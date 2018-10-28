@@ -65,6 +65,7 @@
 #include "MessageSource.h"
 #include "ValidateSaid.h"
 #include "OutputScriptStrings.h"
+#include "CompiledScript.h"
 #include <filesystem>
 #include <regex>
 
@@ -274,7 +275,7 @@ CExtCustomizeSite::CCmdMenuInfo * pMenuInfo = MenuInfoGet();
                 bDoRecalcLayout = TRUE;
         VERIFY( _SyncActiveMdiChild() );
     }
-    
+
     if( bDoRecalcLayout )
     {
         Invalidate();
@@ -398,6 +399,7 @@ BEGIN_MESSAGE_MAP(CMainFrame, CMDIFrameWnd)
     ON_UPDATE_COMMAND_UI(ID_STOPDEBUG, OnUpdateStopDebugging)
 
     ON_COMMAND(ID_SCRIPT_VALIDATEALLSAIDS, OnValidateAllSaids)
+
     ON_UPDATE_COMMAND_UI(ID_SCRIPT_VALIDATEALLSAIDS, OnUpdateValidateAllSaids)
 
     ON_COMMAND(ID_SCRIPT_EXTRACTALLSCRIPTSTRINGS, ExtractAllScriptStrings)
@@ -466,7 +468,7 @@ CMainFrame::CMainFrame() : m_dlgForPanelDialogPic(false, false), m_dlgForPanelDi
     */
 }
 
-void CMainFrame::ActivateFrame(int nCmdShow) 
+void CMainFrame::ActivateFrame(int nCmdShow)
 {
     // Prof-UIS GUI persistence
     if (m_dataFrameWP.showCmd != SW_HIDE)
@@ -587,7 +589,7 @@ void _AssignIcons(const key_value_pair<UINT, int> *rg, size_t count)
     for (size_t i = 0; i < count; ++i)
     {
         // Set the 24x24 icons used in the toolbars
-        HICON hicon = (HICON)LoadImage(AfxGetInstanceHandle(), MAKEINTRESOURCE(rg[i].value), IMAGE_ICON, 24, 24, LR_DEFAULTCOLOR);        
+        HICON hicon = (HICON)LoadImage(AfxGetInstanceHandle(), MAKEINTRESOURCE(rg[i].value), IMAGE_ICON, 24, 24, LR_DEFAULTCOLOR);
         g_CmdManager->CmdSetIcon(appState->_pszCommandProfile,
             rg[i].key,
             hicon,
@@ -761,7 +763,7 @@ std::string GetFileDescription(uint8_t *pBlock)
 
         DWORD_PTR pointerToString;
         UINT stringSizeInBytes;
-        // Retrieve file description for language and code page "i". 
+        // Retrieve file description for language and code page "i".
         if (VerQueryValue(pBlock,
             SubBlock,
             (LPVOID*)&pointerToString,
@@ -940,7 +942,7 @@ void CMainFrame::OnWindowPosChanged(WINDOWPOS *wp)
 
 int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 {
-    
+
     g_CmdManager->ProfileSetup(appState->_pszCommandProfile, GetSafeHwnd());
     g_CmdManager->UpdateFromMenu(appState->_pszCommandProfile, IDR_MAINFRAME);
     RegisterCommands();
@@ -950,7 +952,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
     if (CMDIFrameWnd::OnCreate(lpCreateStruct) == -1)
         return -1;
-    
+
     m_wndMenuBar.SetMdiWindowPopupName("&Window");
     if(!m_wndMenuBar.Create(nullptr, this, IDR_MAINFRAME))
     {
@@ -1083,7 +1085,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
         return -1;		// fail to create
     }
 
-    
+
 
     // The output area at the bottom (which only appears when necessary)
     if (!m_wndResizableBarOutput.Create("Output", this, ID_BAR_OUTPUT))
@@ -1237,7 +1239,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
     if( !m_wndViewTools.Create("view", this, ID_BAR_TOOLRASTER) ||
         !m_wndViewTools.LoadToolBar(IDR_TOOLBARDRAWVIEW))
     {
-        // If you assert in the above function, it means that placeholder IDR_TOOLBARDRAWVIEW doesn't have 
+        // If you assert in the above function, it means that placeholder IDR_TOOLBARDRAWVIEW doesn't have
         // the right number of icons.
         TRACE0( "Failed to create toolbar" );
         return -1;
@@ -1493,7 +1495,7 @@ void CMainFrame::OnFileNewPic()
             unique_ptr<ResourceEntity> pEditPic(CreateDefaultPicResource(appState->GetVersion()));
             if (appState->GetVersion().PicFormat >= PicFormat::VGA1_1)
             {
-                // Let's add a palette. 
+                // Let's add a palette.
                 const PaletteComponent *globalPalette = appState->GetResourceMap().GetPalette999();
                 if (globalPalette)
                 {
@@ -1635,7 +1637,7 @@ void CMainFrame::OnFileNewSound()
     {
         device = DeviceType::SCI1_GM;
     }
-    
+
     std::unique_ptr<ResourceEntity> pSound(CreateSoundResource(appState->GetVersion()));
     if (pSound)
     {
@@ -1979,7 +1981,7 @@ void CMainFrame::_OnNewScriptDialog(CNewScriptDialog &dialog)
                 m_dlgForPanelDialogScript.Refresh();
             }
         }
-    }    
+    }
 }
 
 void CMainFrame::OnNewRoom()
@@ -2405,7 +2407,7 @@ void CMainFrame::_RefreshToolboxPanelOnDeactivate(CFrameWnd *pWnd)
         CDocument *pDoc = pActiveFrame->GetActiveDocument();
         if (pDoc)
         {
-            // If anyone 
+            // If anyone
             // Clear out all documents first.
             // REVIEW: This code really needs reworking.
             m_dlgForPanelDialogView.SetDocument(nullptr);
@@ -2868,7 +2870,7 @@ LRESULT CBrowseInfoStatusPane::_OnStatusReady(WPARAM wParam, LPARAM lParam)
     string textToPost;
     BrowseInfoStatus status;
     {
-        
+
         std::lock_guard<std::mutex> lock(_csTextPosting);
         textToPost = _textToPost;
         status = _status;

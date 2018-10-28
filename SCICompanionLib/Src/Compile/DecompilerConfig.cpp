@@ -75,6 +75,7 @@ public:
             _CacheMethodCallParamTypes();
             _CacheKernelCallParamTypes();
             _CacheSwitchValueTypes();
+			//_CacheGlobals();
         }
         catch (parse_exception &e)
         {
@@ -160,6 +161,25 @@ public:
         _ResolveValuesHelper(binaryOp.GetStatement1(), { binaryOp.GetStatement2() });
         _ResolveValuesHelper(binaryOp.GetStatement2(), { binaryOp.GetStatement1() });
     }
+
+#ifdef KAWA_FORCEDSCRIPTNAMES
+	bool ResolveForcedScriptName(int index, std::string &scriptName) const
+	{
+		if (_table->contains_qualified("kawaForcedScriptNames"))
+		{
+			for (auto keyValuePairs : *_table->get("kawaForcedScriptNames")->as_table())
+			{
+				int thisIndex = atoi(keyValuePairs.first.c_str());
+				if (thisIndex == index)
+				{
+					scriptName = keyValuePairs.second->as<string>()->get();
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+#endif
 
 private:
 
@@ -363,6 +383,25 @@ private:
             }
         }
     }
+
+#ifdef KAWA_GLOBALS
+	/*
+	void _CacheGlobals()
+	{
+		if (_table->contains_qualified("kawaMisc.globals"))
+		{
+			for (const auto &paramName : _table->get("kawaMisc.globals")->as_array()->get())
+			{
+				auto name = paramName->as<std::string>();
+				if (name)
+				{
+					kawaGlobals.push_back(name->get());
+				}
+			}
+		}
+	}
+	*/
+#endif
 
     typedef std::unordered_map<uint16_t, string> enumList_t;
     std::unordered_map<string, enumList_t> _enumLists;

@@ -257,7 +257,7 @@ size_t Vocab000::GetNumberOfGroups() const
 Vocab000::WordGroup Vocab000::GroupFromString(PCTSTR pszString) const
 {
     std::string strLower = pszString;
-    std::transform(strLower.begin(), strLower.end(), strLower.begin(), 
+    std::transform(strLower.begin(), strLower.end(), strLower.begin(),
                    (int(*)(int)) tolower);
 
     PCTSTR pszLower = strLower.c_str();
@@ -401,7 +401,7 @@ VocabChangeHint Vocab000::AddNewWord(PCTSTR pszWordIn, WordClass dwClass, bool f
 void Vocab000::_InsertWord(PCTSTR pszWord, WordGroup dwGroup)
 {
     _mapWordToGroup[pszWord] = dwGroup;
-    
+
     // Insert it into the ordered _words array, at the correct spot.
     vector<string>::iterator wordIt = _words.begin();
     for (; wordIt != _words.end(); ++wordIt)
@@ -533,7 +533,7 @@ VocabChangeHint Vocab000::RemoveWord(PCTSTR pszWord)
     VocabChangeHint hint = VocabChangeHint::None;
     std::string strLower = pszWord;
     transform(strLower.begin(), strLower.end(), strLower.begin(), tolower);
-    
+
     WordGroup dwGroup;
     if (LookupWord(strLower, dwGroup))
     {

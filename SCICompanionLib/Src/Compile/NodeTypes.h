@@ -64,6 +64,10 @@ namespace sci
         NodeTypeClassDefDeclaration,
         NodeTypeGlobal,
         NodeTypeExtern,
-        NodeTypeSelector
+        NodeTypeSelector,
+
+#ifdef PHIL_FOREACH
+		NodeTypeForEach,
+#endif
     };
 }

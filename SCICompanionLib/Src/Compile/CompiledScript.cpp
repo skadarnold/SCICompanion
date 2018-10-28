@@ -1009,7 +1009,7 @@ bool CompiledScript::_ReadSaids(sci::istream &stream, uint16_t wDataSize)
     {
         // Store the actual position in the stream (this is how other parts of the script refer to it).
         uint16_t wBeginingOfSaid = static_cast<uint16_t>(stream.tellg());
-        vector<uint16_t> saidSequence;
+		vector<uint16_t> saidSequence;
         bool fDone = false;
         do
         {
@@ -1024,7 +1024,7 @@ bool CompiledScript::_ReadSaids(sci::istream &stream, uint16_t wDataSize)
                     if (b >= 0xf0)
                     {
                         // It's a operator.
-                        saidSequence.push_back((uint16_t)b);
+						saidSequence.push_back((uint16_t)b);
                     }
                     else
                     {
@@ -1034,7 +1034,7 @@ bool CompiledScript::_ReadSaids(sci::istream &stream, uint16_t wDataSize)
                         //fRet = pStream->ReadByte(&b2);
                         if (stream.good())
                         {
-                            saidSequence.push_back((((uint16_t)b) << 8) | b2);
+							saidSequence.push_back((((uint16_t)b) << 8) | b2);
                         }
                     }
                 }

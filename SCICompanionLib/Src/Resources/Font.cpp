@@ -32,7 +32,9 @@ uint16_t FontTraits::ValidateCharCount(uint16_t charCount) const
     else
     {
         // A max of 256 chars.
+#ifndef KAWA_FONTLIMITBREAK
         charCount = min(256, charCount);
+#endif
     }
     return charCount;
 }
@@ -95,7 +97,9 @@ void FontReadFrom(ResourceEntity &resource, sci::istream &byteStream, const std:
 
     // Some validation
     // TODO: report a status error 
-    cChars = min(256, cChars);
+#ifndef KAWA_FONTLIMITBREAK
+	cChars = min(256, cChars);
+#endif
     // 1 - 128 seems reasonable for line height
     font.LineHeight = max(1, font.LineHeight);
     font.LineHeight = min(MaxLineHeight, font.LineHeight);
@@ -192,11 +196,19 @@ void GetCharacterLabel(PTSTR  pszLabel, size_t cch, int nCel)
 {
     if (nCel < 32)
     {
-        StringCchPrintf(pszLabel, cch, TEXT("(%d)"), nCel);
+#ifdef KAWA_HEXFONTS
+		StringCchPrintf(pszLabel, cch, TEXT("(%X)"), nCel);
+	}
+	else
+	{
+		StringCchPrintf(pszLabel, cch, TEXT("%c (%X)"), nCel, nCel);
+#else
+		StringCchPrintf(pszLabel, cch, TEXT("(%d)"), nCel);
     }
     else
     {
-        StringCchPrintf(pszLabel, cch, TEXT("%c (%d)"), nCel, nCel);
+		StringCchPrintf(pszLabel, cch, TEXT("%c (%d)"), nCel, nCel);
+#endif
     }
 }
 

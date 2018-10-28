@@ -234,6 +234,21 @@ std::string GetPropertyText(const PropertyValueBase &prop)
         case ValueType::Pointer:
             mw << "@" << CleanTokenSCI(prop.GetStringValue());
             break;
+#ifdef PHIL_FOREACH
+		case ValueType::ArraySize:
+			mw << "&sizeof " << CleanTokenSCI(prop.GetStringValue());
+			break;
+#endif
+#ifdef PHIL_EXISTS
+		case ValueType::ParameterIndex:
+			mw << "&exists " << CleanTokenSCI(prop.GetStringValue());
+			break;
+#endif
+#ifdef PHIL_LDMSTM
+		case ValueType::Deref:
+			mw << "*" << CleanTokenSCI(prop.GetStringValue());
+			break;
+#endif
     }
     return mw.str();
 }
@@ -1198,6 +1213,12 @@ public:
         _MaybeNewLineIndent();
 
         GO_INLINE;
+#ifdef PHIL_LDMSTM
+		if (lValue.IsDeref)
+		{
+			out.out << "*";
+		}
+#endif
         if (lValue.HasIndexer())
         {
             out.out << "[";
@@ -1906,6 +1927,12 @@ public:
         out.out << selector.GetName() << " " << selector.Index;
     }
 
+#ifdef PHIL_FOREACH
+	void Visit(const ForEachLoop &vc)
+	{
+		_MaybeIndentAcceptChildren(vc.FinalCode);
+	}
+#endif
 
     // Measure the size of code output in a first pass, so we can better
 

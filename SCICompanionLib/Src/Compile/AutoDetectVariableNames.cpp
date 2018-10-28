@@ -431,6 +431,9 @@ public:
     void Visit(const SelectorDeclaration &selectorDef) override {}
     void Visit(const GlobalDeclaration &globalDecl) override {}
     void Visit(const ExternDeclaration &externDecl) override {}
+#ifdef PHIL_FOREACH
+	void Visit(const ForEachLoop &foreachLoop) override {}
+#endif
 
     void Enter(const SyntaxNode &node) override {}
     void Leave(const SyntaxNode &node) override {}
@@ -538,6 +541,9 @@ public:
     void Visit(const SelectorDeclaration &selectorDef) override {}
     void Visit(const GlobalDeclaration &globalDecl) override {}
     void Visit(const ExternDeclaration &externDecl) override {}
+#ifdef PHIL_FOREACH
+	void Visit(const ForEachLoop &forEachLoop) override {}
+#endif
 
     void Enter(const SyntaxNode &node) override {}
     void Leave(const SyntaxNode &node) override {}

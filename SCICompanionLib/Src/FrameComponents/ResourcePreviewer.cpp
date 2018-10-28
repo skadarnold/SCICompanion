@@ -439,7 +439,12 @@ void VocabPreviewer::_Populate(const std::vector<std::string> &names, const bool
     {
         if (prependNumber)
         {
-            text << index << ": ";
+#ifdef KAWA_VOCABPREVIEWS
+			// Match selector list format
+            text << index << " (0x" << std::hex << (index) << std::dec << "): ";
+#else
+			text << index << ": ";
+#endif
         }
 
         const std::string &line = (*it);
@@ -493,6 +498,35 @@ void VocabPreviewer::SetResource(const ResourceBlob &blob)
     {
         switch (iNumber)
         {
+#ifdef KAWA_VOCABPREVIEWS
+		case 994: //KAWA - object offsets
+		{
+			//SV: OBJECT | OFFSET
+			//-------------------
+			//    0        5
+			//    1        4
+			//    2        14
+			//from "05 00 04 00 0e 00", so each short is an object's offset
+			std::vector<std::string> output;
+			output.push_back("object\toffset");
+			output.push_back("--------------------------");
+			uint16_t *data = (uint16_t*)blob.GetData();
+			int length = blob.GetLength();
+			int index = 0, position = 0;
+			while (position < length)
+			{
+				std::stringstream text;
+				text << static_cast<DWORD>(index) << "\t" << *data;
+				index++;
+				data++;
+				position += 2;
+				output.push_back(text.str());
+			}
+			_Populate(output);
+			fSuccess = true;
+		}
+		break;
+#endif
         case 995: // debug info
         {
             CVocabWithNames vocab;
@@ -523,7 +557,28 @@ void VocabPreviewer::SetResource(const ResourceBlob &blob)
             }
         }
         break;
-        case 999: // kernel functions
+#ifdef KAWA_VOCABPREVIEWS
+		/* case 998: //KAWA - opcodes
+		{
+			//SV: OPCODE / 2 | INSTRUCTION | FLAGS
+			//------------------------------------
+			//    $00          bnot          $00
+			//    $01          add           $00
+			//    $17          bt            $03
+			//from "80 00 02 01 0a 01 11 01-18 01 1f 01 26 01 2d 01"
+			//so that's
+			//  80 00: amount of opcodes
+			//  that many short offset to opcodes
+			//  06 00 00 00 62 6E 6F 74     0006 0000 bnot
+			//  04 00 03 00 62 74           0004 0003 bt
+			//so for each opcode
+			//  short length of code (strlen + flags)
+			//  short flags
+			//  opcode name
+		}
+		break; */
+#endif
+		case 999: // kernel functions
         {
             KernelTable kernels;
             if (kernels.Load(appState->GetResourceMap().Helper()))
@@ -569,7 +624,11 @@ void FontPreviewer::SetResource(const ResourceBlob &blob)
     // Show a preview of entire font.
     std::stringstream ss;
     RasterComponent &rasterComponent = _pFont->GetComponent<RasterComponent>();
-    for (size_t i = 0; i < rasterComponent.Loops[0].Cels.size(); i++)
+#ifndef KAWA_FONTLIMITBREAK
+	for (size_t i = 0; i < rasterComponent.Loops[0].Cels.size(); i++)
+#else
+	for (size_t i = 0; i < min(rasterComponent.Loops[0].Cels.size(), 255); i++)
+#endif
     {
         ss << (char)i;
     }

@@ -68,7 +68,8 @@ std::string EscapeString(const std::string &src)
     for (char ch : src)
     {
         char escaped = 0;
-        switch (ch)
+
+		switch (ch)
         {
             case '\n':
                 escaped = 'n';
@@ -91,7 +92,15 @@ std::string EscapeString(const std::string &src)
             result.push_back('\\');
             result.push_back(escaped);
         }
-        else
+		//KAWA: escape unprintables because many aren't in practice
+		else if (ch < ' ')
+		{
+			result.push_back('\\');
+			result.push_back("0123456789ABCDEF"[(ch >> 4) & 0x0F]); //ugleh
+			result.push_back("0123456789ABCDEF"[ch & 0x0F]);
+			continue;
+		}
+		else
         {
             result.push_back(ch);
         }

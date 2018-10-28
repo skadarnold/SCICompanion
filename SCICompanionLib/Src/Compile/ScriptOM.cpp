@@ -382,6 +382,11 @@ void VariableDecl::AddSimpleInitializer(const PropertyValue &value)
     // Add a copy of the property value
     AddStatement(make_unique<PropertyValue>(value));
 }
+
+#ifdef PHIL_LDMSTM
+VariableDecl::VariableDecl(const std::string &name) : StatementsNode(), TypedNode(), _size(1), _unspecifiedSize(false), _name(name) {}
+#endif
+
 ClassProperty::ClassProperty(const std::string &str, WORD wValue) : NamedNode(), TypedNode()
 {
     _innerName = str;
@@ -658,3 +663,6 @@ void ClassDefDeclaration::Accept(ISyntaxNodeVisitor &visitor) const { visitor.En
 void SelectorDeclaration::Accept(ISyntaxNodeVisitor &visitor) const { visitor.Enter(*this); visitor.Visit(*this); visitor.Leave(*this); }
 void GlobalDeclaration::Accept(ISyntaxNodeVisitor &visitor) const { visitor.Enter(*this); visitor.Visit(*this); visitor.Leave(*this); }
 void ExternDeclaration::Accept(ISyntaxNodeVisitor &visitor) const { visitor.Enter(*this); visitor.Visit(*this); visitor.Leave(*this); }
+#ifdef PHIL_FOREACH
+void ForEachLoop::Accept(ISyntaxNodeVisitor &visitor) const { visitor.Enter(*this); visitor.Visit(*this); visitor.Leave(*this); }
+#endif

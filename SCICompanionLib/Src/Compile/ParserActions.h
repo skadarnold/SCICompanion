@@ -846,6 +846,9 @@ void EvaluateEndIfA(MatchResult &match, const _TParser *pParser, SyntaxContext *
 // Denoted as extern, so they can be used as function template parameters.
 extern char const errBinaryOp[];
 extern char const errCaseArg[];
+#ifdef PHIL_FOREACH
+extern char const errCollectionArg[];
+#endif
 extern char const errSwitchArg[];
 extern char const errSendObject[];
 extern char const errArgument[];

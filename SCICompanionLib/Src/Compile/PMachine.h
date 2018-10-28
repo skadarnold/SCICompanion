@@ -111,7 +111,7 @@ enum class Opcode : uint8_t
     REST = 44,
     LEA = 45,  // load  address of a variable into the acc
     SELFID = 46,  // puts address of self into acc
-    INDETERMINATE = 47,  // NOT A VALID OPCODE
+	OPCODE47 = 47,  // NOT A VALID OPCODE
     PPREV = 48,
     PTOA = 49,      // property index to acc
     ATOP = 50,      // acc to property index
@@ -127,8 +127,8 @@ enum class Opcode : uint8_t
     PUSH1 = 60,      // push 1 onto stack
     PUSH2 = 61,      // push 2 onto stack
     PUSHSELF = 62,      // push self onto stack
-
-    FirstLoadStore = 64,
+	OPCODE63 = 63,
+	FirstLoadStore = 64,
 	LAG = 64,  // load global to acc
 	LAL = 65,
 	LAT = 66,
@@ -199,7 +199,16 @@ enum class Opcode : uint8_t
     Filename = 128,
     LineNumber = 129,
 
-    LastOne = 129,
+#ifdef PHIL_LDMSTM
+	// My extensions that don't fit into short/wide variations.
+	LDM = 130,
+	STM = 131,
+	LastOne = 131,
+	INDETERMINATE = 132,
+#else
+	LastOne = 129,
+	INDETERMINATE = 130,
+#endif
 };
 
 Opcode RawToOpcode(const SCIVersion &version, uint8_t rawOpcode);

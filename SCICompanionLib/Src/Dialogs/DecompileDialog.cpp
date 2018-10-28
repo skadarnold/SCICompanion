@@ -705,18 +705,24 @@ void DecompileDialog::_AssignFilenames()
     unordered_set<string> importantClasses = { "Game" }; // e.g. needed for KQ6, 994
 
     unordered_set<string> usedNames;
+#ifdef KAWA_FORCEDSCRIPTNAMES
+	_decompilerConfig = CreateDecompilerConfig(_helper, _lookups->GetSelectorTable());
+#endif
 
     GlobalCompiledScriptLookups *lookups = appState->GetResourceMap().GetCompiledScriptLookups();
     if (lookups)
     {
         for (CompiledScript *script : lookups->GetGlobalClassTable().GetAllScripts())
         {
-            string suggestedName;
+			string suggestedName;
+#ifndef KAWA_FORCEDSCRIPTNAMES
             if (script->GetScriptNumber() == 0)
             {
                 suggestedName = "Main";
             }
-            else
+#else
+			if (!_decompilerConfig->ResolveForcedScriptName(script->GetScriptNumber(), suggestedName))
+#endif
             {
                 // Look for the first class in the file. If none found, then the first public instance.
                 string firstPublicInstance;

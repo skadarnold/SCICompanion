@@ -410,6 +410,9 @@ const std::vector<std::string> &GetTopLevelKeywords(LangSyntax lang)
 std::vector<std::string> codeLevelKeywordsSCI =
 {
     // Sorted
+#ifdef PHIL_EXISTS
+	_T("&exists"),
+#endif
     _T("&rest"),
     _T("&sizeof"),
     // _T("&tmp"),   // This is special
@@ -424,6 +427,9 @@ std::vector<std::string> codeLevelKeywordsSCI =
     _T("else"),
     _T("enum"),
     _T("for"),
+#ifdef PHIL_FOREACH
+	_T("foreach"),
+#endif
     _T("if"),
     _T("mod"),
     _T("not"),

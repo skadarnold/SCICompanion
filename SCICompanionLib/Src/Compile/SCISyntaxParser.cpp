@@ -6,6 +6,9 @@
 #include "Operators.h"
 #include "OperatorTables.h"
 #include "format.h"
+#ifdef PHIL_FOREACH
+#include "ScriptMakerHelper.h"
+#endif
 
 using namespace sci;
 using namespace std;
@@ -113,18 +116,25 @@ vector<string> SCIKeywords =
     "&tmp",
     "&rest",
     "&sizeof",
-    "script#"
+#ifdef PHIL_EXISTS
+	"&exists",
+#endif
+    "script#",
     // neg, send, case, do, default, export are also keywords, but for the Studio language.
 
     // The following are original Sierra constructs that are not supported yet.
-    "extern"        // For linking public procedures
-    "selectors"     // For the selector list
-    "global"        // For global var declarations
-    "classdef"      //
-    "methods"       // Method forward declarations (also methods in classdef)
-    "class#"        // In classdef
-    "super#"        // In classdef
-    "file#"         // Procedure forward declarations
+    "extern",        // For linking public procedures
+    "selectors",     // For the selector list
+    "global",        // For global var declarations
+    "classdef",      //
+    "methods",       // Method forward declarations (also methods in classdef)
+    "class#",        // In classdef
+    "super#",        // In classdef
+    "file#",         // Procedure forward declarations
+
+#ifdef PHIL_FOREACH
+	"foreach",
+#endif
 };
 
 template<typename _It, typename _TContext>
@@ -364,6 +374,20 @@ void SetCaseA(MatchResult &match, const ParserSCI *pParser, SyntaxContext *pCont
     }
 }
 
+#ifdef PHIL_EXISTS
+void ExistsA(MatchResult &match, const ParserSCI *pParser, SyntaxContext *pContext, const streamIt &stream)
+{
+	if (match.Result())
+	{
+		// Turn &exists foobar into:
+		// (> argc SOME_NUM_TO_BE_DETERMINED)
+		pContext->GetSyntaxNode<BinaryOp>()->Operator = BinaryOperator::GreaterThan;
+		pContext->GetSyntaxNode<BinaryOp>()->SetStatement1(make_unique<PropertyValue>("paramTotal", ValueType::Token)); // Does it need to be ComplexPropertyValue??
+		pContext->GetSyntaxNode<BinaryOp>()->SetStatement2(make_unique<PropertyValue>(pContext->ScratchString(), ValueType::ParameterIndex));
+	}
+}
+#endif
+
 void InitEnumStartA(MatchResult &match, const ParserSCI *pParser, SyntaxContext *pContext, const streamIt &stream)
 {
     if (match.Result()) { pContext->Integer = 0; }
@@ -412,7 +436,7 @@ void RestructureNaryAssociativeOpA(MatchResult &match, const ParserSCI *pParser,
                 binaryOp->SetStatement1(move(*it));
             }
         }
-        
+
         // Now set this back in as the current syntax node.
         pContext->ReplaceSyntaxNode(move(binaryOp));
     }
@@ -482,7 +506,7 @@ bool SCIOptimizedOperatorP(const ParserSCI *pParser, _TContext *pContext, stream
     {
         const char *currentDbStart = currentdb;
 
-        //    not at end     not equal to char      and isn't end of op 
+        //    not at end     not equal to char      and isn't end of op
         while (*currentdb && (ch != *currentdb) && (*currentdb != ' ' || !isspace(ch)))
         {
             currentdb += 2;
@@ -704,6 +728,36 @@ void AddProcedureFwdA(MatchResult &match, const ParserSCI *pParser, SyntaxContex
     }
 }
 
+#ifdef PHIL_FOREACH
+void SetIterationVariableA(MatchResult &match, const ParserSCI *pParser, SyntaxContext *pContext, const streamIt &stream)
+{
+	if (match.Result())
+	{
+		pContext->GetSyntaxNode<ForEachLoop>()->IterationVariable = pContext->ScratchString();
+	}
+}
+#endif
+
+#ifdef PHIL_LDMSTM
+void SetIsReferenceA(MatchResult &match, const ParserSCI *pParser, SyntaxContext *pContext, const streamIt &stream)
+{
+	if (match.Result())
+	{
+		pContext->GetSyntaxNode<ForEachLoop>()->IsReference = true;
+	}
+}
+
+void DerefLValueA(MatchResult &match, const ParserSCI *pParser, SyntaxContext *pContext, const streamIt &stream)
+{
+	if (match.Result())
+	{
+		pContext->CreateSyntaxNode<LValue>(stream);
+		pContext->GetSyntaxNode<LValue>()->IsDeref = true;
+		pContext->GetSyntaxNode<LValue>()->SetPosition(stream.GetPosition());
+		pContext->GetSyntaxNode<LValue>()->SetName(pContext->ScratchString());
+	}
+}
+#endif
 
 SCISyntaxParser::SCISyntaxParser() :
     oppar(char_p("(")),
@@ -716,6 +770,10 @@ SCISyntaxParser::SCISyntaxParser() :
     colon(char_p(":")),
     equalSign(char_p("=")),
     question(char_p("?")),
+#ifdef PHIL_LDMSTM
+	period(char_p("*")),
+	ampersand(char_p("&")),
+#endif
     alphanumAsmLabel_p(AlphanumP),
     selector_send_p(SelectorP_Term<':'>),
     propget_p(SelectorP_Term<'?'>),
@@ -759,7 +817,7 @@ void SCISyntaxParser::Load()
     ParseACChannels ch4Block = SetChannel(NoChannels, ParseAutoCompleteChannel::Four, ParseAutoCompleteContext::Block);
 
     // (xxx             -> procname, pure value or keyword
-    // (something xxx   -> pure value or selector name 
+    // (something xxx   -> pure value or selector name
     ParseACChannels acStartStatement = ch1StartStatement | ch2PureValue | ch3Keyword | ch4Block;
     ParseACChannels acJustAValue = ch1Block | ch2PureValue; // Don't block channel 3, because parent parser might want to add in selectors, not sure about ch4
     ParseACChannels acInSendOrProcCall = ch1Block | ch2PureValue | ch3Selector | ch4Rest;
@@ -791,6 +849,10 @@ void SCISyntaxParser::Load()
 
     size_of = keyword_p("&sizeof") >> alphanumNK_p[{nullptr, ParseAutoCompleteContext::PureValue}];
 
+#ifdef PHIL_EXISTS
+	exists_statement = keyword_p("&exists")[SetStatementA<BinaryOp>] >> alphanumNK_p[{ExistsA, ParseAutoCompleteContext::PureValue}];
+#endif
+
     pointer = atsign;
 
     export_entry = general_token[{nullptr, ParseAutoCompleteContext::Export}] >> integer_p[AddExportA];
@@ -811,6 +873,9 @@ void SCISyntaxParser::Load()
         | squotedstring_p[{ComplexValueStringA<ValueType::Said>, ParseAutoCompleteContext::Block}]
         | bracestring_p[{ComplexValueStringA<ValueType::String>, ParseAutoCompleteContext::Block}]
         | (-pointer[ComplexValuePointerA] >> rvalue_variable)
+#ifdef PHIL_LDMSTM
+		| (period >> general_token[ComplexValueStringA<ValueType::Deref>])
+#endif
         | selector_literal[ComplexValueStringA<ValueType::Selector>]
         | size_of[ComplexValueStringA<ValueType::ArraySize>]);
 
@@ -869,10 +934,19 @@ void SCISyntaxParser::Load()
         >> wrapped_code_block[AddLooperCodeBlockA]
         >> *statement[AddStatementA<ForLoop>];
 
+#ifdef PHIL_FOREACH
+	foreach_loop =
+		keyword_p("foreach")[SetStatementA<ForEachLoop>]
+		>> -ampersand[SetIsReferenceA]
+		>> general_token[SetIterationVariableA]
+		>> statement[StatementBindTo1stA<ForEachLoop, errCollectionArg>]
+		>> *statement[AddStatementA<ForEachLoop>];
+#endif
+
     case_statement =
         alwaysmatch_p[StartStatementA]
         >> (oppar[SetStatementA<CaseStatement>]
-        >> 
+        >>
             (keyword_p("else")[SetDefaultCaseA] |
             statement[StatementBindTo1stA<CaseStatement, errCaseArg>])[NoCaseE]    // REVIEW: does this need to be constant?
         >> *statement[AddStatementA<CaseStatement>]
@@ -939,6 +1013,9 @@ void SCISyntaxParser::Load()
     // blarg    or   [blarg statement]
     lvalue = (opbracket >> general_token[{SetStatementNameA<LValue>, ParseAutoCompleteContext::LValue}] >> statement[LValueIndexerA] >> clbracket) |
         keyword_p("argc")[SetStatementNameToParamTotalA<LValue>] |
+#ifdef PHIL_LDMSTM
+		(period >> general_token[{DerefLValueA, ParseAutoCompleteContext::LValue}]) |
+#endif
         general_token[{SetStatementNameA<LValue>, ParseAutoCompleteContext::LValue}];
 
     rest_statement =
@@ -1010,9 +1087,15 @@ void SCISyntaxParser::Load()
         naryassoc_operation |
         narycompare_operation |
         return_statement |
+#ifdef PHIL_EXISTS
+		exists_statement |
+#endif
         if_statement |
         while_loop |
         for_loop |
+#ifdef PHIL_FOREACH
+		foreach_loop |
+#endif
         cond_statement |
         switchto_statement |
         switch_statement |
@@ -1078,13 +1161,13 @@ void SCISyntaxParser::Load()
 
     // The properties thing in a class or instance
     properties_decl = oppar >> keyword_p("properties")[{nullptr, ParseAutoCompleteContext::ClassLevelKeyword}] >> *property_decl >> clpar;
-    
+
     classbase_decl =
         alphanumNK_p[ClassNameA]
         // Though our official syntax is "of", we'll also support kindof for Sierra compatibility.
         >> -((keyword_p("of")[GeneralE] | keyword_p("kindof")[GeneralE]) >> alphanumNK_p[{ClassSuperA, ParseAutoCompleteContext::SuperClass}])
         >> -properties_decl
-        >> *(oppar[GeneralE] >> 
+        >> *(oppar[GeneralE] >>
             (
             methods_fwd |
             method_decl[FinishClassMethodA] |
@@ -1190,7 +1273,372 @@ void SCISyntaxParser::Load()
 
 }
 
-// 
+#ifdef PHIL_FOREACH
+bool _IsItADeclaredVariable(const VariableDeclVector &varDecls, const string &name)
+{
+	return find_if(varDecls.begin(), varDecls.end(), [&name](const auto &varDecl) { return varDecl->GetName() == name; }) != varDecls.end();
+}
+
+void _ReplaceIterationVariable(ICompileLog &log, Script &script, ForEachLoop &theForEach, const std::string &iterationVariableOrig, const std::string &newIterationVariable)
+{
+	// Now replace the iteration variable with the newIterationVariable
+	// Replace the iteration variable with [bufferName loopIndexVariable]
+	EnumScriptElements<LValue>(theForEach,
+		[&log, &script, &iterationVariableOrig, &newIterationVariable](LValue &lValue)
+	{
+		if (lValue.GetName() == iterationVariableOrig)
+		{
+			// This is us
+			if (lValue.HasIndexer())
+			{
+				log.ReportResult(CompileResult("An iteration variable can not be indexed.", script.GetScriptId(), lValue.GetPosition().Line()));
+			}
+			lValue.SetName(newIterationVariable);
+		}
+	});
+	EnumScriptElements<ComplexPropertyValue>(theForEach,
+		[&log, &script, &iterationVariableOrig, &newIterationVariable](ComplexPropertyValue &propValue)
+	{
+		if ((propValue.GetType() == ValueType::Token) && (propValue.GetStringValue() == iterationVariableOrig))
+		{
+			// This is us
+			if (propValue.GetIndexer())
+			{
+				log.ReportResult(CompileResult("An iteration variable can not be indexed.", script.GetScriptId(), propValue.GetPosition().Line()));
+			}
+			propValue.SetValue(newIterationVariable, ValueType::Token);
+		}
+	});
+	EnumScriptElements<SendCall>(theForEach,
+		[&log, &script, &iterationVariableOrig, &newIterationVariable](SendCall &theSend)
+	{
+		if (theSend.GetTargetName() == iterationVariableOrig)
+		{
+			// This is us - if we have a tempvar we can just set a name:
+			theSend.SetName(newIterationVariable);
+		}
+	});
+}
+
+void _ProcessForEach(ICompileLog &log, Script &script, FunctionBase &func, ForEachLoop &theForEach, int variableGenHint)
+{
+
+	// For now, just support arrays
+	// In the future, we could support params and lists.
+
+	// This turns this:
+	// (foreach boop buffer
+	//     (boop x: 0)
+	// )
+	//
+	// Into:
+	// (for ((= i 0)) (< i &sizeof buffer) ((++ i))
+	//     ([buffer i] x: 0)
+	// )
+	//
+	// This requires making a new iteration variable.
+
+	// Come up with a good loop index name.
+
+	string iterationVariableOrig = theForEach.IterationVariable;
+
+	string newIterationVariable;
+#ifdef PHIL_LDMSTM
+	bool isReference = theForEach.IsReference;
+	if (!isReference)
+#endif
+	{
+		// If the foreach doesn't use a reference iteration variable, we're going to have an actual variable with this name. To reduce the possibility of conflicts,
+		// let's muck up the name. This lets us have multiple foreachs using the same iteration variable name in a function.
+		newIterationVariable = (variableGenHint < 26) ? fmt::format("{}__{}", theForEach.IterationVariable, (char)(variableGenHint + 'A')) : fmt::format("{}__{}", theForEach.IterationVariable, variableGenHint); ;
+		func.GetVariablesNC().push_back(make_unique<VariableDecl>(newIterationVariable));
+	}
+
+	bool isBuffer = true;
+
+	// Buffer name?
+	string bufferName = "INVALID";
+	if (theForEach.GetStatement1()->GetNodeType() == sci::NodeType::NodeTypeComplexValue)
+	{
+		ComplexPropertyValue &collection = static_cast<ComplexPropertyValue&>(*theForEach.GetStatement1());
+		if (collection.GetType() == ValueType::Token)
+		{
+			bufferName = collection.GetStringValue();
+			// Now, if this bufferName is a local or temp var, then we can use &sizeof.
+			// Otherwise, we'll assume it's a FixedList... Or rather, an object with elements and size properties.
+			//bool isBuffer = find_if(func.GetVariables().begin(), func.GetVariables().end(), [&bufferName](const std::unique_ptr<VariableDecl> &varDecl) { return varDecl->GetName() == bufferName; }) != func.GetVariables().end();
+			isBuffer = _IsItADeclaredVariable(func.GetVariables(), bufferName) || _IsItADeclaredVariable(script.GetScriptVariables(), bufferName);
+		}
+		else
+		{
+			log.ReportResult(CompileResult("The collection must be a temp or local array.", script.GetScriptId(), collection.GetPosition().Line()));
+		}
+	}
+	else
+	{
+		log.ReportResult(CompileResult("The collection must be a temp or local array!", script.GetScriptId(), theForEach.GetStatement1()->GetPosition().Line()));
+	}
+	// else it would be some statement...
+
+	if (isBuffer)
+	{
+		string loopIndexName = (variableGenHint < 26) ? fmt::format("i_{}", (char)(variableGenHint + 'A')) : fmt::format("i_{}", variableGenHint);
+		func.GetVariablesNC().push_back(make_unique<VariableDecl>(loopIndexName));
+
+
+		unique_ptr<ForLoop> forLoop = std::make_unique<ForLoop>();
+
+		// Condition
+		unique_ptr<BinaryOp> lessThan = make_unique<BinaryOp>(BinaryOperator::LessThan);
+		lessThan->SetStatement1(_MakeTokenStatement(loopIndexName));
+		lessThan->SetStatement2(_MakeStringStatement(bufferName, ValueType::ArraySize));
+		unique_ptr<ConditionalExpression> condition = make_unique<ConditionalExpression>();
+		condition->AddStatement(move(lessThan));
+		forLoop->SetCondition(move(condition));
+
+		// Initializer
+		unique_ptr<Assignment> theEquals = make_unique<Assignment>();
+		theEquals->Operator = AssignmentOperator::Assign;
+		theEquals->SetVariable(make_unique<LValue>(loopIndexName));
+		theEquals->SetStatement1(_MakeNumberStatement(0));
+		forLoop->SetCodeBlock(_WrapInCodeBlock(move(theEquals)));
+
+		// Looper
+		unique_ptr<UnaryOp> thePlusPlus = make_unique<UnaryOp>();
+		thePlusPlus->Operator = UnaryOperator::Increment;
+		thePlusPlus->SetStatement1(_MakeTokenStatement(loopIndexName));
+		forLoop->SetLooper(_WrapInCodeBlock(move(thePlusPlus)));
+
+#ifdef PHIL_LDMSTM
+		if (!isReference)
+		{
+#endif
+			_ReplaceIterationVariable(log, script, theForEach, iterationVariableOrig, newIterationVariable);
+#ifdef PHIL_LDMSTM
+		}
+		else
+		{
+			// Replace the iteration variable with [bufferName loopIndexVariable]
+			EnumScriptElements<LValue>(theForEach,
+				[&log, &script, &iterationVariableOrig, &bufferName, &loopIndexName](LValue &lValue)
+			{
+				if (lValue.GetName() == iterationVariableOrig)
+				{
+					// This is us
+					if (lValue.HasIndexer())
+					{
+						log.ReportResult(CompileResult("An iteration variable can not be indexed.", script.GetScriptId(), lValue.GetPosition().Line()));
+					}
+					lValue.SetName(bufferName);
+					lValue.SetIndexer(_MakeTokenStatement(loopIndexName));
+				}
+			});
+			EnumScriptElements<ComplexPropertyValue>(theForEach,
+				[&log, &script, &iterationVariableOrig, &bufferName, &loopIndexName](ComplexPropertyValue &propValue)
+			{
+				if ((propValue.GetType() == ValueType::Token) && (propValue.GetStringValue() == iterationVariableOrig))
+				{
+					// This is us
+					if (propValue.GetIndexer())
+					{
+						log.ReportResult(CompileResult("An iteration variable can not be indexed.", script.GetScriptId(), propValue.GetPosition().Line()));
+					}
+					propValue.SetValue(bufferName, ValueType::Token);
+					propValue.SetIndexer(_MakeTokenStatement(loopIndexName));
+				}
+			});
+			EnumScriptElements<SendCall>(theForEach,
+				[&log, &script, &iterationVariableOrig, &bufferName, &loopIndexName](SendCall &theSend)
+			{
+				if (theSend.GetTargetName() == iterationVariableOrig)
+				{
+					// This is us - if we have a tempvar we can just set a name, but
+					// theSend.SetName()
+					// Otherwise, we need to mess with the sendcall to change the target to [bufferName loopIndexName]
+					unique_ptr<LValue> lValue = make_unique<LValue>(bufferName);
+					lValue->SetIndexer(_MakeTokenStatement(loopIndexName));
+					theSend.SetLValue(move(lValue));
+					theSend.SetName(""); // So we use the LValue
+				}
+			});
+		}
+#endif
+
+		// Transfer code to forloop
+		swap(forLoop->GetStatements(), theForEach.GetStatements());
+
+#ifdef PHIL_LDMSTM
+		if (!isReference)
+#endif
+		{
+			// Put in one of these at the beginning of the forloop body: (= newIterationVariable [buffer loopIndexName])
+			unique_ptr<Assignment> loopAssignment = make_unique<Assignment>();
+			loopAssignment->Operator = AssignmentOperator::Assign;
+			loopAssignment->SetVariable(make_unique<LValue>(newIterationVariable));
+			unique_ptr<ComplexPropertyValue> loopAssignmentValue = make_unique<ComplexPropertyValue>();
+			loopAssignmentValue->SetValue(bufferName, ValueType::Token);
+			loopAssignmentValue->SetIndexer(_MakeTokenStatement(loopIndexName));
+			loopAssignment->SetStatement1(move(loopAssignmentValue));
+			forLoop->GetStatements().insert(forLoop->GetStatements().begin(), move(loopAssignment));
+		}
+
+		// Our final thing is just one statement, but it might not be for more complex iterators
+		theForEach.FinalCode.push_back(move(forLoop));
+	}
+	else
+	{
+		// A while loop makes more sense for these things.
+		unique_ptr<WhileLoop> whileLoop = std::make_unique<WhileLoop>();
+
+		//KAWA: instead of what Phil did with his intended semantics, I want
+		//	(foreach blah myList ...)
+		//to become
+		//	(= curNode (FirstNode (myList elements?))
+		//	(while curNode
+		//		(= nextNode (NextNode curNode))
+		//		(= blah (NodeValue curNode))
+		//		(= curNode nextNode)
+		//		...
+		//	)
+
+		string curPtrName = (variableGenHint < 26) ? fmt::format("curNode_{}", (char)(variableGenHint + 'A')) : fmt::format("curNode_{}", variableGenHint);
+		func.GetVariablesNC().push_back(make_unique<VariableDecl>(curPtrName));
+
+		string nextPtrName = (variableGenHint < 26) ? fmt::format("nextNode_{}", (char)(variableGenHint + 'A')) : fmt::format("nextNode_{}", variableGenHint);
+		func.GetVariablesNC().push_back(make_unique<VariableDecl>(nextPtrName));
+
+		// First off, (= curNode (FirstNode (myList elements?))
+		unique_ptr<ProcedureCall> firstNodeCall = make_unique<ProcedureCall>("FirstNode");
+		firstNodeCall->AddStatement(_MakeSimpleSend(bufferName, "elements"));
+
+		unique_ptr<Assignment> firstAssignment = make_unique<Assignment>();
+		firstAssignment->Operator = AssignmentOperator::Assign;
+		firstAssignment->SetVariable(make_unique<LValue>(curPtrName));
+		firstAssignment->SetStatement1(move(firstNodeCall));
+
+		theForEach.FinalCode.push_back(move(firstAssignment));
+
+		//The (while curNode) bit
+		unique_ptr<ConditionalExpression> condition = make_unique<ConditionalExpression>();
+		condition->AddStatement(_MakeTokenStatement(curPtrName));
+		whileLoop->SetCondition(move(condition));
+
+		// Now the meat of the loop
+#ifdef PHIL_LDMSTM
+		if (!isReference)
+		{
+#endif
+			// This is the same as in a buffer-based foreach
+			_ReplaceIterationVariable(log, script, theForEach, iterationVariableOrig, newIterationVariable);
+#ifdef PHIL_LDMSTM
+		}
+		else
+		{
+			// Replace the iteration variable with *newIterationVariable
+			EnumScriptElements<LValue>(theForEach,
+				[&log, &script, &iterationVariableOrig, &curPtrName](LValue &lValue)
+			{
+				if (lValue.GetName() == iterationVariableOrig)
+				{
+					// This is us
+					if (lValue.HasIndexer())
+					{
+						log.ReportResult(CompileResult("An iteration variable can not be indexed.", script.GetScriptId(), lValue.GetPosition().Line()));
+					}
+					lValue.SetName(curPtrName);
+					lValue.IsDeref = true;
+				}
+			});
+			EnumScriptElements<ComplexPropertyValue>(theForEach,
+				[&log, &script, &iterationVariableOrig, &curPtrName](ComplexPropertyValue &propValue)
+			{
+				if ((propValue.GetType() == ValueType::Token) && (propValue.GetStringValue() == iterationVariableOrig))
+				{
+					// This is us
+					if (propValue.GetIndexer())
+					{
+						log.ReportResult(CompileResult("An iteration variable can not be indexed.", script.GetScriptId(), propValue.GetPosition().Line()));
+					}
+					propValue.SetValue(curPtrName, ValueType::Deref);
+				}
+			});
+			EnumScriptElements<SendCall>(theForEach,
+				[&log, &script, &iterationVariableOrig, &curPtrName](SendCall &theSend)
+			{
+				if (theSend.GetTargetName() == iterationVariableOrig)
+				{
+					// This is us - if we have a tempvar we can just set a name, but
+					// theSend.SetName()
+					// Otherwise, we need to mess with the sendcall to change the target to *newIterationVariable
+					// I don't even think this would compile without foreach! Can't have (*ptr poop:) -> we'd mistake it for multiplcation.
+					unique_ptr<LValue> lValue = make_unique<LValue>(curPtrName);
+					lValue->IsDeref = true;
+					theSend.SetLValue(move(lValue));
+					theSend.SetName(""); // So we use the LValue
+				}
+			});
+		}
+#endif
+
+		// Transfer code to whileLoop
+		swap(whileLoop->GetStatements(), theForEach.GetStatements());
+
+#ifdef PHIL_LDMSTM
+		if (!isReference)
+#endif
+		{
+			//KAWA: We don't want this. We want (= nextNode (NextNode curNode))
+			unique_ptr<ProcedureCall> nextNodeCall = make_unique<ProcedureCall>("NextNode");
+			nextNodeCall->AddStatement(_MakeStringStatement(curPtrName, ValueType::Token));
+
+			unique_ptr<Assignment> nextAssignment = make_unique<Assignment>();
+			nextAssignment->Operator = AssignmentOperator::Assign;
+			nextAssignment->SetVariable(make_unique<LValue>(nextPtrName));
+			nextAssignment->SetStatement1(move(nextNodeCall));
+
+			//and then (= blah (NodeValue curNode))
+			unique_ptr<ProcedureCall> nodeValueCall = make_unique<ProcedureCall>();
+			nodeValueCall->SetName("NodeValue");
+			nodeValueCall->AddStatement(_MakeStringStatement(curPtrName, ValueType::Token));
+
+			unique_ptr<Assignment> valueAssignment = make_unique<Assignment>();
+			valueAssignment->Operator = AssignmentOperator::Assign;
+			valueAssignment->SetVariable(make_unique<LValue>(newIterationVariable));
+			valueAssignment->SetStatement1(move(nodeValueCall));
+
+			//and then finally (= curNode nextNode)
+			unique_ptr<Assignment> passAssignment = make_unique<Assignment>();
+			passAssignment->Operator = AssignmentOperator::Assign;
+			passAssignment->SetVariable(make_unique<LValue>(curPtrName));
+			passAssignment->SetStatement1(_MakeStringStatement(nextPtrName, ValueType::Token));
+
+			//Add them in REVERSE ORDER you doof.
+			whileLoop->GetStatements().insert(whileLoop->GetStatements().begin(), move(passAssignment));
+			whileLoop->GetStatements().insert(whileLoop->GetStatements().begin(), move(valueAssignment));
+			whileLoop->GetStatements().insert(whileLoop->GetStatements().begin(), move(nextAssignment));
+		}
+
+		theForEach.FinalCode.push_back(move(whileLoop));
+	}
+}
+
+void _ProcessForEaches(ICompileLog &log, Script &script)
+{
+	EnumScriptElements<FunctionBase>(script,
+		[&log, &script](FunctionBase &func)
+	{
+		int variableGenHint = 0;
+		EnumScriptElements<ForEachLoop>(func,
+			[&log, &script, &func, &variableGenHint](ForEachLoop &forEachLoop)
+		{
+			_ProcessForEach(log, script, func, forEachLoop, variableGenHint);
+			variableGenHint++;
+		});
+	});
+}
+#endif
+
+//
 // Fix up scripts so that they conform to standards. Differences in the SCI syntax make
 // it difficult to get the script OM in its final state just in the parsing phase.
 //
@@ -1215,6 +1663,14 @@ void PostProcessScript(ICompileLog *pLog, Script &script)
         instance.SetPublic(script.IsExport(instance.GetName()));
     }
         );
+
+#ifdef PHIL_FOREACH
+	// Re-work foreach's into for loops (only for compiles where there is a log, e.g. actual compiles)
+	if (pLog)
+	{
+		_ProcessForEaches(*pLog, script);
+	}
+#endif
 
     // Re-work conds into if-elses.
     EnumScriptElements<CondStatement>(script,

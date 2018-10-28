@@ -71,7 +71,7 @@ private:
 
 class CMainFrame : public CExtNCW<CMDIFrameWnd>
 {
-    DECLARE_DYNAMIC(CMainFrame)    
+    DECLARE_DYNAMIC(CMainFrame)
 
 public:
     CMainFrame();

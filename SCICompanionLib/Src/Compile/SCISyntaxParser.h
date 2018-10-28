@@ -107,7 +107,13 @@ private:
     ParserSCI asm_arg;
     ParserSCI cond_statement;
     ParserSCI size_of;
+#ifdef PHIL_EXISTS
+	ParserSCI exists_statement; 
+#endif
     ParserSCI entire_header;
+#ifdef PHIL_FOREACH
+	ParserSCI foreach_loop;
+#endif
 
     // Non-code parsers:
     ParserSCI classdef_file;
@@ -157,5 +163,9 @@ private:
     ParserSCI colon;
     ParserSCI equalSign;
     ParserSCI question;
+#ifdef PHIL_LDMSTM
+	ParserSCI period;
+	ParserSCI ampersand;
+#endif
 };
 

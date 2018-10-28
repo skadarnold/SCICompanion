@@ -339,7 +339,7 @@ void _OnViewResourceMap(const _TResourceSource &fileDescriptor, SCIVersion versi
 
             ShowTextFile(writer.c_str(), format("package file {}.txt", volumeAndOffsets.first));
         }
-    }
+	}
     catch (std::exception &e)
     {
         AfxMessageBox(e.what(), MB_ICONWARNING | MB_OK);

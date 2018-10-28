@@ -799,7 +799,11 @@ public:
     void Visit(const ExternDeclaration &theExtern) override {}
     void Visit(const SelectorDeclaration &selector) override {}
 
-    void Enter(const SyntaxNode &node) override {}
+#ifdef PHIL_FOREACH
+	void Visit(const ForEachLoop &vc) override {}
+#endif
+
+	void Enter(const SyntaxNode &node) override {}
     void Leave(const SyntaxNode &node) override {}
 };
 

@@ -48,7 +48,7 @@ CFontPreviewView::CFontPreviewView()
     // Default size of a font.
     _cyFont = 0;
     _cxFont = 0;
-    _iZoom = 3; // Get this from somewhere.
+    _iZoom = 2; // Get this from somewhere. //KAWA: set to 2 because lol.
 
     _fDoubleBuf = FALSE;
     _pbitmapDoubleBuf = nullptr;

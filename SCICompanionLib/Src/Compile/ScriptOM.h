@@ -146,6 +146,9 @@ namespace sci
     class SelectorDeclaration;
     class GlobalDeclaration;
     class ExternDeclaration;
+#ifdef PHIL_FOREACH
+	class ForEachLoop; 
+#endif
 
     class ISyntaxNodeVisitor
     {
@@ -193,6 +196,9 @@ namespace sci
         virtual void Visit(const SelectorDeclaration &selectorDef) = 0;
         virtual void Visit(const GlobalDeclaration &globalDecl) = 0;
         virtual void Visit(const ExternDeclaration &externDecl) = 0;
+#ifdef PHIL_FOREACH
+		virtual void Visit(const ForEachLoop &forEachLoop) = 0; 
+#endif
 
         virtual void Enter(const SyntaxNode &node) = 0;
         virtual void Leave(const SyntaxNode &node) = 0;
@@ -374,7 +380,11 @@ namespace sci
     class EnumAll : public IExploreNode
     {
     public:
+#ifdef PHIL_FOREACH
+		EnumAll(sci::SyntaxNode &script, _TFunc func) : _func(func) { script.Traverse(*this); }
+#else
         EnumAll(sci::Script &script, _TFunc func) : _func(func) { script.Traverse(*this); }
+#endif
 
         void ExploreNode(SyntaxNode &node, ExploreNodeState state) override
         {
@@ -388,7 +398,11 @@ namespace sci
     };
 
     template<typename _T, typename _TFunc>
+#ifdef PHIL_FOREACH
+	void EnumScriptElements(SyntaxNode &script, _TFunc func)
+#else
     void EnumScriptElements(Script &script, _TFunc func)
+#endif
     {
         EnumAll<_T, _TFunc> enumIt(script, func);
     }
@@ -722,6 +736,9 @@ namespace sci
         DECLARE_NODE_TYPE(NodeTypeVariableDeclaration)
     public:
         VariableDecl();
+#ifdef PHIL_LDMSTM
+		VariableDecl(const std::string &name); 
+#endif
         VariableDecl(const VariableDecl &src) = delete;
 		VariableDecl& operator=(const VariableDecl& src) = delete;
 
@@ -827,6 +844,9 @@ namespace sci
         void AddVariable(std::unique_ptr<VariableDecl> pVar) { _tempVars.push_back(std::move(pVar)); }
         std::string ToString() const;
         const VariableDeclVector &GetVariables() const { return _tempVars; }
+#ifdef PHIL_FOREACH
+		VariableDeclVector &GetVariablesNC() { return _tempVars; }
+#endif
         const ClassDefinition *GetOwnerClass() const { return _pOwnerClass; }
         void SetOwnerClass(const ClassDefinition *pOwnerClass) { _pOwnerClass = pOwnerClass; }
         const SyntaxNodeVector &GetCodeSegments() const { return _segments; }

@@ -459,6 +459,9 @@ char const errVarName[] = "Expected variable name.";
 char const errFileNameString[] = "Expected file name string.";
 char const errElse[] = "Expected else clause.";
 char const errNoKeywordOrSelector[] = "No keyword or selector permitted here.";
+#ifdef PHIL_FOREACH
+char const errCollectionArg[] = "Expected collection."; 
+#endif
 
 template<typename _TParser>
 void StudioScriptVarInitA(MatchResult &match, const _TParser *pParser, SyntaxContext *pContext, const streamIt &stream)

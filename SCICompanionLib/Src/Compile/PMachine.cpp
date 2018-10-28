@@ -26,6 +26,18 @@ Opcode RawToOpcode(const SCIVersion &version, uint8_t rawOpcode)
                 return Opcode::LineNumber;
         }
     }
+#if PHIL_LDMSTM
+	else
+	{
+		switch (rawOpcode)
+		{
+		case 0x7e:
+			return Opcode::LDM;
+		case 0x7f:
+			return Opcode::STM;
+		}
+	}
+#endif
     return (Opcode)(rawOpcode >> 1);
 }
 
@@ -41,6 +53,18 @@ uint8_t OpcodeToRaw(const SCIVersion &version, Opcode opcode, bool wide)
                 return 0x7e;
         }
     }
+#if PHIL_LDMSTM
+	else
+	{
+		switch (opcode)
+		{
+		case Opcode::LDM:
+			return 0x7e;
+		case Opcode::STM:
+			return 0x7f;
+		}
+	}
+#endif
     return (((uint8_t)opcode) << 1) | (wide ? 0 : 1);
 }
 
@@ -97,7 +121,11 @@ OperandType OpArgTypes_SCI0[TOTAL_OPCODES][3] = {
 	/*rest*/     {otPVAR,otEMPTY,otEMPTY},
 	/*lea*/      {otUINT,otUINT,otEMPTY},
 	/*selfID*/   {otEMPTY,otEMPTY,otEMPTY},
+#ifdef PHIL_LDMSTM
+	/*stm*/{ otEMPTY,otEMPTY,otEMPTY },
+#else
 	/**/         {otEMPTY,otEMPTY,otEMPTY},
+#endif
 	/*pprev*/    {otEMPTY,otEMPTY,otEMPTY},
 	/*pToa*/     {otPROP,otEMPTY,otEMPTY},
 /*50*/
@@ -115,7 +143,11 @@ OperandType OpArgTypes_SCI0[TOTAL_OPCODES][3] = {
 	/*push1*/    {otEMPTY,otEMPTY,otEMPTY},
 	/*push2*/    {otEMPTY,otEMPTY,otEMPTY},
 	/*pushSelf*/ {otEMPTY,otEMPTY,otEMPTY},
-    /**/         {otEMPTY,otEMPTY,otEMPTY},
+#ifdef PHIL_LDMSTM
+	/*ldm*/{ otEMPTY,otEMPTY,otEMPTY },
+#else
+	/**/         {otEMPTY,otEMPTY,otEMPTY},
+#endif
 	/*lag*/      {otVAR,otEMPTY,otEMPTY},
 	/*lal*/      {otVAR,otEMPTY,otEMPTY},
 	/*lat*/      {otVAR,otEMPTY,otEMPTY},
@@ -240,8 +272,12 @@ OperandType OpArgTypes_SCI2[TOTAL_OPCODES][3] = {
     /*rest*/{ otPVAR, otEMPTY, otEMPTY },
     /*lea*/{ otUINT, otUINT, otEMPTY },
     /*selfID*/{ otEMPTY, otEMPTY, otEMPTY },
-    /**/{ otEMPTY, otEMPTY, otEMPTY },
-    /*pprev*/{ otEMPTY, otEMPTY, otEMPTY },
+#ifdef PHIL_LDMSTM
+	/*stm*/{ otEMPTY,otEMPTY,otEMPTY },
+#else
+	/**/{ otEMPTY,otEMPTY,otEMPTY },
+#endif
+	/*pprev*/{ otEMPTY, otEMPTY, otEMPTY },
     /*pToa*/{ otPROP, otEMPTY, otEMPTY },
     /*50*/
     /*aTop*/{ otPROP, otEMPTY, otEMPTY },
@@ -258,8 +294,12 @@ OperandType OpArgTypes_SCI2[TOTAL_OPCODES][3] = {
     /*push1*/{ otEMPTY, otEMPTY, otEMPTY },
     /*push2*/{ otEMPTY, otEMPTY, otEMPTY },
     /*pushSelf*/{ otEMPTY, otEMPTY, otEMPTY },
-    /**/{ otEMPTY, otEMPTY, otEMPTY },
-    /*lag*/{ otVAR, otEMPTY, otEMPTY },
+#ifdef PHIL_LDMSTM
+	/*ldm*/{ otEMPTY,otEMPTY,otEMPTY },
+#else
+	/**/{ otEMPTY,otEMPTY,otEMPTY },
+#endif
+	/*lag*/{ otVAR, otEMPTY, otEMPTY },
     /*lal*/{ otVAR, otEMPTY, otEMPTY },
     /*lat*/{ otVAR, otEMPTY, otEMPTY },
     /*lap*/{ otVAR, otEMPTY, otEMPTY },
@@ -333,6 +373,9 @@ OperandType OpArgTypes_SCI2[TOTAL_OPCODES][3] = {
 
 OperandType filenameOperands[3] = { otDEBUGSTRING, otEMPTY, otEMPTY };
 OperandType lineNumberOperands[3] = { otUINT16, otEMPTY, otEMPTY };
+#ifdef PHIL_LDMSTM
+OperandType stmldmOperands[3] = { otEMPTY, otEMPTY, otEMPTY };
+#endif
 
 const OperandType *GetOperandTypes(const SCIVersion &version, Opcode opcode)
 {
@@ -350,12 +393,25 @@ const OperandType *GetOperandTypes(const SCIVersion &version, Opcode opcode)
     }
     else
     {
+#ifdef PHIL_LDMSTM
+		switch (opcode)
+		{
+		case Opcode::LDM:
+		case Opcode::STM:
+			return stmldmOperands;
+			break;
+		}
+#endif
         return OpArgTypes_SCI0[static_cast<BYTE>(opcode)];
     }
 }
 
 // Corresponds to Opcode enum
-char *OpcodeNames[130]={
+#ifdef PHIL_LDMSTM
+char *OpcodeNames[132]={
+#else
+char *OpcodeNames[130] = {
+#endif
 	"bnot",
 	"add",
 	"sub",
@@ -403,7 +459,7 @@ char *OpcodeNames[130]={
 	"&rest",
 	"lea",
 	"selfID",  
-    "INVALID",
+	"INVALID",
 	"pprev",
 	"pToa",
 	"aTop",
@@ -419,7 +475,7 @@ char *OpcodeNames[130]={
 	"push1",
 	"push2",
 	"pushSelf",  
-    "INVALID",
+	"INVALID",
 	"lag",
 	"lal",
 	"lat",
@@ -489,6 +545,10 @@ char *OpcodeNames[130]={
 	"-spi",
     "_file_",
     "_line_",
+#ifdef PHIL_LDMSTM
+	"ldm",
+	"stm",
+#endif
 };
 
 const char *OpcodeToName(Opcode opcode, uint16_t firstOperand)

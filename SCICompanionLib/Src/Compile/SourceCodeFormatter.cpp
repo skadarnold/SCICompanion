@@ -141,50 +141,58 @@ SourceCodeWriter::SourceCodeWriter(std::stringstream &ss, LangSyntax syntax, Scr
 
 void Script::OutputSourceCode(SourceCodeWriter &out) const
 {
-    if (out.lang == LangSyntaxStudio)
-    {
-        OutputSourceCode_SCIStudio(*this, out);
-    }
-    else if (out.lang == LangSyntaxSCI)
-    {
-        OutputSourceCode_SCI(*this, out);
-    }
+#ifndef KAWA_NOSTUDIO
+	if (out.lang == LangSyntaxStudio)
+	{
+		OutputSourceCode_SCIStudio(*this, out);
+	}
+	else if (out.lang == LangSyntaxSCI)
+#endif
+	{
+		OutputSourceCode_SCI(*this, out);
+	}
 }
 
 void ClassDefinition::OutputSourceCode(SourceCodeWriter &out) const
 {
-    if (out.lang == LangSyntaxStudio)
-    {
-        OutputSourceCode_SCIStudio(*this, out);
-    }
-    else if (out.lang == LangSyntaxSCI)
-    {
-        OutputSourceCode_SCI(*this, out);
-    }
+#ifndef KAWA_NOSTUDIO
+	if (out.lang == LangSyntaxStudio)
+	{
+		OutputSourceCode_SCIStudio(*this, out);
+	}
+	else if (out.lang == LangSyntaxSCI)
+#endif
+	{
+		OutputSourceCode_SCI(*this, out);
+	}
 }
 
 void MethodDefinition::OutputSourceCode(SourceCodeWriter &out) const
 {
-    if (out.lang == LangSyntaxStudio)
-    {
-        OutputSourceCode_SCIStudio(*this, out);
-    }
-    else if (out.lang == LangSyntaxSCI)
-    {
-        OutputSourceCode_SCI(*this, out);
-    }
+#ifndef KAWA_NOSTUDIO
+	if (out.lang == LangSyntaxStudio)
+	{
+		OutputSourceCode_SCIStudio(*this, out);
+	}
+	else if (out.lang == LangSyntaxSCI)
+#endif
+	{
+		OutputSourceCode_SCI(*this, out);
+	}
 }
 
 void ClassProperty::OutputSourceCode(SourceCodeWriter &out) const
 {
-    if (out.lang == LangSyntaxStudio)
-    {
-        OutputSourceCode_SCIStudio(*this, out);
-    }
-    else if (out.lang == LangSyntaxSCI)
-    {
-        OutputSourceCode_SCI(*this, out);
-    }
+#ifndef KAWA_NOSTUDIO
+	if (out.lang == LangSyntaxStudio)
+	{
+		OutputSourceCode_SCIStudio(*this, out);
+	}
+	else if (out.lang == LangSyntaxSCI)
+#endif
+	{
+		OutputSourceCode_SCI(*this, out);
+	}
 }
 
 void SourceCodeFormatter::Visit(const sci::WeakSyntaxNode &weakNode)

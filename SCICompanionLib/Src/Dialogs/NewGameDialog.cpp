@@ -123,9 +123,11 @@ void NewGameDialog::DoDataExchange(CDataExchange* pDX)
     DDX_Control(pDX, IDC_EDIT_DESCRIPTION, m_wndDescription);
     DDX_Control(pDX, IDC_STATIC_IMAGE, m_wndImage);
 
-    DDX_Control(pDX, IDC_STATIC4, m_wndStatic4);
+#ifndef KAWA_NOSTUDIO
+	DDX_Control(pDX, IDC_STATIC4, m_wndStatic4);
     DDX_Control(pDX, IDC_COMBOLANGUAGE, m_wndComboLanguage);
     m_wndComboLanguage.SetCurSel(0);
+#endif
 
     DDX_Control(pDX, IDC_COMBOTEMPLATE, m_wndComboTemplate);
     _PopulateTemplates();
@@ -202,12 +204,12 @@ void NewGameDialog::OnBnClickedOk()
 
     // Language
     // Set the game language.
-    int curSel = m_wndComboLanguage.GetCurSel();
-    LangSyntax lang = LangSyntaxUnknown;
-    if (curSel != CB_ERR)
-    {
-        lang = (LangSyntax)curSel;
-    }
+    //int curSel = m_wndComboLanguage.GetCurSel();
+	LangSyntax lang = LangSyntaxSCI; //LangSyntaxUnknown;
+    //if (curSel != CB_ERR)
+    //{
+    //   lang = (LangSyntax)curSel;
+    //}
 
     if (fContinue)
     {

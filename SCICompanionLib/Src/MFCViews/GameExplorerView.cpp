@@ -300,7 +300,7 @@ CRuntimeClass *g_listClasses[] =
     RUNTIME_CLASS(CRasterResourceListCtrl),
     RUNTIME_CLASS(CResourceListCtrl),
     RUNTIME_CLASS(CRasterResourceListCtrl),
-    RUNTIME_CLASS(CResourceListCtrl),   
+    RUNTIME_CLASS(CResourceListCtrl),
     RUNTIME_CLASS(CResourceListCtrl),
     RUNTIME_CLASS(CResourceListCtrl),
     RUNTIME_CLASS(CResourceListCtrl),
@@ -441,7 +441,7 @@ void CGameExplorerView::_OnSelChange(ResourceType iSelectedTab)
         {
             pDoc->ShowResourceType(_iSelectedTab);
         }
-        
+
         int listIndex = (int)iSelectedTab;
         assert(listIndex < (int)ARRAYSIZE(_lists));
         if (_lists[listIndex].get() == nullptr)
@@ -452,7 +452,7 @@ void CGameExplorerView::_OnSelChange(ResourceType iSelectedTab)
             _lists[listIndex]->SetDocument(GetDocument());
             _lists[listIndex]->SetType(iSelectedTab);
             _lists[listIndex]->SetOpenFunction(g_openFunctions[listIndex]);
-            
+
             RECT rc;
             GetClientRect(&rc);
             _lists[listIndex]->Create(WS_CHILD | WS_VISIBLE, rc, this, 0);
@@ -626,7 +626,7 @@ void DropResourceFiles(CArray<CString, CString&> *pDropFiles)
     {
         int iNumber;
         std::string resNameFromFilename;
- 
+
         if (_IsBitmapFile(pDropFiles->GetAt(i)))
         {
             // It's a bmp file... it might have a resource encoded in it.
@@ -752,7 +752,7 @@ BOOL GetDropFiles(COleDataObject *pDataObject, CArray<CString, CString&> *pFileL
                 }
             }
         }
-    }    
+    }
     return fRet;
 }
 

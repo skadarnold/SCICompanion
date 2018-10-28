@@ -433,6 +433,7 @@ BEGIN_MESSAGE_MAP(CRasterView, CScrollingThing<CView>)
     ON_COMMAND(ID_VIEW_REMOVEEMBEDDEDPALETTE, RemoveVGAPalette)
     ON_COMMAND(ID_VIEW_REMAPPALETTE, RemapPalette)
     ON_COMMAND(ID_VIEW_SHIFTCOLORS, ShiftColors)
+	ON_COMMAND(ID_VIEW_SHRINKWRAPCEL, ShrinkWrapCels)
     ON_COMMAND(ID_VIEW_LEFTONIONSKIN, ToggleLeftOnion)
     ON_COMMAND(ID_VIEW_RIGHTONIONSKIN, ToggleRightOnion)
     ON_COMMAND(ID_VIEW_ONIONSKINSETTINGS, OnOnionSkinSettings)
@@ -483,6 +484,7 @@ BEGIN_MESSAGE_MAP(CRasterView, CScrollingThing<CView>)
     ON_UPDATE_COMMAND_UI(ID_VIEW_REMOVEEMBEDDEDPALETTE, OnUpdateHasVGAPalette)
     ON_UPDATE_COMMAND_UI(ID_VIEW_REMAPPALETTE, OnUpdateIsVGA)
     ON_UPDATE_COMMAND_UI(ID_VIEW_SHIFTCOLORS, OnUpdateAlwaysOn)
+	ON_UPDATE_COMMAND_UI(ID_VIEW_SHRINKWRAPCEL, OnUpdateAlwaysOn)
     ON_UPDATE_COMMAND_UI(ID_VIEW_LEFTONIONSKIN, OnUpdateLeftOnion)
     ON_UPDATE_COMMAND_UI(ID_VIEW_RIGHTONIONSKIN, OnUpdateRightOnion)
 END_MESSAGE_MAP()
@@ -2552,7 +2554,7 @@ void CRasterView::_OnPaste(bool fTransparent, bool provideOptions)
                         //  - first try it without excluding the Tx color.
                         //  - if nothing mapped to the Tx color, we're done. If something did, then ask if they want to try again.
                         BitmapConvertStatus convertStatus = BitmapConvertStatus::None;
-                        std::unique_ptr<Cel> finalResult =
+						std::unique_ptr<Cel> finalResult = 
                             GdiPlusBitmapToCel(
                             *pBitmap,
                             false,  // No dither
@@ -2568,6 +2570,7 @@ void CRasterView::_OnPaste(bool fTransparent, bool provideOptions)
                             g_vgaPaletteMapping,
                             convertStatus
                             );
+#ifndef KAWA_NOTRANSPARENCYNAG
                         if (IsFlagSet(convertStatus, BitmapConvertStatus::MappedToTransparentColor))
                         {
                             vector<pair<int, string>> buttons = { { MessageBoxCustomization::Yes, "Try again" }, { MessageBoxCustomization::No, "This is OK"} };
@@ -2594,6 +2597,7 @@ void CRasterView::_OnPaste(bool fTransparent, bool provideOptions)
                             }
 
                         }
+#endif
 
                         if (finalResult)
                         {
@@ -3725,6 +3729,35 @@ void CRasterView::RemapPalette()
 }
 
 void DoNothing(ResourceEntity &resource);
+
+void CRasterView::ShrinkWrapCels()
+{
+	CNewRasterResourceDocument *pDoc = GetDoc();
+	if (pDoc)
+	{
+		bool fApplyToAll = pDoc->GetApplyToAllCels();
+		CelIndex celIndex = pDoc->GetSelectedIndex();
+		pDoc->ApplyChanges<RasterComponent>(
+			[celIndex, fApplyToAll](RasterComponent &raster)
+		{
+			RasterChangeHint hint = RasterChangeHint::None;
+			if (fApplyToAll)
+			{
+				Loop &loop = raster.Loops[celIndex.loop];
+				for (int i = 0; i < (int)loop.Cels.size(); i++)
+				{
+					hint |= ShrinkWrapCel(raster, CelIndex(celIndex.loop, i));
+				}
+			}
+			else
+			{
+				hint |= ShrinkWrapCel(raster, celIndex);
+			}
+			return WrapHint(hint);
+		}
+		);
+	}
+}
 
 void CRasterView::ShiftColors()
 {

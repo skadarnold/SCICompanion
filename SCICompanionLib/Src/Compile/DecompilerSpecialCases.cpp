@@ -166,6 +166,41 @@ void _MassagePrint(ProcedureCall &proc, DecompileLookups &lookups)
     }
 }
 
+#ifdef KAWA_DISPLAYMASSAGE
+void _MassageDisplay(ProcedureCall &proc, DecompileLookups &lookups)
+{
+	size_t parameterIndex = 1;
+	std::string dummy;
+	if (_DoesProcedureStartWithTextTuple(proc, lookups, false, dummy))
+	{
+		parameterIndex++;
+	}
+
+	uint16_t value = -1;
+	while (parameterIndex < proc.GetStatements().size())
+	{
+		SyntaxNode *param = proc.GetParameter(parameterIndex);
+		if (!IsStatementImmediateValue(*param, value))
+			break;
+		PropertyValue *pV = SafeSyntaxNode<PropertyValue>(param);
+		switch (value)
+		{
+			case 100: pV->SetValue("dsCOORD", ValueType::Token); parameterIndex += 2; break;
+			case 101: pV->SetValue("dsALIGN", ValueType::Token); parameterIndex += 1; break;
+			case 102: pV->SetValue("dsCOLOR", ValueType::Token); parameterIndex += 1; break;
+			case 103: pV->SetValue("dsBACKGROUND", ValueType::Token); parameterIndex += 1; break;
+			case 104: pV->SetValue("dsDISABLED", ValueType::Token); parameterIndex += 1; break;
+			case 105: pV->SetValue("dsFONT", ValueType::Token); parameterIndex += 1; break;
+			case 106: pV->SetValue("dsWIDTH", ValueType::Token); parameterIndex += 1; break;
+			case 107: pV->SetValue("dsSAVEPIXELS", ValueType::Token); parameterIndex += 0; break;
+			case 108: pV->SetValue("dsRESTOREPIXELS", ValueType::Token); parameterIndex += 1; break;
+			default: return;
+		}
+		parameterIndex++;
+	}
+}
+#endif
+
 // Print(100 44) becomes Print("Hello there")
 void _SubstituteTextTuples(ProcedureCall &proc, DecompileLookups &lookups, std::string &text, bool replace)
 {
@@ -184,6 +219,13 @@ void _MassageProcedureCall(ProcedureCall &proc, DecompileLookups &lookups)
     {
         _MassagePrint(proc, lookups);
     }
+#ifdef KAWA_DISPLAYMASSAGE
+	else if (proc.GetName() == "Display")
+	{
+		_MassageDisplay(proc, lookups);
+	}
+
+#endif
 }
 
 class MassageProcedureCallsWorker : public IExploreNode

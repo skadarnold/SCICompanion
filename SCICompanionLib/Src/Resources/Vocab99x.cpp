@@ -1243,10 +1243,14 @@ SpeciesIndex SpeciesTable::MaybeAddSpeciesIndex(uint16_t wScript, uint16_t wClas
 std::vector<std::string> SpeciesTable::GetNames() const
 {
     std::vector<std::string> names;
-    for (size_t i = 0; i < _direct.size(); ++i)
+	//KAWA -- table format
+	names.push_back("species\tscript");
+	names.push_back("--------------------------");
+	for (size_t i = 0; i < _direct.size(); ++i)
     {
         std::stringstream stream;
-        stream << "species " << static_cast<DWORD>(i) << ": script " << _direct[i];
+        //stream << "species " << static_cast<DWORD>(i) << ": script " << _direct[i];
+		stream << static_cast<DWORD>(i) << "\t" << _direct[i];
         names.push_back(stream.str());
     }
     return names;

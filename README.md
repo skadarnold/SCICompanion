@@ -21,4 +21,4 @@ The following defines are available:
 * `KAWA_VOCABPREVIEWS` - Adds some more sidebar previews for vocabs, like the Object Offsets (994), ~~and the opcode list (998)~~. Also changes the format for kernel names (999).
 * `KAWA_DISPLAYMASSAGE` - Makes the `Display` kernel call's arguments look better, with proper constants instead of numbers, so `dsWIDTH` instead of `106`.
 
-There are a few other changes that aren't defined away, such as the *Shrinkwrap cel* menu item. In the `Debug` and `Release` target, none of the above are enabled. In `Mild`, only `KAWA_VOCABPREVIEWS` and `KAWA_DISPLAYMASSAGE` are, unless someone wishes otherwise. The `Kawa` target has *all* of them.
+There are a few other changes that aren't defined away, such as the *Shrinkwrap cel* menu item. In the `Debug` and `Release` target, none of the above are enabled. In `Mild`, only `KAWA_VOCABPREVIEWS` and `KAWA_DISPLAYMASSAGE` are, unless someone wishes otherwise. The `Kawa` target has all of them enabled *but* `PHIL_LDMSTM`.

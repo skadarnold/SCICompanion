@@ -736,7 +736,7 @@ namespace sci
         DECLARE_NODE_TYPE(NodeTypeVariableDeclaration)
     public:
         VariableDecl();
-#ifdef PHIL_LDMSTM
+#if defined(PHIL_LDMSTM) || defined(PHIL_FOREACH)
 		VariableDecl(const std::string &name); 
 #endif
         VariableDecl(const VariableDecl &src) = delete;

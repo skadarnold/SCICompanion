@@ -194,6 +194,7 @@ void _MassageDisplay(ProcedureCall &proc, DecompileLookups &lookups)
 			case 106: pV->SetValue("dsWIDTH", ValueType::Token); parameterIndex += 1; break;
 			case 107: pV->SetValue("dsSAVEPIXELS", ValueType::Token); parameterIndex += 0; break;
 			case 108: pV->SetValue("dsRESTOREPIXELS", ValueType::Token); parameterIndex += 1; break;
+			case 122: pV->SetValue("dsSTROKE", ValueType::Token); parameterIndex += 1; break;
 			default: return;
 		}
 		parameterIndex++;

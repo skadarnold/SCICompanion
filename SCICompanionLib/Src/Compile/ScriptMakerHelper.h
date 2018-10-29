@@ -19,13 +19,12 @@ void _AddStatement(_T &method, std::unique_ptr<sci::SyntaxNode> pNode)
     method.AddStatement(std::move(pNode));
 }
 
-#ifdef PHIL_FOREACH
+#ifdef PHIL_LDMSTM
 void _AddAssignment(sci::StatementsNode &method, const std::string &lvalueName, const std::string &assigned);
 #else
-std::unique_ptr<sci::SyntaxNode> _MakeTokenStatement(const std::string &token);
-
 void _AddAssignment(sci::MethodDefinition &method, const std::string &lvalueName, const std::string &assigned);
 #endif
+std::unique_ptr<sci::SyntaxNode> _MakeTokenStatement(const std::string &token);
 
 template<typename _T>
 void _AddComment(_T &method, const std::string &comment, sci::CommentType type)

@@ -736,7 +736,6 @@ void SetIterationVariableA(MatchResult &match, const ParserSCI *pParser, SyntaxC
 		pContext->GetSyntaxNode<ForEachLoop>()->IterationVariable = pContext->ScratchString();
 	}
 }
-#endif
 
 #ifdef PHIL_LDMSTM
 void SetIsReferenceA(MatchResult &match, const ParserSCI *pParser, SyntaxContext *pContext, const streamIt &stream)
@@ -746,7 +745,10 @@ void SetIsReferenceA(MatchResult &match, const ParserSCI *pParser, SyntaxContext
 		pContext->GetSyntaxNode<ForEachLoop>()->IsReference = true;
 	}
 }
+#endif
+#endif
 
+#ifdef PHIL_LDMSTM
 void DerefLValueA(MatchResult &match, const ParserSCI *pParser, SyntaxContext *pContext, const streamIt &stream)
 {
 	if (match.Result())
@@ -937,7 +939,9 @@ void SCISyntaxParser::Load()
 #ifdef PHIL_FOREACH
 	foreach_loop =
 		keyword_p("foreach")[SetStatementA<ForEachLoop>]
+#ifdef PHIL_LDMSTM
 		>> -ampersand[SetIsReferenceA]
+#endif
 		>> general_token[SetIterationVariableA]
 		>> statement[StatementBindTo1stA<ForEachLoop, errCollectionArg>]
 		>> *statement[AddStatementA<ForEachLoop>];

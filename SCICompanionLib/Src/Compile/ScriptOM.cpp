@@ -383,7 +383,7 @@ void VariableDecl::AddSimpleInitializer(const PropertyValue &value)
     AddStatement(make_unique<PropertyValue>(value));
 }
 
-#ifdef PHIL_LDMSTM
+#if defined(PHIL_LDMSTM) || defined(PHIL_FOREACH)
 VariableDecl::VariableDecl(const std::string &name) : StatementsNode(), TypedNode(), _size(1), _unspecifiedSize(false), _name(name) {}
 #endif
 

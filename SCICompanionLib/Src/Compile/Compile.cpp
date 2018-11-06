@@ -3722,13 +3722,7 @@ void ForEachLoop::PreScan(CompileContext &context)
 #endif
 
 #ifdef KAWA_GETPOLY
-void GetPolyStatement::PreScan(CompileContext &context)
-{
-	// These things should have been cleared out:
-	assert(!_statement1);
-	assert(_segments.size() == 0);
-	ForwardPreScan2(FinalCode, context);
-}
+void GetPolyStatement::PreScan(CompileContext &context) {}
 CodeResult GetPolyStatement::OutputByteCode(CompileContext &context) const
 {
 	WORD wBytes = 0;

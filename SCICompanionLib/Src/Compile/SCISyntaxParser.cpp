@@ -1728,6 +1728,13 @@ void _ProcessGetPoly(ICompileLog &log, Script &script, FunctionBase &func, GetPo
 				log.ReportResult(CompileResult("Unknown polygon name in getpoly."));
 			}
 		}
+		else
+		{
+			log.ReportResult(CompileResult("getpoly must have a polygon name as a string parameter, without the P_ in front."));
+		}
+	}
+	{
+		log.ReportResult(CompileResult("getpoly must have a polygon name as a string parameter, without the P_ in front."));
 	}
 }
 

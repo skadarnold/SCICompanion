@@ -1934,6 +1934,13 @@ public:
 	}
 #endif
 
+#ifdef KAWA_GETPOLY
+	void Visit(const GetPolyStatement &gp) override
+	{
+		_MaybeIndentAcceptChildren(gp.FinalCode);
+	}
+#endif
+
     // Measure the size of code output in a first pass, so we can better
 
     void Enter(const SyntaxNode &node) override

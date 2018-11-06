@@ -428,6 +428,26 @@ namespace sci
 	};
 #endif
 
+#ifdef KAWA_GETPOLY
+	class GetPolyStatement : public SyntaxNode, public OneStatementNode
+	{
+		DECLARE_NODE_TYPE(NodeTypeGetPoly)
+	public:
+		GetPolyStatement() {}
+		GetPolyStatement(GetPolyStatement &src) = delete;
+		GetPolyStatement& operator=(GetPolyStatement& src) = delete;
+		void Accept(ISyntaxNodeVisitor &visitor) const override;
+		// IOutputByteCode
+		CodeResult OutputByteCode(CompileContext &context) const;
+		void PreScan(CompileContext &context);
+		void Traverse(IExploreNode &en);
+		// The collection is in _statement1, and the inner code is in _segments.
+		std::string PolyName;
+		// Until the syntax parser processes it all into this:
+		SyntaxNodeVector FinalCode;
+	};
+#endif
+
     //
     // Assignment statement (e.g. += foo 1)
     //

@@ -434,6 +434,9 @@ public:
 #ifdef PHIL_FOREACH
 	void Visit(const ForEachLoop &foreachLoop) override {}
 #endif
+#ifdef KAWA_GETPOLY
+	void Visit(const GetPolyStatement &getPolyStatement) override {}
+#endif
 
     void Enter(const SyntaxNode &node) override {}
     void Leave(const SyntaxNode &node) override {}
@@ -543,6 +546,9 @@ public:
     void Visit(const ExternDeclaration &externDecl) override {}
 #ifdef PHIL_FOREACH
 	void Visit(const ForEachLoop &forEachLoop) override {}
+#endif
+#ifdef KAWA_GETPOLY
+	void Visit(const GetPolyStatement &getPolyStatement) override {}
 #endif
 
     void Enter(const SyntaxNode &node) override {}

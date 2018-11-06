@@ -149,6 +149,9 @@ namespace sci
 #ifdef PHIL_FOREACH
 	class ForEachLoop; 
 #endif
+#ifdef KAWA_GETPOLY
+	class GetPolyStatement;
+#endif
 
     class ISyntaxNodeVisitor
     {
@@ -198,6 +201,9 @@ namespace sci
         virtual void Visit(const ExternDeclaration &externDecl) = 0;
 #ifdef PHIL_FOREACH
 		virtual void Visit(const ForEachLoop &forEachLoop) = 0; 
+#endif
+#ifdef KAWA_GETPOLY
+		virtual void Visit(const GetPolyStatement &getPolyStatement) = 0;
 #endif
 
         virtual void Enter(const SyntaxNode &node) = 0;

@@ -430,6 +430,9 @@ std::vector<std::string> codeLevelKeywordsSCI =
 #ifdef PHIL_FOREACH
 	_T("foreach"),
 #endif
+#ifdef KAWA_GETPOLY
+	_T("getpoly"),
+#endif
     _T("if"),
     _T("mod"),
     _T("not"),

@@ -9,6 +9,10 @@
 #ifdef PHIL_FOREACH
 #include "ScriptMakerHelper.h"
 #endif
+#ifdef KAWA_GETPOLY
+#include "Polygon.h"
+#include "AppState.h"
+#endif
 
 using namespace sci;
 using namespace std;
@@ -134,6 +138,9 @@ vector<string> SCIKeywords =
 
 #ifdef PHIL_FOREACH
 	"foreach",
+#endif
+#ifdef KAWA_GETPOLY
+	"getpoly",
 #endif
 };
 
@@ -946,6 +953,11 @@ void SCISyntaxParser::Load()
 		>> statement[StatementBindTo1stA<ForEachLoop, errCollectionArg>]
 		>> *statement[AddStatementA<ForEachLoop>];
 #endif
+#ifdef KAWA_GETPOLY
+	getpoly_statement =
+		keyword_p("getpoly")[SetStatementA<GetPolyStatement>]
+		>> statement[StatementBindTo1stA<GetPolyStatement, nullptr>];
+#endif
 
     case_statement =
         alwaysmatch_p[StartStatementA]
@@ -1100,7 +1112,10 @@ void SCISyntaxParser::Load()
 #ifdef PHIL_FOREACH
 		foreach_loop |
 #endif
-        cond_statement |
+#ifdef KAWA_GETPOLY
+		getpoly_statement |
+#endif
+		cond_statement |
         switchto_statement |
         switch_statement |
         breakif_statement |
@@ -1642,6 +1657,94 @@ void _ProcessForEaches(ICompileLog &log, Script &script)
 }
 #endif
 
+#ifdef KAWA_GETPOLY
+void _ProcessGetPoly(ICompileLog &log, Script &script, FunctionBase &func, GetPolyStatement &theGetPoly)
+{
+	if (theGetPoly.GetStatement1()->GetNodeType() == sci::NodeType::NodeTypeComplexValue)
+	{
+		auto cpv = static_cast<ComplexPropertyValue&>(*theGetPoly.GetStatement1());
+		if (cpv.GetType() == ValueType::String)
+		{
+			auto ourScriptNum = script.GetScriptNumber();
+			auto ourPolyName = "P_" + cpv.GetStringValue();
+			
+			//TODO: Load polygon data for current script, find ourPolyName, and USE THAT BITCH
+			auto polyComponent = CreatePolygonComponent(appState->GetResourceMap().Helper().GetPolyFolder(), ourScriptNum);
+
+			const SCIPolygon *ourPolygon = nullptr;
+			for (const SCIPolygon &poly : polyComponent->Polygons())
+			{
+				if (!poly.Name.empty())
+				{
+					auto thisPolyName = poly.Name;
+					if (thisPolyName.compare(ourPolyName) == 0)
+					{
+						ourPolygon = &poly;
+						break;
+					}
+				}
+			}
+			if (ourPolygon)
+			{
+				unique_ptr<SendCall> polySend = std::make_unique<SendCall>();
+				polySend->SetName("Polygon");
+				unique_ptr<SendParam> polyNew = std::make_unique<SendParam>();
+				polyNew->SetName("new");
+				polyNew->SetIsMethod(true);
+				polySend->AddSendParam(move(polyNew));
+
+				unique_ptr<SendParam> typeParam = std::make_unique<SendParam>();
+				typeParam->SetName("type");
+				typeParam->SetIsMethod(false);
+				//typeParam->AddStatement(_MakeNumberStatement(2));
+				typeParam->AddStatement(_MakeNumberStatement((int)ourPolygon->Type));
+
+				unique_ptr<SendParam> initParam = std::make_unique<SendParam>();
+				initParam->SetName("init");
+				initParam->SetIsMethod(false);
+				//Repeat as needed
+				//initParam->AddStatement(_MakeNumberStatement(64));
+				//initParam->AddStatement(_MakeNumberStatement(42));
+				for (point16 point : ourPolygon->Points())
+				{
+					initParam->AddStatement(_MakeNumberStatement(point.x));
+					initParam->AddStatement(_MakeNumberStatement(point.y));
+				}
+				//
+
+				unique_ptr<SendParam> yourParam = std::make_unique<SendParam>();
+				yourParam->SetName("yourself");
+				yourParam->SetIsMethod(false);
+
+				unique_ptr<SendCall> pSend = std::make_unique<SendCall>();
+				pSend->SetStatement1(move(polySend));
+				pSend->AddSendParam(move(typeParam));
+				pSend->AddSendParam(move(initParam));
+				pSend->AddSendParam(move(yourParam));
+				theGetPoly.FinalCode.push_back(move(pSend));
+			}
+			else
+			{
+				log.ReportResult(CompileResult("Unknown polygon name in getpoly."));
+			}
+		}
+	}
+}
+
+void _ProcessGetPolys(ICompileLog &log, Script &script)
+{
+	EnumScriptElements<FunctionBase>(script,
+		[&log, &script](FunctionBase &func)
+	{
+		EnumScriptElements<GetPolyStatement>(func,
+			[&log, &script, &func](GetPolyStatement &getPolyStatement)
+		{
+			_ProcessGetPoly(log, script, func, getPolyStatement);
+		});
+	});
+}
+#endif
+
 //
 // Fix up scripts so that they conform to standards. Differences in the SCI syntax make
 // it difficult to get the script OM in its final state just in the parsing phase.
@@ -1673,6 +1776,13 @@ void PostProcessScript(ICompileLog *pLog, Script &script)
 	if (pLog)
 	{
 		_ProcessForEaches(*pLog, script);
+	}
+#endif
+
+#ifdef KAWA_GETPOLY
+	if (pLog)
+	{
+		_ProcessGetPolys(*pLog, script);
 	}
 #endif
 

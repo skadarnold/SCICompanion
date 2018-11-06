@@ -802,6 +802,9 @@ public:
 #ifdef PHIL_FOREACH
 	void Visit(const ForEachLoop &vc) override {}
 #endif
+#ifdef KAWA_GETPOLY
+	void Visit(const GetPolyStatement &gp) override {}
+#endif
 
 	void Enter(const SyntaxNode &node) override {}
     void Leave(const SyntaxNode &node) override {}

@@ -666,3 +666,7 @@ void ExternDeclaration::Accept(ISyntaxNodeVisitor &visitor) const { visitor.Ente
 #ifdef PHIL_FOREACH
 void ForEachLoop::Accept(ISyntaxNodeVisitor &visitor) const { visitor.Enter(*this); visitor.Visit(*this); visitor.Leave(*this); }
 #endif
+#ifdef KAWA_GETPOLY
+void GetPolyStatement::Accept(ISyntaxNodeVisitor &visitor) const { visitor.Enter(*this); visitor.Visit(*this); visitor.Leave(*this); }
+#endif
+

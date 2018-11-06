@@ -3721,6 +3721,23 @@ void ForEachLoop::PreScan(CompileContext &context)
 }
 #endif
 
+#ifdef KAWA_GETPOLY
+void GetPolyStatement::PreScan(CompileContext &context)
+{
+	// These things should have been cleared out:
+	assert(!_statement1);
+	assert(_segments.size() == 0);
+	ForwardPreScan2(FinalCode, context);
+}
+CodeResult GetPolyStatement::OutputByteCode(CompileContext &context) const
+{
+	WORD wBytes = 0;
+	CodeResult result = SingleStatementVectorOutputHelper(FinalCode, context, &wBytes);
+	return CodeResult(wBytes, result.GetType());
+	//return 0;
+}
+#endif
+
 void ExportEntry::PreScan(CompileContext &context) {}
 
 void Script::TrackGenText(CompileContext &context)

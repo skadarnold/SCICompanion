@@ -69,5 +69,8 @@ namespace sci
 #ifdef PHIL_FOREACH
 		NodeTypeForEach,
 #endif
+#ifdef KAWA_GETPOLY
+		NodeTypeGetPoly,
+#endif
     };
 }

@@ -114,6 +114,9 @@ private:
 #ifdef PHIL_FOREACH
 	ParserSCI foreach_loop;
 #endif
+#ifdef KAWA_GETPOLY
+	ParserSCI getpoly_statement;
+#endif
 
     // Non-code parsers:
     ParserSCI classdef_file;

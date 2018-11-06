@@ -176,6 +176,12 @@ void ForEachLoop::Traverse(IExploreNode &en)
 	ForwardTraverse2(_segments, en);
 }
 #endif
+#if KAWA_GETPOLY
+void GetPolyStatement::Traverse(IExploreNode &en)
+{
+	ExploreNodeBlock enb(en, *this);
+}
+#endif
 void Script::Traverse(IExploreNode &en)
 {
 	ExploreNodeBlock enb(en, *this);

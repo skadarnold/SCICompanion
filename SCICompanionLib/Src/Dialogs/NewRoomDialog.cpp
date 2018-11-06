@@ -285,11 +285,13 @@ void CNewRoomDialog::_PrepareBuffer()
         script.AddInclude(messagefileInclude);
     }
 
+#ifndef KAWA_GETPOLY
     if (includePolys)
     {
         string polyfileInclude = fmt::format("{0}.shp", _nPicScript);
         script.AddInclude(polyfileInclude);
     }
+#endif
 
     if (profile == NewRoomProfile::SCI11)
     {
@@ -315,7 +317,7 @@ void CNewRoomDialog::_PrepareBuffer()
         pClass->SetSuperClass(roomName);
 
         // Make sure to add an export for it
-        script.GetExports().push_back(std::make_unique<ExportEntry>(0, pClass->GetName()));
+        //script.GetExports().push_back(std::make_unique<ExportEntry>(0, pClass->GetName()));
 
         // Export it, if we're using syntax version 2
         if (script.SyntaxVersion >= 2)
@@ -356,7 +358,12 @@ void CNewRoomDialog::_PrepareBuffer()
                 
             if (includePolys)
             {
+#ifdef KAWA_GETPOLY
+				_AddStatement(*pInit, GetSetUpPolyProcedureCall());
+				//_AddComment(*pInit, "(gRoom addObstacle: (getpoly {Room}))", sci::CommentType::Indented);
+#else
                 _AddStatement(*pInit, GetSetUpPolyProcedureCall(_nPicScript));
+#endif
             }
 
             _AddSendCall(*pInit, "super", "init", "");

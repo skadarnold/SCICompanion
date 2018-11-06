@@ -67,12 +67,29 @@ const string AccessType[] =
     "PContainedAccess",
 };
 
+#ifdef KAWA_GETPOLY
+unique_ptr<SendCall> GetSetUpPolyProcedureCall()
+{
+	auto gRoom = make_unique<SendCall>();
+	gRoom->SetName("gRoom");
+	auto addObstacle = make_unique<SendParam>();
+	addObstacle->SetName("addObstacle");
+	addObstacle->SetIsMethod(true);
+	auto getPoly = make_unique<ProcedureCall>();
+	getPoly->SetName("getpoly");
+	getPoly->AddStatement(_MakeStringStatement("", sci::ValueType::String)); //Empty, because P_DefaultNNN *has no name in PolygonComponent*.
+	addObstacle->AddStatement(move(getPoly));
+	gRoom->AddSendParam(move(addObstacle));
+	return gRoom;
+}
+#else
 unique_ptr<ProcedureCall> GetSetUpPolyProcedureCall(int picResource)
 {
     unique_ptr<ProcedureCall> procCall = make_unique<ProcedureCall>(c_szAddPolysToRoomFunction);
     _AddStatement(*procCall, make_unique<PropertyValue>(fmt::format("{0}{1}", c_szDefaultPolyName, picResource), ValueType::Pointer));
     return procCall;
 }
+#endif
 
 const PropertyValueBase *_GetPropertyValue(const SyntaxNode *node)
 {

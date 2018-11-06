@@ -1667,6 +1667,8 @@ void _ProcessGetPoly(ICompileLog &log, Script &script, FunctionBase &func, GetPo
 		{
 			auto ourScriptNum = script.GetScriptNumber();
 			auto ourPolyName = "P_" + cpv.GetStringValue();
+			if (ourPolyName == "P_")
+				ourPolyName = "";
 			
 			//TODO: Load polygon data for current script, find ourPolyName, and USE THAT BITCH
 			auto polyComponent = CreatePolygonComponent(appState->GetResourceMap().Helper().GetPolyFolder(), ourScriptNum);
@@ -1674,7 +1676,7 @@ void _ProcessGetPoly(ICompileLog &log, Script &script, FunctionBase &func, GetPo
 			const SCIPolygon *ourPolygon = nullptr;
 			for (const SCIPolygon &poly : polyComponent->Polygons())
 			{
-				if (!poly.Name.empty())
+				//if (!poly.Name.empty())
 				{
 					auto thisPolyName = poly.Name;
 					if (thisPolyName.compare(ourPolyName) == 0)
@@ -1730,11 +1732,12 @@ void _ProcessGetPoly(ICompileLog &log, Script &script, FunctionBase &func, GetPo
 		}
 		else
 		{
-			log.ReportResult(CompileResult("getpoly must have a polygon name as a string parameter, without the P_ in front."));
+			log.ReportResult(CompileResult("getpoly must have a polygon name as a string parameter, without the P_ in front, or an empty string for Default."));
 		}
 	}
+	else
 	{
-		log.ReportResult(CompileResult("getpoly must have a polygon name as a string parameter, without the P_ in front."));
+		log.ReportResult(CompileResult("getpoly must have a polygon name as a string parameter, without the P_ in front, or an empty string for Default."));
 	}
 }
 

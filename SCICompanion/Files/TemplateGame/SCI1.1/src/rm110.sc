@@ -3,7 +3,6 @@
 (include "Verbs.sh")
 (include "game.sh")
 (include "110.shm")
-(include "110.shp")
 (exports
     0 rm110
 )
@@ -31,7 +30,7 @@
     )
 
     (method (init)
-        AddPolygonsToRoom(@P_Default110)
+        (send gRoom:addObstacle(getpoly({})))
         (super:init())
         
         (switch (gPreviousRoomNumber)

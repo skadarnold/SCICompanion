@@ -1699,7 +1699,7 @@ PATCH_FILE_HEAP
 
 const TCHAR g_szResourceSpec[] = PATCH_FILE_TYPES;
 
-const TCHAR* g_szResourceSpecByType[ResourceType::Max] =
+const TCHAR* g_szResourceSpecByType[(int)ResourceType::Max] =
 {
     PATCH_FILE_VIEW,
     PATCH_FILE_PIC,
@@ -2012,6 +2012,9 @@ bool CompileABunchOfScripts(AppState *appState, DependencyTracker *dependencyTra
 
     CPrecisionTimer timer;
     timer.Start();
+
+	g_compileIOTimer.Reset();
+
     bool result = true;
 
     // Clear out results
@@ -2022,7 +2025,9 @@ bool CompileABunchOfScripts(AppState *appState, DependencyTracker *dependencyTra
         CNewCompileDialog dialog(scriptsToRecompile);
         dialog.DoModal();
         result = !dialog.HasErrors();
+		g_compileIOTimer.Start();
         defer.Commit();
+		g_compileIOTimer.Stop();
     }
 
     timer.Stop();
@@ -2030,7 +2035,8 @@ bool CompileABunchOfScripts(AppState *appState, DependencyTracker *dependencyTra
     CompileLog log;
     log.ReportResult(CompileResult("--------------------------------"));
     std::stringstream strMessage;
-    strMessage << "Time elapsed: " << fmt::format("{0:.2f}", (float)timer.Stop()) << " seconds.";
+	strMessage << "Time elapsed: " << fmt::format("{0:.2f}", (float)timer.GetElapsed()) << " seconds.";
+	strMessage << "I/O time: " << fmt::format("{0:.2f}", (float)g_compileIOTimer.GetElapsed()) << " seconds.";
     log.ReportResult(CompileResult(strMessage.str()));
     log.CalculateErrors();
 

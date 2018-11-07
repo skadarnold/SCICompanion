@@ -221,10 +221,14 @@ bool NewCompileScript(CompileResults &results, CompileLog &log, CompileTables &t
 	ClassBrowserLock lock(appState->GetClassBrowser());
     lock.Lock();
 
+	g_compileIOTimer.Start();
+
     // Make a new buffer.
     CCrystalTextBuffer buffer;
     if (buffer.LoadFromFile(script.GetFullPath().c_str()))
     {
+		g_compileIOTimer.Stop();
+
         CScriptStreamLimiter limiter(&buffer);
         CCrystalScriptStream stream(&limiter);
 
@@ -281,6 +285,7 @@ bool NewCompileScript(CompileResults &results, CompileLog &log, CompileTables &t
                 appState->GetDependencyTracker().ClearScript(pScript->GetScriptId());
 
                 // Save the corresponding sco file.
+				g_compileIOTimer.Start();
                 CSCOFile &sco = results.GetSCO();
                 {
                     SaveSCOFile(helper, sco, script);
@@ -295,6 +300,7 @@ bool NewCompileScript(CompileResults &results, CompileLog &log, CompileTables &t
                     scdFile.write((const char *)&results.GetDebugInfo()[0], (std::streamsize)results.GetDebugInfo().size());
                     scdFile.close();
                 }
+				g_compileIOTimer.Stop();
                 fRet = true;
             }
         }

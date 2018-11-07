@@ -485,27 +485,40 @@ DWORD GetDllVersion(LPCTSTR lpszDllName);
 class CPrecisionTimer
 {
   LARGE_INTEGER lFreq, lStart;
+  long long elapsed;
+  bool active;
 
 public:
-  CPrecisionTimer()
+	CPrecisionTimer() : elapsed(0), active(false)
   {
     QueryPerformanceFrequency(&lFreq);
   }
 
   inline void Start()
   {
-    //SetThreadAffinityMask( GetCurrentThread(), 1 );
     QueryPerformanceCounter(&lStart);
+	active = true;
+  }
+  inline void Reset()
+  {
+	  elapsed = 0;
+  }
+  inline void Stop()
+  {
+	  LARGE_INTEGER lEnd;
+	  QueryPerformanceCounter(&lEnd);
+	  elapsed += lEnd.QuadPart - lStart.QuadPart;
+	  active = false;
   }
   
-  inline double Stop()
+  inline double GetElapsed()
   {
-    // Return duration in seconds...
-    LARGE_INTEGER lEnd;
-    QueryPerformanceCounter(&lEnd);
-    return (static_cast<double>(lEnd.QuadPart - lStart.QuadPart) / static_cast<double>(lFreq.QuadPart));
+	  // Return duration in seconds...
+	  return (static_cast<double>(elapsed) / static_cast<double>(lFreq.QuadPart));
   }
 };
+
+extern CPrecisionTimer g_compileIOTimer;
 
 const std::string MakeFile(PCSTR pszContent, const std::string &filename);
 void ShowTextFile(PCSTR pszContent, const std::string &filename);

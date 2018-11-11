@@ -90,58 +90,57 @@ vector<string> SCIStatementKeywords =
 
 vector<string> SCIKeywords =
 {
-    "if",
-    "asm",
-    "break",
-    "breakif",
-    "continue",
-    "contif",
-    "repeat",
-    "switch",
-    "switchto",
-    "properties",
-    "procedure",
-    "method",
-    "for",
-    "return",
-    "cond",
-    "while",
-    "else",
-    "super",
-    "mod",
-    "or",
-    "and",
-    "not",
-    "of",
-    // "scriptNumber",  // This is special, because it's a value. So don't count it as a banned keyword.
-    "public",
-    "text#",
-    "define",
-    "&tmp",
-    "&rest",
-    "&sizeof",
 #ifdef PHIL_EXISTS
 	"&exists",
 #endif
-    "script#",
-    // neg, send, case, do, default, export are also keywords, but for the Studio language.
-
-    // The following are original Sierra constructs that are not supported yet.
-    "extern",        // For linking public procedures
-    "selectors",     // For the selector list
-    "global",        // For global var declarations
-    "classdef",      //
-    "methods",       // Method forward declarations (also methods in classdef)
-    "class#",        // In classdef
-    "super#",        // In classdef
-    "file#",         // Procedure forward declarations
-
+#ifdef KAWA_GETPOLY
+	"&getpoly",
+#endif
+	"&tmp",
+	"&rest",
+	"&sizeof",
+	"and",
+	"asm",
+    "break",
+    "breakif",
+	"class#"        // ** In classdef
+	"classdef"      // **
+	"cond",
+	"continue",
+    "contif",
+	"define",
+	"else",
+	"extern"        // ** For linking public procedures
+	"file#"         // ** Procedure forward declarations
+	"for",
 #ifdef PHIL_FOREACH
 	"foreach",
 #endif
-#ifdef KAWA_GETPOLY
-	"getpoly",
-#endif
+	"global"        // ** For global var declarations
+	"if",
+	"method",
+	"methods"       // ** Method forward declarations (also methods in classdef)
+    "mod",
+    "not",
+    "of",
+	"or",
+	"procedure",
+	"properties",
+	"public",
+	"repeat",
+	"return",
+    "script#",
+	"selectors"     // ** For the selector list
+	"super#"        // ** In classdef
+	"super",
+	"switch",
+	"switchto",
+	"text#",
+	"while",
+	// "scriptNumber",  // This is special, because it's a value. So don't count it as a banned keyword.
+	// neg, send, case, do, default, export are also keywords, but for the Studio language.
+
+	// **: Original Sierra constructs that are not supported yet.
 };
 
 template<typename _It, typename _TContext>
@@ -955,7 +954,7 @@ void SCISyntaxParser::Load()
 #endif
 #ifdef KAWA_GETPOLY
 	getpoly_statement =
-		keyword_p("getpoly")[SetStatementA<GetPolyStatement>]
+		keyword_p("&getpoly")[SetStatementA<GetPolyStatement>]
 		>> statement[StatementBindTo1stA<GetPolyStatement, nullptr>];
 #endif
 
@@ -1727,17 +1726,17 @@ void _ProcessGetPoly(ICompileLog &log, Script &script, FunctionBase &func, GetPo
 			}
 			else
 			{
-				log.ReportResult(CompileResult("Unknown polygon name in getpoly."));
+				log.ReportResult(CompileResult(fmt::format("Unknown polygon name {} in &getpoly.", cpv.GetStringValue()), script.GetScriptId(), cpv.GetPosition().Line()));
 			}
 		}
 		else
 		{
-			log.ReportResult(CompileResult("getpoly must have a polygon name as a string parameter, without the P_ in front, or an empty string for Default."));
+			log.ReportResult(CompileResult("&getpoly must have a polygon name as a string parameter, without the P_ in front, or an empty string for Default.", script.GetScriptId(), cpv.GetPosition().Line()));
 		}
 	}
 	else
 	{
-		log.ReportResult(CompileResult("getpoly must have a polygon name as a string parameter, without the P_ in front, or an empty string for Default."));
+		log.ReportResult(CompileResult("&getpoly must have a polygon name as a string parameter, without the P_ in front, or an empty string for Default.", script.GetScriptId(), theGetPoly.GetLineNumber()));
 	}
 }
 

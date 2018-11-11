@@ -76,7 +76,7 @@ unique_ptr<SendCall> GetSetUpPolyProcedureCall()
 	addObstacle->SetName("addObstacle");
 	addObstacle->SetIsMethod(true);
 	auto getPoly = make_unique<ProcedureCall>();
-	getPoly->SetName("getpoly");
+	getPoly->SetName("&getpoly");
 	getPoly->AddStatement(_MakeStringStatement("", sci::ValueType::String)); //Empty, because P_DefaultNNN *has no name in PolygonComponent*.
 	addObstacle->AddStatement(move(getPoly));
 	gRoom->AddSendParam(move(addObstacle));

@@ -413,7 +413,10 @@ std::vector<std::string> codeLevelKeywordsSCI =
 #ifdef PHIL_EXISTS
 	_T("&exists"),
 #endif
-    _T("&rest"),
+#ifdef KAWA_GETPOLY
+	_T("&getpoly"),
+#endif
+	_T("&rest"),
     _T("&sizeof"),
     // _T("&tmp"),   // This is special
     _T("and"),
@@ -429,9 +432,6 @@ std::vector<std::string> codeLevelKeywordsSCI =
     _T("for"),
 #ifdef PHIL_FOREACH
 	_T("foreach"),
-#endif
-#ifdef KAWA_GETPOLY
-	_T("getpoly"),
 #endif
     _T("if"),
     _T("mod"),

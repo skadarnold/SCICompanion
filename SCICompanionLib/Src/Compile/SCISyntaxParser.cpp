@@ -1662,7 +1662,7 @@ void _ProcessGetPoly(ICompileLog &log, Script &script, FunctionBase &func, GetPo
 	if (theGetPoly.GetStatement1()->GetNodeType() == sci::NodeType::NodeTypeComplexValue)
 	{
 		auto cpv = static_cast<ComplexPropertyValue&>(*theGetPoly.GetStatement1());
-		if (cpv.GetType() == ValueType::String)
+		if (cpv.GetType() == ValueType::String || cpv.GetType() == ValueType::ResourceString)
 		{
 			auto ourScriptNum = script.GetScriptNumber();
 			auto ourPolyName = "P_" + cpv.GetStringValue();

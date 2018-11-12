@@ -869,7 +869,7 @@ bool _PreScanPropertyTokenToNumber(CompileContext &context, SyntaxNode *pNode, c
     {
         wValue = 1;
     }
-    else if ((token == "false") || (token == "nullptr"))
+    else if ((token == "false") || (token == "null"))
     {
         wValue = 0;
     }
@@ -948,7 +948,7 @@ void PropertyValueBase::PreScan(CompileContext &context)
         {
             assert(_fNegate == false); // REVIEW: SCIStudio compiler doesn't allow it - should we?
             _type = ValueType::Number;
-        }
+		} // I guess we can have instances and stuff here too, so we'll delay..
         break;
 
 #ifdef PHIL_EXISTS

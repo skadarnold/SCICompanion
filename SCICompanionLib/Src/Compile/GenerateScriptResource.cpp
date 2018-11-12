@@ -486,7 +486,8 @@ void _Section10_LocalVariables(Script &script, CompileContext &context, vector<B
                         case ValueType::ResourceString:
                         case ValueType::Said:
                         case ValueType::String:
-                            context.WroteSink(context.GetTempToken(pValue->GetType(), pValue->GetStringValue()), (uint16_t)output.size(), ResourceType::Heap);
+						case ValueType::Token:
+							context.WroteSink(context.GetTempToken(pValue->GetType(), pValue->GetStringValue(), pValue), (uint16_t)output.size(), ResourceType::Heap);
                             break;
                         case ValueType::Number:
                             // We're good.

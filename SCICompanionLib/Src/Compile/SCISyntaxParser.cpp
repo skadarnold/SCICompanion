@@ -136,6 +136,9 @@ vector<string> SCIKeywords =
 	"switch",
 	"switchto",
 	"text#",
+#ifdef PHIL_VERBS
+	"verbs",
+#endif
 	"while",
 	// "scriptNumber",  // This is special, because it's a value. So don't count it as a banned keyword.
 	// neg, send, case, do, default, export are also keywords, but for the Studio language.
@@ -390,6 +393,52 @@ void ExistsA(MatchResult &match, const ParserSCI *pParser, SyntaxContext *pConte
 		pContext->GetSyntaxNode<BinaryOp>()->Operator = BinaryOperator::GreaterThan;
 		pContext->GetSyntaxNode<BinaryOp>()->SetStatement1(make_unique<PropertyValue>("paramTotal", ValueType::Token)); // Does it need to be ComplexPropertyValue??
 		pContext->GetSyntaxNode<BinaryOp>()->SetStatement2(make_unique<PropertyValue>(pContext->ScratchString(), ValueType::ParameterIndex));
+	}
+}
+#endif
+
+#ifdef PHIL_VERBS
+unique_ptr<FunctionSignature> _CreateVerbHandlerSignature()
+{
+	unique_ptr<FunctionSignature> signature = make_unique<FunctionSignature>();
+	signature->AddParam("theVerb");
+	return signature;
+}
+unique_ptr<FunctionSignature> _CreateIsVerbHandlerSignature()
+{
+	unique_ptr<FunctionSignature> signature = make_unique<FunctionSignature>();
+	signature->AddParam("theVerb");
+	return signature;
+}
+void SyntaxContext::CreateVerbHandler()
+{
+	FunctionPtr = std::make_unique<sci::VerbHandlerDefinition>();
+	FunctionPtr->AddSignature(_CreateVerbHandlerSignature());
+}
+void CreateVerbHandlerA(MatchResult &match, const ParserSCI *pParser, SyntaxContext *pContext, const streamIt &stream)
+{
+	if (match.Result())
+	{
+		pContext->CreateVerbHandler();
+		pContext->FunctionPtr->SetOwnerClass(pContext->ClassPtr.get());
+	}
+}
+void FinishVerbHandlerA(MatchResult &match, const ParserSCI *pParser, SyntaxContext *pContext, const streamIt &stream)
+{
+	if (match.Result())
+	{
+		pContext->ClassPtr->AddVerbHandler(move(std::unique_ptr<sci::VerbHandlerDefinition>(static_cast<sci::VerbHandlerDefinition*>(pContext->FunctionPtr.release()))));
+	}
+	else
+	{
+		pContext->ReportError("Expected verb handler declaration.", stream);
+	}
+}
+void VerbClauseVerbA(MatchResult &match, const ParserSCI *pParser, SyntaxContext *pContext, const streamIt &stream)
+{
+	if (match.Result())
+	{
+		pContext->GetSyntaxNode<VerbClauseStatement>()->Verbs.push_back(PropertyValue(pContext->ScratchString(), ValueType::Token));
 	}
 }
 #endif
@@ -1177,6 +1226,19 @@ void SCISyntaxParser::Load()
 
     method_decl = keyword_p("method")[{CreateMethodA, ParseAutoCompleteContext::ClassLevelKeyword}] >> method_base[FunctionCloseA];
 
+#ifdef PHIL_VERBS
+	verb_clause =
+		alwaysmatch_p[StartStatementA]
+		>> (oppar[SetStatementA<VerbClauseStatement>]
+		>> (alphanumNK_p[{VerbClauseVerbA, ParseAutoCompleteContext::DefineValue}] % comma[GeneralE]) // comma separated verbs - must have at least one verb though.
+		>> *statement[AddStatementA<VerbClauseStatement>] // then code
+		>> clpar[GeneralE])[FinishStatementA];
+	// here - first just get nearVerbs working, then do an OR for the thing
+	verb_handler_decl = keyword_p("verbs")[{CreateVerbHandlerA, ParseAutoCompleteContext::ClassLevelKeyword}]
+		// >> // Todo, allow for temp vars I guess. Not sure how though.
+		>> *verb_clause[FunctionStatementA]; 
+#endif
+
     // The properties thing in a class or instance
     properties_decl = oppar >> keyword_p("properties")[{nullptr, ParseAutoCompleteContext::ClassLevelKeyword}] >> *property_decl >> clpar;
 
@@ -1189,6 +1251,9 @@ void SCISyntaxParser::Load()
             (
             methods_fwd |
             method_decl[FinishClassMethodA] |
+#ifdef PHIL_VERBS
+			verb_handler_decl[FinishVerbHandlerA] | 
+#endif
             procedure_decl[FinishClassProcedureA]) >> clpar);
 
     instance_decl = keyword_p("instance")[CreateClassA<true>] >> classbase_decl[ClassCloseA];
@@ -1290,6 +1355,76 @@ void SCISyntaxParser::Load()
         );
 
 }
+
+#ifdef PHIL_VERBS
+unique_ptr<CaseStatement> _MakeVerbHandlerElse()
+{
+	unique_ptr<CaseStatement> theCase = make_unique<CaseStatement>();
+	theCase->SetDefault(true);
+
+	// (super doVerb: verb item &rest)
+	unique_ptr<SendCall> theSend = make_unique<SendCall>();
+	theSend->SetName("super");
+	// Create the send param to add to the send call
+	unique_ptr<SendParam> param = std::make_unique<SendParam>();
+	param->SetName("doVerb");
+	param->SetIsMethod(true);
+	param->AddStatement(make_unique<PropertyValue>("theVerb", ValueType::Token));
+	param->AddStatement(make_unique<RestStatement>());
+	theSend->AddSendParam(move(param));
+	theCase->AddStatement(move(theSend));
+	return theCase;
+}
+
+void _ProcessVerbHandler(ClassDefinition &theClass, VerbHandlerDefinition &verbHandler, SwitchStatement **pSwitchWeak)
+{
+	unordered_set<string> usedVerbs;
+
+	// Make a doVerb method with params verb and item - but only do this once.
+	unique_ptr<MethodDefinition> doVerbMethod;
+	// Now create a switch
+	unique_ptr<SwitchStatement> _switch;
+	if (!*pSwitchWeak)
+	{
+		_switch = make_unique<SwitchStatement>();
+		_switch->SetStatement1(_MakeTokenStatement("theVerb"));
+		*pSwitchWeak = _switch.get();
+		doVerbMethod = make_unique<MethodDefinition>();
+		doVerbMethod->SetName("doVerb");
+		doVerbMethod->SetOwnerClass(&theClass);
+		doVerbMethod->AddSignature(_CreateVerbHandlerSignature());
+	}
+	for (auto &statement : verbHandler.GetStatements())
+	{
+		assert(statement->GetNodeType() == NodeTypeVerbClause);
+		VerbClauseStatement &verbClause = static_cast<VerbClauseStatement&>(*statement);
+		unique_ptr<CaseStatement> theCase = make_unique<CaseStatement>();
+		theCase->SetCaseValue(make_unique<PropertyValue>(verbClause.Verbs[0]));
+		// Give all the code to the case statement
+		swap(theCase->GetStatements(), verbClause.GetStatements());
+		(*pSwitchWeak)->AddCase(move(theCase));
+	}
+	if (_switch)
+	{
+		doVerbMethod->AddStatement(move(_switch));
+		theClass.AddMethod(move(doVerbMethod));
+	} // but not if we only had a weak ptr.
+}
+
+void _ProcessClassForVerbHandlers(Script &script, ClassDefinition &theClass)
+{
+	SwitchStatement *pSwitchWeak = nullptr;
+	for (auto &verbHandler : theClass.GetVerbHandlers())
+	{
+		_ProcessVerbHandler(theClass, *verbHandler, &pSwitchWeak);
+	}
+	if (pSwitchWeak)
+	{
+		// It means we added one. Put in the default handler:
+		pSwitchWeak->AddCase(_MakeVerbHandlerElse());
+	}
+}
+#endif
 
 #ifdef PHIL_FOREACH
 bool _IsItADeclaredVariable(const VariableDeclVector &varDecls, const string &name)
@@ -1777,6 +1912,9 @@ void PostProcessScript(ICompileLog *pLog, Script &script)
     {
         // This could be a class too (not just instance). The main game class is public.
         instance.SetPublic(script.IsExport(instance.GetName()));
+#ifdef PHIL_VERBS
+		_ProcessClassForVerbHandlers(script, instance);
+#endif
     }
         );
 

@@ -224,6 +224,9 @@ void ClassDefinition::Traverse(IExploreNode &en)
 {
 	ExploreNodeBlock enb(en, *this);
     ForwardTraverse2(_methods, en);
+#ifdef PHIL_VERBS
+	ForwardTraverse2(_verbHandlers, en);
+#endif
     ForwardTraverse2(_properties, en);
 }
 void SendParam::Traverse(IExploreNode &en)

@@ -521,7 +521,11 @@ bool IsValueKeyword(LangSyntax lang, const std::string &word)
 }
 
 std::vector<std::string> classLevelKeywordsStudio = {  "method", "properties" };
+#ifdef PHIL_VERBS
+std::vector<std::string> classLevelKeywordsSCI = { "method", "properties", "procedure", "verbs" };
+#else
 std::vector<std::string> classLevelKeywordsSCI = { "method", "properties", "procedure" };
+#endif
 bool IsClassLevelKeyword(LangSyntax lang, const std::string &word)
 {
     auto &list = GetClassLevelKeywords(lang);

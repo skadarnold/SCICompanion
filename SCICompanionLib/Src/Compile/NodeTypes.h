@@ -66,6 +66,10 @@ namespace sci
         NodeTypeExtern,
         NodeTypeSelector,
 
+#ifdef PHIL_VERBS
+		NodeTypeVerbClause,
+		NodeTypeVerbHandler,
+#endif
 #ifdef PHIL_FOREACH
 		NodeTypeForEach,
 #endif

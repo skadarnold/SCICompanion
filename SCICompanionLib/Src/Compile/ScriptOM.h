@@ -146,6 +146,11 @@ namespace sci
     class SelectorDeclaration;
     class GlobalDeclaration;
     class ExternDeclaration;
+
+#ifdef PHIL_VERBS
+	class VerbHandlerDefinition;
+	class VerbClauseStatement;
+#endif
 #ifdef PHIL_FOREACH
 	class ForEachLoop; 
 #endif
@@ -199,6 +204,10 @@ namespace sci
         virtual void Visit(const SelectorDeclaration &selectorDef) = 0;
         virtual void Visit(const GlobalDeclaration &globalDecl) = 0;
         virtual void Visit(const ExternDeclaration &externDecl) = 0;
+#ifdef PHIL_VERBS
+		virtual void Visit(const VerbHandlerDefinition &globalDecl) = 0;
+		virtual void Visit(const VerbClauseStatement &externDecl) = 0;
+#endif
 #ifdef PHIL_FOREACH
 		virtual void Visit(const ForEachLoop &forEachLoop) = 0; 
 #endif
@@ -958,7 +967,9 @@ namespace sci
         ClassPropertyVector &GetPropertiesNC() { return _properties; }
         const MethodVector &GetMethods() const { return _methods; }
         MethodVector &GetMethodsNC() { return _methods; }
-
+#ifdef PHIL_VERBS
+		std::vector<std::unique_ptr<VerbHandlerDefinition>> &GetVerbHandlers() { return _verbHandlers; }
+#endif
         bool GetPropertyConst(PCTSTR pszName, PropertyValue &value) const;
 
         // ISCIPropertyBag
@@ -976,6 +987,9 @@ namespace sci
         void AddProperty(std::unique_ptr<ClassProperty> classProp) { _properties.push_back(move(classProp)); }
         void AddProperty(const std::string &name, uint16_t value);
 		void AddMethod(std::unique_ptr<MethodDefinition> method) { _methods.push_back(std::move(method)); }
+#ifdef PHIL_VERBS
+		void AddVerbHandler(std::unique_ptr<VerbHandlerDefinition> verbHandler);
+#endif
 
         // IOutputByteCode
         CodeResult OutputByteCode(CompileContext &context) const;
@@ -998,6 +1012,9 @@ namespace sci
         bool _fInstance; // Instance or class.
         ClassPropertyVector _properties;
         MethodVector _methods;
+#ifdef PHIL_VERBS
+		std::vector<std::unique_ptr<VerbHandlerDefinition>> _verbHandlers;
+#endif
     };
 
     typedef ClassDefinition* ClassPtr;

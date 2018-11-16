@@ -1927,6 +1927,17 @@ public:
         out.out << selector.GetName() << " " << selector.Index;
     }
 
+#ifdef PHIL_VERBS
+	void Visit(const VerbClauseStatement &vc)
+	{
+		out.out << "VerbClauseStatement";
+	}
+	void Visit(const VerbHandlerDefinition &vc)
+	{
+		out.out << "VerbHandlerDefinition";
+	}
+#endif
+
 #ifdef PHIL_FOREACH
 	void Visit(const ForEachLoop &vc)
 	{

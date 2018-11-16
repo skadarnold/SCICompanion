@@ -3136,6 +3136,14 @@ CodeResult ContinueStatement::OutputByteCode(CompileContext &context) const
     return 0; // void
 }
 
+#ifdef PHIL_VERBS
+CodeResult VerbClauseStatement::OutputByteCode(CompileContext &context) const
+{
+	// Should never be called.
+	return CodeResult(0, DataTypeAny);
+}
+#endif
+
 CodeResult AsmBlock::OutputByteCode(CompileContext &context) const
 {
     for (auto &statement : _segments)

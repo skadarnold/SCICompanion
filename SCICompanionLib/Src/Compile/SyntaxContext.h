@@ -120,6 +120,9 @@ public:
     void CreateMethod() {
         FunctionPtr = std::make_unique<sci::MethodDefinition>(); FunctionPtr->AddSignature(std::move(std::make_unique<sci::FunctionSignature>()));
     }
+#ifdef PHIL_VERBS
+	void CreateVerbHandler();
+#endif
     std::unique_ptr<sci::FunctionBase> FunctionPtr;
     std::unique_ptr<sci::ProcedureDefinition> GetFunctionAsProcedure() {
         return std::unique_ptr<sci::ProcedureDefinition>(static_cast<sci::ProcedureDefinition*>(FunctionPtr.release()));

@@ -400,6 +400,36 @@ namespace sci
         CondStatement& operator=(const CondStatement& src) = delete;
     };
 
+#ifdef PHIL_VERBS
+	class VerbClauseStatement : public SyntaxNode, public StatementsNode
+	{
+		DECLARE_NODE_TYPE(NodeTypeVerbClause)
+	public:
+		VerbClauseStatement() {}
+		// IOutputByteCode
+		CodeResult OutputByteCode(CompileContext &context) const;
+		void PreScan(CompileContext &context) {}
+		void Traverse(IExploreNode &en) {}
+		void Accept(ISyntaxNodeVisitor &visitor) const override;
+		const SyntaxNodeVector &GetCodeSegments() const { return _segments; }
+		SyntaxNodeVector &GetCodeSegments() { return _segments; }
+		PropertyValueVector Verbs;
+	private:
+		VerbClauseStatement(const VerbClauseStatement &src) = delete;
+		VerbClauseStatement& operator=(const VerbClauseStatement& src) = delete;
+	};
+	class VerbHandlerDefinition : public FunctionBase
+	{
+		DECLARE_NODE_TYPE(NodeTypeVerbHandler)
+	public:
+		VerbHandlerDefinition() {}
+		VerbHandlerDefinition(VerbHandlerDefinition &src) = delete;
+		VerbHandlerDefinition& operator=(VerbHandlerDefinition& src) = delete;
+		void Accept(ISyntaxNodeVisitor &visitor) const override;
+		void OutputSourceCode(SourceCodeWriter &out) const {}
+	};
+#endif
+
 #ifdef PHIL_FOREACH
 	class ForEachLoop : public SyntaxNode, public StatementsNode, public OneStatementNode
 	{

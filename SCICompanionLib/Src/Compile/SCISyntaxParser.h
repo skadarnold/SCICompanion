@@ -107,6 +107,13 @@ private:
     ParserSCI asm_arg;
     ParserSCI cond_statement;
     ParserSCI size_of;
+
+#ifdef PHIL_VERBS
+	ParserSCI verb_clause;
+	ParserSCI verb_handler_decl;
+	ParserSCI verb_clause_verbs;
+	ParserSCI verb_clause_nouns; 
+#endif
 #ifdef PHIL_EXISTS
 	ParserSCI exists_statement; 
 #endif

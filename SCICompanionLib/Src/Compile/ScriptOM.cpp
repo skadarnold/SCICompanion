@@ -543,6 +543,13 @@ StatementsNode::StatementsNode(SyntaxNodeVector statements) : _segments(std::mov
 
 }
 
+#ifdef PHIL_VERBS
+void ClassDefinition::AddVerbHandler(std::unique_ptr<VerbHandlerDefinition> verbHandler)
+{
+	_verbHandlers.push_back(std::move(verbHandler));
+}
+#endif
+
 void SourceCodeWriter::IndentToCommentColumn()
 {
     ptrdiff_t origPosition = (ptrdiff_t)out.tellp();
@@ -663,6 +670,10 @@ void ClassDefDeclaration::Accept(ISyntaxNodeVisitor &visitor) const { visitor.En
 void SelectorDeclaration::Accept(ISyntaxNodeVisitor &visitor) const { visitor.Enter(*this); visitor.Visit(*this); visitor.Leave(*this); }
 void GlobalDeclaration::Accept(ISyntaxNodeVisitor &visitor) const { visitor.Enter(*this); visitor.Visit(*this); visitor.Leave(*this); }
 void ExternDeclaration::Accept(ISyntaxNodeVisitor &visitor) const { visitor.Enter(*this); visitor.Visit(*this); visitor.Leave(*this); }
+#ifdef PHIL_VERBS
+void VerbHandlerDefinition::Accept(ISyntaxNodeVisitor &visitor) const { visitor.Enter(*this); visitor.Visit(*this); visitor.Leave(*this); }
+void VerbClauseStatement::Accept(ISyntaxNodeVisitor &visitor) const { visitor.Enter(*this); visitor.Visit(*this); visitor.Leave(*this); }
+#endif
 #ifdef PHIL_FOREACH
 void ForEachLoop::Accept(ISyntaxNodeVisitor &visitor) const { visitor.Enter(*this); visitor.Visit(*this); visitor.Leave(*this); }
 #endif

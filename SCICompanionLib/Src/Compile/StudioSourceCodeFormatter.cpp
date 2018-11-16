@@ -799,6 +799,10 @@ public:
     void Visit(const ExternDeclaration &theExtern) override {}
     void Visit(const SelectorDeclaration &selector) override {}
 
+#ifdef PHIL_VERBS
+	void Visit(const VerbClauseStatement &vc) override {}
+	void Visit(const VerbHandlerDefinition &vc) override {}
+#endif
 #ifdef PHIL_FOREACH
 	void Visit(const ForEachLoop &vc) override {}
 #endif

@@ -16,6 +16,8 @@ The following defines are available:
 * `PHIL_LDMSTM` - Enables variable dereferencing (`*var`) as an alternative to `(Memory memPEEK)` and `(Memory memPOKE)`. Requires a special build of the SCI terp with two new opcodes. SCI16+ and Phil's have it.
 * `PHIL_FOREACH` - Enables the use of the `foreach` keyword. `(foreach val anArray ...)` or `(foreach val aCollection)` (where `aCollection` is anything that uses the Node kernel calls and exposes `elements`) will expand into loops where `val` is each value in the set, in order. `val` needs not be defined beforehand. With `PHIL_LDMSTM` enabled you can also use `&val` as a reference to a `val` you *did* define beforehand. Semantics on the "foreach an object" side are *way* different from Phil's!
 * `PHIL_VERBS` - Enables the use of the `verbs` keyword. Semantics are *very* different from Phil's, as this is tailored to SCI11+ use.
+* `KAWA_NOSTUDIO` - Disables selecting anything other than the Sierra-style script language.
+* `KAWA_NODEBUGSTUFF` - Hides some in-depth decompiler stuff that's not officially supported.
 * `KAWA_NOTRANSPARANCYNAG` - Disables the confirmation dialog when pasting an image that contains the transparant color. Annoying!
 * `KAWA_HEXFONTS` - Makes the font editor's character picker labels display in hexadecimal, to match Windows Character Map.
 * `KAWA_FONTLIMITBREAK` - Disables the 256-cel limit on fonts (but also maybe views, so be careful!). Fonts have a 16-bit character count, and with a customized interpreter you can now have basic UTF-8!

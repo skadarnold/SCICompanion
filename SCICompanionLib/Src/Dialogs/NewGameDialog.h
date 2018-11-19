@@ -35,9 +35,7 @@ protected:
     CExtEdit m_wndPath;
     CExtEdit m_wndName;
     CExtComboBox m_wndComboTemplate;
-#ifndef KAWA_NOSTUDIO
     CExtComboBox m_wndComboLanguage;
-#endif
 
     // Visuals
     CExtLabel m_wndStatic1;

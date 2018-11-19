@@ -53,11 +53,12 @@ void CGamePropertiesDialog::DoDataExchange(CDataExchange* pDX)
     DDX_Control(pDX, IDC_STATICEXE, m_wndExe);
     DDX_Control(pDX, IDC_STATICEXEPARAM, m_wndExeParam);
 
-#ifndef KAWA_NOSTUDIO
     DDX_Control(pDX, IDC_STATIC4, m_wndStatic4);
     DDX_Control(pDX, IDC_COMBOLANGUAGE, m_wndComboLanguage);
     LangSyntax lang = appState->GetResourceMap().Helper().GetDefaultGameLanguage();
     m_wndComboLanguage.SetCurSel((int)lang);
+#ifdef KAWA_NOSTUDIO
+	m_wndComboLanguage.EnableWindow(FALSE);
 #endif
 
     DDX_Control(pDX, IDC_STATICPROFILE, m_wndStaticProfile);

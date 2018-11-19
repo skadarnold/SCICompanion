@@ -123,10 +123,11 @@ void NewGameDialog::DoDataExchange(CDataExchange* pDX)
     DDX_Control(pDX, IDC_EDIT_DESCRIPTION, m_wndDescription);
     DDX_Control(pDX, IDC_STATIC_IMAGE, m_wndImage);
 
-#ifndef KAWA_NOSTUDIO
 	DDX_Control(pDX, IDC_STATIC4, m_wndStatic4);
     DDX_Control(pDX, IDC_COMBOLANGUAGE, m_wndComboLanguage);
     m_wndComboLanguage.SetCurSel(0);
+#ifdef KAWA_NOSTUDIO
+	m_wndComboLanguage.EnableWindow(FALSE);
 #endif
 
     DDX_Control(pDX, IDC_COMBOTEMPLATE, m_wndComboTemplate);

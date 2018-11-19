@@ -74,18 +74,20 @@ void DecompileDialog::DoDataExchange(CDataExchange* pDX)
     DDX_Control(pDX, IDC_ASSIGNFILENAMES, m_wndSetFilenames);
     DDX_Control(pDX, IDC_DECOMPILECANCEL, m_wndDecomileCancel);
     DDX_Control(pDX, IDC_DECOMPILESTATUS, m_wndStatus);
+#ifndef KAWA_NODEBUGSTUFF
     DDX_Control(pDX, IDC_CHECKCONTROLFLOW, m_wndDebugControlFlow);
     DDX_Control(pDX, IDC_CHECKINSTRUCTIONCONSUMPTION, m_wndDebugInstConsumption);
     DDX_Control(pDX, IDC_CHECKASM, m_wndAsm);
+	DDX_Control(pDX, IDC_EDITDEBUGMATCH, m_wndDebugFunctionMatch);
+	m_wndDebugFunctionMatch.SetWindowTextA("*");
+	DDX_Control(pDX, IDC_GROUPDEBUG, m_wndGroupDebug);
+#endif
     DDX_Control(pDX, IDC_CHECKSELECTALL, m_wndSelectAll);
     DDX_Control(pDX, IDC_CHECKREDECOMPILE, m_wndRedecompile);
     m_wndRedecompile.SetCheck(BST_CHECKED);
     DDX_Control(pDX, IDC_CHECKTEXTTUPLES, m_wndTextTuples);
     m_wndTextTuples.SetCheck(BST_UNCHECKED);
-    DDX_Control(pDX, IDC_EDITDEBUGMATCH, m_wndDebugFunctionMatch);
     DDX_Control(pDX, IDC_GROUPOPTIONS, m_wndGroupOptions);
-    DDX_Control(pDX, IDC_GROUPDEBUG, m_wndGroupDebug);
-    m_wndDebugFunctionMatch.SetWindowTextA("*");
     DDX_Control(pDX, IDC_INSTRUCTIONS, m_wndSCOLabel);
 
     m_wndScript.SetWindowText(
@@ -623,11 +625,18 @@ void DecompileDialog::OnBnClickedDecompile()
 {
     m_wndResults.SetWindowTextA("");
 
+#ifdef KAWA_NODEBUGSTUFF
+	_debugControlFlow = false;
+	_debugInstConsumption = false;
+	_debugAsm = false;
+	_debugFunctionMatch = "*";
+#else
     _debugControlFlow = m_wndDebugControlFlow.GetCheck() != 0;
     _debugInstConsumption = m_wndDebugInstConsumption.GetCheck() != 0;
     _debugAsm = m_wndAsm.GetCheck() != 0;
+	m_wndDebugFunctionMatch.GetWindowTextA(_debugFunctionMatch);
+#endif
     _substituteTextTuples = m_wndTextTuples.GetCheck() != 0;
-    m_wndDebugFunctionMatch.GetWindowTextA(_debugFunctionMatch);
 
     // Get a list of scripts to decompile
     if (m_wndListScripts.GetSelectedCount() == 0)

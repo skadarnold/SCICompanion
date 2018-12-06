@@ -847,3 +847,64 @@ void DisplayFileError(HRESULT hr, BOOL fOpen, LPCTSTR pszFileName)
         hr);
     AfxMessageBox(szMessage, MB_OK | MB_ICONSTOP);
 }
+
+char* AppState::GetAboutText()
+{
+	return
+		"By Phil Fortier (IceFall Games)\r\n"
+		"Modified by Kawa (Firrhna Productions)\r\n"
+		"\r\n"
+		"Parts of code (""Crystal Edit"" text editor) by Andrei Stcherbatchenko\r\n"
+		"Contains decompression routines from the ScummVM project.\r\n"
+		"cppformat library  Copyright (c) 2012 - 2015, Victor Zverovich\r\n"
+		"Sample rate converter designed by Aleksey Vaneev of Voxengo"
+		"\r\n"
+		"\r\n"
+		"Included modifications:\r\n"
+		"\x95 Font preview zoom at 2x\r\n"
+		"\x95 Escape unprintable range\r\n"
+		"\x95 More word guess preferences\r\n"
+#ifdef KAWA_DISPLAYMASSAGE
+		"\x95 Display argument massaging\r\n"
+#endif
+#ifdef KAWA_FILE993
+		"\x95 Class 993 is always File\r\n"
+#endif
+#ifdef KAWA_FONTLIMITBREAK
+		"\x95 Font limit break\r\n"
+#endif
+#ifdef KAWA_GETPOLY
+		"\x95 &getpoly command\r\n"
+#endif
+#ifdef KAWA_GLOBALS
+		"\x95 Forced global names\r\n"
+#endif
+#ifdef KAWA_HEXFONTS
+		"\x95 Hex numbers in font grid\r\n"
+#endif
+#ifdef KAWA_NODEBUGSTUFF
+		"\x95 No debug stuff in decompiler\r\n"
+#endif
+#ifdef KAWA_NOSTUDIO
+		"\x95 No SCI Studio stuff\r\n"
+#endif
+#ifdef KAWA_NOTRANSPARENCYNAG
+		"\x95 No transparancy nagging\r\n"
+#endif
+#ifdef KAWA_VOCABPREVIEWS
+		"\x95 More vocab previews\r\n"
+#endif
+#ifdef PHIL_EXISTS
+		"\x95 &exists support\r\n"
+#endif
+#ifdef PHIL_FOREACH
+		"\x95 foreach support\r\n"
+#endif
+#ifdef PHIL_VERBS
+		"\x95 verbs block support\r\n"
+#endif
+#ifdef KAWA_FORCEDSCRIPTNAMES
+		"\x95 forced script names\r\n"
+#endif
+		;
+}

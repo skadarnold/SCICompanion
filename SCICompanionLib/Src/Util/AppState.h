@@ -254,6 +254,8 @@ public: // TODO for now
 
     std::unique_ptr<DependencyTracker> _dependencyTracker;
     std::unique_ptr<SCIClassBrowser> _classBrowser;
+
+	char* GetAboutText();
 };
 
 extern AppState *appState;

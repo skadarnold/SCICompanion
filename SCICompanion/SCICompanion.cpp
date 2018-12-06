@@ -646,9 +646,7 @@ void CAboutDlg::DoDataExchange(CDataExchange* pDX)
     DDX_Control(pDX, IDC_EDIT1, m_wndEdit);
     DDX_Control(pDX, IDC_STATIC4, m_wndLabel4);
 
-    m_wndEdit.SetWindowText(
-        "By Phil Fortier (IceFall Games)\r\n\r\n\r\nParts of code (""Crystal Edit"" text editor) by Andrei Stcherbatchenko\r\n\r\nContains decompression routines from the ScummVM project.\r\n\r\ncppformat library  Copyright (c) 2012 - 2015, Victor Zverovich\r\n\r\nSample rate converter designed by Aleksey Vaneev of Voxengo"
-        );
+	m_wndEdit.SetWindowText(appState->GetAboutText());
 }
 
 BEGIN_MESSAGE_MAP(CAboutDlg, CDialog)

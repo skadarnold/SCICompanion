@@ -627,36 +627,60 @@ void CNewRasterResourceDocument::_InsertFiles(const vector<string> &files, bool 
 
     // First, get a collection of usable images
     std::vector<ImageSequenceItem> imageSequenceItems;
-    for (const string &file : files)
-    {
-        imageSequenceItems.emplace_back();
-        ImageSequenceItem &item = imageSequenceItems.back();
-        bool success = false;
-        if (0 == lstrcmpi(".gif", PathFindExtension(file.c_str())))
-        {
-            // Try our gif loader, which understands palettes better than gdip
-            success = GetCelsAndPaletteFromGIFFile(file.c_str(), item.Cels, item.Palette);
-        }
-        if (!success)
-        {
-            // Use gdiplus to load the image.
+	for (const string &file : files)
+	{
+		bool success = false;
+		if (0 == lstrcmpi(".gif", PathFindExtension(file.c_str())))
+		{
+			// Try our gif loader, which understands palettes better than gdip
+			// REVIEW: We should allow for multiple palettes to be returned too! Each gif frame can have its own palette (e.g. gifcam)
+			vector<Cel> cels;
+			vector<PaletteComponent> palettes;
+			PaletteComponent globalPalette;
+			success = GetCelsAndPaletteFromGIFFile(file.c_str(), cels, palettes, globalPalette);
+			if (success)
+			{
+				if (palettes.size() == cels.size())
+				{
+					// Each cel had its own palette
+					for (size_t i = 0; i < cels.size(); i++)
+					{
+						imageSequenceItems.emplace_back();
+						imageSequenceItems.back().Cels.push_back(cels[i]);
+						imageSequenceItems.back().Palette = palettes[i];
+					}
+				}
+				else
+				{
+					// One palette for all (we'll assume)
+					imageSequenceItems.emplace_back();
+					imageSequenceItems.back().Cels = cels;
+					imageSequenceItems.back().Palette = globalPalette;
+				}
+			}
+		}
+		if (!success)
+		{
+			// Use gdiplus to load the image.
+			imageSequenceItems.emplace_back();
+			ImageSequenceItem &item = imageSequenceItems.back();
 #ifdef UNICODE
-            item.Bitmap.reset(Bitmap::FromFile(pszFileName));
+			item.Bitmap.reset(Bitmap::FromFile(pszFileName));
 #else
-            // GDI+ only deals with unicode.
-            BSTR unicodestr = SysAllocStringLen(NULL, file.length());
-            MultiByteToWideChar(CP_ACP, 0, file.c_str(), file.length(), unicodestr, file.length());
-            item.Bitmap.reset(Bitmap::FromFile(unicodestr));
-            //... when done, free the BSTR
-            SysFreeString(unicodestr);
+			// GDI+ only deals with unicode.
+			BSTR unicodestr = SysAllocStringLen(NULL, file.length());
+			MultiByteToWideChar(CP_ACP, 0, file.c_str(), file.length(), unicodestr, file.length());
+			item.Bitmap.reset(Bitmap::FromFile(unicodestr));
+			//... when done, free the BSTR
+			SysFreeString(unicodestr);
 #endif    
-            success = item.Bitmap->GetLastStatus() == Gdiplus::Ok;
-        }
-        if (!success)
-        {
-            imageSequenceItems.pop_back();
-        }
-    }
+			success = item.Bitmap->GetLastStatus() == Gdiplus::Ok;
+			if (!success)
+			{
+				imageSequenceItems.pop_back();
+			}
+		}
+	}
 
     // If we got some, then figure out what to do
     if (!imageSequenceItems.empty())

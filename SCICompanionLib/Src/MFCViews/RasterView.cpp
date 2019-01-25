@@ -1748,6 +1748,11 @@ void CRasterView::_UpdateCursor()
             CPoint ptView = _MapClientPointToPic(_ptCurrentHoverClient);
             // Get the current cursor.
             int idResource = _ViewIDToCursor(_currentTool);
+
+			//KAWA: holding ctrl? then sample
+			if (GetKeyState(VK_CONTROL) & 0x8000)
+				idResource = _ViewIDToCursor(CRasterView::ViewToolType::EyeDropper);
+
             if ((idResource != -1) && _PointInView(ptView))
             {
                 SetCursor(LoadCursor(AfxGetInstanceHandle(), MAKEINTRESOURCE(idResource)));
@@ -2880,7 +2885,7 @@ void CRasterView::OnIndicatorPixelColor(CCmdUI *pCmdUI)
                 rgb = g_egaColors[color % 16];
             }
 
-            StringCchPrintf(szBuf, ARRAYSIZE(szBuf), TEXT("Color: %03d (R=%d, G=%d, B=%d)"), color, rgb.rgbRed, rgb.rgbGreen, rgb.rgbBlue);
+            StringCchPrintf(szBuf, ARRAYSIZE(szBuf), TEXT("Color: %02X (R=%d, G=%d, B=%d)"), color, rgb.rgbRed, rgb.rgbGreen, rgb.rgbBlue);
         }
     }
 
@@ -3125,6 +3130,13 @@ void CRasterView::OnRButtonDown(UINT nFlags, CPoint point)
         return;
     }
 
+	//KAWA: holding ctrl? then sample
+	if (nFlags & 8)
+	{
+		_OnEyeDrop(ptView, false, false);
+		return;
+	}
+
     switch(_currentTool)
     {
     case Zoom:
@@ -3183,7 +3195,14 @@ void CRasterView::OnLButtonDown(UINT nFlags, CPoint point)
     }
     else
     {
-        switch(_currentTool)
+		//KAWA: holding ctrl? then sample
+		if (nFlags & 8)
+		{
+			_OnEyeDrop(ptView, true, false);
+			return;
+		}
+
+		switch(_currentTool)
         {
         case Zoom:
             _OnZoomLClick();

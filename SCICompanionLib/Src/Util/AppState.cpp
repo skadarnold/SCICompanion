@@ -906,5 +906,8 @@ char* AppState::GetAboutText()
 #ifdef KAWA_FORCEDSCRIPTNAMES
 		"\x95 forced script names\r\n"
 #endif
+#ifdef PHIL_UNUSEDINSTANCES
+		"\x95 warnings for unused instances\r\n"
+#endif
 		;
 }

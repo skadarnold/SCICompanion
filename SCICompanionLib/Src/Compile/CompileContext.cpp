@@ -1467,6 +1467,22 @@ std::vector<std::string> CompileContext::GetStringsThatWereWritten()
     return strings;
 }
 
+#ifdef PHIL_UNUSEDINSTANCES
+bool CompileContext::WasInstanceReferenceWritten(const std::string &instanceName) const
+{
+	bool result = false;
+	const auto &it = _instanceTempTokens.find(instanceName);
+	if (it != _instanceTempTokens.end())
+	{
+		if (_tokenToSinkOffsets.find(it->second) != _tokenToSinkOffsets.end())
+		{
+			result = true;
+		}
+	}
+	return result;
+}
+#endif
+
 std::vector<std::string> CompileContext::GetSaids()
 {
     std::vector<std::string> said;

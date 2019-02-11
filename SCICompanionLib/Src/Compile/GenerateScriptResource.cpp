@@ -1298,6 +1298,24 @@ bool GenerateScriptResource_SCI0(Script &script, PrecompiledHeaders &headers, Co
 
     context.FixupSinksAndSources(output, output);
 
+#ifdef PHIL_UNUSEDINSTANCES
+	// Some validation
+	for (const auto &instance : script.GetClasses())
+	{
+		if (instance->IsInstance())
+		{
+			if (!context.WasInstanceReferenceWritten(instance->GetName()))
+			{
+				// It might be a public export
+				if (!instance->IsPublic())
+				{
+					context.ReportWarning(instance.get(), "Instance '%s' is not used anywhere.", instance->GetName().c_str());
+				}
+			}
+		}
+	}
+#endif
+
     return !context.HasErrors();
 }
 
@@ -1547,6 +1565,24 @@ bool GenerateScriptResource_SCI11(Script &script, PrecompiledHeaders &headers, C
             results.SetAutoTextNumber(autoTextNumber);
         }
     }
+
+#ifdef PHIL_UNUSEDINSTANCES
+	// Some validation
+	for (const auto &instance : script.GetClasses())
+	{
+		if (instance->IsInstance())
+		{
+			if (!context.WasInstanceReferenceWritten(instance->GetName()))
+			{
+				// It might be a public export
+				if (!instance->IsPublic())
+				{
+					context.ReportWarning(instance.get(), "Instance '%s' is not used anywhere.", instance->GetName().c_str());
+				}
+			}
+		}
+	}
+#endif
 
     return !context.HasErrors();
 }

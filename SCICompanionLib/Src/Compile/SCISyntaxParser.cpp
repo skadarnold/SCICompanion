@@ -336,7 +336,7 @@ void FinishClassProcedureA(MatchResult &match, const ParserSCI *pParser, SyntaxC
     {
         // Add it to the script's procedures, not the class' methods.
         auto proc = pContext->GetFunctionAsProcedure();
-        proc->SetOwnerClass(pContext->ClassPtr.get());
+        proc->SetClass(pContext->ClassPtr.get()->GetName());
         pContext->Script().AddProcedure(move(proc));
     }
     else

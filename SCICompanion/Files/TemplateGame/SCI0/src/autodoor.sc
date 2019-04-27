@@ -1,19 +1,21 @@
-/******************************************************************************
- SCI Template Game
- By Brian Provinciano
- ******************************************************************************
- autodoor.sc
- Contains an extension of the Door class for simpler doors.
- ******************************************************************************/
-(include "sci.sh")
-(include "game.sh")
-/******************************************************************************/
-(script AUTODOOR_SCRIPT)
-/******************************************************************************/
-(use "main")
-(use "door")
-(use "cycle")
-/******************************************************************************/
+;;; Sierra Script 1.0 - (do not remove this comment)
+;
+; SCI Template Game
+; By Brian Provinciano
+; ******************************************************************************
+; autodoor.sc
+; Contains an extension of the Door class for simpler doors.
+(script# AUTODOOR_SCRIPT)
+(include sci.sh)
+(include game.sh)
+(use main)
+(use door)
+(use cycle)
+
+
+
+
+
 (class AutoDoor of Door
 	(properties
 		y 0
@@ -56,42 +58,34 @@
 		force 0
 		notify 0
 	)
+	
 	(method (init)
-		(super:init())
+		(super init:)
 	)
+	
 	(method (doit)
-		(super:doit())
-		(if(code)
-			(if(send code:doit(self))
-		    	(self:open())
-			)(else
-				(self:close())
-			)
-		)(else
-			(if( & (send gEgo:onControl) doorCtrl)
-				(self:open())
-			)(else
-				(self:close())
-		    )
+		(super doit:)
+		(cond 
+			(code (if (code doit: self) (self open:) else (self close:)))
+			((& (gEgo onControl:) doorCtrl) (self open:))
+			(else (self close:))
 		)
 	)
+	
 	(method (open)
-		(if( (not locked) and (<> doorState 1) and (<> doorState 2))
-			= doorState 1
-			(self:setCycle(End self))
-			(if(openSnd)
-				(send openSnd:play())
-			)
+		(if
+		(and (not locked) (!= doorState 1) (!= doorState 2))
+			(= doorState 1)
+			(self setCycle: End self)
+			(if openSnd (openSnd play:))
 		)
 	)
+	
 	(method (close)
-		(if((<> doorState 3) and (<> doorState 0))
-			= doorState 3
-			(self:setCycle(Beg self))
-			(if(closeSnd)
-				(send closeSnd:play())
-			)
+		(if (and (!= doorState 3) (!= doorState 0))
+			(= doorState 3)
+			(self setCycle: Beg self)
+			(if closeSnd (closeSnd play:))
 		)
 	)
 )
-/******************************************************************************/

@@ -1,17 +1,19 @@
-/******************************************************************************
- SCI Template Game
- By Brian Provinciano
- ******************************************************************************
- window.sc
- Contains the extension of the SysWindow class.
- ******************************************************************************/
-(include "sci.sh")
-(include "game.sh")
-/******************************************************************************/
-(script WINDOW_SCRIPT)
-/******************************************************************************/
-(use "syswindow")
-/******************************************************************************/
+;;; Sierra Script 1.0 - (do not remove this comment)
+;
+; SCI Template Game
+; By Brian Provinciano
+; ******************************************************************************
+; window.sc
+; Contains the extension of the SysWindow class.
+(script# WINDOW_SCRIPT)
+(include sci.sh)
+(include game.sh)
+(use syswindow)
+
+
+
+
+
 (class Window of SysWindow
 	(properties
 		top 0
@@ -30,96 +32,113 @@
 		brRight 320
 		underBits 0
 	)
-	(method (doit))
+	
+	(method (doit)
+	)
+	
 	(method (dispose)
-		(self:restore())
-		(if(window)
-			DisposeWindow(window)
-			= window 0
-		)
-		(super:dispose())
+		(self restore:)
+		(if window (DisposeWindow window) (= window 0))
+		(super dispose:)
 	)
+	
 	(method (open)
-		= window NewWindow(
-			top left bottom right
-		    title
-		    type
-		    priority
-		    color
-		    back
+		(= window
+			(NewWindow
+				top
+				left
+				bottom
+				right
+				title
+				type
+				priority
+				color
+				back
+			)
 		)
 	)
+	
 	(method (handleEvent)
-		return(FALSE)
+		(return FALSE)
 	)
-	(method (setMapSet)
-		(var mapSet)
-		= mapSet 0
-		(if(<> -1 color)
-		    = mapSet (| mapSet 1)
-		)
-		(if(<> -1 priority)
-		    = mapSet (| mapSet 2)
-		)
-		return(mapSet)
+	
+	(method (setMapSet &tmp mapSet)
+		(= mapSet 0)
+		(if (!= -1 color) (= mapSet (| mapSet 1)))
+		(if (!= -1 priority) (= mapSet (| mapSet 2)))
+		(return mapSet)
 	)
+	
 	(method (move theX theY)
-		= left   (+ left   theX)
-		= right  (+ right  theX)
-		= right  (+ right  theY)
-		= bottom (+ bottom theY)
+		(= left (+ left theX))
+		(= right (+ right theX))
+		(= right (+ right theY))
+		(= bottom (+ bottom theY))
 	)
+	
 	(method (moveTo newX newY)
-		(self:move( (- newX left) (- newY top) ))
+		(self move: (- newX left) (- newY top))
 	)
+	
 	(method (draw newColor newPriority)
-		(if(>= paramTotal 1)
-			= color newColor
-		)
-		(if(>= paramTotal 2)
-			= priority newPriority
-		)
-		Graph(
+		(if (>= argc 1) (= color newColor))
+		(if (>= argc 2) (= priority newPriority))
+		(Graph
 			11
-			top left right bottom
-			(self:setMapSet())
+			top
+			left
+			right
+			bottom
+			(self setMapSet:)
 			color
 			priority
 		)
 	)
+	
 	(method (save)
-		= underBits Graph(
-			grSAVE_BOX
-			top left bottom right
-			(self:setMapSet())
+		(= underBits
+			(Graph
+				grSAVE_BOX
+				top
+				left
+				bottom
+				right
+				(self setMapSet:)
+			)
 		)
 	)
+	
 	(method (restore)
-		(if(underBits)
-			Graph(grRESTORE_BOX underBits)
-		)
+		(if underBits (Graph grRESTORE_BOX underBits))
 	)
+	
 	(method (inset theX theY)
-		= top (+ top theY)
-		= left (+ left theX)
-		= bottom (- bottom theY)
-		= right (- right theX)
+		(= top (+ top theY))
+		(= left (+ left theX))
+		(= bottom (- bottom theY))
+		(= right (- right theX))
 	)
+	
 	(method (show)
-		Graph(
+		(Graph
 			grUPDATE_BOX
-			top left bottom right
-			(self:setMapSet())
+			top
+			left
+			bottom
+			right
+			(self setMapSet:)
 		)
 	)
+	
 	(method (erase)
-		(self:draw(back -1))
+		(self draw: back -1)
 	)
+	
 	(method (center)
-		(self:moveTo(
-			(/ (- (- brRight left) (- right left)) 2)
-		    (/ (- (- brBottom top) (- bottom top)) 2)
-		))
+		(self
+			moveTo:
+				(/ (- (- brRight left) (- right left)) 2)
+				(/ (- (- brBottom top) (- bottom top)) 2)
+		)
 	)
 )
-/******************************************************************************/

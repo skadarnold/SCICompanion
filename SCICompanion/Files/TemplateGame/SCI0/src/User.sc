@@ -1,40 +1,43 @@
-/******************************************************************************
- SCI Template Game
- By Brian Provinciano
- ******************************************************************************
- user.sc
- Contains the classes to handle user input and the main character (ego).
- ******************************************************************************/
-(include "sci.sh")
-(include "game.sh")
-/******************************************************************************/
-(script USER_SCRIPT)
-/******************************************************************************/
-(use "main")
-(use "controls")
-(use "sound")
-(use "cycle")
-(use "menubar")
-(use "feature")
-(use "obj")
-/******************************************************************************/
+;;; Sierra Script 1.0 - (do not remove this comment)
+;
+; SCI Template Game
+; By Brian Provinciano
+; ******************************************************************************
+; user.sc
+; Contains the classes to handle user input and the main character (ego).
+(script# USER_SCRIPT)
+(include sci.sh)
+(include game.sh)
+(use main)
+(use controls)
+(use sound)
+(use cycle)
+(use menubar)
+(use feature)
+(use obj)
+
+
 (local
-  inputStr[51]
-  maxInputLen
+
+
+
+	[inputStr 51]
+	maxInputLen
 )
-/******************************************************************************/
+
 (instance uEvt of Event
 	(properties)
 )
-/******************************************************************************/
+
+
 (class User of Obj
 	(properties
 		alterEgo 0
 		canInput 0
 		controls 0
-		echo $20
+		echo $0020
 		prevDir 0
-		prompt "Enter Input:"
+		prompt {Enter Input:}
 		inputLineAddr 0
 		x -1
 		y -1
@@ -42,102 +45,107 @@
 		mapKeyToDir 1
 		curEvent 0
 	)
+	
 	(method (init pInputStr maxLen)
-		(if(paramTotal)
-		    = inputLineAddr pInputStr 
-		)(else
-		    = inputLineAddr @inputStr
+		(if argc
+			(= inputLineAddr pInputStr)
+		else
+			(= inputLineAddr @inputStr)
 		)
-		(if( == paramTotal 2)
-		    = maxInputLen maxLen
-		)(else
-		    = maxInputLen 45
+		(if (== argc 2)
+			(= maxInputLen maxLen)
+		else
+			(= maxInputLen 45)
 		)
-		= curEvent uEvt
+		(= curEvent uEvt)
 	)
+	
 	(method (doit)
-		(if(== 0 gSetRegions)
-			(send curEvent:
-				type(0)
-				message(0)
-				modifiers(0)
-				y(0)
-				x(0)
-				claimed(0)
+		(if (== 0 gSetRegions)
+			(curEvent
+				type: 0
+				message: 0
+				modifiers: 0
+				y: 0
+				x: 0
+				claimed: 0
 			)
-			GetEvent(evALL_EVENTS curEvent)
-			(self:handleEvent(curEvent))
+			(GetEvent evALL_EVENTS curEvent)
+			(self handleEvent: curEvent)
 		)
 	)
+	
 	(method (canControl fCONTROLS)
-		(if(paramTotal)
-			= controls fCONTROLS
-			= prevDir CENTER
-		)
-		return(controls)
+		(if argc (= controls fCONTROLS) (= prevDir CENTER))
+		(return controls)
 	)
-	(method (getInput pEvent)
-		(var prevSound, strLen)
-		(if(<> (send pEvent:type) evKEYBOARD)
-		    = inputStr 0
+	
+	(method (getInput pEvent &tmp prevSound strLen)
+		(if (!= (pEvent type?) evKEYBOARD) (= inputStr 0))
+		(if (!= (pEvent message?) echo)
+			(Format @inputStr {%c} (pEvent message?))
 		)
-		(if(<> (send pEvent:message) echo)
-			Format(@inputStr "%c" (send pEvent:message))
+		(= prevSound (Sound pause: blocks))
+		(= strLen
+			(EditPrint @inputStr maxInputLen prompt #at x y)
 		)
-		= prevSound (Sound:pause(blocks))
-		= strLen EditPrint(@inputStr maxInputLen prompt #at x y)
-		(Sound:pause(prevSound))
-		return(strLen)
+		(Sound pause: prevSound)
+		(return strLen)
 	)
+	
 	(method (said pEvent)
-		(send gSFeatures:add(gCast gFeatures))
-
-		(if(TheMenuBar)
-			(send gSFeatures:addToFront(TheMenuBar))
-		)
-		(send gSFeatures:
-			addToEnd(gGame)
-			handleEvent(pEvent)
-			release()
-		)
-		(if((== (send pEvent:type) evSAID) and (not (send pEvent:claimed)))
-			(send gGame:pragmaFail(@inputStr))
+		(gSFeatures add: gCast gFeatures)
+		(if TheMenuBar (gSFeatures addToFront: TheMenuBar))
+		(gSFeatures addToEnd: gGame handleEvent: pEvent release:)
+		(if
+			(and
+				(== (pEvent type?) evSAID)
+				(not (pEvent claimed?))
+			)
+			(gGame pragmaFail: @inputStr)
 		)
 	)
-	(method (handleEvent pEvent)
-		(var evType)
-		(if(send pEvent:type)
-			= gUserEvent pEvent
-			= evType (send pEvent:type)
-			(if(mapKeyToDir)
-				MapKeyToDir(pEvent)
+	
+	(method (handleEvent pEvent &tmp evType)
+		(if (pEvent type?)
+			(= gUserEvent pEvent)
+			(= evType (pEvent type?))
+			(if mapKeyToDir (MapKeyToDir pEvent))
+			(if TheMenuBar (TheMenuBar handleEvent: pEvent evType))
+			(GlobalToLocal pEvent)
+			(if (not (pEvent claimed?))
+				(gGame handleEvent: pEvent evType)
 			)
-			(if(TheMenuBar)
-				(TheMenuBar:handleEvent(pEvent evType))
+			(if
+				(and
+					controls
+					(not (pEvent claimed?))
+					(gCast contains: alterEgo)
+				)
+				(alterEgo handleEvent: pEvent)
 			)
-		    GlobalToLocal(pEvent)
-			(if(not (send pEvent:claimed))
-				(send gGame:handleEvent(pEvent evType))
-			)
-
-		    (if(controls and (not (send pEvent:claimed))
-		      and (send gCast:contains(alterEgo)))
-		    	(send alterEgo:handleEvent(pEvent))
-		    )
-			
-	       (if(canInput and not(send pEvent:claimed))
-				(if( (== (send pEvent:message) echo) or (<= $20 (send pEvent:message)) and (<= (send pEvent:message) 255))
-						(if( (self:getInput(pEvent)) and Parse(@inputStr pEvent))
-							(send pEvent:type(evSAID))
-		    				(self:said(pEvent))
+			(if (and canInput (not (pEvent claimed?)))
+				(if
+					(or
+						(== (pEvent message?) echo)
+						(and
+							(<= $0020 (pEvent message?))
+							(<= (pEvent message?) 255)
 						)
-                )
-            )
+					)
+					(if
+					(and (self getInput: pEvent) (Parse @inputStr pEvent))
+						(pEvent type: evSAID)
+						(self said: pEvent)
+					)
+				)
+			)
 		)
-  		= gUserEvent NULL
+		(= gUserEvent NULL)
 	)
 )
-/******************************************************************************/
+
+
 (class Ego of Act
 	(properties
 		y 0
@@ -180,88 +188,70 @@
 		avoider 0
 		edgeHit 0
 	)
+	
 	(method (init)
-		(super:init())
-		(if( not cycler )
-			(self:setCycle(Walk))
-		)
+		(super init:)
+		(if (not cycler) (self setCycle: Walk))
 	)
+	
 	(method (doit)
-		(super:doit())
-		(if(<= x 3)
-		    = edgeHit EDGE_LEFT
-		)(else
-  			(if(<= y (send gRoom:horizon))
-		    	= edgeHit EDGE_TOP
-			)(else
-				(if(>= x 316)
-		    		= edgeHit EDGE_RIGHT 
-		    	)(else
-			    	(if(>= y 186)
-		    			= edgeHit EDGE_BOTTOM
-		    		)(else
-		    			= edgeHit EDGE_NONE
-		    		)
-		    	)
-		    )
+		(super doit:)
+		(cond 
+			((<= x 3) (= edgeHit EDGE_LEFT))
+			((<= y (gRoom horizon?)) (= edgeHit EDGE_TOP))
+			((>= x 316) (= edgeHit EDGE_RIGHT))
+			((>= y 186) (= edgeHit EDGE_BOTTOM))
+			(else (= edgeHit EDGE_NONE))
 		)
 	)
-	(method (handleEvent pEvent)
-		(var direction)
-		(if( not (super:handleEvent(pEvent)) )
-		    (switch( (send pEvent:type) )
-				(case evMOUSEBUTTON
-					// Make sure it's the left button
-					(if(not (& (send pEvent:modifiers) emRIGHT_BUTTON)
-					    and (User:controls) )  
-					 		(self:
-					 			setMotion(
-					 				MoveTo
-					 				(send pEvent:x)	 
-					 				(send pEvent:y)	 
-					 			)
-					 		)	
-					 		(User:prevDir(CENTER))
-					 		(send pEvent:claimed(TRUE))
-					 )
+	
+	(method (handleEvent pEvent &tmp direction)
+		(if (not (super handleEvent: pEvent))
+			(switch (pEvent type?)
+				(evMOUSEBUTTON
+					; Make sure it's the left button
+					(if
+						(and
+							(not (& (pEvent modifiers?) emRIGHT_BUTTON))
+							(User controls?)
+						)
+						(self setMotion: MoveTo (pEvent x?) (pEvent y?))
+						(User prevDir: CENTER)
+						(pEvent claimed: TRUE)
+					)
 				)
-  				(case evJOYSTICK
-  					= direction (send pEvent:message)
-  					(if( (== direction (User:prevDir)) and (IsObject(mover)))
-		    			= direction CENTER
-		    		)
-		    		(User:prevDir(direction))
-		    		(self:setDirection(direction))
-		    		(send pEvent:claimed(TRUE))
-  				)
-  			)
-  		)
-  		return(send pEvent:claimed)
+				(evJOYSTICK
+					(= direction (pEvent message?))
+					(if
+					(and (== direction (User prevDir?)) (IsObject mover))
+						(= direction CENTER)
+					)
+					(User prevDir: direction)
+					(self setDirection: direction)
+					(pEvent claimed: TRUE)
+				)
+			)
+		)
+		(return (pEvent claimed?))
 	)
-	(method (get items)
-		(var i, invItem)
-		(for (= i 0) (< i paramTotal) (++i)
-			= invItem (send gInv:at(items[i]))
-			(send invItem:moveTo(self))
-		 )
+	
+	(method (get items &tmp i invItem)
+		(for ( (= i 0)) (< i argc)  ( (++ i)) (= invItem (gInv at: [items i])) (invItem moveTo: self))
 	)
-	(method (put item newOwner)
-		(var invItem)
-		(if( (self:has(item)) )
-			= invItem (send gInv:at(item))
-		    (if(== paramTotal 1)
-				(send invItem:moveTo(-1))
-			)(else
-				(send invItem:moveTo(newOwner))
+	
+	(method (put item newOwner &tmp invItem)
+		(if (self has: item)
+			(= invItem (gInv at: item))
+			(if (== argc 1)
+				(invItem moveTo: -1)
+			else
+				(invItem moveTo: newOwner)
 			)
 		)
 	)
-	(method (has item)
-		(var invItem)
-		= invItem (send gInv:at(item))
-		(if(invItem)
-			(send invItem:ownedBy(self))
-		)
+	
+	(method (has item &tmp invItem)
+		(= invItem (gInv at: item))
+		(if invItem (invItem ownedBy: self))
 	)
 )
-/******************************************************************************/

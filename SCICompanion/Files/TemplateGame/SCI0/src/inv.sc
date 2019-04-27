@@ -1,25 +1,27 @@
-/******************************************************************************
- SCI Template Game
- By Brian Provinciano
- ******************************************************************************
- inv.sc
- Contains the main classes for your game's inventory, one of the most essential 
- parts of an adventure game.
- ******************************************************************************/
-(include "sci.sh")
-(include "game.sh")
-/******************************************************************************/
-(script INVENTORY_SCRIPT)
-/******************************************************************************/
-(use "obj")
-(use "main")
-(use "controls")
-(use "syswindow")
-/******************************************************************************/
+;;; Sierra Script 1.0 - (do not remove this comment)
+;
+; SCI Template Game
+; By Brian Provinciano
+; ******************************************************************************
+; inv.sc
+; Contains the main classes for your game's inventory, one of the most essential 
+; parts of an adventure game.
+(script# INVENTORY_SCRIPT)
+(include sci.sh)
+(include game.sh)
+(use obj)
+(use main)
+(use controls)
+(use syswindow)
+
+
 (local
-  btnHandle = 0
+
+
+
+	btnHandle =  0
 )
-/******************************************************************************/
+
 (class InvI of Obj
 	(properties
 		said 0
@@ -30,168 +32,156 @@
 		cel 0
 		script 0
 	)
+	
 	(method (showSelf)
-		(if(description)
-			IconPrint(description view loop cel)
-		)(else
-			IconPrint(objectName view loop cel)
+		(if description
+			(IconPrint description view loop cel)
+		else
+			(IconPrint objectName view loop cel)
 		)
 	)
+	
 	(method (saidMe)
-		return(Said(said))
+		(return (Said said))
 	)
+	
 	(method (ownedBy anObject)
-		return(== owner anObject)
+		(return (== owner anObject))
 	)
+	
 	(method (moveTo newOwner)
-		= owner newOwner
-		return(self)
+		(= owner newOwner)
+		(return self)
 	)
+	
 	(method (changeState newState)
-		(if(script)
-			(send script:changeState(newState))
-		)
+		(if script (script changeState: newState))
 	)
 )
-/******************************************************************************/
+
+
 (class Inv of Set
 	(properties
 		elements 0
 		size 0
-		carrying "You are carrying:"
-		empty "You are carrying nothing!"
+		carrying {You are carrying:}
+		empty {You are carrying nothing!}
 	)
+	
 	(method (init)
-		= gInv self
+		(= gInv self)
 	)
+	
 	(method (showSelf theOwner)
-		(invD:
-			text(carrying)
-			doit(theOwner)
-		)
+		(invD text: carrying doit: theOwner)
 	)
+	
 	(method (saidMe)
-		return((self:firstTrue(#saidMe)))
+		(return (self firstTrue: #saidMe))
 	)
+	
 	(method (ownedBy anObject)
-		return((self:firstTrue(#ownedBy anObject)))
+		(return (self firstTrue: #ownedBy anObject))
 	)
 )
-/******************************************************************************/
+
+
 (instance invD of Dialog
 	(properties)
-	(method (init theOwner)
-		(var temp0, temp1, temp2, temp3, temp4, temp5, temp6)
-		= temp1 4
-		= temp0 4
-		= temp2 4
-		= temp3 0
-		= temp5 (send gInv:first())
-		(while(temp5)
-		    = temp6 NodeValue(temp5)
-		    (if(send temp6:ownedBy(theOwner))
-			    ++temp3 
-			    = temp4 (DText:new())
-			    (self:add(
-			    	(send temp4:
-						value(temp6)
-						text((send temp6:name))
-						nsLeft(temp0)
-						nsTop(temp1)
-						state(3)
-						font(gDefaultFont)
-						setSize()
-						yourself()
-					)
-				))	
-
-			    (if(< temp2 (- (send temp4:nsRight) (send temp4:nsLeft)))
-			    	= temp2 (- (send temp4:nsRight) (send temp4:nsLeft))
+	
+	(method (init theOwner &tmp temp0 temp1 temp2 temp3 temp4 temp5 temp6)
+		(= temp1 4)
+		(= temp0 4)
+		(= temp2 4)
+		(= temp3 0)
+		(= temp5 (gInv first:))
+		(while temp5
+			(= temp6 (NodeValue temp5))
+			(if (temp6 ownedBy: theOwner)
+				(++ temp3)
+				(= temp4 (DText new:))
+				(self
+					add:
+						(temp4
+							value: temp6
+							text: (temp6 name?)
+							nsLeft: temp0
+							nsTop: temp1
+							state: 3
+							font: gDefaultFont
+							setSize:
+							yourself:
+						)
 				)
-			    = temp1 (+ temp1 (+ (- (send temp4:nsBottom) (send temp4:nsTop)) 1))
-			    (if(> temp1 140)
-			    	= temp1 4
-			    	= temp0 (+ temp0 (+ temp2 10))
-			    	= temp2 0
+				(if
+				(< temp2 (- (temp4 nsRight?) (temp4 nsLeft?)))
+					(= temp2 (- (temp4 nsRight?) (temp4 nsLeft?)))
+				)
+				(= temp1
+					(+ temp1 (- (temp4 nsBottom?) (temp4 nsTop?)) 1)
+				)
+				(if (> temp1 140)
+					(= temp1 4)
+					(= temp0 (+ temp0 temp2 10))
+					(= temp2 0)
 				)
 			)
-  			= temp5 (send gInv:next(temp5))
+			(= temp5 (gInv next: temp5))
 		)
-		(if(not temp3 )
-		    (self:dispose())
-			return(0)
+		(if (not temp3) (self dispose:) (return 0))
+		(= window SysWindow)
+		(self setSize:)
+		(= btnHandle (DButton new:))
+		(btnHandle
+			text: {OK}
+			setSize:
+			moveTo: (- nsRight (+ 4 (btnHandle nsRight?))) nsBottom
 		)
-		= window SysWindow
-	    (self:setSize())
-		= btnHandle (DButton:new())
-		(send btnHandle:
-			text("OK")
-			setSize()
-			moveTo((- nsRight (+ 4 (send btnHandle:nsRight))) nsBottom)
+		(btnHandle
+			move: (- (btnHandle nsLeft?) (btnHandle nsRight?)) 0
 		)
-	    (send btnHandle:
-	    	move(
-	    		(- (send btnHandle:nsLeft) (send btnHandle:nsRight))
-	    		0
-	    	)
-	    )
-		(self:
-			add(btnHandle)
-			setSize()
-			center()
-		)
-		return(temp3)
+		(self add: btnHandle setSize: center:)
+		(return temp3)
 	)
-	(method (doit theOwner)
-		(var temp0,temp1,ts[40])
-		(if(not (self:init(theOwner)))
-		    Print((send gInv:empty))
-		    return
+	
+	(method (doit theOwner &tmp temp0 temp1 [ts 40])
+		(if (not (self init: theOwner))
+			(Print (gInv empty?))
+			(return)
 		)
-		(self:open(nwTITLE 15))
-		= temp0 btnHandle
-
-  		(while(1) 
-  			(if(not (= temp0 (super:doit(temp0))) or == temp0 -1 or == temp0 btnHandle)
-  				break
-  			)
-  			(send (send temp0:value):showSelf())
-		)
-  		(self:dispose())
-	)
-	(method (handleEvent pEvent)
-		(var temp0, temp1)
-		= temp0 (send pEvent:message)
-		= temp1 (send pEvent:type)
-		(switch(temp1)
-			(case 4
-				(switch(temp0)
-					(case $4800
-		    			= temp0 $F00
-					)
-					(case $5000
-		    			= temp0 9
-					)
+		(self open: nwTITLE 15)
+		(= temp0 btnHandle)
+		(repeat
+			(breakif
+				(or
+					(not (= temp0 (super doit: temp0)))
+					(== temp0 -1)
+					(== temp0 btnHandle)
 				)
 			)
-			(case $40
-				(switch(temp0)
-					(case 1
-						= temp0 $F00
-						= temp1 4
-					)
-					(case 5
-						= temp0 9
-						= temp1 4
-		    		)
-		    	)
+			((temp0 value?) showSelf:)
+		)
+		(self dispose:)
+	)
+	
+	(method (handleEvent pEvent &tmp temp0 temp1)
+		(= temp0 (pEvent message?))
+		(= temp1 (pEvent type?))
+		(switch temp1
+			(4
+				(switch temp0
+					($4800 (= temp0 $0f00))
+					($5000 (= temp0 9))
+				)
+			)
+			($0040
+				(switch temp0
+					(1 (= temp0 $0f00) (= temp1 4))
+					(5 (= temp0 9) (= temp1 4))
+				)
 			)
 		)
-		(send pEvent:
-			type(temp1)
-			message(temp0)
-		)
-		(super:handleEvent(pEvent))
+		(pEvent type: temp1 message: temp0)
+		(super handleEvent: pEvent)
 	)
 )
-/******************************************************************************/

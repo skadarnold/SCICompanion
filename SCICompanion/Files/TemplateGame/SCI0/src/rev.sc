@@ -1,17 +1,19 @@
-/******************************************************************************
- SCI Template Game
- By Brian Provinciano
- ******************************************************************************
- rev.sc
- Contains a cycle class for reverse animation. 
- ******************************************************************************/
-(include "sci.sh")
-(include "game.sh")
-/******************************************************************************/
-(script REV_SCRIPT)
-/******************************************************************************/
-(use "cycle")
-/******************************************************************************/
+;;; Sierra Script 1.0 - (do not remove this comment)
+;
+; SCI Template Game
+; By Brian Provinciano
+; ******************************************************************************
+; rev.sc
+; Contains a cycle class for reverse animation. 
+(script# REV_SCRIPT)
+(include sci.sh)
+(include game.sh)
+(use cycle)
+
+
+
+
+
 (class Rev of Cycle
 	(properties
 		client 0
@@ -20,17 +22,17 @@
 		cycleCnt 0
 		completed 0
 	)
-	(method (doit)
-		(var nCel)
-		= nCel (self:nextCel)
-		(if(< nCel 0)
-		    (self:cycleDone())
-		)(else
-			(send client:cel(nCel))
+	
+	(method (doit &tmp nCel)
+		(= nCel (self nextCel:))
+		(if (< nCel 0)
+			(self cycleDone:)
+		else
+			(client cel: nCel)
 		)
 	)
+	
 	(method (cycleDone)
-		(send client:cel( (send client:lastCel) ) )
+		(client cel: (client lastCel:))
 	)
 )
-/******************************************************************************/

@@ -1,19 +1,21 @@
-/******************************************************************************
- SCI Template Game
- By Brian Provinciano
- ******************************************************************************
- cycle.sc
- Contains classes for views, props, acts and their descendants which handles 
- animation cycling.
- ******************************************************************************/
-(include "sci.sh")
-(include "game.sh")
-/******************************************************************************/
-(script CYCLE_SCRIPT)
-/******************************************************************************/
-(use "main")
-(use "obj")
-/******************************************************************************/
+;;; Sierra Script 1.0 - (do not remove this comment)
+;
+; SCI Template Game
+; By Brian Provinciano
+; ******************************************************************************
+; cycle.sc
+; Contains classes for views, props, acts and their descendants which handles 
+; animation cycling.
+(script# CYCLE_SCRIPT)
+(include sci.sh)
+(include game.sh)
+(use main)
+(use obj)
+
+
+
+
+
 (class Cycle of Obj
 	(properties
 		client 0
@@ -22,36 +24,38 @@
 		cycleCnt 0
 		completed 0
 	)
+	
 	(method (init newClient)
-		(if(paramTotal)
-			= client newClient
-		)
-		= cycleCnt 0
-		= completed FALSE
+		(if argc (= client newClient))
+		(= cycleCnt 0)
+		(= completed FALSE)
 	)
+	
 	(method (nextCel)
-		++cycleCnt
-		(if(<= cycleCnt (send client:cycleSpeed))
-			return (send client:cel)
-		)(else
-			= cycleCnt 0
-			(if(& (send client:signal) $1000)
-				return (send client:cel)
-			)(else
-				return (+ (send client:cel) cycleDir)
-		    )
+		(++ cycleCnt)
+		(if (<= cycleCnt (client cycleSpeed?))
+			(return (client cel?))
+		else
+			(= cycleCnt 0)
+			(if (& (client signal?) $1000)
+				(return (client cel?))
+			else
+				(return (+ (client cel?) cycleDir))
+			)
 		)
 	)
-	(method (cycleDone))
+	
+	(method (cycleDone)
+	)
+	
 	(method (motionCue)
-		(send client:cycler(NULL))
-		(if(completed and IsObject(caller))
-			(send caller:cue())
-		)
-		(self:dispose())
+		(client cycler: NULL)
+		(if (and completed (IsObject caller)) (caller cue:))
+		(self dispose:)
 	)
 )
-/******************************************************************************/
+
+
 (class Fwd of Cycle
 	(properties
 		client 0
@@ -60,20 +64,22 @@
 		cycleCnt 0
 		completed 0
 	)
-	(method (doit)
-		(var theCel)
-		= theCel (self:nextCel())
-		(if(> theCel (send client:lastCel))
-			(self:cycleDone())
-		)(else
-			(send client:cel(theCel))
+	
+	(method (doit &tmp theCel)
+		(= theCel (self nextCel:))
+		(if (> theCel (client lastCel:))
+			(self cycleDone:)
+		else
+			(client cel: theCel)
 		)
 	)
+	
 	(method (cycleDone)
-		(send client:cel(0))
+		(client cel: 0)
 	)
 )
-/******************************************************************************/
+
+
 (class Walk of Fwd
 	(properties
 		client 0
@@ -82,13 +88,13 @@
 		cycleCnt 0
 		completed 0
 	)
+	
 	(method (doit)
-		(if(not (send client:isStopped))
-			(super:doit())
-		)
+		(if (not (client isStopped:)) (super doit:))
 	)
 )
-/******************************************************************************/
+
+
 (class CT of Cycle
 	(properties
 		client 0
@@ -98,50 +104,45 @@
 		completed 0
 		endCel 0
 	)
-	(method (init theClient theEndCel theCycleDir theCaller)
-		(var theLastCel)
-		(super:init(theClient))
-		= cycleDir theCycleDir
-		(if(== paramTotal 4)
-			= caller theCaller
-		)
-		= theLastCel (send client:lastCel)
-		(if(> theEndCel theLastCel)
-		    = endCel theLastCel
-		)(else
-		    = endCel theEndCel
+	
+	(method (init theClient theEndCel theCycleDir theCaller &tmp theLastCel)
+		(super init: theClient)
+		(= cycleDir theCycleDir)
+		(if (== argc 4) (= caller theCaller))
+		(= theLastCel (client lastCel:))
+		(if (> theEndCel theLastCel)
+			(= endCel theLastCel)
+		else
+			(= endCel theEndCel)
 		)
 	)
-	(method (doit)		
-		(var theNextCel, theLastCel)
-		= theLastCel (send client:lastCel)
-		(if(> endCel theLastCel)
-			= endCel theLastCel
+	
+	(method (doit &tmp theNextCel theLastCel)
+		(= theLastCel (client lastCel:))
+		(if (> endCel theLastCel) (= endCel theLastCel))
+		(= theNextCel (self nextCel:))
+		(cond 
+			((> theNextCel theLastCel) (client cel: 0))
+			((< theNextCel 0) (client cel: theLastCel))
+			(else (client cel: theNextCel))
 		)
-		= theNextCel (self:nextCel)
-		(if(> theNextCel theLastCel)
-		    (send client:cel(0))
-		)(else
-		    (if(< theNextCel 0)
-		    	(send client:cel(theLastCel))
-		    )(else
-		    	(send client:cel(theNextCel))
-		    )
-  		)
-  		(if((== cycleCnt 0) and (== endCel (send client:cel)))
-		    (self:cycleDone())
+		(if
+		(and (== cycleCnt 0) (== endCel (client cel?)))
+			(self cycleDone:)
 		)
 	)
+	
 	(method (cycleDone)
-		= completed TRUE
-		(if(caller)
-			= gCastMotionCue TRUE
-		)(else
-			(self:motionCue())
+		(= completed TRUE)
+		(if caller
+			(= gCastMotionCue TRUE)
+		else
+			(self motionCue:)
 		)
 	)
 )
-/******************************************************************************/
+
+
 (class End of CT
 	(properties
 		client 0
@@ -151,15 +152,21 @@
 		completed 0
 		endCel 0
 	)
+	
 	(method (init theClient theCaller)
-		(if(== paramTotal 2)
-			(super:init(theClient (send theClient:lastCel) cdFORWARD theCaller))
-		)(else
-			(super:init(theClient (send theClient:lastCel) cdFORWARD NULL))
+		(if (== argc 2)
+			(super
+				init: theClient (theClient lastCel:) cdFORWARD theCaller
+			)
+		else
+			(super
+				init: theClient (theClient lastCel:) cdFORWARD NULL
+			)
 		)
 	)
 )
-/******************************************************************************/
+
+
 (class Beg of CT
 	(properties
 		client 0
@@ -169,15 +176,17 @@
 		completed 0
 		endCel 0
 	)
-	(method(init theClient theCaller)
-		(if(== paramTotal 2)
-		    (super:init(theClient 0 cdBACKWARD theCaller))
-		)(else
-		    (super:init(theClient 0 cdBACKWARD NULL))
+	
+	(method (init theClient theCaller)
+		(if (== argc 2)
+			(super init: theClient 0 cdBACKWARD theCaller)
+		else
+			(super init: theClient 0 cdBACKWARD NULL)
 		)
 	)
 )
-/******************************************************************************/
+
+
 (class Motion of Obj
 	(properties
 		client 0
@@ -186,91 +195,86 @@
 		y 0
 		dx 0
 		dy 0
-		{b-moveCnt} 0
-		{b-i1} 0
-		{b-i2} 0
-		{b-di} 0
-		{b-xAxis} 0
-		{b-incr} 0
+		b-moveCnt 0
+		b-i1 0
+		b-i2 0
+		b-di 0
+		b-xAxis 0
+		b-incr 0
 		completed 0
 		xLast 0
 		yLast 0
 	)
-	(method (init theClient theX theY theCaller)
-		(var theCycler, theLooper)
-		(if(>= paramTotal 1)
-			= client theClient
-			(if(>= paramTotal 2)
-				= x theX
-				(if(>= paramTotal 3)
-					= y theY
-					(if(>= paramTotal 4)
-						= caller theCaller
-		    		)
-		    	)
-		    )
-		)
-		= completed FALSE
-		= {b-moveCnt} 0
-		= xLast 0
-		= yLast 0
-		= theCycler (send client:cycler)
-		(if(theCycler)
-			(send theCycler:cycleCnt(0))
-		)
-		(send client:heading( GetAngle((send client:x) (send client:y) x y) ))
-		(if((send client:looper))
-			= theLooper (send client:looper)
-			(send theLooper:
-				doit(client (send client:heading))
+	
+	(method (init theClient theX theY theCaller &tmp theCycler theLooper)
+		(if (>= argc 1)
+			(= client theClient)
+			(if (>= argc 2)
+				(= x theX)
+				(if (>= argc 3)
+					(= y theY)
+					(if (>= argc 4) (= caller theCaller))
+				)
 			)
-		)(else
-			DirLoop(client (send client:heading))
 		)
-		InitBresen(self)
+		(= completed FALSE)
+		(= b-moveCnt 0)
+		(= xLast 0)
+		(= yLast 0)
+		(= theCycler (client cycler?))
+		(if theCycler (theCycler cycleCnt: 0))
+		(client
+			heading: (GetAngle (client x?) (client y?) x y)
+		)
+		(if (client looper?)
+			(= theLooper (client looper?))
+			(theLooper doit: client (client heading?))
+		else
+			(DirLoop client (client heading?))
+		)
+		(InitBresen self)
 	)
-	(method (doit)
-        (var s[40],t)
-		(if(== {b-moveCnt} (send client:moveSpeed))
-			= xLast (send client:x)
-			= yLast (send client:y)
+	
+	(method (doit &tmp [s 40] t)
+		(if (== b-moveCnt (client moveSpeed?))
+			(= xLast (client x?))
+			(= yLast (client y?))
 		)
-        DoBresen(self)
-        Animate()
-		
-		(if( (== x (send client:x)) and (== y (send client:y)) )
-			(self:moveDone())
+		(DoBresen self)
+		(Animate)
+		(if (and (== x (client x?)) (== y (client y?)))
+			(self moveDone:)
 		)
 	)
+	
 	(method (moveDone)
-		= completed TRUE
-		(if(caller)
-			= gCastMotionCue TRUE
-		)(else
-			(self:motionCue())
+		(= completed TRUE)
+		(if caller
+			(= gCastMotionCue TRUE)
+		else
+			(self motionCue:)
 		)
 	)
+	
 	(method (setTarget newX newY)
-		(if(paramTotal)
-			= x newX
-			= y newY
-		)
+		(if argc (= x newX) (= y newY))
 	)
+	
 	(method (onTarget)
-		(if( (== (send client:x) x) and (== (send client:y) y) )
-			return(TRUE)
+		(if (and (== (client x?) x) (== (client y?) y))
+			(return TRUE)
 		)
-        return(FALSE)
+		(return FALSE)
 	)
+	
 	(method (motionCue)
-		(send client:mover(NULL))
-		(if(completed and IsObject(caller))
-			(send caller:cue())
-		)
-		(self:dispose())
+		(client mover: NULL)
+		(if (and completed (IsObject caller)) (caller cue:))
+		(self dispose:)
 	)
 )
-/******************************************************************************/
+
+
 (class MoveTo of Motion
 	(properties
 		client 0
@@ -279,24 +283,28 @@
 		y 0
 		dx 0
 		dy 0
-		{b-moveCnt} 0
-		{b-i1} 0
-		{b-i2} 0
-		{b-di} 0
-		{b-xAxis} 0
-		{b-incr} 0
+		b-moveCnt 0
+		b-i1 0
+		b-i2 0
+		b-di 0
+		b-xAxis 0
+		b-incr 0
 		completed 0
 		xLast 0
 		yLast 0
 	)
-	(method (init params)
-		(super:init(rest params))
+	
+	(method (init)
+		(super init: &rest)
 	)
+	
 	(method (onTarget)
-		(if((<= Abs(- (send client:x) x) (send client:xStep)) and
-		    (<= Abs(- (send client:y) y) (send client:yStep)))
-		    	return(TRUE)
+		(if
+			(and
+				(<= (Abs (- (client x?) x)) (client xStep?))
+				(<= (Abs (- (client y?) y)) (client yStep?))
+			)
+			(return TRUE)
 		)
 	)
 )
-/******************************************************************************/

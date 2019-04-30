@@ -1342,6 +1342,8 @@ void CScriptView::OnContextMenu(CWnd *pWnd, CPoint point)
             }
         }
 
+		uint16_t possibleResourceNumber = 0xffff;
+
         if (fPossiblyOnWord)
         {
             // Do a parse to see if we have something interesting to show for the "goto" entry.
@@ -1361,40 +1363,45 @@ void CScriptView::OnContextMenu(CWnd *pWnd, CPoint point)
 
                 if (result.possibleResourceNumber == 0xffff)
                 {
-                    // The parser won't set this for raw integers (too much work to get it to work), so we'll
-                    // just try a conversion right here.
-                    CPoint ptRight = WordToRight(ptText);
-                    CPoint ptLeft = WordToLeft(ptText);
-                    CString strMaybeNumber;
-                    GetText(ptLeft, ptRight, strMaybeNumber);
-                    std::string maybeNumber = strMaybeNumber;
+					possibleResourceNumber = result.possibleResourceNumber;
+				}
+			}
 
-                    // A little hokey, but this lets us re-use the parser code to get an integer.
-                    struct DummyContext
-                    {
-                        void ReportError(PCSTR psz, PCSTR &) {}
-                        void SetInteger(int value, bool neg, bool hex, PCSTR &)
-                        {
-                            this->value = value;
-                        }
-                        int value;
-                    };
-                    DummyContext dummyContext;
-                    const char *pszTemp = maybeNumber.c_str();
-                    if (IntegerExpandedPWorker(&dummyContext, pszTemp))
-                    {
-                        result.possibleResourceNumber = dummyContext.value;
-                    }
-                }
+			if (possibleResourceNumber == 0xffff)
+			{
+				// The parser won't set this for raw integers (too much work to get it to work), so we'll
+				// just try a conversion right here.
+				CPoint ptRight = WordToRight(ptText);
+				CPoint ptLeft = WordToLeft(ptText);
+				CString strMaybeNumber;
+				GetText(ptLeft, ptRight, strMaybeNumber);
+				std::string maybeNumber = strMaybeNumber;
 
-                if ((int)result.possibleResourceNumber < appState->GetVersion().GetMaximumResourceNumber())
-                {
-                    if (appState->GetResourceMap().DoesResourceExist(ResourceType::View, (int)result.possibleResourceNumber))
-                    {
-                        _gotoView = result.possibleResourceNumber;
-                    }
+				// A little hokey, but this lets us re-use the parser code to get an integer.
+				struct DummyContext
+				{
+					void ReportError(PCSTR psz, PCSTR &) {}
+					void SetInteger(int value, bool neg, bool hex, PCSTR &)
+					{
+						this->value = value;
                 }
-            }
+					int value;
+				};
+				DummyContext dummyContext;
+				const char *pszTemp = maybeNumber.c_str();
+				if (IntegerExpandedPWorker(&dummyContext, pszTemp))
+				{
+					possibleResourceNumber = dummyContext.value;
+				}
+			}
+
+			if ((int)possibleResourceNumber < appState->GetVersion().GetMaximumResourceNumber())
+			{
+				if (appState->GetResourceMap().DoesResourceExist(ResourceType::View, (int)possibleResourceNumber))
+				{
+					_gotoView = possibleResourceNumber;
+				}
+			}
         }
 
         // Add objects?

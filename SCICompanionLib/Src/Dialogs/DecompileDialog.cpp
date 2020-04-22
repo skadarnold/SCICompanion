@@ -728,7 +728,7 @@ void DecompileDialog::_AssignFilenames()
             if (script->GetScriptNumber() == 0)
             {
                 suggestedName = "Main";
-            }
+            } else
 #else
 			if (!_decompilerConfig->ResolveForcedScriptName(script->GetScriptNumber(), suggestedName))
 #endif

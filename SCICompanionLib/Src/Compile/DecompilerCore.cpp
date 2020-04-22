@@ -449,7 +449,7 @@ Consumption _GetInstructionConsumption(scii &inst, DecompileLookups *lookups)
         // fEatsAcc = true; // But not always intentional...
         // Because we don't know the intent of the code, we can't really do anything here.
         // The acc could be valid, or garbage. So we can just do the "doesn't affect anything"
-        // statement before the return here and call it good. SCISTudio and SICompanion both compile ok with that
+        // statement before the return here and call it good. SCI Studio and SCI Companion both compile ok with that
         // (though SCICompanion gives warnings).
         // e.g.
         //	return (5)
@@ -1113,7 +1113,7 @@ void _TrackExternalScriptUsage(std::list<scii> code, DecompileLookups &lookups)
     }
 }
 
-// pEnd can be teh end of script data. I have added autodetection support.
+// pEnd can be the end of script data. I have added autodetection support.
 void DecompileRaw(FunctionBase &func, DecompileLookups &lookups, const BYTE *pBegin, const BYTE *pEstimatedMaxEnd, const BYTE *pScriptResourceEnd, WORD wBaseOffset)
 {
     bool allowContinues = func.GetOwnerScript()->GetScriptId().Language() == LangSyntaxSCI;

@@ -202,6 +202,13 @@ void _MassageDisplay(ProcedureCall &proc, DecompileLookups &lookups)
 }
 #endif
 
+void _MassageScriptID(ProcedureCall &proc, DecompileLookups &lookups)
+{
+	SyntaxNode *param = proc.GetParameter(0);
+	PropertyValue *pV = SafeSyntaxNode<PropertyValue>(param);
+	pV->_fNegate = false;
+}
+
 // Print(100 44) becomes Print("Hello there")
 void _SubstituteTextTuples(ProcedureCall &proc, DecompileLookups &lookups, std::string &text, bool replace)
 {
@@ -225,8 +232,11 @@ void _MassageProcedureCall(ProcedureCall &proc, DecompileLookups &lookups)
 	{
 		_MassageDisplay(proc, lookups);
 	}
-
 #endif
+	else if (proc.GetName() == "ScriptID")
+	{
+		_MassageScriptID(proc, lookups);
+	}
 }
 
 class MassageProcedureCallsWorker : public IExploreNode

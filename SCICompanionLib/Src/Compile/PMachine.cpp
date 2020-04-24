@@ -408,9 +408,9 @@ const OperandType *GetOperandTypes(const SCIVersion &version, Opcode opcode)
 
 // Corresponds to Opcode enum
 #ifdef PHIL_LDMSTM
-char *OpcodeNames[132]={
+char *OpcodeNames[133]={
 #else
-char *OpcodeNames[130] = {
+char *OpcodeNames[131] = {
 #endif
 	"bnot",
 	"add",
@@ -549,6 +549,7 @@ char *OpcodeNames[130] = {
 	"ldm",
 	"stm",
 #endif
+	"INDETERMINATE", //Torin script 64984 regionpath.sc, no idea why -- KAWA
 };
 
 const char *OpcodeToName(Opcode opcode, uint16_t firstOperand)

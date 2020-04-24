@@ -206,7 +206,8 @@ void _MassageScriptID(ProcedureCall &proc, DecompileLookups &lookups)
 {
 	SyntaxNode *param = proc.GetParameter(0);
 	PropertyValue *pV = SafeSyntaxNode<PropertyValue>(param);
-	pV->_fNegate = false;
+	if (pV)
+		pV->_fNegate = false;
 }
 
 // Print(100 44) becomes Print("Hello there")

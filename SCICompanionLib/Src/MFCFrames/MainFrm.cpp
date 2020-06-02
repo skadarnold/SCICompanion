@@ -978,8 +978,8 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
     ASSERT( m_ThemeSwitcher.GetSafeHwnd() != nullptr );
     if(	! m_ThemeSwitcher.ThemeSwitcherInit() )
     {
-        ASSERT( FALSE );
-        return -1;
+        //ASSERT( FALSE );
+        //return -1;
     }
     m_ThemeSwitcher.ShowWindow(SW_HIDE);
 

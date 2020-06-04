@@ -853,7 +853,7 @@ bool IntegerExpandedPWorker(_TContext *pContext, _It &stream)
                 break;
             }
             default:
-                i = toupper(value);
+				i = (char)value; //toupper(value);
                 fRet = true;
                 break;
 

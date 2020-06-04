@@ -874,7 +874,7 @@ char* AppState::GetAboutText()
 		"\x95 Font limit break\r\n"
 #endif
 #ifdef KAWA_GETPOLY
-		"\x95 &getpoly command\r\n"
+		"\x95 '&getpoly' command\r\n"
 #endif
 #ifdef KAWA_GLOBALS
 		"\x95 Forced global names\r\n"
@@ -895,19 +895,19 @@ char* AppState::GetAboutText()
 		"\x95 More vocab previews\r\n"
 #endif
 #ifdef PHIL_EXISTS
-		"\x95 &exists support\r\n"
+		"\x95 '&exists' support\r\n"
 #endif
 #ifdef PHIL_FOREACH
-		"\x95 foreach support\r\n"
+		"\x95 'foreach' support\r\n"
 #endif
 #ifdef PHIL_VERBS
-		"\x95 verbs block support\r\n"
+		"\x95 'verbs' block support\r\n"
 #endif
 #ifdef KAWA_FORCEDSCRIPTNAMES
-		"\x95 forced script names\r\n"
+		"\x95 Forced script names\r\n"
 #endif
 #ifdef PHIL_UNUSEDINSTANCES
-		"\x95 warnings for unused instances\r\n"
+		"\x95 Warnings for unused instances\r\n"
 #endif
 		;
 }

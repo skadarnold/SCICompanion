@@ -1148,6 +1148,28 @@ WORD _GetImmediateFromCodeNode(ConsumptionNode &node, ConsumptionNode *pNodePrev
             case Opcode::PUSH:
                 // REVIEW, hits too often..... ldi jmp ldi push
                 //ASSERT(node.GetChildCount());
+
+				//HACK: LSL3DEMO uses "ldi 57, push" to push an "init" selector, but this isn't properly decompiled
+				//unlike the "proper" method, "pushi 57". So IF the previous node was an LDI, return *its* first operand instead.
+				//This is *almost* the same as Opcode::DUP down below but I specifically want to use LDI/PUSH pairs only.
+				if (pNodePrevious)
+				{
+					if (pNodePrevious->pos->get_opcode() == Opcode::LDI)
+					{
+						w = _GetImmediateFromCodeNode(*pNodePrevious);
+					}
+				}
+				else
+				{
+					code_pos posFlatPrevious = pos;
+					--posFlatPrevious;
+					if (posFlatPrevious->get_opcode() == Opcode::LDI)
+					{
+						ConsumptionNode nodeTemp;
+						nodeTemp.SetPos(posFlatPrevious);
+						w = _GetImmediateFromCodeNode(nodeTemp);
+					}
+				}
                 break;
 
             case Opcode::DUP:

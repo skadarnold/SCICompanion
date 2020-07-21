@@ -253,6 +253,15 @@ BOOL SCICompanionApp::InitInstance()
     appState->InitInstance();
     CWinApp::InitInstance();
 
+	//KAWA: refuse to load if there's no include\sci.sh
+	OFSTRUCT useless;
+	HFILE test = OpenFile("include\\sci.sh", &useless, OF_EXIST);
+	if (test == HFILE_ERROR)
+	{
+		MessageBox(0, "You can't just run this on its own.\n\nUnpack a full SCI Companion release and replace SCICompanion.exe to update it.", "SCI Companion", MB_OK);
+		return FALSE;
+	}
+
     // Initialize OLE libraries
     if (!AfxOleInit())
     {

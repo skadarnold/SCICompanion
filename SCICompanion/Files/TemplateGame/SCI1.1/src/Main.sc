@@ -15,7 +15,6 @@
 (use GameEgo)
 (use ScrollableInventory)
 (use ScrollInsetWindow)
-(use DColorButton)
 (use SpeakWindow)
 (use Print)
 (use DialogControls)
@@ -659,9 +658,9 @@
 				width: 75
 				window: gWindow
 				mode: 1
-				addText: N_RESTART V_LOOK 0 1 0 0 0
-				addColorButton: 1 N_RESTART V_LOOK 0 2 0 40 0
-				addColorButton: 0 N_RESTART V_LOOK 0 3 0 50 0
+				addText: N_RESTART 0 0 1 0 0 0
+				addButton: 1 N_RESTART 0 0 3 0 20 0
+				addButton: 0 N_RESTART 0 0 4 40 20 0
 				init:
 			)
 		)
@@ -804,9 +803,9 @@
 				font: gFont
 				width: 75
 				mode: 1
-				addText: N_QUITMENU V_LOOK 0 1 0 0 0
-				addColorButton: 1 N_QUITMENU V_LOOK 0 2 0 25 0
-				addColorButton: 0 N_QUITMENU V_LOOK 0 3 0 35 0
+				addText: N_QUITMENU 0 0 1 0 0 0
+				addButton: 1 N_QUITMENU 0 0 3 0 20 0
+				addButton: 0 N_QUITMENU 0 0 4 40 20 0
 				init:
 			)
 		)

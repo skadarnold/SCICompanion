@@ -850,7 +850,7 @@
 	;	
 	;	 Example usage::
 	;	
-	;	 	(gRoom addObstacle: (CreateNewPolygon @P_Flower))
+	;	 	(gRoom addObstacle: (&getpoly "Flower"))
 	;	
 	(method (addObstacle polygon)
 		(if (not (IsObject obstacles))

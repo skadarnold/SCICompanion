@@ -30,7 +30,7 @@
 	)
 	
 	(method (init)
-		(AddPolygonsToRoom @P_Default110)
+		(gRoom addObstacle: (&getpoly ""))
 		(super init:)
 		(switch gPreviousRoomNumber
 			; Add room numbers here to set up the ego when coming from different directions.

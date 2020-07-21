@@ -51,8 +51,6 @@
 	ScoreFlag 10
 	HideStatus 11
 	DebugPrint 12
-	AddPolygonsToRoom 13
-	CreateNewPolygon 14
 )
 (define STARTING_ROOM 100)
 
@@ -397,103 +395,6 @@
 ; 		(DebugPrint {You are in room %d} gNewRoomNumber)
 (procedure (DebugPrint)
 	(if gDebugOut (gDebugOut debugPrint: &rest))
-)
-
-(procedure (CreateNewPolygonHelper polyBuffer nextPoly &tmp newPoly pointCount)
-	(= newPoly (Polygon new:))
-	(= pointCount (Memory memPEEK (+ polyBuffer 2)))
-	(newPoly
-		dynamic: FALSE
-		type: (Memory memPEEK polyBuffer)
-		size: pointCount
-		; Use the points directly from the buffer:
-		points: (+ polyBuffer 4)
-	)
-	; Tell the caller the position of the next poly, if they care:
-	(if (> argc 1)
-		(Memory
-			memPOKE
-			nextPoly
-			(+ polyBuffer 4 (* 4 pointCount))
-		)
-	)
-	(return newPoly)
-)
-
-;	
-;	 Creates :class:`Polygon` objects based on the point lists in polyBuffer and adds
-;	 them to the room's obstacles.
-;	
-;	 :param heapPtr polyBuffer: An array with polygon points.
-;	
-;	 Example usage::
-;	
-;	 	(AddPolygonsToRoom @P_ThePolygons)
-;	
-;	 The array begins with a number indicating how many polygons there are. This is followed
-;	 by the following information for each polygon:
-;	
-;	 	- A number expressing the type of the polygon (e.g. PBarredAccess).
-;	 	- A number indicating how many points are in the polygon.
-;	 	- (x y) pairs of numbers for each point.
-;	
-;	 Example::
-;	
-;	 	[P_ThePolygons 19] = [2 PContainedAccess 4 319 189 319 50 0 50 0 189 PBarredAccess 3 319 189 319 50 0 50]
-;	
-;	 See also: :doc:`/polygons`.		
-(procedure (AddPolygonsToRoom polyBuffer &tmp polyCount)
-	(if (u< polyBuffer 100)
-		(Prints {polyBuffer is not a pointer. Polygon ignored.})
-	else
-		(= polyCount (Memory memPEEK polyBuffer))
-		(+= polyBuffer 2)
-		(while polyCount
-			(gRoom
-				addObstacle:
-					(if (== polyCount 1)
-						(CreateNewPolygonHelper polyBuffer)
-					else
-						(CreateNewPolygonHelper polyBuffer @polyBuffer)
-					)
-			)
-			(-- polyCount)
-		)
-	)
-)
-
-;
-; .. function:: CreateNewPolygon(polyBuffer [nextPolyOptional])
-;
-; 	Creates a new polygon object.
-; 	
-; 	:param heapPtr polyBuffer: An array with polygon points.
-; 	:param heapPtr nextPolyOptional: An optional pointer that receives the position of the next polygon in the buffer.
-; 	
-; 	Example usage::
-; 	
-; 		(aRock setOnMeCheck: omcPOLYGON (CreateNewPolygon @P_Rock))
-;
-; 	The array consists of the following:	
-; 	
-; 		- A number expressing the type of the polygon (e.g. PBarredAccess).
-; 		- A number indicating how many points are in the polygon.
-; 		- (x y) pairs of numbers for each point.
-; 		
-; 	Example::
-; 	
-; 		[P_Rock 10] = [PContainedAccess 4 319 189 319 50 0 50 0 189]
-; 		
-; 	See also: :doc:`/polygons`.
-(procedure (CreateNewPolygon polyBuffer &tmp polyCount)
-	(if (u< polyBuffer 100)
-		(Prints {polyBuffer is not a pointer. Polygon ignored.})
-		(return NULL)
-	else
-		(= polyCount (Memory memPEEK polyBuffer))
-		(+= polyBuffer 2)
-		(return (CreateNewPolygonHelper polyBuffer &rest))
-	)
 )
 
 (instance rm0Sound of Sound

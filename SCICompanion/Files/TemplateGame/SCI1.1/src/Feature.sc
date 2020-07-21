@@ -352,7 +352,7 @@
 	;
 	; 		(theTable setOnMeCheck: omcCOLORS ctlWHITE ctlGREY)
 	;
-	; 		(theRock setOnMeCheck: omcPOLYGON (CreateNewPolygon @P_TheRock))
+	; 		(theRock setOnMeCheck: omcPOLYGON (&getpoly "rock"))
 	;
 	(method (setOnMeCheck checkStyle params &tmp temp0)
 		(switch checkStyle

@@ -623,7 +623,8 @@ BEGIN
         MENUITEM "&Audio preferences",          ID_TOOLS_AUDIOPREFERENCES
         MENUITEM SEPARATOR
         MENUITEM "&Extract all resources",      ID_TOOLS_EXTRACTALLRESOURCES
-        MENUITEM "Rebuild &class table",        ID_TOOLS_REBUILDCLASSTABLE
+		MENUITEM "Extract all text", ID_SCRIPT_EXTRACTALLTEXT
+		MENUITEM "Rebuild &class table",        ID_TOOLS_REBUILDCLASSTABLE
     END
     POPUP "&Game"
     BEGIN
@@ -742,7 +743,6 @@ BEGIN
 #endif
         MENUITEM "Manage decompilation",        ID_SCRIPT_MANAGEDECOMPILATION
         MENUITEM "Validate all Saids",          ID_SCRIPT_VALIDATEALLSAIDS
-        MENUITEM "Extract all script strings",  ID_SCRIPT_EXTRACTALLSCRIPTSTRINGS
     END
     POPUP "&Help"
     BEGIN

@@ -404,7 +404,7 @@ BEGIN_MESSAGE_MAP(CMainFrame, CMDIFrameWnd)
 
     ON_UPDATE_COMMAND_UI(ID_SCRIPT_VALIDATEALLSAIDS, OnUpdateValidateAllSaids)
 
-    ON_COMMAND(ID_SCRIPT_EXTRACTALLSCRIPTSTRINGS, ExtractAllScriptStrings)
+    ON_COMMAND(ID_SCRIPT_EXTRACTALLTEXT, ExtractAllText)
 
     // ON_COMMAND(ID_SELFTEST, OnSelfTest)
     // ON_WM_TIMER()
@@ -2795,7 +2795,7 @@ void CMainFrame::OnValidateAllSaids()
     }
 }
 
-void CMainFrame::ExtractAllScriptStrings()
+void CMainFrame::ExtractAllText()
 {
     std::vector<ScriptId> scripts;
     appState->GetResourceMap().GetAllScripts(scripts);
@@ -2812,7 +2812,21 @@ void CMainFrame::ExtractAllScriptStrings()
         ss << line;
         ss << "\n";
     }
-    ShowTextFile(ss.str().c_str(), "Script strings.txt");
+
+	//KAWA: include all text and message resources. Adapted from _FindInTexts
+	auto container = appState->GetResourceMap().Resources(ResourceTypeFlags::Text | ResourceTypeFlags::Message, ResourceEnumFlags::MostRecentOnly | ResourceEnumFlags::AddInDefaultEnumFlags);
+	for (auto &blob : *container)
+	{
+		auto resource = CreateResourceFromResourceData(*blob);
+		TextComponent &textComponent = resource->GetComponent<TextComponent>();
+		for (size_t i = 0; i < textComponent.Texts.size(); i++)
+		{
+			ss << textComponent.Texts[i].Text;
+			ss << "\n";
+		}
+	}
+
+	ShowTextFile(ss.str().c_str(), "All text.txt");
 }
 
 /*

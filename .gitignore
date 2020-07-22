@@ -17,6 +17,10 @@ bld/
 [Oo]bj/
 [Kk]awa/
 [Mm]ild/
+/SCICompanionLib/[Bb]in/
+/SCICompanionLib/[Oo]bj/
+/SCICompanionLib/[Kk]awa/
+/SCICompanionLib/[Mm]ild/
 
 # Roslyn cache directories
 *.ide/

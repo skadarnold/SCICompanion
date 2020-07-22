@@ -132,6 +132,16 @@ void CFontPreviewView::_OnDraw(CDC *pDC, BOOL fHitTestOnly, CPoint point, int *p
         for (size_t i = 0; i < _previewLetters.length(); i++)
         {
             uint8_t bChar = (uint8_t)_previewLetters[i];
+
+			//KAWA: newlines
+			if (bChar == '\r' && (uint8_t)_previewLetters[i + 1] == '\n')
+			{
+				i++;
+				y += cyLine;
+				x = 0;
+				continue;
+			}
+
             const Cel &cel = raster.GetCelFallback(CelIndex(0, bChar));
             size16 size = cel.size;
             assert(size.cx <= 127);
@@ -270,7 +280,17 @@ void CFontPreviewView::_RecalcHeight()
         for (size_t i = 0; i < _previewLetters.length(); i++)
         {
             uint8_t bChar = (uint8_t)_previewLetters[i];
-            const Cel &cel = raster.GetCelFallback(CelIndex(0, bChar));
+
+			//KAWA: newlines
+			if (bChar == '\r' && (uint8_t)_previewLetters[i + 1] == '\n')
+			{
+				i++;
+				y += cyLine;
+				x = 0;
+				continue;
+			}
+			
+			const Cel &cel = raster.GetCelFallback(CelIndex(0, bChar));
 
             assert(cel.size.cx <= 127);
             assert(cel.size.cy <= 127);

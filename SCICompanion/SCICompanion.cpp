@@ -276,7 +276,7 @@ BOOL SCICompanionApp::InitInstance()
     // the specific initialization routines you do not need
     // Change the registry key under which our settings are stored
     SetRegistryKey(_T("mtnPhilms"));
-    LoadStdProfileSettings(4);  // Load standard INI file options (including MRU)
+    LoadStdProfileSettings(8);  // Load standard INI file options (including MRU)
     // Register the application's document templates.  Document templates
     //  serve as the connection between documents, frame windows and views
 

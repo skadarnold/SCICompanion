@@ -136,7 +136,7 @@
 				iconMessageMode
 				iconHelp
 			eachElementDo: #highlightColor 0
-			eachElementDo: #lowlightColor 4
+			eachElementDo: #lowlightColor 5
 			eachElementDo: #modNum 0
 			eachElementDo: #helpVerb V_HELP
 			helpIconItem: iconHelp

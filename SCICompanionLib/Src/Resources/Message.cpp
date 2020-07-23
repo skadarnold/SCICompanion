@@ -78,28 +78,23 @@ void MessageReadFrom_4000(TextComponent &messageComponent, sci::istream &byteStr
     // "MysteryNumber" is a number that is roughly the number of messages, but sometimes a little more. Occasionally a lot more.
     // Sometimes its zero (KQ6, 95 and 916)
 
-    for (int i = 0; i < messageCount; i++)
-    {
-        TextEntry message = { 0 };
-        byteStream >> message.Noun;
-        byteStream >> message.Verb;
-        byteStream >> message.Condition;
-        byteStream >> message.Sequence;
-        byteStream >> message.Talker;
-        uint16_t textOffset;
-        byteStream >> textOffset;
-        byteStream >> message.Style;
-        // "unknown" seems to be either 0x00000000 or 0x01000000
-        // 0x00000000 seems to indicate some markup.
-        // It's 4 bytes, not 3 like on http://wiki.scummvm.org/index.php/SCI/Specifications/SCI_in_action/The_message_subsystem
-        // An empty string can be x01000108
-        // Hmm, not necessarily. Markup can appear whereever. It seems like fonts are included.
-        // At any rate, presumably it's useful.
-
-        sci::istream textStream = byteStream;
-        textStream.seekg(textOffset);
-        textStream >> message.Text;
-
+	for (int i = 0; i < messageCount; i++)
+	{
+		TextEntry message = { 0 };
+		byteStream >> message.Noun;
+		byteStream >> message.Verb;
+		byteStream >> message.Condition;
+		byteStream >> message.Sequence;
+		byteStream >> message.Talker;
+		uint16_t textOffset;
+		byteStream >> textOffset;
+		byteStream >> message.NounRef;
+		byteStream >> message.VerbRef;
+		byteStream >> message.ConditionRef;
+		byteStream >> message.SequenceRef;
+		sci::istream textStream = byteStream;
+		textStream.seekg(textOffset);
+		textStream >> message.Text;
         messageComponent.Texts.push_back(message);
     }
 }
@@ -122,7 +117,10 @@ void MessageWriteTo_4000(const TextComponent &messageComponent, sci::ostream &by
         byteStream << entry.Sequence;
         byteStream << entry.Talker;
         byteStream << textOffset;
-        byteStream << entry.Style;
+		byteStream << entry.NounRef;
+		byteStream << entry.VerbRef;
+		byteStream << entry.ConditionRef;
+		byteStream << entry.SequenceRef;
         textOffset += (uint16_t)(entry.Text.length() + 1);
     }
 

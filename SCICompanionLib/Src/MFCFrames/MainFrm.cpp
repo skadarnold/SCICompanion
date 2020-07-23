@@ -970,7 +970,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
     }
 
     // We don't actually show this, but we use its m_nMenuMarkerID member variable.
-    if (!m_ThemeSwitcher.Create("theme swtich toolbar", this, AFX_IDW_TOOLBAR))
+    if (!m_ThemeSwitcher.Create("theme switch toolbar", this, AFX_IDW_TOOLBAR))
     {
         return -1;
     }

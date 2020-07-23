@@ -498,7 +498,7 @@ const TextEntry *CMessageView::_GetEntry()
 void CMessageView::OnAddNew()
 {
     // Default to the NARRATOR talker (usually 99), and sequence 1.
-    TextEntry newEntry({ 0, 0, 0, 1, 99, 0, "" });
+    TextEntry newEntry({ 0, 0, 0, 1, 99, 0, 0, 0, 0, "" });
     _AddEntryAtCurrentPosition(newEntry);
 }
 

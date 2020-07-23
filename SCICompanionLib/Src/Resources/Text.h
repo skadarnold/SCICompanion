@@ -46,11 +46,15 @@ struct TextEntry
     uint8_t Condition;
     uint8_t Sequence;
     uint8_t Talker;
-    uint32_t Style;  // Just a guess...
+	uint8_t NounRef;
+	uint8_t VerbRef;
+	uint8_t ConditionRef;
+	uint8_t SequenceRef;
     std::string Text;
 
     bool operator==(const TextEntry &other) const;
     bool operator!=(const TextEntry &other) const;
+	bool IsReference() const;
 };
 
 extern std::string AutoGenTextSentinel;

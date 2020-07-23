@@ -308,6 +308,10 @@ const key_value_pair<PCSTR, MDITabType> c_ResourceSpecificMenus[] =
     { "Voca&b", TAB_VOCAB},
     { "&View", TAB_VIEW},
     { "&Message", TAB_MESSAGE },
+//	{ "&Script", TAB_SCRIPT },
+//KAWA: We *could* be neat about it and hide the Script menu if we don't have a script open
+//but that would mean hiding Compile All, New Room, New Script, etc. One way to keep it clean
+//would be to move those items *out* of the Script menu.
 };
 
 bool CExtMenuControlBarHideShow::_ExcludeMenu(PCSTR pszName)

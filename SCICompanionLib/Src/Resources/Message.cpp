@@ -52,6 +52,7 @@ void UnresolveReferences(TextComponent &messageComponent)
 	for (int i = 0; i < messageComponent.Texts.size(); i++)
 	{
 		TextEntry entry = messageComponent.Texts[i];
+		messageComponent.Texts[i].Reference = 0; //assume it is not!
 		if (entry.Text.substr(0, 5) == "[REF ")
 		{
 			char* lol = (char*)(entry.Text.c_str()) + 5;

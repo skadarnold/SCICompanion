@@ -26,21 +26,13 @@ bool TextEntry::operator == (const TextEntry &other) const
         Condition == other.Condition &&
         Sequence == other.Sequence &&
 		Talker == other.Talker &&
-		NounRef == other.NounRef &&
-		VerbRef == other.VerbRef &&
-		ConditionRef == other.ConditionRef &&
-		SequenceRef == other.SequenceRef;
+		Reference == other.Reference &&
 		Text == other.Text &&
         Talker == other.Talker;
 }
 bool TextEntry::operator!=(const TextEntry &other) const
 {
     return !(*this == other);
-}
-
-bool TextEntry::IsReference() const
-{
-	return NounRef + VerbRef + ConditionRef + SequenceRef != 0;
 }
 
 int TextComponent::AddString(const std::string &theString)

@@ -21,6 +21,51 @@
 
 using namespace std;
 
+void ResolveReferences(TextComponent &messageComponent)
+{
+	int messageCount = messageComponent.Texts.size();
+	for (int i = 0; i < messageCount; i++)
+	{
+		TextEntry message = messageComponent.Texts[i];
+		uint8_t refN = (message.Reference >> 0) & 0xFF;
+		uint8_t refV = (message.Reference >> 8) & 0xFF;
+		uint8_t refC = (message.Reference >> 16) & 0xFF;
+		uint8_t refS = (message.Reference >> 24) & 0xFF;
+		if (refN + refV + refC != 0 && refS > 0)
+		{
+			messageComponent.Texts[i].Text = fmt::format("[REF {0:d}, {1:d}, {2:d}, {3:d}]", refN, refV, refC, refS);
+			for (int j = 0; j < messageCount; j++)
+			{
+				TextEntry other = messageComponent.Texts[j];
+				if (other.Noun == refN && other.Verb == refV && other.Condition == refC && other.Sequence == refS)
+				{
+					messageComponent.Texts[i].Text += fmt::format(" {0}", other.Text);
+					break;
+				}
+			}
+		}
+	}
+}
+
+void UnresolveReferences(TextComponent &messageComponent)
+{
+	for (int i = 0; i < messageComponent.Texts.size(); i++)
+	{
+		TextEntry entry = messageComponent.Texts[i];
+		if (entry.Text.substr(0, 5) == "[REF ")
+		{
+			char* lol = (char*)(entry.Text.c_str()) + 5;
+			int refN = strtol(lol, &lol, 10);
+			int refV = strtol(lol + 1, &lol, 10);
+			int refC = strtol(lol + 1, &lol, 10);
+			int refS = strtol(lol + 1, &lol, 10);
+			uint32_t ref = (refN << 0) | (refV << 8) | (refC << 16) | (refS << 24);
+			messageComponent.Texts[i].Reference = ref;
+			messageComponent.Texts[i].Text = "";
+		}
+	}
+}
+
 void MessageReadFrom_2102(TextComponent &messageComponent, sci::istream &byteStream)
 {
     uint16_t messageCount;
@@ -88,15 +133,14 @@ void MessageReadFrom_4000(TextComponent &messageComponent, sci::istream &byteStr
 		byteStream >> message.Talker;
 		uint16_t textOffset;
 		byteStream >> textOffset;
-		byteStream >> message.NounRef;
-		byteStream >> message.VerbRef;
-		byteStream >> message.ConditionRef;
-		byteStream >> message.SequenceRef;
+		byteStream >> message.Reference;
 		sci::istream textStream = byteStream;
 		textStream.seekg(textOffset);
 		textStream >> message.Text;
         messageComponent.Texts.push_back(message);
     }
+
+	ResolveReferences(messageComponent);
 }
 
 void MessageWriteTo_4000(const TextComponent &messageComponent, sci::ostream &byteStream)
@@ -105,6 +149,8 @@ void MessageWriteTo_4000(const TextComponent &messageComponent, sci::ostream &by
     byteStream.WriteWord(0); // We'll fill this in later
     uint32_t startCount = byteStream.tellp();
     byteStream << messageComponent.MysteryNumber;
+
+	UnresolveReferences((TextComponent&)messageComponent);
 
     byteStream.WriteWord((uint16_t)messageComponent.Texts.size());
 
@@ -117,10 +163,7 @@ void MessageWriteTo_4000(const TextComponent &messageComponent, sci::ostream &by
         byteStream << entry.Sequence;
         byteStream << entry.Talker;
         byteStream << textOffset;
-		byteStream << entry.NounRef;
-		byteStream << entry.VerbRef;
-		byteStream << entry.ConditionRef;
-		byteStream << entry.SequenceRef;
+		byteStream << entry.Reference;
         textOffset += (uint16_t)(entry.Text.length() + 1);
     }
 
@@ -133,6 +176,8 @@ void MessageWriteTo_4000(const TextComponent &messageComponent, sci::ostream &by
     uint16_t offsetToEnd = (uint16_t)(byteStream.tellp() - startCount);
     *(reinterpret_cast<uint16_t*>(byteStream.GetInternalPointer() + fillThisIn)) = offsetToEnd;
     // NOTE: This may need to be padded to WORD boundary
+
+	ResolveReferences((TextComponent&)messageComponent);
 }
 
 uint16_t CheckMessageVersion(sci::istream &byteStream)

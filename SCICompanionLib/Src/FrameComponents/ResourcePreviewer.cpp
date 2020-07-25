@@ -296,6 +296,7 @@ void ScriptPreviewer::SetResource(const ResourceBlob &blob)
     if (scriptFile.is_open())
     {
         ScriptId scriptId(scriptFileName);
+		/*
         if (scriptId.Language() == LangSyntaxStudio)
         {
             m_wndHeader.SetWindowText("Language: SCI Studio");
@@ -304,7 +305,7 @@ void ScriptPreviewer::SetResource(const ResourceBlob &blob)
         {
             m_wndHeader.SetWindowText("Language: Sierra");
         }
-
+		*/
         std::string scriptText;
         std::string line;
         while (std::getline(scriptFile, line))
@@ -317,7 +318,7 @@ void ScriptPreviewer::SetResource(const ResourceBlob &blob)
     }
     else
     {
-        m_wndHeader.SetWindowText("");
+        //m_wndHeader.SetWindowText("");
 
         // If that wasn't possible, spew info from the compiled script resource:
         CompiledScript compiledScript(0);
@@ -341,7 +342,7 @@ void ScriptPreviewer::DoDataExchange(CDataExchange* pDX)
 	__super::DoDataExchange(pDX);
 
     DDX_Control(pDX, IDC_EDITSCRIPT, m_wndEdit);
-    DDX_Control(pDX, IDC_STATICHEADER, m_wndHeader);
+    //DDX_Control(pDX, IDC_STATICHEADER, m_wndHeader);
     AddAnchor(IDC_EDITSCRIPT, CPoint(0, 0), CPoint(100, 100));
 }
 

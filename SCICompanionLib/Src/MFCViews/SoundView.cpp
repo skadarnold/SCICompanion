@@ -528,15 +528,18 @@ void CSoundView::_RecalculateChannelBitmaps()
         int height = (rect.Height() * 2 / 3) / max(pSound->GetChannelInfos().size(), 15);
         if (_PrepChannelBitmaps(width, height, _GetNumberOfChannelBitmaps()))
         {
-            std::vector<std::vector<BYTE>> channelValues;  // the data we'll eventually put in the bitmaps
-            channelValues.resize(_channelBitmaps.size());
-            std::vector<std::vector<bool>> isEventAtPosition;
+            std::vector<std::vector<BYTE>> channelPitches;  // the data we'll eventually put in the bitmaps
+			std::vector<std::vector<BYTE>> channelVelocities;
+            channelPitches.resize(_channelBitmaps.size());
+			channelVelocities.resize(_channelBitmaps.size());
+			std::vector<std::vector<bool>> isEventAtPosition;
             isEventAtPosition.resize(_channelBitmaps.size());
 
-            for (size_t i = 0; i < channelValues.size(); i++)
+            for (size_t i = 0; i < channelPitches.size(); i++)
             {
-                channelValues[i].resize(width, 255); // 255 is a sentinel value indicating undefined
-                isEventAtPosition[i].resize(width, false);
+                channelPitches[i].resize(width, 255); // 255 is a sentinel value indicating undefined
+				channelVelocities[i].resize(width, 255);
+				isEventAtPosition[i].resize(width, false);
             }
 
             set<int> channelNumbersUsed;
@@ -568,23 +571,25 @@ void CSoundView::_RecalculateChannelBitmaps()
                         // We moved a bit... initialize the "max" values with the current.
                         memcpy(vNoteMax, vNote, sizeof(vNoteMax));
                     }
-					channelValues[channelId][dwPos] = 0;
+					channelPitches[channelId][dwPos] = 0;
                     if ((event.GetCommand() == SoundEvent::NoteOn) || (event.GetCommand() == SoundEvent::NoteOff))
                     {
                         BYTE note = event.bParam1;
                         if (note < 128)
                         {
+							BYTE pitch = 0;
 							BYTE velocity = 0;
 							if (!event.IsEffectiveNoteOff())
 							{
-								velocity = event.bParam1;
+								pitch = event.bParam1;
+								velocity = event.bParam2;
 							}
 							else
-								velocity = 0;
-                            vNote[note] = velocity;
-                            if (velocity > vNoteMax[note])
+								pitch = 0;
+                            vNote[note] = pitch;
+                            if (pitch > vNoteMax[note])
                             {
-                                vNoteMax[note] = velocity;
+                                vNoteMax[note] = pitch;
                             }
 							/*
                             uint8_t loudest = _GetLoudest(vNoteMax);
@@ -604,7 +609,8 @@ void CSoundView::_RecalculateChannelBitmaps()
                                 }
                             }
 							*/
-							channelValues[channelId][dwPos] = velocity;
+							channelPitches[channelId][dwPos] = pitch;
+							channelVelocities[channelId][dwPos] = velocity;
                         }
                     }
                 }
@@ -627,30 +633,33 @@ void CSoundView::_RecalculateChannelBitmaps()
                 if (dcMem.CreateCompatibleDC(pDC))
                 {
                     HGDIOBJ hOld = dcMem.SelectObject(*_channelBitmaps[channelId]);
-                    dcMem.FillSolidRect(0, 0, width, height, ColorTrackBackground);
+					dcMem.FillSolidRect(0, 0, width, height, ColorTrackBackground); // + (channelId % 2 == 1 ? 0 : 0x080808));
 
                     if (channelId < (int)sound.GetChannelInfos().size())
                     {
                         // REVIEW: This seems like assigning data, and should not be part of drawing
                         _channelNumbers[channelId] = sound.GetChannelInfos()[channelId].Number;
 
-                        BYTE loudness = 0;
-                        for (size_t posStart = 0; posStart < channelValues[channelId].size();)
+                        BYTE pitch = 0;
+						BYTE loudness = 0;
+                        for (size_t posStart = 0; posStart < channelPitches[channelId].size();)
                         {
-                            loudness = channelValues[channelId][posStart];
+                            pitch = channelPitches[channelId][posStart];
+							loudness = channelVelocities[channelId][posStart];
                             if (loudness == 255)
                             {
-                                loudness = 0;
+								loudness = 0;
                             }
-                            int cy = max(1, height * loudness / 128);
+                            int cyp = max(1, height * pitch / 128);
+							int cyv = max(1, height * loudness / 128);
 							size_t posEnd = posStart;
-                            while (posEnd < channelValues[channelId].size() &&
-                                (channelValues[channelId][posEnd] == 255 ||
-                                channelValues[channelId][posEnd] == loudness))
+                            while (posEnd < channelPitches[channelId].size() &&
+                                (channelPitches[channelId][posEnd] == 255 ||
+                                channelPitches[channelId][posEnd] == pitch))
                             {
                                 if (isEventAtPosition[channelId][posEnd])
                                 {
-                                    eventPoints.emplace_back(posEnd, height - cy);
+                                    eventPoints.emplace_back(posEnd, height - cyp);
                                     eventPoints.emplace_back(posEnd, height);
                                     pointCounts.push_back(2);
                                 }
@@ -661,9 +670,9 @@ void CSoundView::_RecalculateChannelBitmaps()
                             COLORREF  cr = (find(selectedTrackInfo.ChannelIds.begin(), selectedTrackInfo.ChannelIds.end(), channelId) == selectedTrackInfo.ChannelIds.end()) ?
                             ColorSilentTrack :
                                              ColorActiveTrack;
-                            //dcMem.FillSolidRect((int)posStart, height - cy, (int)(posEnd - posStart), cy, cr);
-							if (loudness > 0)
-							dcMem.FillSolidRect((int)posStart, height - cy, (int)(posEnd - posStart), 2, cr);
+                            dcMem.FillSolidRect((int)posStart, height - cyv, (int)(posEnd - posStart), cyv, ColorVelocity);
+							if (pitch > 0)
+								dcMem.FillSolidRect((int)posStart, height - cyp, (int)(posEnd - posStart), 2, cr);
 
                             posStart = posEnd;
                         }

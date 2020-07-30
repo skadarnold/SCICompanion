@@ -150,11 +150,12 @@ private:
 
     const static COLORREF ColorActiveTrack = RGB(64, 64, 255);
     const static COLORREF ColorTrackEvent = RGB(128, 128, 255);
-    const static COLORREF ColorSilentTrack = RGB(196, 196, 196);
+    const static COLORREF ColorSilentTrack = RGB(64, 64, 64);
     const static COLORREF ColorTrackBackground = RGB(220, 220, 220);
     const static COLORREF ColorSelectedTrackBackgroundMask = RGB(255, 196, 196);
     const static COLORREF ColorSelectedTrackBackground = RGB(220, 196, 196);    // Combo of two above
     const static COLORREF ColorCursor = RGB(255, 0, 0);
+	const static COLORREF ColorVelocity = RGB(200, 200, 200);
 
     CColoredToolTip _toolTip;
 

@@ -862,6 +862,8 @@ char* AppState::GetAboutText()
 		"\r\n"
 		"Included modifications:\r\n"
 		"\x95 Font preview zoom at 2x\r\n"
+		"\x95 Unbounded font preview length\r\n"
+		"\x95 Improved visuals for sound editor\r\n"
 		"\x95 Escape unprintable range\r\n"
 		"\x95 More word guess preferences\r\n"
 #ifdef KAWA_DISPLAYMASSAGE

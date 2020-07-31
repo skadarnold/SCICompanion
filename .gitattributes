@@ -1,3 +1,8 @@
+*.sc linguist-language=lisp
+*.sh linguist-language=lisp
+*.shm linguist-language=lisp
+*.shp linguist-language=lisp
+
 ###############################################################################
 # Set default behavior to automatically normalize line endings.
 ###############################################################################

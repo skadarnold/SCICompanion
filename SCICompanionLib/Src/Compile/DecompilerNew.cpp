@@ -1157,9 +1157,10 @@ WORD _GetImmediateFromCodeNode(ConsumptionNode &node, ConsumptionNode *pNodePrev
 					if (pNodePrevious->pos->get_opcode() == Opcode::LDI)
 					{
 						w = _GetImmediateFromCodeNode(*pNodePrevious);
+						break;
 					}
 				}
-				else
+				//else
 				{
 					code_pos posFlatPrevious = pos;
 					--posFlatPrevious;

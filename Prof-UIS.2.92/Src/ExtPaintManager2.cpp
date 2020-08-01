@@ -863,9 +863,9 @@ CExtSafeString sTmp( _T("") );
 		m_pfnSetLayeredWindowAttributes	= (PFNSETLAYEREDWINDOWATTRIBUTES)	::GetProcAddress( m_hDllUser32, "SetLayeredWindowAttributes" );
 		m_pfnUpdateLayeredWindow		= (PFNUPDATELAYEREDWINDOW)			::GetProcAddress( m_hDllUser32, "UpdateLayeredWindow" );
 		m_pfnPrintWindow				= (PFNPRINTWINDOW)					::GetProcAddress( m_hDllUser32, "PrintWindow" );
-		BOOL ( WINAPI * pfnSetProcessDPIAware )( VOID ) = ( BOOL ( WINAPI * )( VOID ) ) ::GetProcAddress( m_hDllUser32, "SetProcessDPIAware" );
-		if( pfnSetProcessDPIAware != NULL )
-			pfnSetProcessDPIAware();
+		//BOOL ( WINAPI * pfnSetProcessDPIAware )( VOID ) = ( BOOL ( WINAPI * )( VOID ) ) ::GetProcAddress( m_hDllUser32, "SetProcessDPIAware" );
+		//if( pfnSetProcessDPIAware != NULL )
+		//	pfnSetProcessDPIAware();
 // 		VOID ( WINAPI * pfnDisableProcessWindowsGhosting )( VOID ) = ( VOID ( WINAPI * )( VOID ) ) ::GetProcAddress( m_hDllUser32, "DisableProcessWindowsGhosting" );
 // 		if( pfnDisableProcessWindowsGhosting != NULL )
 // 			pfnDisableProcessWindowsGhosting();

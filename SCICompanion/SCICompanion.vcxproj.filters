@@ -67,9 +67,6 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="UserImages.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
     <Image Include="res\SCICompanionDoc.ico">
       <Filter>Resource Files</Filter>
     </Image>

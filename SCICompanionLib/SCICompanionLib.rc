@@ -67,17 +67,17 @@ END
 // remains consistent on all systems.
 IDR_MAINFRAME           ICON                    "res\\1_216.ico"
 
-IDR_SCIPicEditorTYPE    ICON                    "res\\SCICompanionDoc.ico"
+//IDR_SCIPicEditorTYPE    ICON                    "res\\SCICompanionDoc.ico"
 
-IDI_ICONCONVERT         ICON                    "res\\icon1.ico"
+//IDI_ICONCONVERT         ICON                    "res\\icon1.ico"
 
-IDI_APPICON             ICON                    "res\\icon2.ico"
+//IDI_APPICON             ICON                    "res\\icon2.ico"
 
-IDI_BANG                ICON                    "res\\bang.ico"
+//IDI_BANG                ICON                    "res\\bang.ico"
 
-IDI_ICONTEST            ICON                    "res\\icon3.ico"
+//IDI_ICONTEST            ICON                    "res\\icon3.ico"
 
-IDI_ICONMAINTEXT        ICON                    "res\\SCIText.ico"
+//IDI_ICONMAINTEXT        ICON                    "res\\SCIText.ico"
 
 IDI_COMPILEALL          ICON                    "res\\script_compileall.ico"
 
@@ -87,7 +87,7 @@ IDI_REPLACECOLOUR       ICON                    "res\\draw_replace.ico"
 
 IDI_ZOOM                ICON                    "res\\draw_zoom.ico"
 
-IDI_EDIT_COPY           ICON                    "res\\edit.ico"
+IDI_EDIT_COPY           ICON                    "res\\edit_copy.ico"
 
 IDI_EDIT_CUT            ICON                    "res\\edit_cut.ico"
 
@@ -99,7 +99,7 @@ IDI_FILE_SAVE           ICON                    "res\\file_save.ico"
 
 IDI_REBUILDRESOURCES    ICON                    "res\\main_rebuild.ico"
 
-IDI_CD                  ICON                    "res\\CD.ico"
+//IDI_CD                  ICON                    "res\\CD.ico"
 
 IDI_RUNGAME             ICON                    "res\\main_run.ico"
 
@@ -231,9 +231,9 @@ IDI_LIGHTUP             ICON                    "res\\lightup.ico"
 
 IDI_PLACEMENT           ICON                    "res\\placement.ico"
 
-IDI_DITHER              ICON                    "res\\dither.ico"
+//IDI_DITHER              ICON                    "res\\dither.ico"
 
-IDI_FAKEEGO             ICON                    "res\\fakeego.ico"
+//IDI_FAKEEGO             ICON                    "res\\fakeego.ico"
 
 IDI_PRIORITYLINES       ICON                    "res\\prioritylines.ico"
 
@@ -255,9 +255,9 @@ IDI_FLOODFILL           ICON                    "res\\floodfill.ico"
 
 IDI_PALETTEVGA          ICON                    "res\\palette.ico"
 
-IDI_ICON3               ICON                    "res\\ico00001.ico"
+IDI_ICON3               ICON                    "res\\repackage.ico"
 
-IDI_ICON5               ICON                    "res\\icon5.ico"
+IDI_ICON5               ICON                    "res\\select.ico"
 
 IDI_EYEDROPPER          ICON                    "res\\Eyedropper.ico"
 
@@ -285,7 +285,7 @@ IDI_RIGHT_ARROW         ICON                    "res\\RightArrow.ico"
 
 IDI_WAVEFORM            ICON                    "res\\waveform.ico"
 
-IDI_CONVERT             ICON                    "res\\convert.ico"
+//IDI_CONVERT             ICON                    "res\\convert.ico"
 
 IDI_STAMP               ICON                    "res\\Stamp.ico"
 
@@ -329,7 +329,7 @@ IDR_TOOLBARFONT         BITMAP                  "res\\bmp00010.bmp"
 
 IDR_TOOLBARTEXT         BITMAP                  "res\\bmp00011.bmp"
 
-IDB_BITMAPCONVERT       BITMAP                  "res\\bmp00012.bmp"
+//IDB_BITMAPCONVERT       BITMAP                  "res\\bmp00012.bmp"
 
 IDB_CLASSBROWSER        BITMAP                  "res\\bmp00013.bmp"
 
@@ -339,13 +339,13 @@ IDB_ALPHABLENDWHITE     BITMAP                  "res\\alphable.bmp"
 
 IDB_BITMAPOBJECTTREE    BITMAP                  "res\\bmp00015.bmp"
 
-IDR_TOOLBAR_PICSLIDER   BITMAP                  "res\\bmp00016.bmp"
+//IDR_TOOLBAR_PICSLIDER   BITMAP                  "res\\bmp00016.bmp"
 
-IDR_TOOLBARPALETTES     BITMAP                  "res\\bmp00017.bmp"
+//IDR_TOOLBARPALETTES     BITMAP                  "res\\bmp00017.bmp"
 
-IDB_RESOURCETYPES       BITMAP                  "res\\bmp00018.bmp"
+//IDB_RESOURCETYPES       BITMAP                  "res\\bmp00018.bmp"
 
-IDB_BITMAPNOPIC         BITMAP                  "res\\bmp00005.bmp"
+//IDB_BITMAPNOPIC         BITMAP                  "res\\bmp00005.bmp"
 
 IDB_BITMAPNULL          BITMAP                  "res\\bmp00019.bmp"
 
@@ -369,7 +369,7 @@ IDB_VPCHIGHLIGHTX       BITMAP                  "res\\vpc_highlightx.bmp"
 
 IDR_TOOLBARSCREENS      BITMAP                  "res\\bmp00020.bmp"
 
-IDB_PICTHUMB_HIGHLIGHT  BITMAP                  "res\\picthumb_highlight.bmp"
+//IDB_PICTHUMB_HIGHLIGHT  BITMAP                  "res\\picthumb_highlight.bmp"
 
 IDB_CLOSE_ACTIVE        BITMAP                  "res\\CloseActive.bmp"
 

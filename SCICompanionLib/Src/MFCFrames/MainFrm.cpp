@@ -1306,7 +1306,9 @@ void CMainFrame::_PrepareRasterCommands()
 {
     static const key_value_pair<UINT, int> c_rasterIcons[] =
     {
-        { ID_PENTOOL, IDI_BRUSH },
+		{ ID_DRAWOFF, IDI_CURSOR },
+		{ ID_SELECT, IDI_ICON5 },
+		{ ID_PENTOOL, IDI_BRUSH },
         { ID_LINE, IDI_LINE },
         { ID_FILL, IDI_FLOODFILL },
         { ID_EYEDROPPER, IDI_EYEDROPPER },
@@ -1326,7 +1328,7 @@ void CMainFrame::_PrepareRasterCommands()
         { ID_FLIPVERT, IDI_FLIPVERT },
         { ID_INVERT, IDI_INVERT },
         { ID_GREYSCALE, IDI_GREYSCALE },
-        { ID_DITHER, IDI_DITHER },
+        { ID_DITHER, IDI_UNDITHERPIC },
         { ID_SETPLACEMENT, IDI_PLACEMENT },
     };
     _AssignIcons(c_rasterIcons, ARRAYSIZE(c_rasterIcons));
@@ -1343,7 +1345,7 @@ void CMainFrame::_PreparePicCommands()
         { ID_DEFINEPALETTES, IDI_PALETTE },
         { ID_CIRCLE, IDI_ELLIPSE },
         { ID_PICCLIPS, IDI_STAMP },
-        { ID_TOGGLEEGO, IDI_FAKEEGO },
+        { ID_TOGGLEEGO, IDI_VIEW },
         { ID_POLYPATH, IDI_POLYPATH },
         { ID_TOGGLEPRIORITYLINES, IDI_PRIORITYLINES },
         { ID_LIGHTUPCOORDS, IDI_LIGHTUP },
@@ -1423,7 +1425,7 @@ void CMainFrame::_PrepareMainCommands()
         { ID_EDIT_DELETE, IDI_DELETE },
         { ID_EDIT_FIND, IDI_EDIT_FIND },
         { ID_TOOLS_REBUILDRESOURCES, IDI_REBUILDRESOURCES },
-        { ID_TOOLS_REPACKAGEAUDIO, IDI_CD },
+        { ID_TOOLS_REPACKAGEAUDIO, IDI_ICON3 },
         { ID_RUNGAME, IDI_RUNGAME },
         { ID_DEBUGGAME, IDI_DEBUG },
         { ID_STOPDEBUG, IDI_STOPDEBUG },
@@ -1442,7 +1444,7 @@ void CMainFrame::_PrepareMainCommands()
         { ID_PREFERENCES, IDI_PREFERENCES },
         { ID_NEW_MESSAGE, IDI_NEWMESSAGE },
         { ID_NEW_PALETTE, IDI_NEWPALETTE },
-        { ID_CONVERTSCRIPT, IDI_CONVERT }
+        { ID_CONVERTSCRIPT, IDI_SCRIPT_CONVERT }
     };
     _AssignIcons(c_mainIcons, ARRAYSIZE(c_mainIcons));
 }

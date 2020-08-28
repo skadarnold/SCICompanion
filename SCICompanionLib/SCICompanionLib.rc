@@ -231,9 +231,9 @@ IDI_LIGHTUP             ICON                    "res\\lightup.ico"
 
 IDI_PLACEMENT           ICON                    "res\\placement.ico"
 
-//IDI_DITHER              ICON                    "res\\dither.ico"
+IDI_DITHER              ICON                    "res\\findinfiles.ico"
 
-//IDI_FAKEEGO             ICON                    "res\\fakeego.ico"
+IDI_FAKEEGO             ICON                    "res\\decompile.ico"
 
 IDI_PRIORITYLINES       ICON                    "res\\prioritylines.ico"
 
@@ -385,7 +385,7 @@ IDB_MESSAGEAUDIOICONS   BITMAP                  "res\\bitmapob.bmp"
 // Toolbar
 //
 
-IDR_MAINFRAME TOOLBAR 25, 24
+IDR_MAINFRAME TOOLBAR 24, 24
 BEGIN
     BUTTON      ID_BACK
     BUTTON      ID_FORWARD
@@ -411,6 +411,7 @@ BEGIN
     BUTTON      ID_RUNGAME
     BUTTON      ID_DEBUGGAME
     BUTTON      ID_STOPDEBUG
+	BUTTON		ID_SCRIPT_MANAGEDECOMPILATION
     BUTTON      ID_TOOLS_REBUILDRESOURCES
     BUTTON      ID_GAME_PROPERTIES
     SEPARATOR
@@ -751,7 +752,7 @@ BEGIN
         MENUITEM "SCI programmer's &wiki",      ID_HELP_ONLINESCIDOCUMENTATION
         MENUITEM "Online &tutorials",           ID_HELP_ONLINETUTORIALS
         MENUITEM "SCI &Community",              ID_HELP_FORUMS
-        MENUITEM "Get latest &updates",         ID_HELP_GETLATESTUPDATES
+        //MENUITEM "Get latest &updates",         ID_HELP_GETLATESTUPDATES
         MENUITEM "Get &games",                  ID_HELP_GETGAMES
         MENUITEM SEPARATOR
         MENUITEM "Report a &bug or issue",      ID_HELP_EMAIL

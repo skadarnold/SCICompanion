@@ -3608,6 +3608,7 @@ BEGIN
     ID_DEBUGGAME            "Debug the game\nDebug game"
     ID_DEBUGROOM            "Debug the current room\nDebug room"
     ID_STOPDEBUG            "Stop the game begin debugger\nStop debugging"
+	ID_SCRIPT_MANAGEDECOMPILATION		"Manage decompilation\nManage decompilation"
 END
 
 STRINGTABLE

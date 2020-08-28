@@ -688,12 +688,12 @@ void SCICompanionApp::OnWindowsExplorer()
 
 void SCICompanionApp::OnForums()
 {
-    ShellExecute(NULL, "open", "http://sciprogramming.com/", "", "", SW_SHOWNORMAL);
+    ShellExecute(NULL, "open", "https://sciprogramming.com/", "", "", SW_SHOWNORMAL);
 }
 
 void SCICompanionApp::OnTutorials()
 {
-    ShellExecute(NULL, "open", "http://sciprogramming.com/tutorial.php?entry=6693", "", "", SW_SHOWNORMAL);
+    ShellExecute(NULL, "open", "https://sciprogramming.com/tutorial.php?entry=6693", "", "", SW_SHOWNORMAL);
 }
 
 void SCICompanionApp::OnDocumentation()
@@ -708,7 +708,7 @@ void SCICompanionApp::OnUpdates()
 
 void SCICompanionApp::OnEmail()
 {
-    ShellExecute(NULL, "open", "https://github.com/icefallgames/SCICompanion", "", "", SW_SHOWNORMAL);
+    ShellExecute(NULL, "open", "https://github.com/Kawa-oneechan/SCICompanion/issues", "", "", SW_SHOWNORMAL);
 }
 
 void SCICompanionApp::GetGames()

@@ -183,9 +183,9 @@ IDI_IMAGESEQUENCE       ICON                    "res\\image_sequence.ico"
 
 IDI_IMAGE               ICON                    "res\\image.ico"
 
-IDI_VIEWDETAILS         ICON                    "res\\view_details.ico"
+//IDI_VIEWDETAILS         ICON                    "res\\view_details.ico"
 
-IDI_VIEWICONS           ICON                    "res\\view_icons.ico"
+//IDI_VIEWICONS           ICON                    "res\\view_icons.ico"
 
 IDI_SCRIPT_CONVERT      ICON                    "res\\script_convert.ico"
 
@@ -295,49 +295,49 @@ IDI_STAMP               ICON                    "res\\Stamp.ico"
 // Bitmap
 //
 
-IDR_MAINFRAME           BITMAP                  "res\\Toolbar.bmp"
+IDR_MAINFRAME           BITMAP                  "res\\MainTools.bmp"
 
-IDR_TOOLBARPIC          BITMAP                  "res\\bmp00001.bmp"
+IDR_TOOLBARPIC          BITMAP                  "res\\PicTools.bmp"
 
-IDR_TOOLBARVIEWS        BITMAP                  "res\\bmp00003.bmp"
+IDR_TOOLBARVIEWS        BITMAP                  "res\\ListTools.bmp"
 
-IDR_TOOLBARCOMMANDVIEW  BITMAP                  "res\\bmp00004.bmp"
+IDR_TOOLBARCOMMANDVIEW  BITMAP                  "res\\ViewCommandTools.bmp"
 
-IDR_TOOLBARSCRIPT       BITMAP                  "res\\bmp00002.bmp"
+IDR_TOOLBARSCRIPT       BITMAP                  "res\\ScriptTools.bmp"
 
-IDR_TOOLBARDRAWVIEW     BITMAP                  "res\\toolbard.bmp"
+IDR_TOOLBARDRAWVIEW     BITMAP                  "res\\ViewTools.bmp"
 
-IDR_TOOLBARVOCAB        BITMAP                  "res\\bmp00006.bmp"
+IDR_TOOLBARVOCAB        BITMAP                  "res\\VocabTools.bmp"
 
-IDB_BITMAPUP            BITMAP                  "res\\Up.bmp"
+//IDB_BITMAPUP            BITMAP                  "res\\Up.bmp"
 
-IDB_BITMAPDOWN          BITMAP                  "res\\Down.bmp"
+//IDB_BITMAPDOWN          BITMAP                  "res\\Down.bmp"
 
-IDB_BITMAPLEFT          BITMAP                  "res\\Left.bmp"
+//IDB_BITMAPLEFT          BITMAP                  "res\\Left.bmp"
 
-IDB_BITMAPRIGHT         BITMAP                  "res\\Right.bmp"
+//IDB_BITMAPRIGHT         BITMAP                  "res\\Right.bmp"
 
-IDB_BITMAPTEST          BITMAP                  "res\\bitmap1.bmp"
+//IDB_BITMAPTEST          BITMAP                  "res\\bitmap1.bmp"
 
-IDB_OVERLAYOLD          BITMAP                  "res\\bmp00007.bmp"
+IDB_OVERLAYOLD          BITMAP                  "res\\UnusedResource.bmp"
 
-IDB_OVERLAYOLD40        BITMAP                  "res\\bmp00008.bmp"
+IDB_OVERLAYOLD40        BITMAP                  "res\\UnusedRes40.bmp"
 
-IDB_CORRUPTRESOURCE     BITMAP                  "res\\bmp00009.bmp"
+IDB_CORRUPTRESOURCE     BITMAP                  "res\\CorruptResource.bmp"
 
-IDR_TOOLBARFONT         BITMAP                  "res\\bmp00010.bmp"
+IDR_TOOLBARFONT         BITMAP                  "res\\FontTools.bmp"
 
-IDR_TOOLBARTEXT         BITMAP                  "res\\bmp00011.bmp"
+IDR_TOOLBARTEXT         BITMAP                  "res\\TextTools.bmp"
 
 //IDB_BITMAPCONVERT       BITMAP                  "res\\bmp00012.bmp"
 
-IDB_CLASSBROWSER        BITMAP                  "res\\bmp00013.bmp"
+IDB_CLASSBROWSER        BITMAP                  "res\\ClassBrowser.bmp"
 
-IDB_ALPHABLEND          BITMAP                  "res\\bmp00014.bmp"
+IDB_ALPHABLEND          BITMAP                  "res\\AlphaBlend.bmp"
 
-IDB_ALPHABLENDWHITE     BITMAP                  "res\\alphable.bmp"
+//IDB_ALPHABLENDWHITE     BITMAP                  "res\\AlphaWhite.bmp"
 
-IDB_BITMAPOBJECTTREE    BITMAP                  "res\\bmp00015.bmp"
+//IDB_BITMAPOBJECTTREE    BITMAP                  "res\\ObjectTree.bmp"
 
 //IDR_TOOLBAR_PICSLIDER   BITMAP                  "res\\bmp00016.bmp"
 
@@ -347,17 +347,17 @@ IDB_BITMAPOBJECTTREE    BITMAP                  "res\\bmp00015.bmp"
 
 //IDB_BITMAPNOPIC         BITMAP                  "res\\bmp00005.bmp"
 
-IDB_BITMAPNULL          BITMAP                  "res\\bmp00019.bmp"
+IDB_BITMAPNULL          BITMAP                  "res\\null.bmp"
 
-IDR_TOOLBARSOUND        BITMAP                  "res\\toolbart.bmp"
+IDR_TOOLBARSOUND        BITMAP                  "res\\SoundTools.bmp"
 
-IDB_BITMAPLOOP          BITMAP                  "res\\bitmapup.bmp"
+IDB_BITMAPLOOP          BITMAP                  "res\\SoundLoop.bmp"
 
-IDB_BITMAPCUE           BITMAP                  "res\\bitmaplo.bmp"
+IDB_BITMAPCUE           BITMAP                  "res\\SoundCue.bmp"
 
 IDB_BITMAPAFFECTALL     BITMAP                  "res\\AffectAll.bmp"
 
-IDB_BITMAPCUEACTIVE     BITMAP                  "res\\bitmapcu.bmp"
+IDB_BITMAPCUEACTIVE     BITMAP                  "res\\SoundCueActive.bmp"
 
 IDB_TABPIC              BITMAP                  "res\\TabPic.bmp"
 
@@ -367,7 +367,7 @@ IDB_VPCHIGHLIGHT        BITMAP                  "res\\vpc_highlight.bmp"
 
 IDB_VPCHIGHLIGHTX       BITMAP                  "res\\vpc_highlightx.bmp"
 
-IDR_TOOLBARSCREENS      BITMAP                  "res\\bmp00020.bmp"
+IDR_TOOLBARSCREENS      BITMAP                  "res\\Screens.bmp"
 
 //IDB_PICTHUMB_HIGHLIGHT  BITMAP                  "res\\picthumb_highlight.bmp"
 
@@ -375,9 +375,9 @@ IDB_CLOSE_ACTIVE        BITMAP                  "res\\CloseActive.bmp"
 
 IDB_CLOSE_INACTIVE      BITMAP                  "res\\CloseInactive.bmp"
 
-IDR_TOOLBARMESSAGE      BITMAP                  "res\\bmp00021.bmp"
+IDR_TOOLBARMESSAGE      BITMAP                  "res\\MessageTools.bmp"
 
-IDB_MESSAGEAUDIOICONS   BITMAP                  "res\\bitmapob.bmp"
+IDB_MESSAGEAUDIOICONS   BITMAP                  "res\\MessageIcons.bmp"
 
 
 /////////////////////////////////////////////////////////////////////////////

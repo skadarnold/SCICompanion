@@ -1121,7 +1121,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
         TRACE0( "Failed to create toolbar" );
         return -1;
     }
-    _PrepareExplorerCommands();
+    //_PrepareExplorerCommands();
 
     RefreshExplorerTools();
 

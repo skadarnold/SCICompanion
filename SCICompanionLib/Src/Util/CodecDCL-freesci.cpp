@@ -930,5 +930,3 @@ int decrypt4(byte* dest, byte* src, int length, int complength)
 
 	return -decrypt4_hdyn(dest, length, &reader);
 }
-
-

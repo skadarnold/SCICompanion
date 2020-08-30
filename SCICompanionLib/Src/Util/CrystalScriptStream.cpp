@@ -316,4 +316,3 @@ int CCrystalScriptStream::const_iterator::GetColumnNumber() const
 {
 	return _nChar;
 }
-

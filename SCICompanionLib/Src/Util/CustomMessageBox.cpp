@@ -81,4 +81,3 @@ MessageBoxCustomization::~MessageBoxCustomization()
 		messageBoxHook = nullptr;
 	}
 }
-

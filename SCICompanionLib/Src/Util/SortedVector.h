@@ -97,5 +97,4 @@ struct sorted_vector {
 	{
 		return !(*this == other);
 	}
-
 };

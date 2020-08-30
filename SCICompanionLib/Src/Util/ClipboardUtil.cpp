@@ -49,4 +49,3 @@ void OpenAndSetClipboardDataFromStream(CWnd *wnd, UINT clipboardFormat, const sc
 		}
 	}
 }
-

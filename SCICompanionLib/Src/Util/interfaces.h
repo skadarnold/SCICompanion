@@ -21,4 +21,3 @@ class ILookupNames
 public:
 	virtual std::string Lookup(WORD wName) const = 0;
 };
-

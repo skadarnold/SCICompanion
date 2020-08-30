@@ -162,6 +162,3 @@ private:
 	std::list<std::unique_ptr<TITEM>> _workItems;
 	std::list<std::unique_ptr<TRESULT>> _workResults;
 };
-
-
-

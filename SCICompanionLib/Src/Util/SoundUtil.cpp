@@ -394,4 +394,3 @@ void AddWaveFileToGame(const std::string &filename)
 	std::unique_ptr<ResourceEntity> resource = WaveResourceFromFilename(filename);
 	appState->GetResourceMap().AppendResourceAskForNumber(*resource, _NameFromFilename(filename.c_str()));
 }
-

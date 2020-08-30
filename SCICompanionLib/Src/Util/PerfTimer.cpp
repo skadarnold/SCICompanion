@@ -29,4 +29,3 @@ PerfTimer::~PerfTimer()
 	double timeTaken = (double)(lEnd.LowPart - _lStart.LowPart) * 1000.0 / (double)freq.LowPart;
 	OutputDebugString(fmt::format("PREF - {0}: {1}ms\n", _name, timeTaken).c_str());
 }
-

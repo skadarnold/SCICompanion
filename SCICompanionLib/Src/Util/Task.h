@@ -254,5 +254,3 @@ private:
 	CWnd *_pwnd;
 	UINT _message;
 };
-
-

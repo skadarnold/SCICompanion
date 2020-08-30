@@ -42,4 +42,3 @@ struct _UpdateNonView : public std::binary_function<INonViewClient*, CObject*, v
 		pClient->UpdateNonView(pObjec);
 	}
 };
-

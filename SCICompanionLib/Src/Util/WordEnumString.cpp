@@ -159,5 +159,4 @@ HRESULT CWordEnumString_CreateInstance(REFIID riid, void **ppv)
 		pEnumString->Release();
 	}
 	return hr;
-
 }

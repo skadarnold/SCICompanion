@@ -282,5 +282,3 @@ void AudioRecording::Record(WaveRecordingFormat format)
 	_StartBuffer(RecordState::Recording, format);
 
 }
-
-

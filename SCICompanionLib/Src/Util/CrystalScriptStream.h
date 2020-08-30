@@ -173,7 +173,3 @@ public:
 private:
 	CScriptStreamLimiter *_pLimiter;
 };
-
-
-
-

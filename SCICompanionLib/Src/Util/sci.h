@@ -656,4 +656,3 @@ struct point16
 		return point16(x - point.x, y - point.y);
 	}
 };
-

@@ -1731,4 +1731,3 @@ void SCIClassBrowser::ResolveValue(WORD wScript, const PropertyValue &In, Proper
 		Out = In;
 	}
 }
-

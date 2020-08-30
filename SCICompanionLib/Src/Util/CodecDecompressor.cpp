@@ -62,4 +62,3 @@ void Decompressor::putByte(byte b) {
 byte Decompressor::getByteMSB() {
 	return getBitsMSB(8);
 }
-

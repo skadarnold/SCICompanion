@@ -240,5 +240,3 @@ void CScrollingThing<T>::Dump(CDumpContext& dc) const
 
 
 // CScrollingThing message handlers
-
-

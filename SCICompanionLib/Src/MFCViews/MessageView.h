@@ -82,5 +82,3 @@ private:
 inline CMessageDoc* CMessageView::GetDocument() const
 { return reinterpret_cast<CMessageDoc*>(m_pDocument); }
 #endif
-
-

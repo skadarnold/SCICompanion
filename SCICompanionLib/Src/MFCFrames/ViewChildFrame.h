@@ -63,5 +63,3 @@ protected:
 	CRasterView *_pViewMainView;
 	bool _splitterCreated;
 };
-
-

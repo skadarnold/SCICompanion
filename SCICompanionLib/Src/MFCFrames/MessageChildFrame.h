@@ -42,5 +42,3 @@ protected:
 	MessageEditPane m_wndMessageEditPane;
 	CExtControlBarNoX m_wndResizableBarMessageEdit;
 };
-
-

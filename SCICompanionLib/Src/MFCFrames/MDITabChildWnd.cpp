@@ -157,5 +157,3 @@ void CMDITabChildWnd::OnUpdateFrameTitle(BOOL bAddToTitle)
 		}
 	}
 }
-
-

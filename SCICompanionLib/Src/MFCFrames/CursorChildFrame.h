@@ -40,5 +40,3 @@ protected:
 
 	CRasterView *_pViewMainView;
 };
-
-

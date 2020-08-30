@@ -2345,5 +2345,3 @@ CScriptDocument* CScriptView::GetDocument() const // non-debug version is inline
 
 
 // CScriptView message handlers
-
-

@@ -373,8 +373,3 @@ void CRasterResourceListCtrl::Dump(CDumpContext& dc) const
 #endif //_DEBUG
 
 // CResourceListListView message handlers
-
-
- 
- 
-

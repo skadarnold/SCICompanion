@@ -75,5 +75,3 @@ private:
 inline CTextDoc* CTextView::GetDocument() const
    { return reinterpret_cast<CTextDoc*>(m_pDocument); }
 #endif
-
-

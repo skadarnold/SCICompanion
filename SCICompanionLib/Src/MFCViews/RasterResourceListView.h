@@ -87,4 +87,3 @@ private:
 	std::shared_ptr<QueueItems<VIEWWORKITEM, VIEWWORKRESULT>> _pQueue;
 	int _iLastImageReadyHint;
 };
-

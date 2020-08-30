@@ -93,4 +93,3 @@ protected:
 inline CResourceListDoc* CGameExplorerView::GetDocument() const
    { return reinterpret_cast<CResourceListDoc*>(m_pDocument); }
 #endif
-

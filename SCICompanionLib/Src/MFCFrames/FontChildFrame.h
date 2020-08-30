@@ -46,5 +46,3 @@ protected:
 	CRasterView *_pViewMainView;
 	CFontPreviewView *_pFontPreviewView;
 };
-
-

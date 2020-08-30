@@ -30,5 +30,3 @@ protected:
 	virtual int OnCreate(LPCREATESTRUCT lpCreateStruct);
 	DECLARE_MESSAGE_MAP()
 };
-
-

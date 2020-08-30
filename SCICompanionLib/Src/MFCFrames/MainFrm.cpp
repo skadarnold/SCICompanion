@@ -2983,4 +2983,3 @@ void CBrowseInfoStatusPane::NotifyClassBrowserStatus(BrowseInfoStatus status, in
 
 CBrowseInfoStatusPane::CBrowseInfoStatusPane() : _lastPercent(-1) {}
 CBrowseInfoStatusPane::~CBrowseInfoStatusPane() {}
-

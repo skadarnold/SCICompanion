@@ -4841,7 +4841,4 @@ CPicDoc* CPicView::GetDocument() const // non-debug version is inline
 #endif //_DEBUG
 
 
-
-
-
 // CPicView message handlers

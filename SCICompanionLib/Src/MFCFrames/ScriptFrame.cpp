@@ -55,4 +55,3 @@ int CScriptFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	return 0;
 }
-

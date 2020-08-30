@@ -249,4 +249,3 @@ private:
 inline CRoomExplorerDoc* CRoomExplorerView::GetDocument() const
    { return reinterpret_cast<CRoomExplorerDoc*>(m_pDocument); }
 #endif
-

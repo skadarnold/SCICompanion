@@ -37,5 +37,3 @@ protected:
 
 	CToolBar m_wndToolBar;
 };
-
-

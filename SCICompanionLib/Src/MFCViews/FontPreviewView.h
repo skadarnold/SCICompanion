@@ -89,5 +89,3 @@ private:
 inline CNewRasterResourceDocument* CFontPreviewView::GetDocument() const
 { return static_cast<CNewRasterResourceDocument*>(m_pDocument); }
 #endif
-
-

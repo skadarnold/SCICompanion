@@ -488,5 +488,3 @@ private:
 	// Manages selection. Go figure.
 	SelectionManager _selectionManager;
 };
-
-

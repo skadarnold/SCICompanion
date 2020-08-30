@@ -207,5 +207,3 @@ protected:
 inline CScriptDocument* CScriptView::GetDocument() const
    { return reinterpret_cast<CScriptDocument*>(m_pDocument); }
 #endif
-
-

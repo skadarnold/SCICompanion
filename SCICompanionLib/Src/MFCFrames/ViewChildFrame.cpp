@@ -192,4 +192,3 @@ void CRatioSplitter::SetSizes()
 		SetRowInfo(1, lowerHeight, 5);
 	}
 }
-

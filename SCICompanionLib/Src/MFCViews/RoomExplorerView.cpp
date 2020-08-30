@@ -1419,4 +1419,3 @@ CRoomExplorerDoc* CRoomExplorerView::GetDocument() const // non-debug version is
 	return (CRoomExplorerDoc*)m_pDocument;
 }
 #endif //_DEBUG
-

@@ -52,5 +52,3 @@ private:
 	typedef std::unordered_map<ResourceType, ResourcePreviewer*> previewer_map;
 	previewer_map _previewers;
 };
-
-

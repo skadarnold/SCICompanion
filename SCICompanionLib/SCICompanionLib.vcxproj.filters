@@ -108,9 +108,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="ReadMe.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="SCICompanionLib.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -1831,11 +1828,6 @@
     <None Include="res\SCICompanionLib.rc2">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="Src\cpptoml\LICENSE" />
-    <None Include="Src\r8brain\README.md" />
-    <None Include="Src\GIFLIB\AUTHORS" />
-    <None Include="Src\GIFLIB\COPYING" />
-    <None Include="Src\CppFormat\README.rst" />
     <None Include="SCICompanionLib.licenseheader" />
     <None Include="Src\CrystalEdit\CCrystalTextView.inl">
       <Filter>Header Files\CrystalEdit</Filter>
@@ -1926,6 +1918,21 @@
     </None>
     <None Include="res\eyedropper.cur">
       <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Src\r8brain\README.md">
+      <Filter>Header Files\r8brain</Filter>
+    </None>
+    <None Include="Src\cpptoml\LICENSE">
+      <Filter>Header Files\cpptoml</Filter>
+    </None>
+    <None Include="Src\GIFLIB\COPYING">
+      <Filter>Header Files\GIFLIB</Filter>
+    </None>
+    <None Include="Src\GIFLIB\AUTHORS">
+      <Filter>Header Files\GIFLIB</Filter>
+    </None>
+    <None Include="Src\CppFormat\README.rst">
+      <Filter>Header Files\CppFormat</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -2330,5 +2337,10 @@
     <Image Include="res\roundedrect_solid.ico">
       <Filter>Resource Files</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt">
+      <Filter>Header Files\CppFormat</Filter>
+    </Text>
   </ItemGroup>
 </Project>

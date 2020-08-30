@@ -37,4 +37,3 @@ private:
 	CPicDoc *_pDoc;
 	UINT _lastPos;
 };
-

@@ -376,5 +376,3 @@ void CIntellisenseListBox::UpdateChoices(const std::vector<AutoCompleteChoice> &
 
 	SetRedraw(TRUE);
 }
-
-

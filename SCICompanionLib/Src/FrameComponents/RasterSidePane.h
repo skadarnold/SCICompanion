@@ -164,5 +164,3 @@ private:
 
 	HACCEL _hAccel;
 };
-
-

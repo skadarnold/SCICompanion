@@ -55,5 +55,3 @@ private:
 	HBITMAP _hBitmapWeak;
 	CSize _size;
 };
-
-

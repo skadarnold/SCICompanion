@@ -393,4 +393,3 @@ void AudioWaveformUI::_GenerateDoubleBuffer(CDC *pDC, LPRECT prc)
 		}
 	}
 }
-

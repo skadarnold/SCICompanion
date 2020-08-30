@@ -322,4 +322,3 @@ void ViewUIElement::_GenerateDoubleBuffer(CDC *pDC, LPRECT prc)
 		_pbitmapDoubleBuf->CreateCompatibleBitmap(pDC, _sizeDoubleBuf.cx, _sizeDoubleBuf.cy);
 	}
 }
-

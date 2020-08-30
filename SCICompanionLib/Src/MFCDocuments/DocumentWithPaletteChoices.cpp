@@ -131,4 +131,3 @@ const PaletteComponent *DocumentWithPaletteChoices::GetCurrentPaletteComponent()
 {
 	return _currentPaletteComponent.get();
 }
-

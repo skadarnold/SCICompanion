@@ -1143,4 +1143,3 @@ void RasterSidePane::OnPenStyle()
 		}
 	}
 }
-

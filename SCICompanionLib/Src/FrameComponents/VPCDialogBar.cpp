@@ -147,4 +147,3 @@ void CVPCDialogBar::DoDataExchange(CDataExchange* pDX)
 	// Visuals
 	DDX_Control(pDX, IDC_STATIC1, m_wndLabel);
 }
-

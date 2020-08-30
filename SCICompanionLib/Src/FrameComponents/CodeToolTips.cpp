@@ -143,4 +143,3 @@ void _GetClassInfoHelper(LangSyntax lang, PTSTR szBuf, size_t cchBuf, const Clas
 	StringCchCat(szMethodPart, ARRAYSIZE(szMethodPart), TEXT(")"));
 	StringCchCat(szBuf, cchBuf, szMethodPart);
 }
-

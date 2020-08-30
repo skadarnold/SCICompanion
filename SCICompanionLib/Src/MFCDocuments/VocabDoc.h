@@ -45,4 +45,3 @@ protected:
 private:
 	Vocab000 *_pVocab;
 };
-

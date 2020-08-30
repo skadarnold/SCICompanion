@@ -141,4 +141,3 @@ public:
 
 	virtual void PostApplyChanges(CObject *pObj) {}
 };
-

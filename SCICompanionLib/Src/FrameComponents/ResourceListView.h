@@ -121,4 +121,3 @@ protected:
 inline CResourceListDoc* CResourceListCtrl::GetDocument() const
    { return reinterpret_cast<CResourceListDoc*>(m_pDocument); }
 #endif
-

@@ -28,4 +28,3 @@ void CExtControlBarNoX::OnNcAreaButtonsReinitialize()
 		NcButtons_Add( new
 	CExtBarNcAreaButtonMenu(this) );
 }
-

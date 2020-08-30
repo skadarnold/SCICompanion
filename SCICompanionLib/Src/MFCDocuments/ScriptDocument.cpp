@@ -742,4 +742,3 @@ void CScriptDocument::_OnUpdateTitle()
 {
 	SetTitle(_scriptId.GetFileNameOrig().c_str());
 }
-

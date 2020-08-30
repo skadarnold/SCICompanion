@@ -236,4 +236,3 @@ void CColoredToolTip::OnPaint()
 		dc.SelectObject(hOld);
 	}
 }
-

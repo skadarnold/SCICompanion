@@ -283,5 +283,3 @@ private:
 
 	std::unique_ptr<ResourceEntity> _resource;
 };
-
-

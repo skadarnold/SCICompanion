@@ -501,5 +501,3 @@ void AudioPlaybackUI<T>::OnTimer(UINT_PTR nIDEvent)
 		__super::OnTimer(nIDEvent);
 	}
 }
-
-

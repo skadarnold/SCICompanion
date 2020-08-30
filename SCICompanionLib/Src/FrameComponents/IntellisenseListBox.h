@@ -67,4 +67,3 @@ public:
 	// Returns TRUE if there was an entry selected in the AC
 	virtual BOOL OnACDoubleClick() = 0;
 };
-

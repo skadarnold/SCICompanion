@@ -87,4 +87,3 @@ private:
 	int _iTokenImageIndex;
 	std::shared_ptr<QueueItems<PICWORKITEM, PICWORKRESULT>> _pQueue;
 };
-

@@ -53,5 +53,3 @@ private:
 	// Visuals
 	CExtLabel m_wndLabel;
 };
-
-

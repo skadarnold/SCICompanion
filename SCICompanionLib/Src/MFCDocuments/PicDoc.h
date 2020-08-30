@@ -195,4 +195,3 @@ private:
 };
 
 bool InsertPaletteCommands(PicComponent &pepic, INT_PTR iPos, const EGACOLOR *pPaletteOrig, const EGACOLOR *pPaletteNew, BOOL fWriteEntire);
-

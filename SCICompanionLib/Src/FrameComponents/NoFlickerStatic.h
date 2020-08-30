@@ -35,4 +35,3 @@ protected:
 	int _cy;
 	bool _correctForAspectRatio;
 };
-

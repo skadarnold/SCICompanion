@@ -107,4 +107,3 @@ private:
 	bool _capturing;
 	int _hoverIndex;
 };
-

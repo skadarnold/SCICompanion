@@ -30,4 +30,3 @@ void CNonViewHostDocument::AddNonViewClient(INonViewClient *pClient)
 {
 	_nonViewClients.insert(pClient);
 }
-

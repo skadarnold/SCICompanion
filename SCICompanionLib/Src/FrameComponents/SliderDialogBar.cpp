@@ -152,5 +152,3 @@ void CPositionSlider::UpdateNonView(CObject *pObject)
 		SetPos((int)iPos);
 	}
 }
-
-

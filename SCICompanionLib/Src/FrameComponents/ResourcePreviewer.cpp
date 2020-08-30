@@ -925,5 +925,3 @@ BOOL AudioPreviewer::OnInitDialog()
 //
 BEGIN_MESSAGE_MAP(BlankPreviewer, ResourcePreviewer)
 END_MESSAGE_MAP()
-
-

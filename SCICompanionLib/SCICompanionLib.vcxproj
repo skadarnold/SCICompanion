@@ -251,9 +251,6 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <Text Include="ReadMe.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="Src\Compile\AutoDetectVariableNames.cpp" />
     <ClCompile Include="Src\Compile\ControlFlowNode.cpp" />
     <ClCompile Include="Src\Compile\ControlFlowGraphViz.cpp" />

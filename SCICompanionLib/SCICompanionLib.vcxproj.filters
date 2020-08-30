@@ -2338,9 +2338,4 @@
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>
-  <ItemGroup>
-    <Text Include="ReadMe.txt">
-      <Filter>Header Files\CppFormat</Filter>
-    </Text>
-  </ItemGroup>
 </Project>

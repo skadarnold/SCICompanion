@@ -278,4 +278,3 @@ uint16_t _ReadBEWORD(std::istream &stream);
 
 ResourceEntity *CreateSoundResource(SCIVersion version);
 ResourceEntity *CreateDefaultSoundResource(SCIVersion version);
-

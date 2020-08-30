@@ -31,4 +31,3 @@ bool operator!=(const PenStyle &one, const PenStyle &two);
 
 void PatternInfoFromIndex(BYTE bIndex, PenStyle *pPenStyle);
 uint8_t IndexFromPatternInfo(const PenStyle *pPenStyle);
-

@@ -791,5 +791,3 @@ void AudioCacheResourceSource::RebuildResources(bool force, ResourceSource &sour
 }
 
 AudioCacheResourceSource::~AudioCacheResourceSource() {}
-
-

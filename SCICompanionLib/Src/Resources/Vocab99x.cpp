@@ -1308,5 +1308,3 @@ bool KernelTable::ReverseLookup(std::string name, uint16_t &wIndex) const
 	}
 	return result;
 }
-
-

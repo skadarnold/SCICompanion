@@ -1295,5 +1295,3 @@ ResourceEntity *CreateDefaultViewResource(SCIVersion version)
 	::FillEmpty(raster, CelIndex(0, 0), size16(16, 16));
 	return pResource.release();
 }
-
-

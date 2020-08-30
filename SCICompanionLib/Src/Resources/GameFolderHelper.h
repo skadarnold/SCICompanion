@@ -92,4 +92,3 @@ public:
 private:
 	std::string _GetSubfolder(const char *key, const std::string *prefix = nullptr) const;
 };
-

@@ -182,5 +182,3 @@ ResourceEntity *CreateDefaultTextResource(SCIVersion version)
 	// Nothing different.
 	return CreateTextResource(version);
 }
-
-

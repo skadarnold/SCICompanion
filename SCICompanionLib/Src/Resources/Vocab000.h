@@ -128,4 +128,3 @@ Vocab000::WordGroup GetWordGroup(DWORD dwInfo);
 DWORD InfoFromClassAndGroup(WordClass dwClass, Vocab000::WordGroup dwGroup);
 
 ResourceEntity *CreateVocabResource(SCIVersion version);
-

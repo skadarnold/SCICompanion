@@ -1377,4 +1377,3 @@ ResourceEntity *CreateDefaultPicResource(SCIVersion version)
 
 	return pResource.release();
 }
-

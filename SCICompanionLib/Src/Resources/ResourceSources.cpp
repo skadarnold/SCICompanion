@@ -96,4 +96,3 @@ bool IsResourceCompatible(const SCIVersion &version, const ResourceBlob &blob)
 {
 	return IsResourceCompatible(version, blob.GetVersion(), blob.GetType());
 }
-

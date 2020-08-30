@@ -536,7 +536,6 @@
     <ClCompile Include="Src\Dialogs\SCIPropertyCtrl.cpp" />
     <ClCompile Include="Src\Dialogs\SCIPropertyInfo.cpp" />
     <ClCompile Include="Src\Dialogs\SCIProps.cpp" />
-    <ClCompile Include="Src\Dialogs\VisualScriptDialog.cpp" />
     <ClCompile Include="Src\Dialogs\VocabAutoCompleteDialog.cpp" />
     <ClCompile Include="Src\FrameComponents\ChooseColorStatic.cpp" />
     <ClCompile Include="Src\FrameComponents\CodeToolTips.cpp" />
@@ -737,7 +736,6 @@
     <ClInclude Include="Src\Dialogs\SCIPropertyCtrl.h" />
     <ClInclude Include="Src\Dialogs\SCIPropertyInfo.h" />
     <ClInclude Include="Src\Dialogs\SCIProps.h" />
-    <ClInclude Include="Src\Dialogs\VisualScriptDialog.h" />
     <ClInclude Include="Src\Dialogs\VocabAutoCompleteDialog.h" />
     <ClInclude Include="Src\FrameComponents\ChooseColorStatic.h" />
     <ClInclude Include="Src\FrameComponents\CodeToolTips.h" />

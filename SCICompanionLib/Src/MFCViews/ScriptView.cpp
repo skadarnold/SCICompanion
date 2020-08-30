@@ -28,7 +28,6 @@
 #include "ScriptOM.h"
 #include "CrystalScriptStream.h"
 #include "GotoDialog.h"
-#include "VisualScriptDialog.h"
 #include "CompiledScript.h"
 #include "Vocab99x.h"
 #include "SCO.h"

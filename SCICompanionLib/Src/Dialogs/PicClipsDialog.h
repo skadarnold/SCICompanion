@@ -20,62 +20,62 @@ struct sRECT;
 
 struct PicClip
 {
-    PicClip() {}
-    PicClip(const std::string &name, const sRECT &bounds, std::unique_ptr<std::vector<PicCommand>> &&Commands);
+	PicClip() {}
+	PicClip(const std::string &name, const sRECT &bounds, std::unique_ptr<std::vector<PicCommand>> &&Commands);
 
 
-    std::string Name;
-    std::unique_ptr<std::vector<PicCommand>> Commands;
-    CRect Bounds;
+	std::string Name;
+	std::unique_ptr<std::vector<PicCommand>> Commands;
+	CRect Bounds;
 };
 
 class PicClipsDialog : public CExtResizableDialog
 {
 public:
-    PicClipsDialog(CWnd* pParent = nullptr);   // standard constructor
+	PicClipsDialog(CWnd* pParent = nullptr);   // standard constructor
 
-    // Dialog Data
-    enum { IDD = IDD_PICCLIPS };
+	// Dialog Data
+	enum { IDD = IDD_PICCLIPS };
 
-    BOOL PreTranslateMessage(MSG* pMsg) override;
-    void SetNumber(int number) { _number = number; }
+	BOOL PreTranslateMessage(MSG* pMsg) override;
+	void SetNumber(int number) { _number = number; }
 
-    const std::vector<PicCommand> &GetCurrentClip(CRect &boundsOut);
-    void MoveSelection(int delta);
+	const std::vector<PicCommand> &GetCurrentClip(CRect &boundsOut);
+	void MoveSelection(int delta);
 
 
 private:
-    void _PopulateFilesList();
-    void OnLvnBeginlabeleditListscripts(NMHDR *pNMHDR, LRESULT *pResult);
-    void OnLvnEndlabeleditListscripts(NMHDR *pNMHDR, LRESULT *pResult);
-    void OnCbnSelchangeFiles();
+	void _PopulateFilesList();
+	void OnLvnBeginlabeleditListscripts(NMHDR *pNMHDR, LRESULT *pResult);
+	void OnLvnEndlabeleditListscripts(NMHDR *pNMHDR, LRESULT *pResult);
+	void OnCbnSelchangeFiles();
 
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV support
 
-    DECLARE_MESSAGE_MAP()
+	DECLARE_MESSAGE_MAP()
 
-    CExtButton m_wndSave;
-    CListCtrl m_wndClips;
-    CExtComboBox m_wndFiles;
+	CExtButton m_wndSave;
+	CListCtrl m_wndClips;
+	CExtComboBox m_wndFiles;
 
-    // Visuals
-    CExtButton m_wndOK;
+	// Visuals
+	CExtButton m_wndOK;
 
-    std::vector<std::unique_ptr<PicClip>> _clips;
+	std::vector<std::unique_ptr<PicClip>> _clips;
 
-    std::vector<std::string> _fileNames;
+	std::vector<std::string> _fileNames;
 
-    void _InitClipsList();
-    void _UpdateList();
+	void _InitClipsList();
+	void _UpdateList();
 
-    HACCEL _hAccel;
+	HACCEL _hAccel;
 
-    bool _initialized;
-    int _number;
-    bool _inLabelEdit;
+	bool _initialized;
+	int _number;
+	bool _inLabelEdit;
 
 public:
-    afx_msg void OnUpdateCopyPaste(CCmdUI *pCmd);
-    afx_msg void OnBnClickedSave();
-    afx_msg void OnPaste();
+	afx_msg void OnUpdateCopyPaste(CCmdUI *pCmd);
+	afx_msg void OnBnClickedSave();
+	afx_msg void OnPaste();
 };

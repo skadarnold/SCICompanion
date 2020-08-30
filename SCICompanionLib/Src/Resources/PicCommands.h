@@ -1,15 +1,15 @@
 /***************************************************************************
-    Copyright (c) 2015 Philip Fortier
+	Copyright (c) 2015 Philip Fortier
 
-    This program is free software; you can redistribute it and/or
-    modify it under the terms of the GNU General Public License
-    as published by the Free Software Foundation; either version 2
-    of the License, or (at your option) any later version.
+	This program is free software; you can redistribute it and/or
+	modify it under the terms of the GNU General Public License
+	as published by the Free Software Foundation; either version 2
+	of the License, or (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
 ***************************************************************************/
 
 //
@@ -19,7 +19,7 @@
 
 namespace sci
 {
-    class istream;
+	class istream;
 }
 
 #include "PicCommandsCommon.h"
@@ -66,47 +66,47 @@ typedef void (CALLBACK *PFNCLOSECOORDCALLBACK)(void *, CDC *, int, int, int, int
 class ViewPort
 {
 public:
-    ViewPort(uint8_t bPaletteToUse);
-    ViewPort(const ViewPort& src) = default;
-    ViewPort();
-    ViewPort& operator=(const ViewPort& src) = default;
+	ViewPort(uint8_t bPaletteToUse);
+	ViewPort(const ViewPort& src) = default;
+	ViewPort();
+	ViewPort& operator=(const ViewPort& src) = default;
 
-    void Reset(uint8_t bPaletteToUse);
+	void Reset(uint8_t bPaletteToUse);
 
-    PicScreenFlags dwDrawEnable;
-    uint8_t bPriorityValue;
-    uint8_t bControlValue;
-    EGACOLOR egaColor;
+	PicScreenFlags dwDrawEnable;
+	uint8_t bPriorityValue;
+	uint8_t bControlValue;
+	EGACOLOR egaColor;
 
-    // The following are just used for UI state.
-    uint8_t bPaletteNumber;// new: which palette the color belongs to
-    uint8_t bPaletteOffset;// new: which index in that palette that the color belongs to (or the actual index in VGA)
+	// The following are just used for UI state.
+	uint8_t bPaletteNumber;// new: which palette the color belongs to
+	uint8_t bPaletteOffset;// new: which index in that palette that the color belongs to (or the actual index in VGA)
 
-    uint8_t bPatternNR;
-    uint8_t bPatternSize;
-    EGACOLOR pPalettes[160]; // 40 times 4 bytes
+	uint8_t bPatternNR;
+	uint8_t bPatternSize;
+	EGACOLOR pPalettes[160]; // 40 times 4 bytes
 
-    uint8_t bPaletteToDraw; // Global palette with which to draw
-    uint8_t rgLocked[40];   // Whether or not the colours in palette 0 are locked.
+	uint8_t bPaletteToDraw; // Global palette with which to draw
+	uint8_t rgLocked[40];   // Whether or not the colours in palette 0 are locked.
 
-    uint16_t bPriorityLines[NumPriorityBars];
+	uint16_t bPriorityLines[NumPriorityBars];
 };
 
 
 
 struct PicData
 {
-    PicScreenFlags dwMapsToRedraw;
-    uint8_t *pdataVisual;
-    uint8_t *pdataPriority;
-    uint8_t *pdataControl;
-    uint8_t *pdataAux;
-    bool isVGA;
+	PicScreenFlags dwMapsToRedraw;
+	uint8_t *pdataVisual;
+	uint8_t *pdataPriority;
+	uint8_t *pdataControl;
+	uint8_t *pdataAux;
+	bool isVGA;
 	bool isUndithered;
-    size16 size;
-    bool isContinuousPriority;
+	size16 size;
+	bool isContinuousPriority;
 
-    void EnsureInBounds(int &x, int &y);
+	void EnsureInBounds(int &x, int &y);
 };
 
 //
@@ -114,17 +114,17 @@ struct PicData
 //
 struct SerializedPicState
 {
-    bool fInited;
-    uint8_t bPatternSize;
-    uint8_t wFlags;
+	bool fInited;
+	uint8_t bPatternSize;
+	uint8_t wFlags;
 };
 
 struct sRECT
 {
-    int16_t left;
-    int16_t top;
-    int16_t right;
-    int16_t bottom;
+	int16_t left;
+	int16_t top;
+	int16_t right;
+	int16_t bottom;
 };
 
 bool PtInSRect(sRECT *prc, int16_t x, int16_t y);
@@ -134,87 +134,87 @@ bool PtInSRect(sRECT *prc, int16_t x, int16_t y);
 //
 struct LINECOMMAND
 {
-    int16_t xFrom;
-    int16_t yFrom;
-    int16_t xTo;
-    int16_t yTo;
+	int16_t xFrom;
+	int16_t yFrom;
+	int16_t xTo;
+	int16_t yTo;
 }; // 8 bytes
 
 struct CIRCLECOMMAND
 {
-    int16_t xFrom;
-    int16_t yFrom;
-    int16_t xTo;
-    int16_t yTo;
+	int16_t xFrom;
+	int16_t yFrom;
+	int16_t xTo;
+	int16_t yTo;
 }; // 8 bytes
 
 struct PATTERNCOMMAND
 {
-    int16_t x;
-    int16_t y;
-    uint8_t bPatternSize;
-    uint8_t bPatternNR;
-    uint8_t wFlags; // 
+	int16_t x;
+	int16_t y;
+	uint8_t bPatternSize;
+	uint8_t bPatternNR;
+	uint8_t wFlags; // 
 }; // 8 bytes
 
 struct FILLCOMMAND
 {
-    int16_t x;
-    int16_t y;
+	int16_t x;
+	int16_t y;
 }; // 4 bytes
 
 struct SETVISUALCOMMAND
 {
-    uint8_t bColor;
-    bool isVGA;
-    // For EGA:
-    uint8_t GetPaletteNumber() const { assert(!isVGA);  return (GET_PALDEX(bColor)); }
-    uint8_t GetPaletteIndex() const{ assert(!isVGA);  return (GET_PALCOL(bColor)); }
+	uint8_t bColor;
+	bool isVGA;
+	// For EGA:
+	uint8_t GetPaletteNumber() const { assert(!isVGA);  return (GET_PALDEX(bColor)); }
+	uint8_t GetPaletteIndex() const{ assert(!isVGA);  return (GET_PALCOL(bColor)); }
 }; // 2 bytes
 
 struct SETPRIORITYCOMMAND
 {
-    int16_t bPriorityValue;
+	int16_t bPriorityValue;
 }; // 2 bytes
 
 struct SETCONTROLCOMMAND
 {
-    uint8_t bControlValue;
+	uint8_t bControlValue;
 }; // 1 byte
 
 struct SETPALETTECOMMAND
 {
-    // So as not to bloat all commands, we allocate the palette here,
-    // instead of having an embedded array.
-    EGACOLOR *pPalette;
-    uint8_t bPaletteNumber;
+	// So as not to bloat all commands, we allocate the palette here,
+	// instead of having an embedded array.
+	EGACOLOR *pPalette;
+	uint8_t bPaletteNumber;
 }; // 8 bytes (packed)
 
 struct SETPALETTEENTRYCOMMAND
 {
-    EGACOLOR color;
-    uint8_t bPaletteNumber;
-    uint8_t bOffset;
+	EGACOLOR color;
+	uint8_t bPaletteNumber;
+	uint8_t bOffset;
 }; // 4 bytes (packed)
 
 struct SETVISUALCOMMAND_SCI1
 {
-    uint8_t bPaletteIndex;
+	uint8_t bPaletteIndex;
 }; // 1 byte
 
 struct SETPRIORITYBARSCOMMAND_SCI1
 {
-    uint16_t *pPriorityLines;
-    bool is16Bit;
-    bool isVGA;
+	uint16_t *pPriorityLines;
+	bool is16Bit;
+	bool isVGA;
 }; // 8 bytes
 
 struct DRAWVISUALBITMAPCOMMAND_SCI1
 {
-    Cel *pCel;
-    int16_t priority;   // for SCI2, otherwise it's 0xffff
-    bool mirrored;
-    bool isVGA;
+	Cel *pCel;
+	int16_t priority;   // for SCI2, otherwise it's 0xffff
+	bool mirrored;
+	bool isVGA;
 };  // 8 bytes
 
 #define SCI1_PALETTE_LENGTH 256
@@ -239,161 +239,161 @@ class PicCommand
 {
 public:
 
-    //
-    // command types
-    // 
-    // These serve as indexes into function pointer arrays
-    enum CommandType : uint8_t
-    {
-        Line =           0x00000000,
-        Pattern =        0x00000001,
-        Fill =           0x00000002,
-        SetVisual =      0x00000003,
-        SetPriority =    0x00000004,
-        SetControl =     0x00000005,
-        DisableVisual =  0x00000006,
-        DisablePriority =0x00000007,
-        DisableControl = 0x00000008,
-        SetPalette =     0x00000009,
-        SetPaletteEntry =0x0000000a,
-        SetPriorityBars =0x0000000b,
-        DrawBitmap =     0x0000000c,
-        Circle =         0x0000000d,
-        PicClips =       0x0000000e,
-        CommandTypeMax = 0x0000000e,
-        None =           0xff, // Just for convenience
-    };
+	//
+	// command types
+	// 
+	// These serve as indexes into function pointer arrays
+	enum CommandType : uint8_t
+	{
+		Line =		   0x00000000,
+		Pattern =		0x00000001,
+		Fill =		   0x00000002,
+		SetVisual =	  0x00000003,
+		SetPriority =	0x00000004,
+		SetControl =	 0x00000005,
+		DisableVisual =  0x00000006,
+		DisablePriority =0x00000007,
+		DisableControl = 0x00000008,
+		SetPalette =	 0x00000009,
+		SetPaletteEntry =0x0000000a,
+		SetPriorityBars =0x0000000b,
+		DrawBitmap =	 0x0000000c,
+		Circle =		 0x0000000d,
+		PicClips =	   0x0000000e,
+		CommandTypeMax = 0x0000000e,
+		None =		   0xff, // Just for convenience
+	};
 
-    PicCommand();
-    PicCommand(const PicCommand& src);
-    // For deserialization from clipboard:
-    bool Initialize(sci::istream &byteStream);
-    // Serialization for clipboard
-    void SerializeForClipboard(sci::ostream *pSerial) const;
-    ~PicCommand();
-    PicCommand& operator=(const PicCommand& src);
+	PicCommand();
+	PicCommand(const PicCommand& src);
+	// For deserialization from clipboard:
+	bool Initialize(sci::istream &byteStream);
+	// Serialization for clipboard
+	void SerializeForClipboard(sci::ostream *pSerial) const;
+	~PicCommand();
+	PicCommand& operator=(const PicCommand& src);
 
-    void _MaybeDeepCopy(const PicCommand &src);
+	void _MaybeDeepCopy(const PicCommand &src);
 
-    // We achieve our polymorphism via unions. This avoids us having to allocate
-    // a chunk of memory for each command (only certain commands with extra data
-    // require it).
-    // The down size is that we need to implement our own custom assignment and copy constructors.
-    union 
-    {
-        LINECOMMAND drawLine;
-        CIRCLECOMMAND circle;
-        PATTERNCOMMAND drawPattern;
-        FILLCOMMAND fill;
-        SETVISUALCOMMAND setVisual;
-        SETPRIORITYCOMMAND setPriority;
-        SETCONTROLCOMMAND setControl;
-        SETPALETTECOMMAND setPalette;
-        SETPALETTEENTRYCOMMAND setPaletteEntry;
-        SETPRIORITYBARSCOMMAND_SCI1 setPriorityBars;
-        DRAWVISUALBITMAPCOMMAND_SCI1 drawVisualBitmap;
-    };
+	// We achieve our polymorphism via unions. This avoids us having to allocate
+	// a chunk of memory for each command (only certain commands with extra data
+	// require it).
+	// The down size is that we need to implement our own custom assignment and copy constructors.
+	union 
+	{
+		LINECOMMAND drawLine;
+		CIRCLECOMMAND circle;
+		PATTERNCOMMAND drawPattern;
+		FILLCOMMAND fill;
+		SETVISUALCOMMAND setVisual;
+		SETPRIORITYCOMMAND setPriority;
+		SETCONTROLCOMMAND setControl;
+		SETPALETTECOMMAND setPalette;
+		SETPALETTEENTRYCOMMAND setPaletteEntry;
+		SETPRIORITYBARSCOMMAND_SCI1 setPriorityBars;
+		DRAWVISUALBITMAPCOMMAND_SCI1 drawVisualBitmap;
+	};
 
-    CommandType type;
+	CommandType type;
 
-    // Create functions
-    static PicCommand CreateLine(int16_t xFrom, int16_t yFrom, int16_t xTo, int16_t yTo)
-    {
-        PicCommand command;
-        command._CreateLine(xFrom, yFrom, xTo, yTo);
-        return command;
-    }
-    static PicCommand CreatePattern(int16_t x, int16_t y, uint8_t bPatternSize, uint8_t bPatternNR, bool fPattern, bool fRectangle)
-    {
-        PicCommand command;
-        command._CreatePattern(x, y, bPatternSize, bPatternNR, fPattern, fRectangle);
-        return command;
-    }
-    static PicCommand CreateFill(int16_t x, int16_t y)
-    {
-        PicCommand command;
-        command._CreateFill(x, y);
-        return command;
-    }
-    static PicCommand CreateSetVisual(uint8_t bPaletteNumber, uint8_t bPaletteIndex)
-    {
-        PicCommand command;
-        command._CreateSetVisual(bPaletteNumber, bPaletteIndex);
-        return command;
-    }
-    static PicCommand CreateSetVisual(uint8_t bColor)
-    {
-        PicCommand command;
-        command._CreateSetVisualVGA(bColor);
-        return command;
-    }
-    static PicCommand CreateSetPriority(int16_t bPriorityValue)
-    {
-        PicCommand command;
-        command._CreateSetPriority(bPriorityValue);
-        return command;
-    }
-    static PicCommand CreateSetControl(uint8_t bControlValue)
-    {
-        PicCommand command;
-        command._CreateSetControl(bControlValue);
-        return command;
-    }
-    static PicCommand CreateDisableVisual()
-    {
-        PicCommand command;
-        command._CreateDisableVisual();
-        return command;
-    }
-    static PicCommand CreateDisablePriority()
-    {
-        PicCommand command;
-        command._CreateDisablePriority();
-        return command;
-    }
-    static PicCommand CreateDisableControl()
-    {
-        PicCommand command;
-        command._CreateDisableControl();
-        return command;
-    }
-    static PicCommand CreateSetPalette(uint8_t bPaletteNumber, const EGACOLOR *pPalette)
-    {
-        PicCommand command;
-        command._CreateSetPalette(bPaletteNumber, pPalette);
-        return command;
-    }
-    static PicCommand CreateSetPaletteEntry(uint8_t bPaletteNumber, uint8_t bOffset, EGACOLOR color)
-    {
-        PicCommand command;
-        command._CreateSetPaletteEntry(bPaletteNumber, bOffset, color);
-        return command;
-    }
-    void CreateSetPriorityBars(const uint16_t *pBars, bool is16Bit, bool isVGA);
-    void CreateDrawVisualBitmap(const Cel &cel, bool isVGA, int16_t priority = InvalidPri);
-    void CreateCircle(int16_t xFrom, int16_t yFrom, int16_t xTo, int16_t yTo);
+	// Create functions
+	static PicCommand CreateLine(int16_t xFrom, int16_t yFrom, int16_t xTo, int16_t yTo)
+	{
+		PicCommand command;
+		command._CreateLine(xFrom, yFrom, xTo, yTo);
+		return command;
+	}
+	static PicCommand CreatePattern(int16_t x, int16_t y, uint8_t bPatternSize, uint8_t bPatternNR, bool fPattern, bool fRectangle)
+	{
+		PicCommand command;
+		command._CreatePattern(x, y, bPatternSize, bPatternNR, fPattern, fRectangle);
+		return command;
+	}
+	static PicCommand CreateFill(int16_t x, int16_t y)
+	{
+		PicCommand command;
+		command._CreateFill(x, y);
+		return command;
+	}
+	static PicCommand CreateSetVisual(uint8_t bPaletteNumber, uint8_t bPaletteIndex)
+	{
+		PicCommand command;
+		command._CreateSetVisual(bPaletteNumber, bPaletteIndex);
+		return command;
+	}
+	static PicCommand CreateSetVisual(uint8_t bColor)
+	{
+		PicCommand command;
+		command._CreateSetVisualVGA(bColor);
+		return command;
+	}
+	static PicCommand CreateSetPriority(int16_t bPriorityValue)
+	{
+		PicCommand command;
+		command._CreateSetPriority(bPriorityValue);
+		return command;
+	}
+	static PicCommand CreateSetControl(uint8_t bControlValue)
+	{
+		PicCommand command;
+		command._CreateSetControl(bControlValue);
+		return command;
+	}
+	static PicCommand CreateDisableVisual()
+	{
+		PicCommand command;
+		command._CreateDisableVisual();
+		return command;
+	}
+	static PicCommand CreateDisablePriority()
+	{
+		PicCommand command;
+		command._CreateDisablePriority();
+		return command;
+	}
+	static PicCommand CreateDisableControl()
+	{
+		PicCommand command;
+		command._CreateDisableControl();
+		return command;
+	}
+	static PicCommand CreateSetPalette(uint8_t bPaletteNumber, const EGACOLOR *pPalette)
+	{
+		PicCommand command;
+		command._CreateSetPalette(bPaletteNumber, pPalette);
+		return command;
+	}
+	static PicCommand CreateSetPaletteEntry(uint8_t bPaletteNumber, uint8_t bOffset, EGACOLOR color)
+	{
+		PicCommand command;
+		command._CreateSetPaletteEntry(bPaletteNumber, bOffset, color);
+		return command;
+	}
+	void CreateSetPriorityBars(const uint16_t *pBars, bool is16Bit, bool isVGA);
+	void CreateDrawVisualBitmap(const Cel &cel, bool isVGA, int16_t priority = InvalidPri);
+	void CreateCircle(int16_t xFrom, int16_t yFrom, int16_t xTo, int16_t yTo);
 
-    // Drawing functions, etc...
-    void Draw(PicData *pData, ViewPort &state) const;
-    void GetName(TCHAR *pszBuf, size_t cchBuf) const;
+	// Drawing functions, etc...
+	void Draw(PicData *pData, ViewPort &state) const;
+	void GetName(TCHAR *pszBuf, size_t cchBuf) const;
 
 private:
-    void _CreateLine(int16_t xFrom, int16_t yFrom, int16_t xTo, int16_t yTo);
-    void _CreatePattern(int16_t x, int16_t y, uint8_t bPatternSize, uint8_t bPatternNR, bool fPattern, bool fRectangle);
-    void _CreateFill(int16_t x, int16_t y);
-    void _CreateSetVisual(uint8_t bPaletteNumber, uint8_t bPaletteIndex);
-    void _CreateSetVisualVGA(uint8_t bColor);
-    void _CreateSetPriority(int16_t bPriorityValue);
-    void _CreateSetControl(uint8_t bControlValue);
-    void _CreateDisableVisual();
-    void _CreateDisablePriority();
-    void _CreateDisableControl();
-    void _CreateSetPalette(uint8_t bPaletteNumber, const EGACOLOR *pPalette);
-    void _CreateSetPaletteEntry(uint8_t bPaletteNumber, uint8_t bOffset, EGACOLOR color);
-    void _CreateCircle(int16_t xFrom, int16_t yFrom, int16_t xTo, int16_t yTo);
+	void _CreateLine(int16_t xFrom, int16_t yFrom, int16_t xTo, int16_t yTo);
+	void _CreatePattern(int16_t x, int16_t y, uint8_t bPatternSize, uint8_t bPatternNR, bool fPattern, bool fRectangle);
+	void _CreateFill(int16_t x, int16_t y);
+	void _CreateSetVisual(uint8_t bPaletteNumber, uint8_t bPaletteIndex);
+	void _CreateSetVisualVGA(uint8_t bColor);
+	void _CreateSetPriority(int16_t bPriorityValue);
+	void _CreateSetControl(uint8_t bControlValue);
+	void _CreateDisableVisual();
+	void _CreateDisablePriority();
+	void _CreateDisableControl();
+	void _CreateSetPalette(uint8_t bPaletteNumber, const EGACOLOR *pPalette);
+	void _CreateSetPaletteEntry(uint8_t bPaletteNumber, uint8_t bOffset, EGACOLOR color);
+	void _CreateCircle(int16_t xFrom, int16_t yFrom, int16_t xTo, int16_t yTo);
 
-    bool _IsEmpty();
-    void _CleanUp();
+	bool _IsEmpty();
+	void _CleanUp();
 };
 
 void PatternInfoFromIndex(uint8_t bIndex, PenStyle *pPenStyle);
@@ -404,9 +404,9 @@ uint8_t IndexFromPatternInfo(const PenStyle *pPenStyle);
 //
 enum DRAWSIZE
 {
-    DS_SMALL     = 0,   // x,y in one byte  (max 8,8)
-    DS_MEDIUM    = 1,   // x,y in two bytes (max 128,111)
-    DS_LARGE     = 2,   // x,y in three bytes (max 319, 189)
+	DS_SMALL	 = 0,   // x,y in one byte  (max 8,8)
+	DS_MEDIUM	= 1,   // x,y in two bytes (max 128,111)
+	DS_LARGE	 = 2,   // x,y in three bytes (max 319, 189)
 };
 
 //
@@ -472,11 +472,11 @@ void LineCommand_DrawEx(int cx, int cy, PicCommand *pCommand, uint8_t *pData, EG
 
 struct PICCOMMAND_ADJUST
 {
-    RECT rcBounds; // Original bounds
-    RECT rcNew;
-    bool fVFlip;    // Flip vertical
-    bool fHFlip;    // Flip horizontal
-    int iAngle;
+	RECT rcBounds; // Original bounds
+	RECT rcNew;
+	bool fVFlip;	// Flip vertical
+	bool fHFlip;	// Flip horizontal
+	int iAngle;
 };
 
 void PastedCommands_GetBounds(size16 displaySize, const PicCommand *pCommand, size_t cCommands, sRECT *prc);
@@ -491,10 +491,10 @@ typedef void (*SERIALIZE_FUNCTION)(sci::ostream *pSerial, const PicCommand *pCom
 
 const uint8_t g_defaultPaletteInit[] = 
 { (0), (0x11), (0x22), (0x33), (0x44), (0x55), (0x66), (0x77),
-      (0x88), (0x99), (0xaa), (0xbb), (0xcc), (0xdd), (0xee), (0x88),
-      (0x88), (0x01), (0x02), (0x03), (0x04), (0x05), (0x06), (0x88),
-      (0x88), (0xf9), (0xfa), (0xfb), (0xfc), (0xfd), (0xfe), (0xff),
-      (0x08), (0x91), (0x2a), (0x3b), (0x4c), (0x5d), (0x6e), (0x88) };
+	  (0x88), (0x99), (0xaa), (0xbb), (0xcc), (0xdd), (0xee), (0x88),
+	  (0x88), (0x01), (0x02), (0x03), (0x04), (0x05), (0x06), (0x88),
+	  (0x88), (0xf9), (0xfa), (0xfb), (0xfc), (0xfd), (0xfe), (0xff),
+	  (0x08), (0x91), (0x2a), (0x3b), (0x4c), (0x5d), (0x6e), (0x88) };
 
 extern const EGACOLOR *g_defaultPalette;
 

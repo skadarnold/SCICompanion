@@ -1,15 +1,15 @@
 /***************************************************************************
-    Copyright (c) 2015 Philip Fortier
+	Copyright (c) 2015 Philip Fortier
 
-    This program is free software; you can redistribute it and/or
-    modify it under the terms of the GNU General Public License
-    as published by the Free Software Foundation; either version 2
-    of the License, or (at your option) any later version.
+	This program is free software; you can redistribute it and/or
+	modify it under the terms of the GNU General Public License
+	as published by the Free Software Foundation; either version 2
+	of the License, or (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
 ***************************************************************************/
 // ScriptFrame.cpp : implementation file
 //
@@ -26,17 +26,17 @@ IMPLEMENT_DYNCREATE(CScriptFrame, CMDITabChildWnd)
 
 CScriptFrame::CScriptFrame()
 {
-    appState->SetScriptFrame(this);
+	appState->SetScriptFrame(this);
 }
 
 CScriptFrame::~CScriptFrame()
 {
-    appState->SetScriptFrame(NULL);
+	appState->SetScriptFrame(NULL);
 }
 
 
 BEGIN_MESSAGE_MAP(CScriptFrame, CMDITabChildWnd)
-    ON_WM_CREATE()
+	ON_WM_CREATE()
 END_MESSAGE_MAP()
 
 
@@ -46,13 +46,13 @@ END_MESSAGE_MAP()
 
 int CScriptFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 {
-    if (__super::OnCreate(lpCreateStruct) == -1)
-        return -1;
+	if (__super::OnCreate(lpCreateStruct) == -1)
+		return -1;
 
-    EnableDocking(CBRS_ALIGN_ANY);
+	EnableDocking(CBRS_ALIGN_ANY);
 
-    //m_wndStatusBar.SetPane0Icon(IDI_EXCLAMATION);
+	//m_wndStatusBar.SetPane0Icon(IDI_EXCLAMATION);
 
-    return 0;
+	return 0;
 }
 

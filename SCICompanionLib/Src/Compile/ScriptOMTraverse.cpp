@@ -1,15 +1,15 @@
 /***************************************************************************
-    Copyright (c) 2015 Philip Fortier
+	Copyright (c) 2015 Philip Fortier
 
-    This program is free software; you can redistribute it and/or
-    modify it under the terms of the GNU General Public License
-    as published by the Free Software Foundation; either version 2
-    of the License, or (at your option) any later version.
+	This program is free software; you can redistribute it and/or
+	modify it under the terms of the GNU General Public License
+	as published by the Free Software Foundation; either version 2
+	of the License, or (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
 ***************************************************************************/
 #include "stdafx.h"
 #include "ScriptOMAll.h"
@@ -20,19 +20,19 @@ using namespace std;
 class PerformTraverse : public std::unary_function<SyntaxNode*, void>
 {
 public:
-    PerformTraverse(IExploreNode &en) : _en(en) {}
-    void operator()(SyntaxNode* pNode) const
-    {
-        pNode->Traverse(_en);
-    }
+	PerformTraverse(IExploreNode &en) : _en(en) {}
+	void operator()(SyntaxNode* pNode) const
+	{
+		pNode->Traverse(_en);
+	}
 private:
-    IExploreNode &_en;
+	IExploreNode &_en;
 };
 
 template<typename T>
 void ForwardTraverse(const T &container, IExploreNode &en)
 {
-    for_each(container.begin(), container.end(), PerformTraverse(en));
+	for_each(container.begin(), container.end(), PerformTraverse(en));
 }
 
 template<typename T>
@@ -77,20 +77,20 @@ void ForwardTraverse3(T &container, IExploreNode &en)
 void FunctionBase::Traverse(IExploreNode &en)
 {
 	ExploreNodeBlock enb(en, *this);
-    ForwardTraverse2(_signatures, en);
-    ForwardTraverse2(_tempVars, en);
+	ForwardTraverse2(_signatures, en);
+	ForwardTraverse2(_tempVars, en);
 	ForwardTraverse2(_segments, en);
 }
 
 void FunctionSignature::Traverse(IExploreNode &en)
 {
-    ExploreNodeBlock enb(en, *this);
-    ForwardTraverse2(_params, en);
+	ExploreNodeBlock enb(en, *this);
+	ForwardTraverse2(_params, en);
 }
 
 void FunctionParameter::Traverse(IExploreNode &en)
 {
-    ExploreNodeBlock enb(en, *this);
+	ExploreNodeBlock enb(en, *this);
 }
 
 void CodeBlock::Traverse(IExploreNode &en)
@@ -100,8 +100,8 @@ void CodeBlock::Traverse(IExploreNode &en)
 }
 void NaryOp::Traverse(IExploreNode &en)
 {
-    ExploreNodeBlock enb(en, *this);
-    ForwardTraverse2(_segments, en);
+	ExploreNodeBlock enb(en, *this);
+	ForwardTraverse2(_segments, en);
 }
 void Cast::Traverse(IExploreNode &en)
 {
@@ -111,23 +111,23 @@ void Cast::Traverse(IExploreNode &en)
 void SendCall::Traverse(IExploreNode &en)
 {
 	ExploreNodeBlock enb(en, *this);
-    // One of three forms of send params.
-    ForwardTraverse2(_params, en);
+	// One of three forms of send params.
+	ForwardTraverse2(_params, en);
 	if (GetTargetName().empty())
-    {
-        if (!_object3 || _object3->GetName().empty())
-        {
+	{
+		if (!_object3 || _object3->GetName().empty())
+		{
 			_statement1->Traverse(en);
-        }
-        else
-        {
+		}
+		else
+		{
 			_object3->Traverse(en);
-        }
-    }
-    if (_rest)
-    {
-        _rest->Traverse(en);
-    }
+		}
+	}
+	if (_rest)
+	{
+		_rest->Traverse(en);
+	}
 }
 void ProcedureCall::Traverse(IExploreNode &en)
 {
@@ -143,20 +143,20 @@ void SwitchStatement::Traverse(IExploreNode &en)
 {
 	ExploreNodeBlock enb(en, *this);
 	_statement1->Traverse(en);
-    ForwardTraverse2(_cases, en);
+	ForwardTraverse2(_cases, en);
 }
 void CondStatement::Traverse(IExploreNode &en)
 {
-    ExploreNodeBlock enb(en, *this);
-    if (_statement1) { _statement1->Traverse(en); }
-    ForwardTraverse2(_clausesTemp, en);
+	ExploreNodeBlock enb(en, *this);
+	if (_statement1) { _statement1->Traverse(en); }
+	ForwardTraverse2(_clausesTemp, en);
 }
 void ForLoop::Traverse(IExploreNode &en)
 {
 	ExploreNodeBlock enb(en, *this);
 	GetInitializer()->Traverse(en);
 	_innerCondition->Traverse(en);
-    _looper->Traverse(en);
+	_looper->Traverse(en);
 	ForwardTraverse2(_segments, en);
 }
 void WhileLoop::Traverse(IExploreNode &en)
@@ -186,22 +186,22 @@ void Script::Traverse(IExploreNode &en)
 {
 	ExploreNodeBlock enb(en, *this);
 
-    //
-    ForwardTraverse2(Globals, en);
-    ForwardTraverse2(Externs, en);
-    ForwardTraverse2(ClassDefs, en);
-    ForwardTraverse2(Selectors, en);
+	//
+	ForwardTraverse2(Globals, en);
+	ForwardTraverse2(Externs, en);
+	ForwardTraverse2(ClassDefs, en);
+	ForwardTraverse2(Selectors, en);
 
-    ForwardTraverse2(_procedures, en);
-    ForwardTraverse2(_classes, en);
-    ForwardTraverse2(_scriptVariables, en);
-    ForwardTraverse2(_scriptStringDeclarations, en);
-    ForwardTraverse2(_synonyms, en);
+	ForwardTraverse2(_procedures, en);
+	ForwardTraverse2(_classes, en);
+	ForwardTraverse2(_scriptVariables, en);
+	ForwardTraverse2(_scriptStringDeclarations, en);
+	ForwardTraverse2(_synonyms, en);
 }
 
 void VariableDecl::Traverse(IExploreNode &en)
 {
-    ExploreNodeBlock enb(en, *this);
+	ExploreNodeBlock enb(en, *this);
 }
 
 void DoLoop::Traverse(IExploreNode &en)
@@ -223,11 +223,11 @@ void ClassProperty::Traverse(IExploreNode &en)
 void ClassDefinition::Traverse(IExploreNode &en)
 {
 	ExploreNodeBlock enb(en, *this);
-    ForwardTraverse2(_methods, en);
+	ForwardTraverse2(_methods, en);
 #ifdef PHIL_VERBS
 	ForwardTraverse2(_verbHandlers, en);
 #endif
-    ForwardTraverse2(_properties, en);
+	ForwardTraverse2(_properties, en);
 }
 void SendParam::Traverse(IExploreNode &en)
 {
@@ -237,10 +237,10 @@ void SendParam::Traverse(IExploreNode &en)
 void LValue::Traverse(IExploreNode &en)
 {
 	ExploreNodeBlock enb(en, *this);
-    if (HasIndexer())
-    {
+	if (HasIndexer())
+	{
 		_indexer->Traverse(en);
-    }
+	}
 }
 void ReturnStatement::Traverse(IExploreNode &en)
 {
@@ -250,7 +250,7 @@ void ReturnStatement::Traverse(IExploreNode &en)
 void CaseStatementBase::Traverse(IExploreNode &en)
 {
 	ExploreNodeBlock enb(en, *this);
-    if (!IsDefault() && _statement1) _statement1->Traverse(en);
+	if (!IsDefault() && _statement1) _statement1->Traverse(en);
 	ForwardTraverse2(_segments, en);
 }
 void UnaryOp::Traverse(IExploreNode &en)
@@ -269,18 +269,18 @@ void IfStatement::Traverse(IExploreNode &en)
 	ExploreNodeBlock enb(en, *this);
 	_innerCondition->Traverse(en);
 	_statement1->Traverse(en);
-    if (_statement2)
-    {
-        _statement2->Traverse(en);
-    }
+	if (_statement2)
+	{
+		_statement2->Traverse(en);
+	}
 }
 void ComplexPropertyValue::Traverse(IExploreNode &en)
 {
 	ExploreNodeBlock enb(en, *this);
-    if (_pArrayInternal)
-    {
-        _pArrayInternal->Traverse(en);
-    }
+	if (_pArrayInternal)
+	{
+		_pArrayInternal->Traverse(en);
+	}
 }
 void PropertyValue::Traverse(IExploreNode &en)
 {
@@ -288,7 +288,7 @@ void PropertyValue::Traverse(IExploreNode &en)
 }
 void Synonym::Traverse(IExploreNode &en)
 {
-    ExploreNodeBlock enb(en, *this);
+	ExploreNodeBlock enb(en, *this);
 }
 void BreakStatement::Traverse(IExploreNode &en)
 {
@@ -296,7 +296,7 @@ void BreakStatement::Traverse(IExploreNode &en)
 }
 void ContinueStatement::Traverse(IExploreNode &en)
 {
-    ExploreNodeBlock enb(en, *this);
+	ExploreNodeBlock enb(en, *this);
 }
 void RestStatement::Traverse(IExploreNode &en)
 {
@@ -304,36 +304,36 @@ void RestStatement::Traverse(IExploreNode &en)
 }
 void Asm::Traverse(IExploreNode &en)
 {
-    ExploreNodeBlock enb(en, *this);
-    ForwardTraverse2(_segments, en);
+	ExploreNodeBlock enb(en, *this);
+	ForwardTraverse2(_segments, en);
 }
 void AsmBlock::Traverse(IExploreNode &en)
 {
-    ExploreNodeBlock enb(en, *this);
-    ForwardTraverse2(_segments, en);
+	ExploreNodeBlock enb(en, *this);
+	ForwardTraverse2(_segments, en);
 }
 void WeakSyntaxNode::Traverse(IExploreNode &en)
 {
-    assert(false);
+	assert(false);
 }
 void ClassDefDeclaration::Traverse(IExploreNode &en)
 {
-    ExploreNodeBlock enb(en, *this);
+	ExploreNodeBlock enb(en, *this);
 }
 void SelectorDeclaration::Traverse(IExploreNode &en)
 {
-    ExploreNodeBlock enb(en, *this);
+	ExploreNodeBlock enb(en, *this);
 }
 void GlobalDeclaration::Traverse(IExploreNode &en)
 {
-    ExploreNodeBlock enb(en, *this);
-    if (InitialValue)
-    {
-        InitialValue->Traverse(en);
-    }
+	ExploreNodeBlock enb(en, *this);
+	if (InitialValue)
+	{
+		InitialValue->Traverse(en);
+	}
 }
 void ExternDeclaration::Traverse(IExploreNode &en)
 {
-    ExploreNodeBlock enb(en, *this);
-    ScriptNumber.Traverse(en);
+	ExploreNodeBlock enb(en, *this);
+	ScriptNumber.Traverse(en);
 }

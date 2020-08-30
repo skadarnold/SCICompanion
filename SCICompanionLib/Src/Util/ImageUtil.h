@@ -1,15 +1,15 @@
 /***************************************************************************
-    Copyright (c) 2015 Philip Fortier
+	Copyright (c) 2015 Philip Fortier
 
-    This program is free software; you can redistribute it and/or
-    modify it under the terms of the GNU General Public License
-    as published by the Free Software Foundation; either version 2
-    of the License, or (at your option) any later version.
+	This program is free software; you can redistribute it and/or
+	modify it under the terms of the GNU General Public License
+	as published by the Free Software Foundation; either version 2
+	of the License, or (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
 ***************************************************************************/
 #pragma once
 
@@ -20,23 +20,23 @@ class GameFolderHelper;
 
 namespace Gdiplus
 {
-    class Bitmap;
+	class Bitmap;
 }
 
 char g_szGdiplus8BitSaveFilter[];
 
 enum class ColorMatching
 {
-    RGB = 0,
-    CCIR = 1,
+	RGB = 0,
+	CCIR = 1,
 };
 
 enum class DitherAlgorithm
 {
-    None = 0,
-    FloydSteinberg = 1,
-    JarvisJudiceNinke = 2,
-    OrderedBayer = 3,
+	None = 0,
+	FloydSteinberg = 1,
+	JarvisJudiceNinke = 2,
+	OrderedBayer = 3,
 };
 
 RGBQUAD _ToSRGB(RGBQUAD color);
@@ -44,8 +44,8 @@ RGBQUAD _ToLinear(RGBQUAD color);
 
 enum class BitmapConvertStatus : uint32_t
 {
-    None = 0,
-    MappedToTransparentColor = 0x0001,
+	None = 0,
+	MappedToTransparentColor = 0x0001,
 };
 DEFINE_ENUM_FLAGS(BitmapConvertStatus, uint32_t)
 

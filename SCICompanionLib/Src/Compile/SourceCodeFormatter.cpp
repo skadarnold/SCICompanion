@@ -1,15 +1,15 @@
 /***************************************************************************
-    Copyright (c) 2015 Philip Fortier
+	Copyright (c) 2015 Philip Fortier
 
-    This program is free software; you can redistribute it and/or
-    modify it under the terms of the GNU General Public License
-    as published by the Free Software Foundation; either version 2
-    of the License, or (at your option) any later version.
+	This program is free software; you can redistribute it and/or
+	modify it under the terms of the GNU General Public License
+	as published by the Free Software Foundation; either version 2
+	of the License, or (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
 ***************************************************************************/
 #include "stdafx.h"
 #include "ScriptOMAll.h"
@@ -27,21 +27,21 @@ using namespace std;
 
 std::string OperatorToString(const std::string &op)
 {
-    std::stringstream output;
-    output << "operator '" << op << "'";
-    return output.str();
+	std::stringstream output;
+	output << "operator '" << op << "'";
+	return output.str();
 }
 
 std::string BinaryOp::ToString() const
 {
-    // REVIEW: This is really language specific, but we're using the SCIStudio names.
-    return OperatorToString(OperatorToName(Operator, studioNameToBinaryOp));
+	// REVIEW: This is really language specific, but we're using the SCIStudio names.
+	return OperatorToString(OperatorToName(Operator, studioNameToBinaryOp));
 }
 
 std::string UnaryOp::ToString() const
 {
-    // REVIEW: This is really language specific, but we're using the SCIStudio names.
-    return OperatorToString(OperatorToName(Operator, studioNameToUnaryOp));
+	// REVIEW: This is really language specific, but we're using the SCIStudio names.
+	return OperatorToString(OperatorToName(Operator, studioNameToUnaryOp));
 }
 
 
@@ -54,89 +54,89 @@ CommentTracker::CommentTracker(Script &script) : _comments(script.GetComments())
 
 bool CommentTracker::_OutputCommentHelper(const Comment &comment, SourceCodeWriter &out)
 {
-    if (comment.CommentType == CommentType::Positioned)
-    {
-        out.IndentToCommentColumn();
-    }
-    else
-    {
-        // Just our standard indent.
-        Indent(out);
-    }
-    out.out << comment.GetName();
+	if (comment.CommentType == CommentType::Positioned)
+	{
+		out.IndentToCommentColumn();
+	}
+	else
+	{
+		// Just our standard indent.
+		Indent(out);
+	}
+	out.out << comment.GetName();
 
-    // Always go non-inline here, since a comment may comment out everything to the end of the line.
-    {
-        Inline outline(out, false);
-        out.EnsureNewLine();
-    }
+	// Always go non-inline here, since a comment may comment out everything to the end of the line.
+	{
+		Inline outline(out, false);
+		out.EnsureNewLine();
+	}
 
-    ++_commentIndex;
-    return true;
+	++_commentIndex;
+	return true;
 }
 
 std::string CommentTracker::GetFirstComment() const
 {
-    if (!_comments.empty() && _comments[0]->GetPosition().Line() == 0)
-    {
-        return _comments[0]->GetSanitizedText();
-    }
-    return "";
+	if (!_comments.empty() && _comments[0]->GetPosition().Line() == 0)
+	{
+		return _comments[0]->GetSanitizedText();
+	}
+	return "";
 }
 
 void CommentTracker::OutputInitialComment(SourceCodeWriter &out)
 {
-    if (_commentIndex < _comments.size())
-    {
-        if (_comments[_commentIndex]->GetPosition().Line() == 0)
-        {
-            _OutputCommentHelper(*_comments[_commentIndex], out);
-        }
-    }
+	if (_commentIndex < _comments.size())
+	{
+		if (_comments[_commentIndex]->GetPosition().Line() == 0)
+		{
+			_OutputCommentHelper(*_comments[_commentIndex], out);
+		}
+	}
 }
 
 bool CommentTracker::Sync(const sci::SyntaxNode *pNode, SourceCodeWriter &out, int incrementLine)
 {
-    bool outputComment = false;
-    if (_commentIndex < _comments.size())
-    {
-        LineCol commentPosition = _comments[_commentIndex]->GetEndPosition();
-        LineCol nodePosition = pNode->GetPosition(); // Note: can't use end position, it's not consistently set.
-        nodePosition = LineCol(nodePosition.Line() + incrementLine, nodePosition.Column());
-        while ((_commentIndex < _comments.size()) && (commentPosition < nodePosition))
-        {
-            outputComment = _OutputCommentHelper(*_comments[_commentIndex], out);
+	bool outputComment = false;
+	if (_commentIndex < _comments.size())
+	{
+		LineCol commentPosition = _comments[_commentIndex]->GetEndPosition();
+		LineCol nodePosition = pNode->GetPosition(); // Note: can't use end position, it's not consistently set.
+		nodePosition = LineCol(nodePosition.Line() + incrementLine, nodePosition.Column());
+		while ((_commentIndex < _comments.size()) && (commentPosition < nodePosition))
+		{
+			outputComment = _OutputCommentHelper(*_comments[_commentIndex], out);
 
-            if (_commentIndex < _comments.size())
-            {
-                commentPosition = _comments[_commentIndex]->GetEndPosition();
-            }
-        }
-    }
-    return outputComment;
+			if (_commentIndex < _comments.size())
+			{
+				commentPosition = _comments[_commentIndex]->GetEndPosition();
+			}
+		}
+	}
+	return outputComment;
 }
 
 SourceCodeWriter::SourceCodeWriter(std::stringstream &ss, LangSyntax syntax, Script *pScript) :
-    out(ss),
-    lang(syntax),
-    iIndent(0),
-    fInline(false),
-    fLast(false),
-    fUseBrackets(false),
-    fExpandCodeBlock(false),
-    pszNewLine("\n"),
-    lastNewLineLength(0),
-    disallowedTokens(nullptr),
-    fAlwaysExpandCodeBlocks(false),
-    defaultInlineCommentColumn(40),
-    // We'll use tabs now. Ideally this would be customizable, but it matches the way the script editor is set up.
-    indentChar('\t'),
-    indentAmount(1)
+	out(ss),
+	lang(syntax),
+	iIndent(0),
+	fInline(false),
+	fLast(false),
+	fUseBrackets(false),
+	fExpandCodeBlock(false),
+	pszNewLine("\n"),
+	lastNewLineLength(0),
+	disallowedTokens(nullptr),
+	fAlwaysExpandCodeBlocks(false),
+	defaultInlineCommentColumn(40),
+	// We'll use tabs now. Ideally this would be customizable, but it matches the way the script editor is set up.
+	indentChar('\t'),
+	indentAmount(1)
 {
-    if (pScript)
-    {
-        pComments = std::make_unique<CommentTracker>(*pScript);
-    }
+	if (pScript)
+	{
+		pComments = std::make_unique<CommentTracker>(*pScript);
+	}
 }
 
 void Script::OutputSourceCode(SourceCodeWriter &out) const
@@ -197,5 +197,5 @@ void ClassProperty::OutputSourceCode(SourceCodeWriter &out) const
 
 void SourceCodeFormatter::Visit(const sci::WeakSyntaxNode &weakNode)
 {
-    if (weakNode.WeakNode) { weakNode.WeakNode->Accept(*this); }
+	if (weakNode.WeakNode) { weakNode.WeakNode->Accept(*this); }
 }

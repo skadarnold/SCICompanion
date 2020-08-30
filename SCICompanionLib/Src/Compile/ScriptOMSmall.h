@@ -1,15 +1,15 @@
 /***************************************************************************
-    Copyright (c) 2015 Philip Fortier
+	Copyright (c) 2015 Philip Fortier
 
-    This program is free software; you can redistribute it and/or
-    modify it under the terms of the GNU General Public License
-    as published by the Free Software Foundation; either version 2
-    of the License, or (at your option) any later version.
+	This program is free software; you can redistribute it and/or
+	modify it under the terms of the GNU General Public License
+	as published by the Free Software Foundation; either version 2
+	of the License, or (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
 ***************************************************************************/
 #pragma once
 
@@ -24,28 +24,28 @@ public:
 	WORD GetBytes() const { return _wBytes; }
 	SpeciesIndex GetType() const { return _type; }
 private:
-	WORD _wBytes;           // Number of bytes pushed onto the stack
-	SpeciesIndex _type;    // Data type
+	WORD _wBytes;		   // Number of bytes pushed onto the stack
+	SpeciesIndex _type;	// Data type
 };
 
 namespace sci
 {
-    enum class ValueType : uint32_t
-    {
-        String = 0x00000000,
-        Said = 0x00000001,
-        Number = 0x00000002,
-        Token = 0x00000003,
-        Selector = 0x00000004,
-        Pointer = 0x00000005,
-        None = 0x00000006,
-        ResourceString = 0x00000007,    // Not available in SCIStudio syntax
-        ArraySize = 0x00000008,         // e.g. &sizeof MyArray - should get converted in prescan
+	enum class ValueType : uint32_t
+	{
+		String = 0x00000000,
+		Said = 0x00000001,
+		Number = 0x00000002,
+		Token = 0x00000003,
+		Selector = 0x00000004,
+		Pointer = 0x00000005,
+		None = 0x00000006,
+		ResourceString = 0x00000007,	// Not available in SCIStudio syntax
+		ArraySize = 0x00000008,		 // e.g. &sizeof MyArray - should get converted in prescan
 #ifdef PHIL_EXISTS
-		ParameterIndex = 0x00000010,    // the 0-based numerical index of the parameter
+		ParameterIndex = 0x00000010,	// the 0-based numerical index of the parameter
 #endif
 #ifdef PHIL_LDMSTM
 		Deref = 0x00000020,
 #endif
-    };
+	};
 }

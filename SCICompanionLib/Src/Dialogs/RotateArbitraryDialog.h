@@ -18,22 +18,22 @@ GNU General Public License for more details.
 class RotateArbitraryDialog : public CExtResizableDialog
 {
 public:
-    RotateArbitraryDialog(int degrees, CWnd* pParent = nullptr);   // standard constructor
-    int GetDegrees() { return _degrees; }
+	RotateArbitraryDialog(int degrees, CWnd* pParent = nullptr);   // standard constructor
+	int GetDegrees() { return _degrees; }
 
-    virtual void OnOK();
+	virtual void OnOK();
 
-    // Dialog Data
-    enum { IDD = IDD_ROTATENUMBER };
+	// Dialog Data
+	enum { IDD = IDD_ROTATENUMBER };
 
 private:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV support
 
-    int _degrees;
-    CExtEdit m_wndEditDegrees;
+	int _degrees;
+	CExtEdit m_wndEditDegrees;
 
-    // Visuals
-    CExtButton m_wndOk;
-    CExtButton m_wndCancel;
-    CExtLabel m_wndLabel1;
+	// Visuals
+	CExtButton m_wndOk;
+	CExtButton m_wndCancel;
+	CExtLabel m_wndLabel1;
 };

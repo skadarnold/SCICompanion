@@ -1,15 +1,15 @@
 /***************************************************************************
-    Copyright (c) 2015 Philip Fortier
+	Copyright (c) 2015 Philip Fortier
 
-    This program is free software; you can redistribute it and/or
-    modify it under the terms of the GNU General Public License
-    as published by the Free Software Foundation; either version 2
-    of the License, or (at your option) any later version.
+	This program is free software; you can redistribute it and/or
+	modify it under the terms of the GNU General Public License
+	as published by the Free Software Foundation; either version 2
+	of the License, or (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
 ***************************************************************************/
 
 // ResourcePreviewer.cpp : implementation file
@@ -42,22 +42,22 @@
 
 BOOL ResourcePreviewer::OnInitDialog()
 {
-    BOOL fRet = __super::OnInitDialog();
-    ShowSizeGrip(FALSE);
-    return fRet;
+	BOOL fRet = __super::OnInitDialog();
+	ShowSizeGrip(FALSE);
+	return fRet;
 }
 
 BEGIN_MESSAGE_MAP(ResourcePreviewer, ToolTipDialog)
-    ON_WM_WINDOWPOSCHANGED()
+	ON_WM_WINDOWPOSCHANGED()
 END_MESSAGE_MAP()
 
 void ResourcePreviewer::OnWindowPosChanged(WINDOWPOS* lpwndpos)
 {
-    if (lpwndpos->flags & SWP_HIDEWINDOW)
-    {
-        OnPreviewerHidden();
-    }
-    __super::OnWindowPosChanged(lpwndpos);
+	if (lpwndpos->flags & SWP_HIDEWINDOW)
+	{
+		OnPreviewerHidden();
+	}
+	__super::OnWindowPosChanged(lpwndpos);
 }
 
 
@@ -68,22 +68,22 @@ void PicPreviewer::DoDataExchange(CDataExchange* pDX)
 {
 	__super::DoDataExchange(pDX);
 
-    DDX_Control(pDX, IDC_STATICVISUAL, m_wndVisual);
-    DDX_Control(pDX, IDC_GROUPVISUAL, m_wndVisualGroup);
-    m_wndVisualGroup.SetStyle(CExtGroupBox::e_style_t::STYLE_CAPTION);
-    DDX_Control(pDX, IDC_STATICPRIORITY, m_wndPriority);
-    DDX_Control(pDX, IDC_GROUPPRIORITY, m_wndPriorityGroup);
-    m_wndPriorityGroup.SetStyle(CExtGroupBox::e_style_t::STYLE_CAPTION);
-    DDX_Control(pDX, IDC_STATICCONTROL, m_wndControl);
-    DDX_Control(pDX, IDC_GROUPCONTROL, m_wndControlGroup);
-    m_wndControlGroup.SetStyle(CExtGroupBox::e_style_t::STYLE_CAPTION);
+	DDX_Control(pDX, IDC_STATICVISUAL, m_wndVisual);
+	DDX_Control(pDX, IDC_GROUPVISUAL, m_wndVisualGroup);
+	m_wndVisualGroup.SetStyle(CExtGroupBox::e_style_t::STYLE_CAPTION);
+	DDX_Control(pDX, IDC_STATICPRIORITY, m_wndPriority);
+	DDX_Control(pDX, IDC_GROUPPRIORITY, m_wndPriorityGroup);
+	m_wndPriorityGroup.SetStyle(CExtGroupBox::e_style_t::STYLE_CAPTION);
+	DDX_Control(pDX, IDC_STATICCONTROL, m_wndControl);
+	DDX_Control(pDX, IDC_GROUPCONTROL, m_wndControlGroup);
+	m_wndControlGroup.SetStyle(CExtGroupBox::e_style_t::STYLE_CAPTION);
 
-    // Visuals
-    DDX_Control(pDX, IDC_BUTTON1, m_wndButton1);
-    DDX_Control(pDX, IDC_BUTTON2, m_wndButton2);
-    DDX_Control(pDX, IDC_BUTTON3, m_wndButton3);
-    DDX_Control(pDX, IDC_BUTTON4, m_wndButton4);
-    DDX_Control(pDX, IDC_STATICPALETTE, m_wndStaticPalette);
+	// Visuals
+	DDX_Control(pDX, IDC_BUTTON1, m_wndButton1);
+	DDX_Control(pDX, IDC_BUTTON2, m_wndButton2);
+	DDX_Control(pDX, IDC_BUTTON3, m_wndButton3);
+	DDX_Control(pDX, IDC_BUTTON4, m_wndButton4);
+	DDX_Control(pDX, IDC_STATICPALETTE, m_wndStaticPalette);
 }
 
 PicPreviewer::~PicPreviewer()
@@ -91,95 +91,95 @@ PicPreviewer::~PicPreviewer()
 }
 
 BEGIN_MESSAGE_MAP(PicPreviewer, ResourcePreviewer)
-    ON_COMMAND_EX(IDC_BUTTON1, OnSetPalette)
-    ON_COMMAND_EX(IDC_BUTTON2, OnSetPalette)
-    ON_COMMAND_EX(IDC_BUTTON3, OnSetPalette)
-    ON_COMMAND_EX(IDC_BUTTON4, OnSetPalette)
-    ON_WM_ERASEBKGND()
+	ON_COMMAND_EX(IDC_BUTTON1, OnSetPalette)
+	ON_COMMAND_EX(IDC_BUTTON2, OnSetPalette)
+	ON_COMMAND_EX(IDC_BUTTON3, OnSetPalette)
+	ON_COMMAND_EX(IDC_BUTTON4, OnSetPalette)
+	ON_WM_ERASEBKGND()
 END_MESSAGE_MAP()
 
 // CNoFlickerStatic message handlers
 BOOL PicPreviewer::OnEraseBkgnd(CDC *pDC)
 {
-    return TRUE;
+	return TRUE;
 }
 
 BOOL PicPreviewer::OnSetPalette(UINT nID)
 {
-    ASSERT((IDC_BUTTON4 - IDC_BUTTON1) == 3);
-    _paletteNumber = (BYTE)(nID - IDC_BUTTON1);
-    PicDrawManager pdm(&_pic->GetComponent<PicComponent>(), _pic->TryGetComponent<PaletteComponent>());
+	ASSERT((IDC_BUTTON4 - IDC_BUTTON1) == 3);
+	_paletteNumber = (BYTE)(nID - IDC_BUTTON1);
+	PicDrawManager pdm(&_pic->GetComponent<PicComponent>(), _pic->TryGetComponent<PaletteComponent>());
 
-    pdm.SetPalette(_paletteNumber);
-    _ResetVisualBitmap(_pic->GetComponent<PicComponent>(), pdm);
+	pdm.SetPalette(_paletteNumber);
+	_ResetVisualBitmap(_pic->GetComponent<PicComponent>(), pdm);
 
-    // Update buttons states - ON_UPDATE_COMMAND_UI doesn't work in dialogs.
-    for (UINT buttonId = IDC_BUTTON1; buttonId <= IDC_BUTTON4; buttonId++)
-    {
-        CExtButton *pButton = static_cast<CExtButton*>(GetDlgItem(buttonId));
-        pButton->SetCheck(buttonId == nID);
-    }
-    return TRUE;
+	// Update buttons states - ON_UPDATE_COMMAND_UI doesn't work in dialogs.
+	for (UINT buttonId = IDC_BUTTON1; buttonId <= IDC_BUTTON4; buttonId++)
+	{
+		CExtButton *pButton = static_cast<CExtButton*>(GetDlgItem(buttonId));
+		pButton->SetCheck(buttonId == nID);
+	}
+	return TRUE;
 }
 
 void PicPreviewer::OnUpdatePaletteButton(CCmdUI *pCmdUI)
 {
-    BYTE paletteNumber = (BYTE)(pCmdUI->m_nID - IDC_BUTTON1);
-    pCmdUI->Enable(TRUE);
-    pCmdUI->SetCheck(paletteNumber == _paletteNumber);
+	BYTE paletteNumber = (BYTE)(pCmdUI->m_nID - IDC_BUTTON1);
+	pCmdUI->Enable(TRUE);
+	pCmdUI->SetCheck(paletteNumber == _paletteNumber);
 }
 
 void AdjustPicRectBasedOnDefaultResolution(NativeResolution resolution, CRect &rc)
 {
-    if (resolution == NativeResolution::Res640x480)
-    {
-        int shrinkBy = rc.Width() - rc.Width() * 5 / 6;
-        rc.left += shrinkBy / 2;
-        rc.right -= shrinkBy - (shrinkBy / 2);
-    }
+	if (resolution == NativeResolution::Res640x480)
+	{
+		int shrinkBy = rc.Width() - rc.Width() * 5 / 6;
+		rc.left += shrinkBy / 2;
+		rc.right -= shrinkBy - (shrinkBy / 2);
+	}
 }
 
 void PicPreviewer::_ResetVisualBitmap(const PicComponent &pic, PicDrawManager &pdm)
 {
-    CRect rc;
-    m_wndVisual.GetClientRect(&rc);
-    CBitmap bitmap;
-    AdjustPicRectBasedOnDefaultResolution(appState->GetVersion().DefaultResolution, rc);
-    bitmap.Attach(pdm.CreateBitmap(PicScreen::Visual, PicPosition::Final, pic.Size, rc.Width(), rc.Height()));
-    m_wndVisual.FromBitmap((HBITMAP)bitmap, rc.Width(), rc.Height(), true);
+	CRect rc;
+	m_wndVisual.GetClientRect(&rc);
+	CBitmap bitmap;
+	AdjustPicRectBasedOnDefaultResolution(appState->GetVersion().DefaultResolution, rc);
+	bitmap.Attach(pdm.CreateBitmap(PicScreen::Visual, PicPosition::Final, pic.Size, rc.Width(), rc.Height()));
+	m_wndVisual.FromBitmap((HBITMAP)bitmap, rc.Width(), rc.Height(), true);
 }
 
 void PicPreviewer::SetResource(const ResourceBlob &blob)
 {
-    _pic = CreateResourceFromResourceData(blob);
-    const PicComponent &pic = _pic->GetComponent<PicComponent>();
+	_pic = CreateResourceFromResourceData(blob);
+	const PicComponent &pic = _pic->GetComponent<PicComponent>();
 
-    int showSCI0PaletteControls = pic.Traits->IsVGA ? SW_HIDE : SW_SHOW;
-    int showControlSCreen = pic.Traits->SupportsControlScreen ? SW_SHOW : SW_HIDE;
+	int showSCI0PaletteControls = pic.Traits->IsVGA ? SW_HIDE : SW_SHOW;
+	int showControlSCreen = pic.Traits->SupportsControlScreen ? SW_SHOW : SW_HIDE;
 
-    m_wndButton1.ShowWindow(showSCI0PaletteControls);
-    m_wndButton2.ShowWindow(showSCI0PaletteControls);
-    m_wndButton3.ShowWindow(showSCI0PaletteControls);
-    m_wndButton4.ShowWindow(showSCI0PaletteControls);
-    m_wndStaticPalette.ShowWindow(showSCI0PaletteControls);
+	m_wndButton1.ShowWindow(showSCI0PaletteControls);
+	m_wndButton2.ShowWindow(showSCI0PaletteControls);
+	m_wndButton3.ShowWindow(showSCI0PaletteControls);
+	m_wndButton4.ShowWindow(showSCI0PaletteControls);
+	m_wndStaticPalette.ShowWindow(showSCI0PaletteControls);
 
-    PicDrawManager pdm(&pic, _pic->TryGetComponent<PaletteComponent>());
-    pdm.SetPalette(_paletteNumber);
-    pdm.RefreshAllScreens(PicScreenFlags::All, PicPositionFlags::Final); // Be efficient - we're going to get all 3 screens.
-    _ResetVisualBitmap(pic, pdm);
+	PicDrawManager pdm(&pic, _pic->TryGetComponent<PaletteComponent>());
+	pdm.SetPalette(_paletteNumber);
+	pdm.RefreshAllScreens(PicScreenFlags::All, PicPositionFlags::Final); // Be efficient - we're going to get all 3 screens.
+	_ResetVisualBitmap(pic, pdm);
 
-    // Do the priority and controls too.
-    CRect rc;
-    m_wndVisual.GetClientRect(&rc);
-    AdjustPicRectBasedOnDefaultResolution(appState->GetVersion().DefaultResolution, rc);
-    CBitmap bitmapP;
-    bitmapP.Attach(pdm.CreateBitmap(PicScreen::Priority, PicPosition::Final, pic.Size, rc.Width(), rc.Height()));
-    m_wndPriority.FromBitmap((HBITMAP)bitmapP, rc.Width(), rc.Height(), true);
-    CBitmap bitmapC;
-    bitmapC.Attach(pdm.CreateBitmap(PicScreen::Control, PicPosition::Final, pic.Size, rc.Width(), rc.Height()));
-    m_wndControl.FromBitmap((HBITMAP)bitmapC, rc.Width(), rc.Height(), true);
-    m_wndControl.ShowWindow(showControlSCreen);
-    m_wndControlGroup.ShowWindow(showControlSCreen);
+	// Do the priority and controls too.
+	CRect rc;
+	m_wndVisual.GetClientRect(&rc);
+	AdjustPicRectBasedOnDefaultResolution(appState->GetVersion().DefaultResolution, rc);
+	CBitmap bitmapP;
+	bitmapP.Attach(pdm.CreateBitmap(PicScreen::Priority, PicPosition::Final, pic.Size, rc.Width(), rc.Height()));
+	m_wndPriority.FromBitmap((HBITMAP)bitmapP, rc.Width(), rc.Height(), true);
+	CBitmap bitmapC;
+	bitmapC.Attach(pdm.CreateBitmap(PicScreen::Control, PicPosition::Final, pic.Size, rc.Width(), rc.Height()));
+	m_wndControl.FromBitmap((HBITMAP)bitmapC, rc.Width(), rc.Height(), true);
+	m_wndControl.ShowWindow(showControlSCreen);
+	m_wndControlGroup.ShowWindow(showControlSCreen);
 }
 
 //
@@ -190,60 +190,60 @@ END_MESSAGE_MAP()
 
 void ViewPreviewer::SetResource(const ResourceBlob &blob)
 {
-    //
-    // Generate a large bitmap containing all the views.
-    //
-    _view = CreateResourceFromResourceData(blob);
-    CBitmap bitmap;
-    SCIBitmapInfo bmi;
-    BYTE *pBitsDest;
+	//
+	// Generate a large bitmap containing all the views.
+	//
+	_view = CreateResourceFromResourceData(blob);
+	CBitmap bitmap;
+	SCIBitmapInfo bmi;
+	BYTE *pBitsDest;
 
-    m_wndStaticResNum.SetWindowText(GetFileNameFor(blob).c_str());
+	m_wndStaticResNum.SetWindowText(GetFileNameFor(blob).c_str());
 
-    std::unique_ptr<PaletteComponent> optionalPalette;
-    if (_view->GetComponent<RasterComponent>().Traits.PaletteType == PaletteType::VGA_256)
-    {
-        optionalPalette = appState->GetResourceMap().GetMergedPalette(*_view, 999);
-    }
-    bitmap.Attach(CreateBitmapFromResource(*_view, optionalPalette.get(), &bmi, &pBitsDest));
-    m_wndView.FromBitmap((HBITMAP)bitmap, bmi.bmiHeader.biWidth, abs(bmi.bmiHeader.biHeight), true);
+	std::unique_ptr<PaletteComponent> optionalPalette;
+	if (_view->GetComponent<RasterComponent>().Traits.PaletteType == PaletteType::VGA_256)
+	{
+		optionalPalette = appState->GetResourceMap().GetMergedPalette(*_view, 999);
+	}
+	bitmap.Attach(CreateBitmapFromResource(*_view, optionalPalette.get(), &bmi, &pBitsDest));
+	m_wndView.FromBitmap((HBITMAP)bitmap, bmi.bmiHeader.biWidth, abs(bmi.bmiHeader.biHeight), true);
 
-    // Don't use the fallback here:
-    if (_view->TryGetComponent<PaletteComponent>())
-    {
-        CBitmap bitmapPalette;
-        SCIBitmapInfo bmiPalette;
-        COLORREF background = g_PaintManager->GetColor(COLOR_3DFACE);
-        std::vector<const Cel*> cels;
-        RasterComponent &raster = _view->GetComponent<RasterComponent>();
-        for (Loop &loop : raster.Loops)
-        {
-            for (Cel &cel : loop.Cels)
-            {
-                cels.push_back(&cel);
-            }
-        }
+	// Don't use the fallback here:
+	if (_view->TryGetComponent<PaletteComponent>())
+	{
+		CBitmap bitmapPalette;
+		SCIBitmapInfo bmiPalette;
+		COLORREF background = g_PaintManager->GetColor(COLOR_3DFACE);
+		std::vector<const Cel*> cels;
+		RasterComponent &raster = _view->GetComponent<RasterComponent>();
+		for (Loop &loop : raster.Loops)
+		{
+			for (Cel &cel : loop.Cels)
+			{
+				cels.push_back(&cel);
+			}
+		}
 
-        bitmapPalette.Attach(CreateBitmapFromPaletteResource(_view.get(), &bmiPalette, &pBitsDest, &background, &cels));
-        m_wndPalette.ShowWindow(SW_SHOW);
-        m_wndPalette.FromBitmap((HBITMAP)bitmapPalette, bmiPalette.bmiHeader.biWidth, abs(bmiPalette.bmiHeader.biHeight), false);
-    }
-    else
-    {
-        m_wndPalette.ShowWindow(SW_HIDE);
-        //m_wndPalette.FromBitmap(nullptr, 0, 0);
-    }
+		bitmapPalette.Attach(CreateBitmapFromPaletteResource(_view.get(), &bmiPalette, &pBitsDest, &background, &cels));
+		m_wndPalette.ShowWindow(SW_SHOW);
+		m_wndPalette.FromBitmap((HBITMAP)bitmapPalette, bmiPalette.bmiHeader.biWidth, abs(bmiPalette.bmiHeader.biHeight), false);
+	}
+	else
+	{
+		m_wndPalette.ShowWindow(SW_HIDE);
+		//m_wndPalette.FromBitmap(nullptr, 0, 0);
+	}
 }
 
 void ViewPreviewer::DoDataExchange(CDataExchange* pDX)
 {
 	__super::DoDataExchange(pDX);
-    DDX_Control(pDX, IDC_STATICVIEW, m_wndView);
-    AddAnchor(IDC_STATICVIEW, CPoint(0, 0), CPoint(100, 100));
-    DDX_Control(pDX, IDC_STATIC2, m_wndPalette);
-    AddAnchor(IDC_STATIC2, CPoint(50, 100), CPoint(50, 100));
-    DDX_Control(pDX, IDC_STATICRESNUM, m_wndStaticResNum);
-    AddAnchor(IDC_STATICRESNUM, CPoint(0, 0), CPoint(100, 0));
+	DDX_Control(pDX, IDC_STATICVIEW, m_wndView);
+	AddAnchor(IDC_STATICVIEW, CPoint(0, 0), CPoint(100, 100));
+	DDX_Control(pDX, IDC_STATIC2, m_wndPalette);
+	AddAnchor(IDC_STATIC2, CPoint(50, 100), CPoint(50, 100));
+	DDX_Control(pDX, IDC_STATICRESNUM, m_wndStaticResNum);
+	AddAnchor(IDC_STATICRESNUM, CPoint(0, 0), CPoint(100, 0));
 }
 
 //
@@ -254,29 +254,29 @@ END_MESSAGE_MAP()
 
 void PalettePreviewer::SetResource(const ResourceBlob &blob)
 {
-    //
-    // Generate a large bitmap containing all the views.
-    //
-    _palette = CreateResourceFromResourceData(blob);
-    CBitmap bitmap;
-    SCIBitmapInfo bmi;
-    BYTE *pBitsDest;
-    COLORREF background = g_PaintManager->GetColor(COLOR_3DFACE);
-    bitmap.Attach(CreateBitmapFromPaletteResource(_palette.get(), &bmi, &pBitsDest, &background));
-    m_wndView.FromBitmap((HBITMAP)bitmap, bmi.bmiHeader.biWidth, abs(bmi.bmiHeader.biHeight), false);
+	//
+	// Generate a large bitmap containing all the views.
+	//
+	_palette = CreateResourceFromResourceData(blob);
+	CBitmap bitmap;
+	SCIBitmapInfo bmi;
+	BYTE *pBitsDest;
+	COLORREF background = g_PaintManager->GetColor(COLOR_3DFACE);
+	bitmap.Attach(CreateBitmapFromPaletteResource(_palette.get(), &bmi, &pBitsDest, &background));
+	m_wndView.FromBitmap((HBITMAP)bitmap, bmi.bmiHeader.biWidth, abs(bmi.bmiHeader.biHeight), false);
 
-    m_wndStaticResNum.SetWindowText(GetFileNameFor(blob).c_str());
+	m_wndStaticResNum.SetWindowText(GetFileNameFor(blob).c_str());
 }
 
 void PalettePreviewer::DoDataExchange(CDataExchange* pDX)
 {
-    __super::DoDataExchange(pDX);
-    DDX_Control(pDX, IDC_STATICVIEW, m_wndView);
-    AddAnchor(IDC_STATICVIEW, CPoint(0, 0), CPoint(100, 100));
-    DDX_Control(pDX, IDC_STATIC2, m_wndPaletteNOT);
-    AddAnchor(IDC_STATIC2, CPoint(100, 100), CPoint(100, 100));
-    DDX_Control(pDX, IDC_STATICRESNUM, m_wndStaticResNum);
-    AddAnchor(IDC_STATICRESNUM, CPoint(0, 0), CPoint(100, 0));
+	__super::DoDataExchange(pDX);
+	DDX_Control(pDX, IDC_STATICVIEW, m_wndView);
+	AddAnchor(IDC_STATICVIEW, CPoint(0, 0), CPoint(100, 100));
+	DDX_Control(pDX, IDC_STATIC2, m_wndPaletteNOT);
+	AddAnchor(IDC_STATIC2, CPoint(100, 100), CPoint(100, 100));
+	DDX_Control(pDX, IDC_STATICRESNUM, m_wndStaticResNum);
+	AddAnchor(IDC_STATICRESNUM, CPoint(0, 0), CPoint(100, 0));
 }
 
 //
@@ -289,61 +289,61 @@ ScriptPreviewer::~ScriptPreviewer() {}
 
 void ScriptPreviewer::SetResource(const ResourceBlob &blob)
 {
-    // Try to find a source file.
-    std::string scriptFileName = appState->GetResourceMap().Helper().GetScriptFileName(blob.GetName());
+	// Try to find a source file.
+	std::string scriptFileName = appState->GetResourceMap().Helper().GetScriptFileName(blob.GetName());
 
-    std::ifstream scriptFile(scriptFileName.c_str());
-    if (scriptFile.is_open())
-    {
-        ScriptId scriptId(scriptFileName);
+	std::ifstream scriptFile(scriptFileName.c_str());
+	if (scriptFile.is_open())
+	{
+		ScriptId scriptId(scriptFileName);
 		/*
-        if (scriptId.Language() == LangSyntaxStudio)
-        {
-            m_wndHeader.SetWindowText("Language: SCI Studio");
-        }
-        else
-        {
-            m_wndHeader.SetWindowText("Language: Sierra");
-        }
+		if (scriptId.Language() == LangSyntaxStudio)
+		{
+			m_wndHeader.SetWindowText("Language: SCI Studio");
+		}
+		else
+		{
+			m_wndHeader.SetWindowText("Language: Sierra");
+		}
 		*/
-        std::string scriptText;
-        std::string line;
-        while (std::getline(scriptFile, line))
-        {
-            scriptText += line;
-            scriptText += "\r\n";
+		std::string scriptText;
+		std::string line;
+		while (std::getline(scriptFile, line))
+		{
+			scriptText += line;
+			scriptText += "\r\n";
 
-        }
-        m_wndEdit.SetWindowText(scriptText.c_str());
-    }
-    else
-    {
-        //m_wndHeader.SetWindowText("");
+		}
+		m_wndEdit.SetWindowText(scriptText.c_str());
+	}
+	else
+	{
+		//m_wndHeader.SetWindowText("");
 
-        // If that wasn't possible, spew info from the compiled script resource:
-        CompiledScript compiledScript(0);
-        if (compiledScript.Load(appState->GetResourceMap().Helper(), appState->GetVersion(), blob.GetNumber(), blob.GetReadStream()))
-        {
-            // Write some crap.
-            std::stringstream out;
-            DebugOut(compiledScript, out, true);
-            // Now we have a stream.  Put it in the edit box
-            m_wndEdit.SetWindowText(out.str().c_str());
-        }
-        else
-        {
-            m_wndEdit.SetWindowText("Unable to load script.");
-        }
-    }
+		// If that wasn't possible, spew info from the compiled script resource:
+		CompiledScript compiledScript(0);
+		if (compiledScript.Load(appState->GetResourceMap().Helper(), appState->GetVersion(), blob.GetNumber(), blob.GetReadStream()))
+		{
+			// Write some crap.
+			std::stringstream out;
+			DebugOut(compiledScript, out, true);
+			// Now we have a stream.  Put it in the edit box
+			m_wndEdit.SetWindowText(out.str().c_str());
+		}
+		else
+		{
+			m_wndEdit.SetWindowText("Unable to load script.");
+		}
+	}
 }
 
 void ScriptPreviewer::DoDataExchange(CDataExchange* pDX)
 {
 	__super::DoDataExchange(pDX);
 
-    DDX_Control(pDX, IDC_EDITSCRIPT, m_wndEdit);
-    //DDX_Control(pDX, IDC_STATICHEADER, m_wndHeader);
-    AddAnchor(IDC_EDITSCRIPT, CPoint(0, 0), CPoint(100, 100));
+	DDX_Control(pDX, IDC_EDITSCRIPT, m_wndEdit);
+	//DDX_Control(pDX, IDC_STATICHEADER, m_wndHeader);
+	AddAnchor(IDC_EDITSCRIPT, CPoint(0, 0), CPoint(100, 100));
 }
 
 
@@ -358,46 +358,46 @@ TextPreviewer::~TextPreviewer() {}
 
 void TextPreviewer::SetResource(const ResourceBlob &blob)
 {
-    std::unique_ptr<ResourceEntity> resource = CreateResourceFromResourceData(blob);
-    TextComponent *pText = resource->TryGetComponent<TextComponent>();
+	std::unique_ptr<ResourceEntity> resource = CreateResourceFromResourceData(blob);
+	TextComponent *pText = resource->TryGetComponent<TextComponent>();
 
-    if (blob.GetType() == ResourceType::Message)
-    {
-        m_wndTitle.SetWindowText("Message resources are used for displaying text and (optionally) lip-sync'd audio in-game.");
-    }
-    else
-    {
-        if (appState->GetVersion().SupportsMessages)
-        {
-            m_wndTitle.SetWindowText("Text resources can be used for displaying text in-game. Message resources have generally replaced Text resources for SCI1 and above.");
-        }
-        else
-        {
-            m_wndTitle.SetWindowText("Text resources can be used for displaying text in-game.");
-        }
-    }
+	if (blob.GetType() == ResourceType::Message)
+	{
+		m_wndTitle.SetWindowText("Message resources are used for displaying text and (optionally) lip-sync'd audio in-game.");
+	}
+	else
+	{
+		if (appState->GetVersion().SupportsMessages)
+		{
+			m_wndTitle.SetWindowText("Text resources can be used for displaying text in-game. Message resources have generally replaced Text resources for SCI1 and above.");
+		}
+		else
+		{
+			m_wndTitle.SetWindowText("Text resources can be used for displaying text in-game.");
+		}
+	}
 
-    if (pText)
-    {
-        std::stringstream ss;
-        for (auto &aString : pText->Texts)
-        {
-            ss << aString.Text << "\r\n";
-        }
-        m_wndEdit.SetWindowText(ss.str().c_str());
-    }
-    else
-    {
-        m_wndEdit.SetWindowText("Unable to load text resource.");
-    }
+	if (pText)
+	{
+		std::stringstream ss;
+		for (auto &aString : pText->Texts)
+		{
+			ss << aString.Text << "\r\n";
+		}
+		m_wndEdit.SetWindowText(ss.str().c_str());
+	}
+	else
+	{
+		m_wndEdit.SetWindowText("Unable to load text resource.");
+	}
 }
 
 void TextPreviewer::DoDataExchange(CDataExchange* pDX)
 {
 	__super::DoDataExchange(pDX);
-    DDX_Control(pDX, IDC_EDITSCRIPT, m_wndEdit);
-    DDX_Control(pDX, IDC_STATICTITLE, m_wndTitle);
-    AddAnchor(IDC_EDITSCRIPT, CPoint(0, 0), CPoint(100, 100));
+	DDX_Control(pDX, IDC_EDITSCRIPT, m_wndEdit);
+	DDX_Control(pDX, IDC_STATICTITLE, m_wndTitle);
+	AddAnchor(IDC_EDITSCRIPT, CPoint(0, 0), CPoint(100, 100));
 }
 
 
@@ -415,8 +415,8 @@ void MapPreviewer::SetResource(const ResourceBlob &blob) {}
 
 void MapPreviewer::DoDataExchange(CDataExchange* pDX)
 {
-    __super::DoDataExchange(pDX);
-    DDX_Control(pDX, IDC_STATICTITLE, m_wndTitle);
+	__super::DoDataExchange(pDX);
+	DDX_Control(pDX, IDC_STATICTITLE, m_wndTitle);
 }
 
 
@@ -432,83 +432,83 @@ VocabPreviewer::~VocabPreviewer() {}
 
 void VocabPreviewer::_Populate(const std::vector<std::string> &names, const bool prependNumber)
 {
-    std::vector<std::string>::const_iterator it = names.begin();
-    
-    std::stringstream text;
-    int index = 0;
-    while (it != names.end())
-    {
-        if (prependNumber)
-        {
+	std::vector<std::string>::const_iterator it = names.begin();
+	
+	std::stringstream text;
+	int index = 0;
+	while (it != names.end())
+	{
+		if (prependNumber)
+		{
 #ifdef KAWA_VOCABPREVIEWS
 			// Match selector list format
-            text << index << " (0x" << std::hex << (index) << std::dec << "): ";
+			text << index << " (0x" << std::hex << (index) << std::dec << "): ";
 #else
 			text << index << ": ";
 #endif
-        }
+		}
 
-        const std::string &line = (*it);
-        // Replace \n with \r\n for display in the edit control
-        size_t position = 0;
-        size_t carriageReturnPos = line.find('\n', position);
-        while (carriageReturnPos != std::string::npos)
-        {
-            text << line.substr(position, carriageReturnPos - position);
-            position = carriageReturnPos + 1;
+		const std::string &line = (*it);
+		// Replace \n with \r\n for display in the edit control
+		size_t position = 0;
+		size_t carriageReturnPos = line.find('\n', position);
+		while (carriageReturnPos != std::string::npos)
+		{
+			text << line.substr(position, carriageReturnPos - position);
+			position = carriageReturnPos + 1;
 
-            text << "\r\n";
-            carriageReturnPos = line.find('\n', position);
-        }
+			text << "\r\n";
+			carriageReturnPos = line.find('\n', position);
+		}
 
-        text << line.substr(position);
+		text << line.substr(position);
 
-        text << "\r\n";
-        ++it;
-        index++;
-    }
-    m_wndEdit.SetWindowText(text.str().c_str());
+		text << "\r\n";
+		++it;
+		index++;
+	}
+	m_wndEdit.SetWindowText(text.str().c_str());
 }
 
 void VocabPreviewer::SetResource(const ResourceBlob &blob)
 {
-    // It appears that the different vocabs have different formats.  We would need
-    // to write previers for each kind.
-    // Let's use some heuristics to determine how to load them.
-    int iNumber = blob.GetNumber();
-    bool fSuccess = false;
+	// It appears that the different vocabs have different formats.  We would need
+	// to write previers for each kind.
+	// Let's use some heuristics to determine how to load them.
+	int iNumber = blob.GetNumber();
+	bool fSuccess = false;
 
-    if (iNumber == appState->GetVersion().MainVocabResource)
-    {
-        CPrecisionTimer timer;
-        timer.Start();
-        double initTime = 0.0;
-        double popTime = 0.0;
-        std::unique_ptr<ResourceEntity> pResource = CreateResourceFromResourceData(blob);
-        if (pResource)
-        {
+	if (iNumber == appState->GetVersion().MainVocabResource)
+	{
+		CPrecisionTimer timer;
+		timer.Start();
+		double initTime = 0.0;
+		double popTime = 0.0;
+		std::unique_ptr<ResourceEntity> pResource = CreateResourceFromResourceData(blob);
+		if (pResource)
+		{
 			timer.Stop();
 			initTime = timer.GetElapsed();
 
-            timer.Start();
-            _Populate(pResource->GetComponent<Vocab000>().GetWords());
+			timer.Start();
+			_Populate(pResource->GetComponent<Vocab000>().GetWords());
 			timer.Stop();
 			popTime = timer.GetElapsed();
-            fSuccess = true;
-        }
-    }
-    else
-    {
-        switch (iNumber)
-        {
+			fSuccess = true;
+		}
+	}
+	else
+	{
+		switch (iNumber)
+		{
 #ifdef KAWA_VOCABPREVIEWS
 		case 994: //KAWA - object offsets
 		{
 			//SV: OBJECT | OFFSET
 			//-------------------
-			//    0        5
-			//    1        4
-			//    2        14
+			//	0		5
+			//	1		4
+			//	2		14
 			//from "05 00 04 00 0e 00", so each short is an object's offset
 			std::vector<std::string> output;
 			output.push_back("object\toffset");
@@ -530,50 +530,50 @@ void VocabPreviewer::SetResource(const ResourceBlob &blob)
 		}
 		break;
 #endif
-        case 995: // debug info
-        {
-            CVocabWithNames vocab;
-            if (vocab.Create(&blob.GetReadStream(), true))
-            {
-                _Populate(vocab.GetNames());
-                fSuccess = true;
-            }
-        }
-        break;
-        case 996: // species table
-        {
-            SpeciesTable species;
-            if (species.Load(appState->GetResourceMap().Helper()))
-            {
-                _Populate(species.GetNames());
-                fSuccess = true;
-            }
-        }
-        break;
-        case 997: // selector table
-        {
-            SelectorTable selectors;
-            if (selectors.Load(appState->GetResourceMap().Helper()))
-            {
-                _Populate(selectors.GetNamesForDisplay(), false);
-                fSuccess = true;
-            }
-        }
-        break;
+		case 995: // debug info
+		{
+			CVocabWithNames vocab;
+			if (vocab.Create(&blob.GetReadStream(), true))
+			{
+				_Populate(vocab.GetNames());
+				fSuccess = true;
+			}
+		}
+		break;
+		case 996: // species table
+		{
+			SpeciesTable species;
+			if (species.Load(appState->GetResourceMap().Helper()))
+			{
+				_Populate(species.GetNames());
+				fSuccess = true;
+			}
+		}
+		break;
+		case 997: // selector table
+		{
+			SelectorTable selectors;
+			if (selectors.Load(appState->GetResourceMap().Helper()))
+			{
+				_Populate(selectors.GetNamesForDisplay(), false);
+				fSuccess = true;
+			}
+		}
+		break;
 #ifdef KAWA_VOCABPREVIEWS
 		/* case 998: //KAWA - opcodes
 		{
 			//SV: OPCODE / 2 | INSTRUCTION | FLAGS
 			//------------------------------------
-			//    $00          bnot          $00
-			//    $01          add           $00
-			//    $17          bt            $03
+			//	$00		  bnot		  $00
+			//	$01		  add		   $00
+			//	$17		  bt			$03
 			//from "80 00 02 01 0a 01 11 01-18 01 1f 01 26 01 2d 01"
 			//so that's
 			//  80 00: amount of opcodes
 			//  that many short offset to opcodes
-			//  06 00 00 00 62 6E 6F 74     0006 0000 bnot
-			//  04 00 03 00 62 74           0004 0003 bt
+			//  06 00 00 00 62 6E 6F 74	 0006 0000 bnot
+			//  04 00 03 00 62 74		   0004 0003 bt
 			//so for each opcode
 			//  short length of code (strlen + flags)
 			//  short flags
@@ -582,33 +582,33 @@ void VocabPreviewer::SetResource(const ResourceBlob &blob)
 		break; */
 #endif
 		case 999: // kernel functions
-        {
-            KernelTable kernels;
-            if (kernels.Load(appState->GetResourceMap().Helper()))
-            {
-                _Populate(kernels.GetNames(), true);
-                fSuccess = true;
-            }
-        }
-        break;
-        default:
-            m_wndEdit.SetWindowText(GetBinaryDataVisualization(blob.GetData(), blob.GetLength()).c_str());
-            fSuccess = true;
-            break;
-        }
-    }
+		{
+			KernelTable kernels;
+			if (kernels.Load(appState->GetResourceMap().Helper()))
+			{
+				_Populate(kernels.GetNames(), true);
+				fSuccess = true;
+			}
+		}
+		break;
+		default:
+			m_wndEdit.SetWindowText(GetBinaryDataVisualization(blob.GetData(), blob.GetLength()).c_str());
+			fSuccess = true;
+			break;
+		}
+	}
 
-    if (!fSuccess)
-    {
-        m_wndEdit.SetWindowText("Unable to load vocab resource.");
-    }
+	if (!fSuccess)
+	{
+		m_wndEdit.SetWindowText("Unable to load vocab resource.");
+	}
 }
 
 void VocabPreviewer::DoDataExchange(CDataExchange* pDX)
 {
 	__super::DoDataExchange(pDX);
-    DDX_Control(pDX, IDC_EDITSCRIPT, m_wndEdit);
-    AddAnchor(IDC_EDITSCRIPT, CPoint(0, 0), CPoint(100, 100));
+	DDX_Control(pDX, IDC_EDITSCRIPT, m_wndEdit);
+	AddAnchor(IDC_EDITSCRIPT, CPoint(0, 0), CPoint(100, 100));
 }
 
 
@@ -623,40 +623,40 @@ FontPreviewer::~FontPreviewer() {}
 
 void FontPreviewer::SetResource(const ResourceBlob &blob)
 {
-    _pFont = CreateResourceFromResourceData(blob);
-    // Show a preview of entire font.
-    std::stringstream ss;
-    RasterComponent &rasterComponent = _pFont->GetComponent<RasterComponent>();
+	_pFont = CreateResourceFromResourceData(blob);
+	// Show a preview of entire font.
+	std::stringstream ss;
+	RasterComponent &rasterComponent = _pFont->GetComponent<RasterComponent>();
 #ifndef KAWA_FONTLIMITBREAK
 	for (size_t i = 0; i < rasterComponent.Loops[0].Cels.size(); i++)
 #else
 	for (size_t i = 0; i < min(rasterComponent.Loops[0].Cels.size(), 255); i++)
 #endif
-    {
-        ss << (char)i;
-    }
-    _pWndFontView->OverridePreviewLetters(ss.str());
-    _pWndFontView->SetFontResource(_pFont.get());
+	{
+		ss << (char)i;
+	}
+	_pWndFontView->OverridePreviewLetters(ss.str());
+	_pWndFontView->SetFontResource(_pFont.get());
 }
 
 BOOL FontPreviewer::OnInitDialog()
 {
-    BOOL fRet = __super::OnInitDialog();
-    CRect rc;
-    GetClientRect(&rc);
-    CCreateContext context;
-    context.m_pNewViewClass = RUNTIME_CLASS(CFontPreviewView);
-    _pWndFontView = static_cast<CFontPreviewView*>(context.m_pNewViewClass->CreateObject());
-    if (!_pWndFontView->Create(NULL, NULL, AFX_WS_DEFAULT_VIEW,
+	BOOL fRet = __super::OnInitDialog();
+	CRect rc;
+	GetClientRect(&rc);
+	CCreateContext context;
+	context.m_pNewViewClass = RUNTIME_CLASS(CFontPreviewView);
+	_pWndFontView = static_cast<CFontPreviewView*>(context.m_pNewViewClass->CreateObject());
+	if (!_pWndFontView->Create(NULL, NULL, AFX_WS_DEFAULT_VIEW,
 		rc, this, 12345, &context))
-    {
-        return FALSE;
-    }
-    else
-    {
-        AddAnchor(_pWndFontView->GetSafeHwnd(), CSize(0, 0), CSize(100, 100));
-    }
-    return fRet;
+	{
+		return FALSE;
+	}
+	else
+	{
+		AddAnchor(_pWndFontView->GetSafeHwnd(), CSize(0, 0), CSize(100, 100));
+	}
+	return fRet;
 }
 
 void FontPreviewer::DoDataExchange(CDataExchange* pDX)
@@ -671,11 +671,11 @@ void FontPreviewer::DoDataExchange(CDataExchange* pDX)
 // Sound previewer
 //
 BEGIN_MESSAGE_MAP(SoundPreviewer, ResourcePreviewer)
-    ON_CBN_SELCHANGE(IDC_COMBO_DEVICE, OnSynthChoiceChange)
-    ON_CBN_SELCHANGE(IDC_COMBO_MIDIDEVICE, OnMIDIDeviceChange)
-    ON_BN_CLICKED(IDC_BUTTON_PLAY, OnPlay)
-    ON_BN_CLICKED(IDC_BUTTON_STOP, OnStop)
-    ON_WM_TIMER()
+	ON_CBN_SELCHANGE(IDC_COMBO_DEVICE, OnSynthChoiceChange)
+	ON_CBN_SELCHANGE(IDC_COMBO_MIDIDEVICE, OnMIDIDeviceChange)
+	ON_BN_CLICKED(IDC_BUTTON_PLAY, OnPlay)
+	ON_BN_CLICKED(IDC_BUTTON_STOP, OnStop)
+	ON_WM_TIMER()
 END_MESSAGE_MAP()
 
 #define SOUND_TIMER 5003
@@ -686,238 +686,238 @@ SoundPreviewer::SoundPreviewer() : _lastVersion({ })
 
 void SoundPreviewer::SetResource(const ResourceBlob &blob)
 {
-    // Add the items to the combobox.
-    if (blob.GetVersion() != _lastVersion)
-    {
-        _lastVersion = blob.GetVersion();
+	// Add the items to the combobox.
+	if (blob.GetVersion() != _lastVersion)
+	{
+		_lastVersion = blob.GetVersion();
 
-        m_wndSynths.ResetContent();
-        PopulateComboWithDevicesHelper(blob.GetVersion(), m_wndSynths);
-        m_wndSynths.SetCurSel(0);
-        OnSynthChoiceChange();
-    }
+		m_wndSynths.ResetContent();
+		PopulateComboWithDevicesHelper(blob.GetVersion(), m_wndSynths);
+		m_wndSynths.SetCurSel(0);
+		OnSynthChoiceChange();
+	}
 
-    _sound = CreateResourceFromResourceData(blob);
+	_sound = CreateResourceFromResourceData(blob);
 
-    std::string durationString = "Duration: ";
-    SoundComponent *soundComp = _sound->TryGetComponent<SoundComponent>();
-    if (soundComp)
-    {
-        SelectFirstDeviceWithChannels(blob.GetVersion(), m_wndSynths, *soundComp);
-        OnSynthChoiceChange();
+	std::string durationString = "Duration: ";
+	SoundComponent *soundComp = _sound->TryGetComponent<SoundComponent>();
+	if (soundComp)
+	{
+		SelectFirstDeviceWithChannels(blob.GetVersion(), m_wndSynths, *soundComp);
+		OnSynthChoiceChange();
 
-        m_wndSynths.EnableWindow(TRUE);
-        g_midiPlayer.SetSound(*soundComp, StandardTempo); // We don't have a tempo control
+		m_wndSynths.EnableWindow(TRUE);
+		g_midiPlayer.SetSound(*soundComp, StandardTempo); // We don't have a tempo control
 
-        m_wndChannels.ShowWindow(soundComp->Traits.CanEditChannelMask ? SW_SHOW : SW_HIDE);
-        m_wndDuration.SetWindowText((durationString + GetSoundLength(*soundComp)).c_str());
-    }
-    else
-    {
-        m_wndSynths.EnableWindow(FALSE);
-        m_wndChannels.ShowWindow(SW_HIDE);
-    }
-    OnSynthChoiceChange();
-    if (m_wndAutoPreview.GetCheck() == BST_CHECKED)
-    {
-        OnPlay();
-    }
-    else
-    {
-        OnStop();
-    }
+		m_wndChannels.ShowWindow(soundComp->Traits.CanEditChannelMask ? SW_SHOW : SW_HIDE);
+		m_wndDuration.SetWindowText((durationString + GetSoundLength(*soundComp)).c_str());
+	}
+	else
+	{
+		m_wndSynths.EnableWindow(FALSE);
+		m_wndChannels.ShowWindow(SW_HIDE);
+	}
+	OnSynthChoiceChange();
+	if (m_wndAutoPreview.GetCheck() == BST_CHECKED)
+	{
+		OnPlay();
+	}
+	else
+	{
+		OnStop();
+	}
 }
 
 void SoundPreviewer::DoDataExchange(CDataExchange* pDX)
 {
 	__super::DoDataExchange(pDX);
 
-    DDX_Control(pDX, IDC_COMBO_DEVICE, m_wndSynths);
-    DDX_Control(pDX, IDC_EDIT_CHANNELS, m_wndChannels);
-    DDX_Control(pDX, IDC_STATIC_SYNTH, m_wndStaticSynth);
-    DDX_Control(pDX, IDC_BUTTON_PLAY, m_wndPlay);
-    DDX_Control(pDX, IDC_BUTTON_STOP, m_wndStop);
-    DDX_Control(pDX, IDC_SLIDER, m_wndSlider);
-    DDX_Control(pDX, IDC_CHECK_AUTOPREV, m_wndAutoPreview);
-    DDX_Control(pDX, IDC_STATIC_DURATION, m_wndDuration);
-    DDX_Control(pDX, IDC_STATICTITLE, m_wndTitle);
+	DDX_Control(pDX, IDC_COMBO_DEVICE, m_wndSynths);
+	DDX_Control(pDX, IDC_EDIT_CHANNELS, m_wndChannels);
+	DDX_Control(pDX, IDC_STATIC_SYNTH, m_wndStaticSynth);
+	DDX_Control(pDX, IDC_BUTTON_PLAY, m_wndPlay);
+	DDX_Control(pDX, IDC_BUTTON_STOP, m_wndStop);
+	DDX_Control(pDX, IDC_SLIDER, m_wndSlider);
+	DDX_Control(pDX, IDC_CHECK_AUTOPREV, m_wndAutoPreview);
+	DDX_Control(pDX, IDC_STATIC_DURATION, m_wndDuration);
+	DDX_Control(pDX, IDC_STATICTITLE, m_wndTitle);
 
-    AddAnchor(IDC_COMBO_DEVICE, CPoint(0, 0), CPoint(100, 0));
-    AddAnchor(IDC_SLIDER, CPoint(0, 0), CPoint(100, 0));
+	AddAnchor(IDC_COMBO_DEVICE, CPoint(0, 0), CPoint(100, 0));
+	AddAnchor(IDC_SLIDER, CPoint(0, 0), CPoint(100, 0));
 }
 
 BOOL SoundPreviewer::OnInitDialog()
 {
-    BOOL fRet = __super::OnInitDialog();
-    CRect rc;
-    GetClientRect(&rc);
+	BOOL fRet = __super::OnInitDialog();
+	CRect rc;
+	GetClientRect(&rc);
 
-    CDC *pDC = GetDC();
-    {
-        LOGFONT logFont = { 0 };
-        StringCchCopy(logFont.lfFaceName, ARRAYSIZE(logFont.lfFaceName), "Marlett");
-        logFont.lfHeight = -MulDiv(10, GetDeviceCaps((HDC)*pDC, LOGPIXELSY), 72);
-	    logFont.lfWeight = FW_NORMAL;
-	    logFont.lfItalic = FALSE;
-	    logFont.lfCharSet = DEFAULT_CHARSET;
-	    logFont.lfOutPrecision = OUT_DEFAULT_PRECIS;
-	    logFont.lfClipPrecision = CLIP_DEFAULT_PRECIS;
-	    logFont.lfQuality = DEFAULT_QUALITY;
-	    logFont.lfPitchAndFamily = FIXED_PITCH;
-        _marlettFont.CreateFontIndirect(&logFont);
-        m_wndPlay.SetFont(&_marlettFont);
-        m_wndStop.SetFont(&_marlettFont);
-    }
+	CDC *pDC = GetDC();
+	{
+		LOGFONT logFont = { 0 };
+		StringCchCopy(logFont.lfFaceName, ARRAYSIZE(logFont.lfFaceName), "Marlett");
+		logFont.lfHeight = -MulDiv(10, GetDeviceCaps((HDC)*pDC, LOGPIXELSY), 72);
+		logFont.lfWeight = FW_NORMAL;
+		logFont.lfItalic = FALSE;
+		logFont.lfCharSet = DEFAULT_CHARSET;
+		logFont.lfOutPrecision = OUT_DEFAULT_PRECIS;
+		logFont.lfClipPrecision = CLIP_DEFAULT_PRECIS;
+		logFont.lfQuality = DEFAULT_QUALITY;
+		logFont.lfPitchAndFamily = FIXED_PITCH;
+		_marlettFont.CreateFontIndirect(&logFont);
+		m_wndPlay.SetFont(&_marlettFont);
+		m_wndStop.SetFont(&_marlettFont);
+	}
 
-    m_wndSlider.SetRange(0, 100);
+	m_wndSlider.SetRange(0, 100);
 
-    _UpdatePlayState();
+	_UpdatePlayState();
 
-    ReleaseDC(pDC);
-    return fRet;
+	ReleaseDC(pDC);
+	return fRet;
 }
 
 std::string SoundPreviewer::_FillChannelString(BYTE bChannel, bool fHeader)
 {
-    std::string channelString;
-    ASSERT(((0x1 << bChannel) & _wChannelMask) || (bChannel == 0));
-    WORD wMask = _wChannelMask;
-    for (int i = 0; i < 15; i++)
-    {
-        if (wMask & 0x1)
-        {
-            // This channel is used.
-            if (fHeader)
-            {
-                char sz[3];
-                StringCchPrintf(sz, ARRAYSIZE(sz), "%1x", i);
-                channelString += sz;
-            }
-            else
-            {
-                if (bChannel == i)
-                {
-                    // It's used by this event.
-                    channelString += "X";
-                }
-                else
-                {
-                    channelString += " ";
-                }
-            }
-        }
-        wMask >>= 1;
-    }
-    return channelString;
+	std::string channelString;
+	ASSERT(((0x1 << bChannel) & _wChannelMask) || (bChannel == 0));
+	WORD wMask = _wChannelMask;
+	for (int i = 0; i < 15; i++)
+	{
+		if (wMask & 0x1)
+		{
+			// This channel is used.
+			if (fHeader)
+			{
+				char sz[3];
+				StringCchPrintf(sz, ARRAYSIZE(sz), "%1x", i);
+				channelString += sz;
+			}
+			else
+			{
+				if (bChannel == i)
+				{
+					// It's used by this event.
+					channelString += "X";
+				}
+				else
+				{
+					channelString += " ";
+				}
+			}
+		}
+		wMask >>= 1;
+	}
+	return channelString;
 }
 
 void SoundPreviewer::OnSynthChoiceChange()
 {
-    // Recalculate the mask.
-    _device = GetDeviceFromComboHelper(appState->GetVersion(), m_wndSynths);
-    if (_sound)
-    {
-        SoundComponent *soundComp = _sound->TryGetComponent<SoundComponent>();
-        if (soundComp)
-        {
-            std::string channelText;
-            _wChannelMask = soundComp->CalculateChannelMask(_device);
-            for (int i = 0; i < 16; i++)
-            {
-                channelText += ((_wChannelMask >> i) & 0x1) ? "1" : "0";
-            }
-            m_wndChannels.SetWindowText(channelText.c_str());
-        }
-        g_midiPlayer.SetDevice(_device);
-    }
+	// Recalculate the mask.
+	_device = GetDeviceFromComboHelper(appState->GetVersion(), m_wndSynths);
+	if (_sound)
+	{
+		SoundComponent *soundComp = _sound->TryGetComponent<SoundComponent>();
+		if (soundComp)
+		{
+			std::string channelText;
+			_wChannelMask = soundComp->CalculateChannelMask(_device);
+			for (int i = 0; i < 16; i++)
+			{
+				channelText += ((_wChannelMask >> i) & 0x1) ? "1" : "0";
+			}
+			m_wndChannels.SetWindowText(channelText.c_str());
+		}
+		g_midiPlayer.SetDevice(_device);
+	}
 }
 
 void SoundPreviewer::OnMIDIDeviceChange()
 {
-    // TODO
+	// TODO
 }
 
 bool SoundPreviewer::_IsPlaying()
 {
-    return g_midiPlayer.IsPlaying();
+	return g_midiPlayer.IsPlaying();
 }
 
 void SoundPreviewer::_UpdatePlayState()
 {
-    if (_IsPlaying())
-    {
-        SetTimer(SOUND_TIMER, 100, NULL);
-    }
-    else
-    {
-        KillTimer(SOUND_TIMER);
-    }
-    m_wndPlay.EnableWindow(_sound.get() && !_IsPlaying());
-    m_wndStop.EnableWindow(_sound.get() && _IsPlaying());
+	if (_IsPlaying())
+	{
+		SetTimer(SOUND_TIMER, 100, NULL);
+	}
+	else
+	{
+		KillTimer(SOUND_TIMER);
+	}
+	m_wndPlay.EnableWindow(_sound.get() && !_IsPlaying());
+	m_wndStop.EnableWindow(_sound.get() && _IsPlaying());
 }
 void SoundPreviewer::OnPlay()
 {
-    g_midiPlayer.Play();
-    _UpdatePlayState();
+	g_midiPlayer.Play();
+	_UpdatePlayState();
 }
 void SoundPreviewer::OnStop()
 {
-    g_midiPlayer.Stop();
-    _UpdatePlayState();
+	g_midiPlayer.Stop();
+	_UpdatePlayState();
 }
 void SoundPreviewer::OnTimer(UINT_PTR nIDEvent)
 {
-    if (nIDEvent == SOUND_TIMER)
-    {
-        if (g_midiPlayer.IsPlaying())
-        {
-            m_wndSlider.SetPos(g_midiPlayer.QueryPosition(100));
-        }
-        if (!_IsPlaying())
-        {
-            _UpdatePlayState();
-        }
-    }
-    else
-    {
-        __super::OnTimer(nIDEvent);
-    }
+	if (nIDEvent == SOUND_TIMER)
+	{
+		if (g_midiPlayer.IsPlaying())
+		{
+			m_wndSlider.SetPos(g_midiPlayer.QueryPosition(100));
+		}
+		if (!_IsPlaying())
+		{
+			_UpdatePlayState();
+		}
+	}
+	else
+	{
+		__super::OnTimer(nIDEvent);
+	}
 }
 
 
 void AudioPreviewer::SetResource(const ResourceBlob &blob)
 {
-    _resource = CreateResourceFromResourceData(blob);
-    SetAudioResource(_resource.get());
+	_resource = CreateResourceFromResourceData(blob);
+	SetAudioResource(_resource.get());
 }
 
 void AudioPreviewer::OnNewResourceCreated(std::unique_ptr<ResourceEntity> audioResource, const std::string &name, bool isRecording)
 {
-    assert(audioResource->SourceFlags == ResourceSourceFlags::AudioCache);
-    appState->GetResourceMap().AppendResourceAskForNumber(*audioResource, name);
+	assert(audioResource->SourceFlags == ResourceSourceFlags::AudioCache);
+	appState->GetResourceMap().AppendResourceAskForNumber(*audioResource, name);
 }
 
 void AudioPreviewer::OnPreviewerHidden()
 {
-    AutomaticStop();
+	AutomaticStop();
 }
 
 void AudioPreviewer::DoDataExchange(CDataExchange* pDX)
 {
-    __super::DoDataExchange(pDX);
-    DoDataExchangeHelper(pDX);
+	__super::DoDataExchange(pDX);
+	DoDataExchangeHelper(pDX);
 
-    AddAnchor(IDC_EDIT_DESCRIPTION, CPoint(0, 0), CPoint(100, 0));
-    AddAnchor(IDC_SLIDER, CPoint(0, 0), CPoint(100, 0));
-    AddAnchor(IDC_EDIT_SAMPLEBIT, CPoint(0, 0), CPoint(100, 0));
-    AddAnchor(IDC_BUTTON_EXPORT, CPoint(0, 0), CPoint(100, 0));
+	AddAnchor(IDC_EDIT_DESCRIPTION, CPoint(0, 0), CPoint(100, 0));
+	AddAnchor(IDC_SLIDER, CPoint(0, 0), CPoint(100, 0));
+	AddAnchor(IDC_EDIT_SAMPLEBIT, CPoint(0, 0), CPoint(100, 0));
+	AddAnchor(IDC_BUTTON_EXPORT, CPoint(0, 0), CPoint(100, 0));
 }
 
 BOOL AudioPreviewer::OnInitDialog()
 {
-    BOOL fRet = __super::OnInitDialog();
-    OnInitDialogHelper();
-    return fRet;
+	BOOL fRet = __super::OnInitDialog();
+	OnInitDialogHelper();
+	return fRet;
 }
 
 //

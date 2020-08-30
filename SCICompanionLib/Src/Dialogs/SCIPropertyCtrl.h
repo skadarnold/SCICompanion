@@ -1,15 +1,15 @@
 /***************************************************************************
-    Copyright (c) 2015 Philip Fortier
+	Copyright (c) 2015 Philip Fortier
 
-    This program is free software; you can redistribute it and/or
-    modify it under the terms of the GNU General Public License
-    as published by the Free Software Foundation; either version 2
-    of the License, or (at your option) any later version.
+	This program is free software; you can redistribute it and/or
+	modify it under the terms of the GNU General Public License
+	as published by the Free Software Foundation; either version 2
+	of the License, or (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
 ***************************************************************************/
 #pragma once
 
@@ -40,9 +40,9 @@ namespace sci
 
 enum PROPERTYCHANGE_INFO
 {
-    PC_ADDED,
-    PC_REMOVED,
-    PC_CHANGED,
+	PC_ADDED,
+	PC_REMOVED,
+	PC_CHANGED,
 };
 
 typedef std::unordered_map<std::string, sci::PropertyValue> property_map;
@@ -54,78 +54,78 @@ typedef std::unordered_map<std::string, sci::PropertyValue> property_map;
 class CSCIPropertyBagNotify : public ISCIPropertyBag
 {
 public:
-    ISCIPropertyBag *_pBagInner;
-    CSCIPropertyBagNotify(SCIClassBrowser *pBrowser, sci::ClassDefinition *pClass);
+	ISCIPropertyBag *_pBagInner;
+	CSCIPropertyBagNotify(SCIClassBrowser *pBrowser, sci::ClassDefinition *pClass);
 
-    void AddListener(ISCIPropertyChange *pListener) { _listeners.Add(pListener); }
+	void AddListener(ISCIPropertyChange *pListener) { _listeners.Add(pListener); }
 
-    void RemoveListener(ISCIPropertyChange *pListener)
-    {
-        for (INT_PTR i = 0; i < _listeners.GetSize(); i++)
-        {
-            if (_listeners[i] == pListener)
-            {
-                _listeners.RemoveAt(i);
-                break;
-            }
-        }
-    }
+	void RemoveListener(ISCIPropertyChange *pListener)
+	{
+		for (INT_PTR i = 0; i < _listeners.GetSize(); i++)
+		{
+			if (_listeners[i] == pListener)
+			{
+				_listeners.RemoveAt(i);
+				break;
+			}
+		}
+	}
 
-    // ISCIPropertyBag
-    bool SetProperty(PCTSTR pszName, sci::PropertyValue value);
-    bool GetProperty(PCTSTR pszName, sci::PropertyValue &value);
+	// ISCIPropertyBag
+	bool SetProperty(PCTSTR pszName, sci::PropertyValue value);
+	bool GetProperty(PCTSTR pszName, sci::PropertyValue &value);
 
-    void SetBagName(PCTSTR pszName)
-    {
-        if (_strName != pszName)
-        {
-            _strName = pszName;
-            _fNameChanged = TRUE;
-            for (INT_PTR i = 0; i < _listeners.GetSize(); i++)
-            {
-                _listeners[i]->OnNameChange(this, pszName);
-            }
-        }
-    }
-    const std::string GetBagName() { return _strName; }
+	void SetBagName(PCTSTR pszName)
+	{
+		if (_strName != pszName)
+		{
+			_strName = pszName;
+			_fNameChanged = TRUE;
+			for (INT_PTR i = 0; i < _listeners.GetSize(); i++)
+			{
+				_listeners[i]->OnNameChange(this, pszName);
+			}
+		}
+	}
+	const std::string GetBagName() { return _strName; }
 
-    void SetSpecies(PCTSTR pszName)
-    {
-        if (_strSpecies != pszName)
-        {
-            _strSpecies = pszName;
-            _fSpeciesChanged = TRUE;
-            for (INT_PTR i = 0; i < _listeners.GetSize(); i++)
-            {
-                _listeners[i]->OnSpeciesChange(this, pszName);
-            }
-        }
-    }
-    const std::string GetSpecies() const { return _strSpecies; }
-    const std::vector<std::unique_ptr<sci::ClassProperty>> &GetProperties()
-    {
-        return _propertiesEnum; // TODO, empty
-    }
+	void SetSpecies(PCTSTR pszName)
+	{
+		if (_strSpecies != pszName)
+		{
+			_strSpecies = pszName;
+			_fSpeciesChanged = TRUE;
+			for (INT_PTR i = 0; i < _listeners.GetSize(); i++)
+			{
+				_listeners[i]->OnSpeciesChange(this, pszName);
+			}
+		}
+	}
+	const std::string GetSpecies() const { return _strSpecies; }
+	const std::vector<std::unique_ptr<sci::ClassProperty>> &GetProperties()
+	{
+		return _propertiesEnum; // TODO, empty
+	}
 
-    const sci::ClassDefinition *GetClass() const { return _pClass; }
+	const sci::ClassDefinition *GetClass() const { return _pClass; }
 
 protected:
-    sci::ClassDefinition *_pClass;
-    SCIClassBrowser *_pBrowser;
+	sci::ClassDefinition *_pClass;
+	SCIClassBrowser *_pBrowser;
 
 private:
-    CArray<ISCIPropertyChange *, ISCIPropertyChange *> _listeners;
+	CArray<ISCIPropertyChange *, ISCIPropertyChange *> _listeners;
 
-    // Map of properties
-    property_map _properties;
-    // And information about when they've changed
-    CMap<CString, PCTSTR, PROPERTYCHANGE_INFO, PROPERTYCHANGE_INFO> _changeInfo;
-    std::string _strName;
-    BOOL _fNameChanged;
-    std::string _strSpecies;
-    BOOL _fSpeciesChanged;
+	// Map of properties
+	property_map _properties;
+	// And information about when they've changed
+	CMap<CString, PCTSTR, PROPERTYCHANGE_INFO, PROPERTYCHANGE_INFO> _changeInfo;
+	std::string _strName;
+	BOOL _fNameChanged;
+	std::string _strSpecies;
+	BOOL _fSpeciesChanged;
 
-    std::vector<std::unique_ptr<sci::ClassProperty>> _propertiesEnum; // TODO
+	std::vector<std::unique_ptr<sci::ClassProperty>> _propertiesEnum; // TODO
 };
 
 
@@ -139,34 +139,34 @@ public:
 	CSCIPropertyCtrl();
 	virtual ~CSCIPropertyCtrl();
 
-    void SetControl(CSCIPropertyBagNotify *pBag);
-    void Initialize(const sci::Script *pScript, SCIClassBrowser *pBrowser, CWnd *pDescription);
+	void SetControl(CSCIPropertyBagNotify *pBag);
+	void Initialize(const sci::Script *pScript, SCIClassBrowser *pBrowser, CWnd *pDescription);
 
-    // ISCIPropertyChange
-    void OnPropertyChange(ISCIPropertyBag *pSource, PCTSTR pszName, sci::PropertyValue value);
-    void OnNameChange(ISCIPropertyBag *pSource, PCTSTR pszName);
-    void OnSpeciesChange(ISCIPropertyBag *pSource, PCTSTR pszSpecies) { /*TODO*/ }
-    void OnAddProperty(ISCIPropertyBag *pSource, PCTSTR pszName) { /*TODO*/ }
-    void OnRemoveProperty(ISCIPropertyBag *pSource, PCTSTR pszName) { /*TODO*/ }
+	// ISCIPropertyChange
+	void OnPropertyChange(ISCIPropertyBag *pSource, PCTSTR pszName, sci::PropertyValue value);
+	void OnNameChange(ISCIPropertyBag *pSource, PCTSTR pszName);
+	void OnSpeciesChange(ISCIPropertyBag *pSource, PCTSTR pszSpecies) { /*TODO*/ }
+	void OnAddProperty(ISCIPropertyBag *pSource, PCTSTR pszName) { /*TODO*/ }
+	void OnRemoveProperty(ISCIPropertyBag *pSource, PCTSTR pszName) { /*TODO*/ }
 
 protected:
 	DECLARE_MESSAGE_MAP()
-    void OnItemClick(NMHDR *pNMHDR, LRESULT *pResult);
-    void OnItemChanged(NMHDR* pNMHDR, LRESULT* pResult);
-    void OnLButtonDown(UINT nFlags, CPoint point);
+	void OnItemClick(NMHDR *pNMHDR, LRESULT *pResult);
+	void OnItemChanged(NMHDR* pNMHDR, LRESULT* pResult);
+	void OnLButtonDown(UINT nFlags, CPoint point);
 
-    void _AddProperty(PCTSTR pszProp);
+	void _AddProperty(PCTSTR pszProp);
 
-    CSCIPropertyBagNotify *_pBag;
-    BOOL _fInLabelEdit;
-    BOOL _fMadeAutoComplete;
+	CSCIPropertyBagNotify *_pBag;
+	BOOL _fInLabelEdit;
+	BOOL _fMadeAutoComplete;
 
-    const sci::Script *_pScript;
-    SCIClassBrowser *_pBrowser;
+	const sci::Script *_pScript;
+	SCIClassBrowser *_pBrowser;
 
-    CWnd *_pDescription;
+	CWnd *_pDescription;
 
-    CComboBox m_wndComboInPlace;
+	CComboBox m_wndComboInPlace;
 };
 
 

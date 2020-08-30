@@ -1,15 +1,15 @@
 /***************************************************************************
-    Copyright (c) 2015 Philip Fortier
+	Copyright (c) 2015 Philip Fortier
 
-    This program is free software; you can redistribute it and/or
-    modify it under the terms of the GNU General Public License
-    as published by the Free Software Foundation; either version 2
-    of the License, or (at your option) any later version.
+	This program is free software; you can redistribute it and/or
+	modify it under the terms of the GNU General Public License
+	as published by the Free Software Foundation; either version 2
+	of the License, or (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
 ***************************************************************************/
 #pragma once
 
@@ -19,55 +19,55 @@ class GameFolderHelper;
 
 enum class PaletteChangeHint
 {
-    None = 0,
-    Changed = 0x00000100,
+	None = 0,
+	Changed = 0x00000100,
 };
 DEFINE_ENUM_FLAGS(PaletteChangeHint, uint32_t)
 
 enum class PaletteCompression
 {
-    Unknown,
-    None,
-    Header,
+	Unknown,
+	None,
+	Header,
 };
 
 enum class PaletteEntryType
 {
-    Unknown,
-    ThreeByte,
-    FourByte,
+	Unknown,
+	ThreeByte,
+	FourByte,
 };
 
 
 struct PaletteComponent : public ResourceComponent
 {
-    PaletteComponent();
-    PaletteComponent(const PaletteComponent &src) = default;
-    PaletteComponent& operator=(const PaletteComponent &src) = default;
-    ResourceComponent *Clone() const override
-    {
-        return new PaletteComponent(*this);
-    }
+	PaletteComponent();
+	PaletteComponent(const PaletteComponent &src) = default;
+	PaletteComponent& operator=(const PaletteComponent &src) = default;
+	ResourceComponent *Clone() const override
+	{
+		return new PaletteComponent(*this);
+	}
 
-    bool operator==(const PaletteComponent &src);
-    bool operator!=(const PaletteComponent &src);
+	bool operator==(const PaletteComponent &src);
+	bool operator!=(const PaletteComponent &src);
 
-    ~PaletteComponent()
-    {
-    }
+	~PaletteComponent()
+	{
+	}
 
-    uint8_t Mapping[256];
-    // The rgbReserved component of RGBQUAD appears to represent
-    // "priority" for palette colors (for when palettes are combined).
-    // The global palette typically has 0x1 set for its values.
-    // Individual palettes for pics/views tend to have 0x0 set for values they
-    // don't use (to be overriden by the global palette), or 0x3 for values
-    // they do use.
-    RGBQUAD Colors[256];
+	uint8_t Mapping[256];
+	// The rgbReserved component of RGBQUAD appears to represent
+	// "priority" for palette colors (for when palettes are combined).
+	// The global palette typically has 0x1 set for its values.
+	// Individual palettes for pics/views tend to have 0x0 set for values they
+	// don't use (to be overriden by the global palette), or 0x3 for values
+	// they do use.
+	RGBQUAD Colors[256];
 
-    PaletteCompression Compression;
-    PaletteEntryType EntryType;
-    void MergeFromOther(const PaletteComponent *globalPalette);
+	PaletteCompression Compression;
+	PaletteEntryType EntryType;
+	void MergeFromOther(const PaletteComponent *globalPalette);
 };
 
 extern PaletteComponent g_egaDummyPalette;

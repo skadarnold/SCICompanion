@@ -22,29 +22,29 @@ struct Cel;
 class EditCelDataDialog : public CExtResizableDialog
 {
 public:
-    EditCelDataDialog(int16_t &priority, Cel &cel, CWnd* pParent = NULL);   // standard constructor
-    virtual ~EditCelDataDialog();
-    virtual void OnOK();
+	EditCelDataDialog(int16_t &priority, Cel &cel, CWnd* pParent = NULL);   // standard constructor
+	virtual ~EditCelDataDialog();
+	virtual void OnOK();
 
-    // Dialog Data
-    enum { IDD = IDD_EDITCELDATA };
+	// Dialog Data
+	enum { IDD = IDD_EDITCELDATA };
 
 private:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV support
 
-    DECLARE_MESSAGE_MAP()
+	DECLARE_MESSAGE_MAP()
 
-    Cel &_cel;
-    int16_t &_priority;
+	Cel &_cel;
+	int16_t &_priority;
 
-    CExtEdit m_wndEditX;
-    CExtEdit m_wndEditY;
-    CExtEdit m_wndEditPriority;
+	CExtEdit m_wndEditX;
+	CExtEdit m_wndEditY;
+	CExtEdit m_wndEditPriority;
 
-    // Visuals
-    CExtButton m_wndOk;
-    CExtButton m_wndCancel;
-    CExtLabel m_wndLabel1;
-    CExtLabel m_wndLabel2;
-    CExtLabel m_wndLabel3;
+	// Visuals
+	CExtButton m_wndOk;
+	CExtButton m_wndCancel;
+	CExtLabel m_wndLabel1;
+	CExtLabel m_wndLabel2;
+	CExtLabel m_wndLabel3;
 };

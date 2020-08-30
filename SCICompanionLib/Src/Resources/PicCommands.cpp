@@ -1,15 +1,15 @@
 /***************************************************************************
-    Copyright (c) 2015 Philip Fortier
+	Copyright (c) 2015 Philip Fortier
 
-    This program is free software; you can redistribute it and/or
-    modify it under the terms of the GNU General Public License
-    as published by the Free Software Foundation; either version 2
-    of the License, or (at your option) any later version.
+	This program is free software; you can redistribute it and/or
+	modify it under the terms of the GNU General Public License
+	as published by the Free Software Foundation; either version 2
+	of the License, or (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
 ***************************************************************************/
 
 #include "stdafx.h"
@@ -29,10 +29,10 @@ static char THIS_FILE[] = __FILE__;
 
 // As long as these values are unsigned, there's no need to check for 0
 #define CHECK_RECT(cx, cy, x,y)\
-    ( x < cx && y < cy )
+	( x < cx && y < cy )
 
 #define BYTE_FROM_PALETTE_AND_OFFSET(num, offset)   ((uint8_t) (((num) * PALETTE_SIZE) + (offset)))
-#define BYTE_FROM_EGACOLOR(color)                   ((uint8_t) ((color).color2 + ((color).color1 << 4)))
+#define BYTE_FROM_EGACOLOR(color)				   ((uint8_t) ((color).color2 + ((color).color1 << 4)))
 
 #define GET_PALETTE(palettes, number) ((palettes) + (number) * PALETTE_SIZE)
 
@@ -54,13 +54,13 @@ const int16_t InvalidPri = (std::numeric_limits<int16_t>::min)();
 //
 uint8_t PriorityFromY(uint16_t y, const ViewPort &picState)
 {
-    uint8_t bPriority = 0;
-    for (bPriority = 0; bPriority < ARRAYSIZE(picState.bPriorityLines); bPriority++)
-    {
-        if (y < picState.bPriorityLines[bPriority])
-            break;
-    }
-    return bPriority;
+	uint8_t bPriority = 0;
+	for (bPriority = 0; bPriority < ARRAYSIZE(picState.bPriorityLines); bPriority++)
+	{
+		if (y < picState.bPriorityLines[bPriority])
+			break;
+	}
+	return bPriority;
 }
 
 //
@@ -70,28 +70,28 @@ uint8_t PriorityFromY(uint16_t y, const ViewPort &picState)
 //
 void PatternInfoFromIndex(uint8_t bIndex, PenStyle *pPenStyle)
 {
-    // Pattern size resets every 8.
-    pPenStyle->bPatternSize = bIndex % 8;
-    // fPattern alterates every 8, from solid->pattern->solid->pattern
-    pPenStyle->fPattern = ((bIndex / 8) % 2) != 0;
-    pPenStyle->bPatternNR = 0;
-    // fRectangle is true for >= 16
-    pPenStyle->fRectangle = (bIndex / 16) != 0;
+	// Pattern size resets every 8.
+	pPenStyle->bPatternSize = bIndex % 8;
+	// fPattern alterates every 8, from solid->pattern->solid->pattern
+	pPenStyle->fPattern = ((bIndex / 8) % 2) != 0;
+	pPenStyle->bPatternNR = 0;
+	// fRectangle is true for >= 16
+	pPenStyle->fRectangle = (bIndex / 16) != 0;
 }
 
 uint8_t IndexFromPatternInfo(const PenStyle *pPenStyle)
 {
-    uint8_t bIndex = 0;
-    if (pPenStyle->fRectangle)
-    {
-        bIndex += 16;
-    }
-    if (pPenStyle->fPattern)
-    {
-        bIndex += 8;
-    }
-    bIndex += pPenStyle->bPatternSize;
-    return bIndex;
+	uint8_t bIndex = 0;
+	if (pPenStyle->fRectangle)
+	{
+		bIndex += 16;
+	}
+	if (pPenStyle->fPattern)
+	{
+		bIndex += 8;
+	}
+	bIndex += pPenStyle->bPatternSize;
+	return bIndex;
 }
 
 uint8_t c_SizeToOpcodeLine[] = { PIC_OP_RELATIVE_SHORT_LINES, PIC_OP_RELATIVE_MEDIUM_LINES, PIC_OP_RELATIVE_LONG_LINES };
@@ -99,21 +99,21 @@ uint8_t c_SizeToOpcodePen[] =  { PIC_OP_RELATIVE_PATTERNS, PIC_OP_RELATIVE_MEDIU
 
 uint8_t OpcodeFromCommandTypeAndSize(uint8_t bType, DRAWSIZE size)
 {
-    if (bType == PicCommand::Line)
-    {
-        return c_SizeToOpcodeLine[size];
-    }
-    else if (bType == PicCommand::Pattern)
-    {
-        return c_SizeToOpcodePen[size];
-    }
-    assert(false);
-    return PIC_END;
+	if (bType == PicCommand::Line)
+	{
+		return c_SizeToOpcodeLine[size];
+	}
+	else if (bType == PicCommand::Pattern)
+	{
+		return c_SizeToOpcodePen[size];
+	}
+	assert(false);
+	return PIC_END;
 }
 
 DRAWSIZE DrawSizeFromCoords(int16_t x1, int16_t y1, int16_t x2, int16_t y2)
 {
-    DRAWSIZE dsReturn = DS_LARGE;
+	DRAWSIZE dsReturn = DS_LARGE;
 
 	__int16 dx = abs(x1 - x2);
 	__int16 dy = abs(y1 - y2);
@@ -128,7 +128,7 @@ DRAWSIZE DrawSizeFromCoords(int16_t x1, int16_t y1, int16_t x2, int16_t y2)
 		// x is within 127 pixels (128 is ok for +ve, but who cares) and y is within 111
 		dsReturn = DS_MEDIUM;
 	}
-    return dsReturn;
+	return dsReturn;
 }
 
 
@@ -139,24 +139,24 @@ DRAWSIZE DrawSizeFromCoords(int16_t x1, int16_t y1, int16_t x2, int16_t y2)
 //
 DRAWSIZE DrawSizeFromNextCommand(PicCommand *pCommand, PicCommand *pNextCommand)
 {
-    DRAWSIZE dsReturn = DS_LARGE;
-    if ((pCommand->type == PicCommand::Line) && (pNextCommand->type == PicCommand::Line) &&
-        (pCommand->drawLine.xTo == pNextCommand->drawLine.xFrom) &&
-        (pCommand->drawLine.yTo == pNextCommand->drawLine.yFrom))
-    {
-        dsReturn = DrawSizeFromCoords(pNextCommand->drawLine.xFrom,
-                                      pNextCommand->drawLine.yFrom,
-                                      pNextCommand->drawLine.xTo,
-                                      pNextCommand->drawLine.yTo);
-    }
-    else if ((pCommand->type == PicCommand::Pattern) && (pNextCommand->type == PicCommand::Pattern))
-    {
-        dsReturn = DrawSizeFromCoords(pCommand->drawPattern.x,
-                                      pCommand->drawPattern.y,
-                                      pNextCommand->drawPattern.x,
-                                      pNextCommand->drawPattern.y);
-    }
-    return dsReturn;
+	DRAWSIZE dsReturn = DS_LARGE;
+	if ((pCommand->type == PicCommand::Line) && (pNextCommand->type == PicCommand::Line) &&
+		(pCommand->drawLine.xTo == pNextCommand->drawLine.xFrom) &&
+		(pCommand->drawLine.yTo == pNextCommand->drawLine.yFrom))
+	{
+		dsReturn = DrawSizeFromCoords(pNextCommand->drawLine.xFrom,
+									  pNextCommand->drawLine.yFrom,
+									  pNextCommand->drawLine.xTo,
+									  pNextCommand->drawLine.yTo);
+	}
+	else if ((pCommand->type == PicCommand::Pattern) && (pNextCommand->type == PicCommand::Pattern))
+	{
+		dsReturn = DrawSizeFromCoords(pCommand->drawPattern.x,
+									  pCommand->drawPattern.y,
+									  pNextCommand->drawPattern.x,
+									  pNextCommand->drawPattern.y);
+	}
+	return dsReturn;
 }
 
 
@@ -182,20 +182,20 @@ void CircleCommand_GetName(const PicCommand *pCommand, TCHAR *pszBuf, size_t cch
 
 DRAW_FUNCTION g_DrawFunctions[] =
 {
-    LineCommand_Draw,
-    PatternCommand_Draw,
-    FillCommand_Draw,
-    SetVisualCommand_Draw,
-    SetPriorityCommand_Draw,
-    SetControlCommand_Draw,
-    DisableVisualCommand_Draw,
-    DisablePriorityCommand_Draw,
-    DisableControlCommand_Draw,
-    SetPaletteCommand_Draw,
-    SetPaletteEntryCommand_Draw,
-    SetPriorityBarsCommand_Draw,
-    DrawVisualBitmap_Draw,
-    CircleCommand_Draw,
+	LineCommand_Draw,
+	PatternCommand_Draw,
+	FillCommand_Draw,
+	SetVisualCommand_Draw,
+	SetPriorityCommand_Draw,
+	SetControlCommand_Draw,
+	DisableVisualCommand_Draw,
+	DisablePriorityCommand_Draw,
+	DisableControlCommand_Draw,
+	SetPaletteCommand_Draw,
+	SetPaletteEntryCommand_Draw,
+	SetPriorityBarsCommand_Draw,
+	DrawVisualBitmap_Draw,
+	CircleCommand_Draw,
 };
 
 
@@ -204,114 +204,114 @@ DRAW_FUNCTION g_DrawFunctions[] =
 
 void _WriteColor(sci::ostream *pSerial, EGACOLOR color)
 {
-    pSerial->WriteByte(color.color1 | (color.color2 << 4));
+	pSerial->WriteByte(color.color1 | (color.color2 << 4));
 }
 
 void _WriteAbsCoordinate(sci::ostream *pSerial, uint16_t x, uint16_t y)
 {
-    // Coordinate prefix | x / 256 | y / 256
-    // Coord prefix byte is xxxxyyyy, where xxxx = x % 256, yyyy = y % 256.
-    pSerial->WriteByte((uint8_t) ( ((x >> 4) & 0x00f0) | (y >> 8))); // It is redundant to & y with 0x000f
-    pSerial->WriteByte((uint8_t) (x & 0x00ff));
-    pSerial->WriteByte((uint8_t) (y & 0x00ff));
+	// Coordinate prefix | x / 256 | y / 256
+	// Coord prefix byte is xxxxyyyy, where xxxx = x % 256, yyyy = y % 256.
+	pSerial->WriteByte((uint8_t) ( ((x >> 4) & 0x00f0) | (y >> 8))); // It is redundant to & y with 0x000f
+	pSerial->WriteByte((uint8_t) (x & 0x00ff));
+	pSerial->WriteByte((uint8_t) (y & 0x00ff));
 }
 
 void _WriteMediumCoordinate(sci::ostream *pSerial, uint16_t xOld, uint16_t yOld, uint16_t x, uint16_t y)
 {
-    // x | y
-    uint8_t byte;
-    if (y < yOld)
-    {
-        byte = 0x80 | (uint8_t)(yOld - y);
-    }
-    else
-    {
-        byte = (uint8_t)(y - yOld);
-    }
-    assert(byte < 0xf0); // Since 0xf0 signifies the next opcode.
-    pSerial->WriteByte(byte);
+	// x | y
+	uint8_t byte;
+	if (y < yOld)
+	{
+		byte = 0x80 | (uint8_t)(yOld - y);
+	}
+	else
+	{
+		byte = (uint8_t)(y - yOld);
+	}
+	assert(byte < 0xf0); // Since 0xf0 signifies the next opcode.
+	pSerial->WriteByte(byte);
 
-    byte = (uint8_t)(((__int16)x) - (__int16)xOld);
-    pSerial->WriteByte(byte);
+	byte = (uint8_t)(((__int16)x) - (__int16)xOld);
+	pSerial->WriteByte(byte);
 }
 
 void _WriteSmallCoordinate(sci::ostream *pSerial, uint16_t xOld, uint16_t yOld, uint16_t x, uint16_t y)
 {
-    // x,y
-    // where xxxxyyyy, and leftmost bits of each indicate -ve or +ve
-    uint8_t byte = 0;
-    if (x < xOld)
-    {
-        byte |= (((xOld - x) << 4) | 0x80);
-    }
-    else
-    {
-        byte |= ((x - xOld) << 4);
-    }
-    if (y < yOld)
-    {
-        byte |= ((yOld - y) | 0x08);
-    }
-    else
-    {
-        byte |= (y - yOld);
-    }
+	// x,y
+	// where xxxxyyyy, and leftmost bits of each indicate -ve or +ve
+	uint8_t byte = 0;
+	if (x < xOld)
+	{
+		byte |= (((xOld - x) << 4) | 0x80);
+	}
+	else
+	{
+		byte |= ((x - xOld) << 4);
+	}
+	if (y < yOld)
+	{
+		byte |= ((yOld - y) | 0x08);
+	}
+	else
+	{
+		byte |= (y - yOld);
+	}
 
-    pSerial->WriteByte(byte);
+	pSerial->WriteByte(byte);
 }
 
 void _WriteCoordinate(sci::ostream *pSerial, DRAWSIZE ds, uint16_t xOld, uint16_t yOld, uint16_t x, uint16_t y)
 {
-    switch (ds)
-    {
-    case DS_SMALL:
-        _WriteSmallCoordinate(pSerial, xOld, yOld, x, y);
-        break;
-    case DS_MEDIUM:
-        _WriteMediumCoordinate(pSerial, xOld, yOld, x, y);
-        break;
-    case DS_LARGE:
-        _WriteAbsCoordinate(pSerial, x, y); // Don't need the old coord
-        break;
-    }
-    assert("Error writing coordinate: invalid drawsize");
+	switch (ds)
+	{
+	case DS_SMALL:
+		_WriteSmallCoordinate(pSerial, xOld, yOld, x, y);
+		break;
+	case DS_MEDIUM:
+		_WriteMediumCoordinate(pSerial, xOld, yOld, x, y);
+		break;
+	case DS_LARGE:
+		_WriteAbsCoordinate(pSerial, x, y); // Don't need the old coord
+		break;
+	}
+	assert("Error writing coordinate: invalid drawsize");
 }
 
 
 SERIALIZE_FUNCTION g_SerializeFunctions[] =
 {
-    LineCommand_Serialize,
-    PatternCommand_Serialize,
-    FillCommand_Serialize,
-    SetVisualCommand_Serialize,
-    SetPriorityCommand_Serialize,
-    SetControlCommand_Serialize,
-    DisableVisualCommand_Serialize,
-    DisablePriorityCommand_Serialize,
-    DisableControlCommand_Serialize,
-    SetPaletteCommand_Serialize,
-    SetPaletteEntryCommand_Serialize,
-    SetPriorityBarsCommand_Serialize,
-    DrawVisualBitmap_Serialize,
-    CircleCommand_Serialize,
+	LineCommand_Serialize,
+	PatternCommand_Serialize,
+	FillCommand_Serialize,
+	SetVisualCommand_Serialize,
+	SetPriorityCommand_Serialize,
+	SetControlCommand_Serialize,
+	DisableVisualCommand_Serialize,
+	DisablePriorityCommand_Serialize,
+	DisableControlCommand_Serialize,
+	SetPaletteCommand_Serialize,
+	SetPaletteEntryCommand_Serialize,
+	SetPriorityBarsCommand_Serialize,
+	DrawVisualBitmap_Serialize,
+	CircleCommand_Serialize,
 };
 
 GETNAME_FUNCTION g_GetNameFunctions[] =
 {
-    LineCommand_GetName,
-    PatternCommand_GetName,
-    FillCommand_GetName,
-    SetVisualCommand_GetName,
-    SetPriorityCommand_GetName,
-    SetControlCommand_GetName,
-    DisableVisualCommand_GetName,
-    DisablePriorityCommand_GetName,
-    DisableControlCommand_GetName,
-    SetPaletteCommand_GetName,
-    SetPaletteEntryCommand_GetName,
-    SetPriorityBarsCommand_GetName,
-    DrawVisualBitmap_GetName,
-    CircleCommand_GetName,
+	LineCommand_GetName,
+	PatternCommand_GetName,
+	FillCommand_GetName,
+	SetVisualCommand_GetName,
+	SetPriorityCommand_GetName,
+	SetControlCommand_GetName,
+	DisableVisualCommand_GetName,
+	DisablePriorityCommand_GetName,
+	DisableControlCommand_GetName,
+	SetPaletteCommand_GetName,
+	SetPaletteEntryCommand_GetName,
+	SetPriorityBarsCommand_GetName,
+	DrawVisualBitmap_GetName,
+	CircleCommand_GetName,
 };
 
 static_assert(ARRAYSIZE(g_GetNameFunctions) == ARRAYSIZE(g_SerializeFunctions), "Different number of PicCommand functions");
@@ -319,18 +319,18 @@ static_assert(ARRAYSIZE(g_GetNameFunctions) == ARRAYSIZE(g_DrawFunctions), "Diff
 
 void PicCommand::Draw(PicData *pData, ViewPort &state) const
 {
-    g_DrawFunctions[type](this, pData, &state);
+	g_DrawFunctions[type](this, pData, &state);
 }
 
 
 void PicCommand::GetName(TCHAR *pszBuf, size_t cchBuf) const
 {
-    g_GetNameFunctions[type](this, pszBuf, cchBuf);
+	g_GetNameFunctions[type](this, pszBuf, cchBuf);
 }
 
 void Command_Serialize(sci::ostream *pSerial, const PicCommand *pCommand, const PicCommand *pCommandPrev, const PicCommand *pCommandNext, DRAWSIZE dsPrev, DRAWSIZE *pds, SerializedPicState *pState)
 {
-    g_SerializeFunctions[pCommand->type](pSerial, pCommand, pCommandPrev, pCommandNext, dsPrev, pds, pState);
+	g_SerializeFunctions[pCommand->type](pSerial, pCommand, pCommandPrev, pCommandNext, dsPrev, pds, pState);
 }
 
 //
@@ -338,80 +338,80 @@ void Command_Serialize(sci::ostream *pSerial, const PicCommand *pCommand, const 
 //
 void PastedCommands_GetBounds(size16 displaySize, const PicCommand *pCommand, size_t cCommands, sRECT *prc)
 {
-    prc->left = displaySize.cx - 1;
-    prc->right = 0;
-    prc->top = displaySize.cy - 1;
-    prc->bottom = 0;
+	prc->left = displaySize.cx - 1;
+	prc->right = 0;
+	prc->top = displaySize.cy - 1;
+	prc->bottom = 0;
 
-    const PicCommand *pCurrent = pCommand;
-    for (size_t i = 0; i < cCommands; i++)
-    {
-        switch (pCurrent->type)
-        {
-        case PicCommand::Line:
-            prc->left = min(prc->left, pCurrent->drawLine.xFrom);
-            prc->left = min(prc->left, pCurrent->drawLine.xTo);
-            prc->right = max(prc->right, pCurrent->drawLine.xFrom);
-            prc->right = max(prc->right, pCurrent->drawLine.xTo);
-            prc->top = min(prc->top, pCurrent->drawLine.yFrom);
-            prc->top = min(prc->top, pCurrent->drawLine.yTo);
-            prc->bottom = max(prc->bottom, pCurrent->drawLine.yFrom);
-            prc->bottom = max(prc->bottom, pCurrent->drawLine.yTo);
-            break;
+	const PicCommand *pCurrent = pCommand;
+	for (size_t i = 0; i < cCommands; i++)
+	{
+		switch (pCurrent->type)
+		{
+		case PicCommand::Line:
+			prc->left = min(prc->left, pCurrent->drawLine.xFrom);
+			prc->left = min(prc->left, pCurrent->drawLine.xTo);
+			prc->right = max(prc->right, pCurrent->drawLine.xFrom);
+			prc->right = max(prc->right, pCurrent->drawLine.xTo);
+			prc->top = min(prc->top, pCurrent->drawLine.yFrom);
+			prc->top = min(prc->top, pCurrent->drawLine.yTo);
+			prc->bottom = max(prc->bottom, pCurrent->drawLine.yFrom);
+			prc->bottom = max(prc->bottom, pCurrent->drawLine.yTo);
+			break;
 
-        case PicCommand::Pattern:
-            prc->left = min(prc->left, pCurrent->drawPattern.x);
-            prc->right = max(prc->right, pCurrent->drawPattern.x);
-            prc->top = min(prc->top, pCurrent->drawPattern.y);
-            prc->bottom = max(prc->bottom, pCurrent->drawPattern.y);
-            break;
+		case PicCommand::Pattern:
+			prc->left = min(prc->left, pCurrent->drawPattern.x);
+			prc->right = max(prc->right, pCurrent->drawPattern.x);
+			prc->top = min(prc->top, pCurrent->drawPattern.y);
+			prc->bottom = max(prc->bottom, pCurrent->drawPattern.y);
+			break;
 
-        case PicCommand::Fill:
-            prc->left = min(prc->left, pCurrent->fill.x);
-            prc->right = max(prc->right, pCurrent->fill.x);
-            prc->top = min(prc->top, pCurrent->fill.y);
-            prc->bottom = max(prc->bottom, pCurrent->fill.y);
-            break;
-        case PicCommand::Circle:
-            prc->left = min(prc->left, pCurrent->circle.xFrom);
-            prc->left = min(prc->left, pCurrent->circle.xTo);
-            prc->right = max(prc->right, pCurrent->circle.xFrom);
-            prc->right = max(prc->right, pCurrent->circle.xTo);
-            prc->top = min(prc->top, pCurrent->circle.yFrom);
-            prc->top = min(prc->top, pCurrent->circle.yTo);
-            prc->bottom = max(prc->bottom, pCurrent->circle.yFrom);
-            prc->bottom = max(prc->bottom, pCurrent->circle.yTo);
-        default:
-            // Not a coordinate command
-            break;
-        }
-        pCurrent++;
-    }
+		case PicCommand::Fill:
+			prc->left = min(prc->left, pCurrent->fill.x);
+			prc->right = max(prc->right, pCurrent->fill.x);
+			prc->top = min(prc->top, pCurrent->fill.y);
+			prc->bottom = max(prc->bottom, pCurrent->fill.y);
+			break;
+		case PicCommand::Circle:
+			prc->left = min(prc->left, pCurrent->circle.xFrom);
+			prc->left = min(prc->left, pCurrent->circle.xTo);
+			prc->right = max(prc->right, pCurrent->circle.xFrom);
+			prc->right = max(prc->right, pCurrent->circle.xTo);
+			prc->top = min(prc->top, pCurrent->circle.yFrom);
+			prc->top = min(prc->top, pCurrent->circle.yTo);
+			prc->bottom = max(prc->bottom, pCurrent->circle.yFrom);
+			prc->bottom = max(prc->bottom, pCurrent->circle.yTo);
+		default:
+			// Not a coordinate command
+			break;
+		}
+		pCurrent++;
+	}
 
-    // The rect bottom and right need to be "off the edge"
-    prc->bottom += 1;
-    prc->right += 1;
+	// The rect bottom and right need to be "off the edge"
+	prc->bottom += 1;
+	prc->right += 1;
 
-    // TODO: Give it a min size.
+	// TODO: Give it a min size.
 }
 
 
 bool PastedCommands_ContainDrawCommands(const PicCommand *pCommands, size_t cCommands)
 {
-    bool fContain = FALSE;
-    for (size_t i = 0; (!fContain) && (i < cCommands); i++)
-    {
-        switch (pCommands[i].type)
-        {
-        case PicCommand::Line:
-        case PicCommand::Pattern:
-        case PicCommand::Fill:
-        case PicCommand::Circle:
-            fContain = TRUE;
-            break;
-        }
-    }
-    return fContain;
+	bool fContain = FALSE;
+	for (size_t i = 0; (!fContain) && (i < cCommands); i++)
+	{
+		switch (pCommands[i].type)
+		{
+		case PicCommand::Line:
+		case PicCommand::Pattern:
+		case PicCommand::Fill:
+		case PicCommand::Circle:
+			fContain = TRUE;
+			break;
+		}
+	}
+	return fContain;
 }
 
 //
@@ -419,55 +419,55 @@ bool PastedCommands_ContainDrawCommands(const PicCommand *pCommands, size_t cCom
 //
 bool Coord_Adjust(size16 size, int16_t *px, int16_t *py, const PICCOMMAND_ADJUST *pAdjust)
 {
-    int x = (int)*px;
-    int y = (int)*py;
+	int x = (int)*px;
+	int y = (int)*py;
 
-    // Flip.
-    if (pAdjust->fHFlip)
-    {
+	// Flip.
+	if (pAdjust->fHFlip)
+	{
 		x = (pAdjust->rcBounds.right - 1) - (x - pAdjust->rcBounds.left);
-    }
-    if (pAdjust->fVFlip)
-    {
+	}
+	if (pAdjust->fVFlip)
+	{
 		y = (pAdjust->rcBounds.bottom - 1) - (y - pAdjust->rcBounds.top);
-    }
+	}
 
-    int dx = x - pAdjust->rcBounds.left;
-    int dy = y - pAdjust->rcBounds.top;
-    if (RECTWIDTH(pAdjust->rcBounds) > 0)
-    {
-        dx = dx * RECTWIDTH(pAdjust->rcNew) / RECTWIDTH(pAdjust->rcBounds);
-    }
-    x = dx + pAdjust->rcNew.left;
-    if (RECTHEIGHT(pAdjust->rcBounds) > 0)
-    {
-        dy = dy * RECTHEIGHT(pAdjust->rcNew) / RECTHEIGHT(pAdjust->rcBounds);
-    }
-    y = dy + pAdjust->rcNew.top;
+	int dx = x - pAdjust->rcBounds.left;
+	int dy = y - pAdjust->rcBounds.top;
+	if (RECTWIDTH(pAdjust->rcBounds) > 0)
+	{
+		dx = dx * RECTWIDTH(pAdjust->rcNew) / RECTWIDTH(pAdjust->rcBounds);
+	}
+	x = dx + pAdjust->rcNew.left;
+	if (RECTHEIGHT(pAdjust->rcBounds) > 0)
+	{
+		dy = dy * RECTHEIGHT(pAdjust->rcNew) / RECTHEIGHT(pAdjust->rcBounds);
+	}
+	y = dy + pAdjust->rcNew.top;
 
-    // Now rotate them.
-    if (pAdjust->iAngle != 0)
-    {
-        // TODO: 
-        // 1) Find the rotation center, based on the stretching done above (rcNew/rcBounds)
-        double xCenter = (double)((pAdjust->rcNew.right + pAdjust->rcNew.left) / 2);
-        double yCenter = (double)((pAdjust->rcNew.bottom + pAdjust->rcNew.top) / 2);
-        double xOrig = ((double)x) - xCenter;
-        double yOrig = ((double)y) - yCenter;
-        double fAngle = ((double)pAdjust->iAngle) / 360.0 * 6.28;
-        double xNew = (cos(fAngle) * xOrig - sin(fAngle) * yOrig) + xCenter;
-        double yNew = (sin(fAngle) * xOrig + cos(fAngle) * yOrig) + yCenter;
-        x = (int)xNew;
-        y = (int)yNew;
-    }
+	// Now rotate them.
+	if (pAdjust->iAngle != 0)
+	{
+		// TODO: 
+		// 1) Find the rotation center, based on the stretching done above (rcNew/rcBounds)
+		double xCenter = (double)((pAdjust->rcNew.right + pAdjust->rcNew.left) / 2);
+		double yCenter = (double)((pAdjust->rcNew.bottom + pAdjust->rcNew.top) / 2);
+		double xOrig = ((double)x) - xCenter;
+		double yOrig = ((double)y) - yCenter;
+		double fAngle = ((double)pAdjust->iAngle) / 360.0 * 6.28;
+		double xNew = (cos(fAngle) * xOrig - sin(fAngle) * yOrig) + xCenter;
+		double yNew = (sin(fAngle) * xOrig + cos(fAngle) * yOrig) + yCenter;
+		x = (int)xNew;
+		y = (int)yNew;
+	}
 
-    bool fRet = ((x >= 0) && (y >= 0) && (x < size.cx) && (y < size.cy));
+	bool fRet = ((x >= 0) && (y >= 0) && (x < size.cx) && (y < size.cy));
 
-    // Truncation/overflow is ok, since we've checked the bounds above.
-    *px = (int16_t)x;
-    *py = (int16_t)y;
+	// Truncation/overflow is ok, since we've checked the bounds above.
+	*px = (int16_t)x;
+	*py = (int16_t)y;
 
-    return fRet;
+	return fRet;
 }
 
 //
@@ -475,38 +475,38 @@ bool Coord_Adjust(size16 size, int16_t *px, int16_t *py, const PICCOMMAND_ADJUST
 //
 bool Command_Adjust(size16 size, PicCommand *pCommand, const PICCOMMAND_ADJUST *pAdjust)
 {
-    bool fRet = TRUE;
-    __int16 dx = (__int16)(pAdjust->rcNew.left - pAdjust->rcBounds.left);
-    __int16 dy = (__int16)(pAdjust->rcNew.top - pAdjust->rcBounds.top);
-    switch (pCommand->type)
-    {
-    case PicCommand::Line:
-        // REVIEW: could clip the line instead of completely removing it, when it goes out of bounds.
-        // Would need to use bresenham algorithm.
-        fRet = Coord_Adjust(size, &pCommand->drawLine.xFrom, &pCommand->drawLine.yFrom, pAdjust);
-        if (fRet)
-        {
-            fRet = Coord_Adjust(size, &pCommand->drawLine.xTo, &pCommand->drawLine.yTo, pAdjust);
-        }
-        break;
-    case PicCommand::Circle:
-        // REVIEW: could clip the line instead of completely removing it, when it goes out of bounds.
-        // Would need to use bresenham algorithm.
-        fRet = Coord_Adjust(size, &pCommand->circle.xFrom, &pCommand->circle.yFrom, pAdjust);
-        if (fRet)
-        {
-            fRet = Coord_Adjust(size, &pCommand->circle.xTo, &pCommand->circle.yTo, pAdjust);
-        }
-        break;
-    case PicCommand::Pattern:
-        fRet = Coord_Adjust(size, &pCommand->drawPattern.x, &pCommand->drawPattern.y, pAdjust);
-        break;
+	bool fRet = TRUE;
+	__int16 dx = (__int16)(pAdjust->rcNew.left - pAdjust->rcBounds.left);
+	__int16 dy = (__int16)(pAdjust->rcNew.top - pAdjust->rcBounds.top);
+	switch (pCommand->type)
+	{
+	case PicCommand::Line:
+		// REVIEW: could clip the line instead of completely removing it, when it goes out of bounds.
+		// Would need to use bresenham algorithm.
+		fRet = Coord_Adjust(size, &pCommand->drawLine.xFrom, &pCommand->drawLine.yFrom, pAdjust);
+		if (fRet)
+		{
+			fRet = Coord_Adjust(size, &pCommand->drawLine.xTo, &pCommand->drawLine.yTo, pAdjust);
+		}
+		break;
+	case PicCommand::Circle:
+		// REVIEW: could clip the line instead of completely removing it, when it goes out of bounds.
+		// Would need to use bresenham algorithm.
+		fRet = Coord_Adjust(size, &pCommand->circle.xFrom, &pCommand->circle.yFrom, pAdjust);
+		if (fRet)
+		{
+			fRet = Coord_Adjust(size, &pCommand->circle.xTo, &pCommand->circle.yTo, pAdjust);
+		}
+		break;
+	case PicCommand::Pattern:
+		fRet = Coord_Adjust(size, &pCommand->drawPattern.x, &pCommand->drawPattern.y, pAdjust);
+		break;
 
-    case PicCommand::Fill:
-        fRet = Coord_Adjust(size, &pCommand->fill.x, &pCommand->fill.y, pAdjust);
-        break;
-    }
-    return fRet;
+	case PicCommand::Fill:
+		fRet = Coord_Adjust(size, &pCommand->fill.x, &pCommand->fill.y, pAdjust);
+		break;
+	}
+	return fRet;
 }
 
 //
@@ -515,61 +515,61 @@ bool Command_Adjust(size16 size, PicCommand *pCommand, const PICCOMMAND_ADJUST *
 //
 void PastedCommands_Adjust(size16 size, std::vector<PicCommand> &commandsIn, const PICCOMMAND_ADJUST *pAdjust)
 {
-    for (size_t i = 0; i < commandsIn.size(); i++)
-    {
-        if (Command_Adjust(size, &commandsIn[i], pAdjust))
-        {
-            // We're good
-        }
-        else
-        {
-            // This was out of bounds - remove it.
-            //commandsIn.erase(&commandsIn[i]);
+	for (size_t i = 0; i < commandsIn.size(); i++)
+	{
+		if (Command_Adjust(size, &commandsIn[i], pAdjust))
+		{
+			// We're good
+		}
+		else
+		{
+			// This was out of bounds - remove it.
+			//commandsIn.erase(&commandsIn[i]);
 			commandsIn.erase(commandsIn.begin() + i);
-        }
-    }
+		}
+	}
 }
 
 HGLOBAL CopiedCommands_AllocAndFillMemory(const PicCommand *pCommands, size_t cCommands)
 {
-    sci::ostream serial;
-    for (size_t i = 0; i < cCommands; i++)
-    {
-        pCommands->SerializeForClipboard(&serial);
-        pCommands++; // Go to next command
-    }
+	sci::ostream serial;
+	for (size_t i = 0; i < cCommands; i++)
+	{
+		pCommands->SerializeForClipboard(&serial);
+		pCommands++; // Go to next command
+	}
 
-    GlobalAllocGuard globalAlloc(GMEM_MOVEABLE, serial.tellp());
-    if (globalAlloc.Global)
-    {
-        GlobalLockGuard<uint8_t*> globalLock(globalAlloc);
-        if (globalLock.Object)
-        {
-            memcpy(globalLock.Object, serial.GetInternalPointer(), serial.tellp());
-            globalLock.Unlock();
-        }
-        else
-        {
-            // Didn't work
-            globalAlloc.Free();
-        }
-    }
-    return globalAlloc.RelinquishOwnership();
+	GlobalAllocGuard globalAlloc(GMEM_MOVEABLE, serial.tellp());
+	if (globalAlloc.Global)
+	{
+		GlobalLockGuard<uint8_t*> globalLock(globalAlloc);
+		if (globalLock.Object)
+		{
+			memcpy(globalLock.Object, serial.GetInternalPointer(), serial.tellp());
+			globalLock.Unlock();
+		}
+		else
+		{
+			// Didn't work
+			globalAlloc.Free();
+		}
+	}
+	return globalAlloc.RelinquishOwnership();
 }
 
 
 bool PtInSRect(sRECT *prc, int16_t x, int16_t y)
 {
-    return ( (((__int16)x) >= prc->left) && (((__int16)x) < prc->right) && (((__int16)y) >= prc->top) && (((__int16)y) < prc->bottom));
+	return ( (((__int16)x) >= prc->left) && (((__int16)x) < prc->right) && (((__int16)y) >= prc->top) && (((__int16)y) < prc->bottom));
 }
 
 void Command_DrawWithOffset(const PicCommand *pCommandIn, PicData *pData, ViewPort *pState, const PICCOMMAND_ADJUST *pAdjust)
 {
-    PicCommand commandAdjusted = *pCommandIn; // class copy, since we don't want to modify pCommandIn (should be const).
-    if (Command_Adjust(pData->size, &commandAdjusted, pAdjust))
-    {
-        g_DrawFunctions[pCommandIn->type](&commandAdjusted, pData, pState);
-    }
+	PicCommand commandAdjusted = *pCommandIn; // class copy, since we don't want to modify pCommandIn (should be const).
+	if (Command_Adjust(pData->size, &commandAdjusted, pAdjust))
+	{
+		g_DrawFunctions[pCommandIn->type](&commandAdjusted, pData, pState);
+	}
 }
 
 
@@ -578,23 +578,23 @@ void Command_DrawWithOffset(const PicCommand *pCommandIn, PicData *pData, ViewPo
 // 
 void SerializeAllCommands_SCI0_SCI1(sci::ostream *pSerial, const std::vector<PicCommand> &commands, size_t cCommands)
 {
-    PicCommand commandPrev;
-    DRAWSIZE ds = DS_SMALL; // Initial value doesn't matter.
-    SerializedPicState picState = { 0 };
-    for (size_t i = 0; i < cCommands; i++)
-    {
-        const PicCommand &command = commands[i];
-        Command_Serialize(pSerial, &command, (i == 0) ? nullptr : &commandPrev, (i == (cCommands - 1)) ? nullptr : &commands[i + 1], ds, &ds, &picState);
-        commandPrev = command;
-    }
-    
-    // Terminate the command stream.
-    pSerial->WriteByte(PIC_END);
+	PicCommand commandPrev;
+	DRAWSIZE ds = DS_SMALL; // Initial value doesn't matter.
+	SerializedPicState picState = { 0 };
+	for (size_t i = 0; i < cCommands; i++)
+	{
+		const PicCommand &command = commands[i];
+		Command_Serialize(pSerial, &command, (i == 0) ? nullptr : &commandPrev, (i == (cCommands - 1)) ? nullptr : &commands[i + 1], ds, &ds, &picState);
+		commandPrev = command;
+	}
+	
+	// Terminate the command stream.
+	pSerial->WriteByte(PIC_END);
 }
 
 ViewPort::ViewPort(uint8_t bPaletteToUse)
 {
-    Reset(bPaletteToUse);
+	Reset(bPaletteToUse);
 }
 
 ViewPort::ViewPort() :ViewPort(static_cast<uint8_t>(0))
@@ -603,71 +603,71 @@ ViewPort::ViewPort() :ViewPort(static_cast<uint8_t>(0))
 
 void ViewPort::Reset(uint8_t bPaletteToUse)
 {
-    dwDrawEnable = PicScreenFlags::Visual;
-    bPriorityValue = 0;
-    bControlValue = 0;
-    egaColor.color1 = 0;
-    egaColor.color2 = 0;
-    bPaletteNumber = 0;
-    bPaletteOffset = 0;
-    bPatternNR = 0;
-    bPatternSize = 0;
-    bPaletteToDraw = bPaletteToUse;
+	dwDrawEnable = PicScreenFlags::Visual;
+	bPriorityValue = 0;
+	bControlValue = 0;
+	egaColor.color1 = 0;
+	egaColor.color2 = 0;
+	bPaletteNumber = 0;
+	bPaletteOffset = 0;
+	bPatternNR = 0;
+	bPatternSize = 0;
+	bPaletteToDraw = bPaletteToUse;
 
-    // Set all palettes to default:
-    memcpy(GET_PALETTE(pPalettes, 0), g_defaultPalette, cbDefaultPalette);
-    memcpy(GET_PALETTE(pPalettes, 1), g_defaultPalette, cbDefaultPalette);
-    memcpy(GET_PALETTE(pPalettes, 2), g_defaultPalette, cbDefaultPalette);
-    memcpy(GET_PALETTE(pPalettes, 3), g_defaultPalette, cbDefaultPalette);
+	// Set all palettes to default:
+	memcpy(GET_PALETTE(pPalettes, 0), g_defaultPalette, cbDefaultPalette);
+	memcpy(GET_PALETTE(pPalettes, 1), g_defaultPalette, cbDefaultPalette);
+	memcpy(GET_PALETTE(pPalettes, 2), g_defaultPalette, cbDefaultPalette);
+	memcpy(GET_PALETTE(pPalettes, 3), g_defaultPalette, cbDefaultPalette);
 
-    // The locked colours.
-    memset(rgLocked, 0, sizeof(rgLocked));
+	// The locked colours.
+	memset(rgLocked, 0, sizeof(rgLocked));
 
-    std::copy(g_defaultPriBands, g_defaultPriBands + ARRAYSIZE(g_defaultPriBands), bPriorityLines);
+	std::copy(g_defaultPriBands, g_defaultPriBands + ARRAYSIZE(g_defaultPriBands), bPriorityLines);
 }
 
 inline void _PlotPixI(int p, PicData *pData, int16_t x, int16_t y, PicScreenFlags dwDrawEnable, EGACOLOR color, uint8_t bPriorityValue, uint8_t bControlValue)
 {
-    if (IsFlagSet(pData->dwMapsToRedraw, PicScreenFlags::Visual) && IsFlagSet(dwDrawEnable, PicScreenFlags::Visual))
-    {
-        pData->pdataVisual[p] = ((x^y) & 1)? color.color1 : color.color2;
-    }
-    if (IsFlagSet(pData->dwMapsToRedraw, PicScreenFlags::Priority) && IsFlagSet(dwDrawEnable, PicScreenFlags::Priority))
-    {
-        pData->pdataPriority[p] = bPriorityValue;
-    }
-    if (IsFlagSet(pData->dwMapsToRedraw, PicScreenFlags::Control) && IsFlagSet(dwDrawEnable, PicScreenFlags::Control))
-    {
-        pData->pdataControl[p] = bControlValue;
-    }
+	if (IsFlagSet(pData->dwMapsToRedraw, PicScreenFlags::Visual) && IsFlagSet(dwDrawEnable, PicScreenFlags::Visual))
+	{
+		pData->pdataVisual[p] = ((x^y) & 1)? color.color1 : color.color2;
+	}
+	if (IsFlagSet(pData->dwMapsToRedraw, PicScreenFlags::Priority) && IsFlagSet(dwDrawEnable, PicScreenFlags::Priority))
+	{
+		pData->pdataPriority[p] = bPriorityValue;
+	}
+	if (IsFlagSet(pData->dwMapsToRedraw, PicScreenFlags::Control) && IsFlagSet(dwDrawEnable, PicScreenFlags::Control))
+	{
+		pData->pdataControl[p] = bControlValue;
+	}
 }
 
 struct PlotEGA
 {
-    typedef EGACOLOR PixelType;
+	typedef EGACOLOR PixelType;
 
-    static uint8_t Plot(int16_t x, int16_t y, EGACOLOR color)
-    {
-        return ((x^y) & 1) ? color.color1 : color.color2;
-    }
+	static uint8_t Plot(int16_t x, int16_t y, EGACOLOR color)
+	{
+		return ((x^y) & 1) ? color.color1 : color.color2;
+	}
 
-    static bool IsColorWhite(PixelType pixel) { return pixel.color1 == White && pixel.color2 == White; }
+	static bool IsColorWhite(PixelType pixel) { return pixel.color1 == White && pixel.color2 == White; }
 
 	static bool IsPixelWhite(uint8_t pixel, int16_t x, int16_t y) { return pixel == 0x0f; }
 
-    // Guard against someone doing a fill with pure white, since this algorithm will hang in that case.
-    // Hero's quest does this, when some pictures are drawn with some palettes.
-    // REVIEW: This appears to not be the case anymore.
-    static bool EarlyBail(PicScreenFlags dwDrawEnable, EGACOLOR color, uint8_t priValue, uint8_t controlValue)
-    {
-        return (IsFlagSet(dwDrawEnable, PicScreenFlags::Visual) && ((color.color1 == 0xf) && (color.color2 == 0xf)));
-        // ScummVM appears to have the following logic, but that is incorrect.
-        /* ||
-            (IsFlagSet(dwDrawEnable, PicScreenFlags::Control) && (controlValue == 0)) ||
-            (IsFlagSet(dwDrawEnable, PicScreenFlags::Priority) && (priValue == 0));*/
-    }
+	// Guard against someone doing a fill with pure white, since this algorithm will hang in that case.
+	// Hero's quest does this, when some pictures are drawn with some palettes.
+	// REVIEW: This appears to not be the case anymore.
+	static bool EarlyBail(PicScreenFlags dwDrawEnable, EGACOLOR color, uint8_t priValue, uint8_t controlValue)
+	{
+		return (IsFlagSet(dwDrawEnable, PicScreenFlags::Visual) && ((color.color1 == 0xf) && (color.color2 == 0xf)));
+		// ScummVM appears to have the following logic, but that is incorrect.
+		/* ||
+			(IsFlagSet(dwDrawEnable, PicScreenFlags::Control) && (controlValue == 0)) ||
+			(IsFlagSet(dwDrawEnable, PicScreenFlags::Priority) && (priValue == 0));*/
+	}
 
-    static const uint8_t White = 0xf;
+	static const uint8_t White = 0xf;
 };
 
 struct PlotEGAUndithered
@@ -696,85 +696,85 @@ struct PlotEGAUndithered
 
 struct PlotVGA
 {
-    typedef uint8_t PixelType;
+	typedef uint8_t PixelType;
 
-    static uint8_t Plot(int16_t x, int16_t y, int8_t color)
-    {
-        return color;
-    }
+	static uint8_t Plot(int16_t x, int16_t y, int8_t color)
+	{
+		return color;
+	}
 
-    static bool IsColorWhite(PixelType pixel) { return pixel == White; }
+	static bool IsColorWhite(PixelType pixel) { return pixel == White; }
 
 	static bool IsPixelWhite(uint8_t pixel, int16_t x, int16_t y) { return pixel == White; }
 
-    static bool EarlyBail(PicScreenFlags dwDrawEnable, uint8_t color, uint8_t priValue, uint8_t controlValue)
-    {
-        return (IsFlagSet(dwDrawEnable, PicScreenFlags::Visual) && (color == 0xff)); // See PlotEGA
-    }
-    static const uint8_t White = 0xff;
+	static bool EarlyBail(PicScreenFlags dwDrawEnable, uint8_t color, uint8_t priValue, uint8_t controlValue)
+	{
+		return (IsFlagSet(dwDrawEnable, PicScreenFlags::Visual) && (color == 0xff)); // See PlotEGA
+	}
+	static const uint8_t White = 0xff;
 };
 
 template<typename _TFormat>
 inline void _PlotPix(PicData *pData, int16_t x, int16_t y, PicScreenFlags dwDrawEnable, PicScreenFlags auxSet, typename _TFormat::PixelType color, uint8_t bPriorityValue, uint8_t bControlValue)
 {
-    if(x < 0 || y < 0 || x >= pData->size.cx || y >= pData->size.cy)
-    {
-        return;
-    }
+	if(x < 0 || y < 0 || x >= pData->size.cx || y >= pData->size.cy)
+	{
+		return;
+	}
 
-    int p = BUFFEROFFSET_NONSTD(pData->size.cx, pData->size.cy, x, y);
-    //_PlotPixI(p, pData, x, y, dwDrawEnable, color, bPriorityValue, bControlValue);
-    // Duplicate the code from _PlotPixI here for speed (perf increase of ~5%?)
-    if (IsFlagSet(pData->dwMapsToRedraw, PicScreenFlags::Visual) && IsFlagSet(dwDrawEnable, PicScreenFlags::Visual))
-    {
-        pData->pdataVisual[p] = _TFormat::Plot(x, y, color);
-    }
-    if (IsFlagSet(pData->dwMapsToRedraw, PicScreenFlags::Priority) && IsFlagSet(dwDrawEnable, PicScreenFlags::Priority))
-    {
-        pData->pdataPriority[p] = bPriorityValue;
-    }
-    if (IsFlagSet(pData->dwMapsToRedraw, PicScreenFlags::Control) && IsFlagSet(dwDrawEnable, PicScreenFlags::Control))
-    {
-        pData->pdataControl[p] = bControlValue;
-    }
+	int p = BUFFEROFFSET_NONSTD(pData->size.cx, pData->size.cy, x, y);
+	//_PlotPixI(p, pData, x, y, dwDrawEnable, color, bPriorityValue, bControlValue);
+	// Duplicate the code from _PlotPixI here for speed (perf increase of ~5%?)
+	if (IsFlagSet(pData->dwMapsToRedraw, PicScreenFlags::Visual) && IsFlagSet(dwDrawEnable, PicScreenFlags::Visual))
+	{
+		pData->pdataVisual[p] = _TFormat::Plot(x, y, color);
+	}
+	if (IsFlagSet(pData->dwMapsToRedraw, PicScreenFlags::Priority) && IsFlagSet(dwDrawEnable, PicScreenFlags::Priority))
+	{
+		pData->pdataPriority[p] = bPriorityValue;
+	}
+	if (IsFlagSet(pData->dwMapsToRedraw, PicScreenFlags::Control) && IsFlagSet(dwDrawEnable, PicScreenFlags::Control))
+	{
+		pData->pdataControl[p] = bControlValue;
+	}
 
-    pData->pdataAux[p] |= (uint8_t)auxSet;
+	pData->pdataAux[p] |= (uint8_t)auxSet;
 }
 
 template<typename _TFormat>
 PicScreenFlags _GetAuxSet(typename  _TFormat::PixelType color, uint8_t bPriorityValue, uint8_t bControlValue, PicScreenFlags dwDrawEnable)
 {
-    PicScreenFlags auxSet = dwDrawEnable;
-    if (_TFormat::IsColorWhite(color))
-    {
-        ClearFlag(auxSet, PicScreenFlags::Visual);
-    }
-    if (bPriorityValue == 0)
-    {
-        ClearFlag(auxSet, PicScreenFlags::Priority);
-    }
-    if (bControlValue == 0)
-    {
-        ClearFlag(auxSet, PicScreenFlags::Control);
-    }
-    return auxSet;
+	PicScreenFlags auxSet = dwDrawEnable;
+	if (_TFormat::IsColorWhite(color))
+	{
+		ClearFlag(auxSet, PicScreenFlags::Visual);
+	}
+	if (bPriorityValue == 0)
+	{
+		ClearFlag(auxSet, PicScreenFlags::Priority);
+	}
+	if (bControlValue == 0)
+	{
+		ClearFlag(auxSet, PicScreenFlags::Control);
+	}
+	return auxSet;
 }
 
 void _PlotPixNonStd(int cx, int cy, PicData *pData, int16_t x, int16_t y, PicScreenFlags dwDrawEnable, EGACOLOR color, uint8_t bPriorityValue, uint8_t bControlValue)
 {
-    if(x < 0 || y < 0 || x >= cx || y >= cy)
-    {
-        return;
-    }
+	if(x < 0 || y < 0 || x >= cx || y >= cy)
+	{
+		return;
+	}
 
-    int p = BUFFEROFFSET_NONSTD(cx, cy, x, y);
-    _PlotPixI(p, pData, x, y, dwDrawEnable, color, bPriorityValue, bControlValue);
+	int p = BUFFEROFFSET_NONSTD(cx, cy, x, y);
+	_PlotPixI(p, pData, x, y, dwDrawEnable, color, bPriorityValue, bControlValue);
 }
 
 
 
 #define LINEMACRO(pData, startx, starty, deltalinear, deltanonlinear, linearvar, nonlinearvar, \
-                  linearend, nonlinearstart, linearmod, nonlinearmod) \
+				  linearend, nonlinearstart, linearmod, nonlinearmod) \
    x = (startx); y = (starty); \
    incrNE = ((deltalinear) > 0)? (deltalinear) : -(deltalinear); \
    incrNE <<= 1; \
@@ -782,60 +782,60 @@ void _PlotPixNonStd(int cx, int cy, PicData *pData, int16_t x, int16_t y, PicScr
    incrE = ((deltanonlinear) > 0) ? -(deltanonlinear) : (deltanonlinear);  \
    d = nonlinearstart-1;  \
    while (linearvar != (linearend)) { \
-     _PlotPix<_TFormat>(pData, x,y, dwDrawEnable, auxSet, color, bPriorityValue, bControlValue); \
-     linearvar += linearmod; \
-     if ((d+=incrE) < 0) { \
-       d += incrNE; \
-       nonlinearvar += nonlinearmod; \
-     }; \
+	 _PlotPix<_TFormat>(pData, x,y, dwDrawEnable, auxSet, color, bPriorityValue, bControlValue); \
+	 linearvar += linearmod; \
+	 if ((d+=incrE) < 0) { \
+	   d += incrNE; \
+	   nonlinearvar += nonlinearmod; \
+	 }; \
    }; \
    _PlotPix<_TFormat>(pData, x, y, dwDrawEnable, auxSet, color, bPriorityValue, bControlValue);
 
 template<typename _TFormat>
 void _DitherLine(PicData *pData, int16_t xStart, int16_t yStart, int16_t xEnd, int16_t yEnd, typename _TFormat::PixelType color, uint8_t bPriorityValue, uint8_t bControlValue, PicScreenFlags dwDrawEnable)
 {
-    int dx, dy, incrE, incrNE, d, finalx, finaly;
-    int x = (int)xStart;
-    int y = (int)yStart;
-    dx = (int)xEnd - (int)x;
-    dy = (int)yEnd - (int)y;
-    finalx = (int)xEnd;
-    finaly = (int)yEnd;
+	int dx, dy, incrE, incrNE, d, finalx, finaly;
+	int x = (int)xStart;
+	int y = (int)yStart;
+	dx = (int)xEnd - (int)x;
+	dy = (int)yEnd - (int)y;
+	finalx = (int)xEnd;
+	finaly = (int)yEnd;
 
-    PicScreenFlags auxSet = _GetAuxSet<_TFormat>(color, bPriorityValue, bControlValue, dwDrawEnable);
+	PicScreenFlags auxSet = _GetAuxSet<_TFormat>(color, bPriorityValue, bControlValue, dwDrawEnable);
 
-    dx = abs(dx);
-    dy = abs(dy);
+	dx = abs(dx);
+	dy = abs(dy);
 
-    if (dx > dy) {
-        if (finalx < x) {
-            if (finaly < y) { /* llu == left-left-up */
-                LINEMACRO(pData, x, y, dx, dy, x, y, finalx, dx, -1, -1);
-            } else {         /* lld */
-                LINEMACRO(pData, x, y, dx, dy, x, y, finalx, dx, -1, 1);
-            }
-        } else { /* x1 >= x */
-            if (finaly < y) { /* rru */
-                LINEMACRO(pData, x, y, dx, dy, x, y, finalx, dx, 1, -1);
-            } else {         /* rrd */
-                LINEMACRO(pData, x, y, dx, dy, x, y, finalx, dx, 1, 1);
-            }
-        }
-    } else { /* dx <= dy */
-        if (finaly < y) {
-            if (finalx < x) { /* luu */
-                LINEMACRO(pData, x, y, dy, dx, y, x, finaly, dy, -1, -1);
-            } else {         /* ruu */
-                LINEMACRO(pData, x, y, dy, dx, y, x, finaly, dy, -1, 1);
-            }
-        } else { /* y1 >= y */
-            if (finalx < x) { /* ldd */
-                LINEMACRO(pData, x, y, dy, dx, y, x, finaly, dy, 1, -1);
-            } else {         /* rdd */
-                LINEMACRO(pData, x, y, dy, dx, y, x, finaly, dy, 1, 1);
-            }
-        }
-    }
+	if (dx > dy) {
+		if (finalx < x) {
+			if (finaly < y) { /* llu == left-left-up */
+				LINEMACRO(pData, x, y, dx, dy, x, y, finalx, dx, -1, -1);
+			} else {		 /* lld */
+				LINEMACRO(pData, x, y, dx, dy, x, y, finalx, dx, -1, 1);
+			}
+		} else { /* x1 >= x */
+			if (finaly < y) { /* rru */
+				LINEMACRO(pData, x, y, dx, dy, x, y, finalx, dx, 1, -1);
+			} else {		 /* rrd */
+				LINEMACRO(pData, x, y, dx, dy, x, y, finalx, dx, 1, 1);
+			}
+		}
+	} else { /* dx <= dy */
+		if (finaly < y) {
+			if (finalx < x) { /* luu */
+				LINEMACRO(pData, x, y, dy, dx, y, x, finaly, dy, -1, -1);
+			} else {		 /* ruu */
+				LINEMACRO(pData, x, y, dy, dx, y, x, finaly, dy, -1, 1);
+			}
+		} else { /* y1 >= y */
+			if (finalx < x) { /* ldd */
+				LINEMACRO(pData, x, y, dy, dx, y, x, finaly, dy, 1, -1);
+			} else {		 /* rdd */
+				LINEMACRO(pData, x, y, dy, dx, y, x, finaly, dy, 1, 1);
+			}
+		}
+	}
 }
 
 
@@ -846,13 +846,13 @@ uint8_t circles[][30] = { /* bitmaps for circle patterns */
 {0x38, 0x7c, 0xfe, 0xfe, 0xfe, 0x7c, 0x38, 0x00},
 {0x1c, 0x1f, 0xcf, 0xfb, 0xfe, 0xff, 0xbf, 0xef, 0xf9, 0xfc, 0x1c},
 {0x0e, 0x03, 0xf8, 0x7f, 0xc7, 0xfc, 0xff, 0xef, 0xfe, 0xff, 0xe7,
-    0xfc, 0x7f, 0xc3, 0xf8, 0x1f, 0x00},
+	0xfc, 0x7f, 0xc3, 0xf8, 0x1f, 0x00},
 {0x0f, 0x80, 0xff, 0x87, 0xff, 0x1f, 0xfc, 0xff, 0xfb, 0xff, 0xef,
-    0xff, 0xbf, 0xfe, 0xff, 0xf9, 0xff, 0xc7, 0xff, 0x0f, 0xf8,
-    0x0f, 0x80},
+	0xff, 0xbf, 0xfe, 0xff, 0xf9, 0xff, 0xc7, 0xff, 0x0f, 0xf8,
+	0x0f, 0x80},
 {0x07, 0xc0, 0x1f, 0xf0, 0x3f, 0xf8, 0x7f, 0xfc, 0x7f, 0xfc, 0xff,
-    0xfe, 0xff, 0xfe, 0xff, 0xfe, 0xff, 0xfe, 0xff, 0xfe, 0x7f,
-    0xfc, 0x7f, 0xfc, 0x3f, 0xf8, 0x1f, 0xf0, 0x07, 0xc0}};
+	0xfe, 0xff, 0xfe, 0xff, 0xfe, 0xff, 0xfe, 0xff, 0xfe, 0x7f,
+	0xfc, 0x7f, 0xfc, 0x3f, 0xf8, 0x1f, 0xf0, 0x07, 0xc0}};
 uint8_t junq[32] = { /* random-looking fill pattern */
 0x20, 0x94, 0x02, 0x24, 0x90, 0x82, 0xa4, 0xa2, 0x82, 0x09, 0x0a, 0x22,
 0x12, 0x10, 0x42, 0x14, 0x91, 0x4a, 0x91, 0x11, 0x08, 0x12, 0x25, 0x10,
@@ -876,103 +876,103 @@ uint8_t junqindex[128] = { /* starting points for junq fill */
 };
 
 //
-// fPattern:        pattern or solid?
-// fRectangle:      rect or circle?
+// fPattern:		pattern or solid?
+// fRectangle:	  rect or circle?
 //
 template<typename _TFormat>
 void _DrawPattern(PicData *pData, int16_t x, int16_t y, typename _TFormat::PixelType color, uint8_t bPriorityValue, uint8_t bControlValue, PicScreenFlags dwDrawEnable, bool fPattern, uint8_t bPatternSize, uint8_t bPatternNR, bool fRectangle)
 {
-    uint16_t wSize = (uint16_t)bPatternSize;
+	uint16_t wSize = (uint16_t)bPatternSize;
 
-    PicScreenFlags auxSet = _GetAuxSet<_TFormat>(color, bPriorityValue, bControlValue, dwDrawEnable);
+	PicScreenFlags auxSet = _GetAuxSet<_TFormat>(color, bPriorityValue, bControlValue, dwDrawEnable);
 
-    int16_t xMax = pData->size.cx - 1;
-    int16_t yMax = pData->size.cy - 1;
+	int16_t xMax = pData->size.cx - 1;
+	int16_t yMax = pData->size.cy - 1;
 
-    // Fix up x and y
-    if (x < wSize)
-    {
-        x = wSize;
-    }
-    if ((x + wSize) > xMax)
-    {
-        x = xMax - wSize;
-    }
-    if (y < wSize)
-    {
-        y = wSize;
-    }
-    if ((y + wSize) > yMax)
-    {
-        y = yMax - wSize;
-    }
+	// Fix up x and y
+	if (x < wSize)
+	{
+		x = wSize;
+	}
+	if ((x + wSize) > xMax)
+	{
+		x = xMax - wSize;
+	}
+	if (y < wSize)
+	{
+		y = wSize;
+	}
+	if ((y + wSize) > yMax)
+	{
+		y = yMax - wSize;
+	}
 
-    if (bPatternNR < ARRAYSIZE(junqindex))
-    {
-        uint8_t junqbit = junqindex[bPatternNR];
-        if (fRectangle)
-        {
-            uint16_t k, l;
-            for (l = y - wSize; l <= y + wSize; l++)
-            {
-                for (k = x - wSize; k <= (x + wSize + 1); k++)
-                {
-                    if (fPattern)
-                    {
-                        if ( (junq[junqbit>>3] >> (7-(junqbit & 7))) & 1)
-                        {
-                            _PlotPix<_TFormat>(pData, k, l, dwDrawEnable, auxSet, color, bPriorityValue, bControlValue);
-                        }
-                        junqbit++;
-                        if (junqbit == 0xff)
-                        {
-                            junqbit = 0;
-                        }
-                    }
-                    else
-                    {
-                        _PlotPix<_TFormat>(pData, k, l, dwDrawEnable, auxSet, color, bPriorityValue, bControlValue);
-                    }
-                }
-            }
-        }
-        else
-        {
-            uint16_t k, l;
-            // Circle
-            int circlebit = 0;
-            for (l = y - wSize; l <= y + wSize; l++)
-            {
-                for (k = x- wSize; k <= x + wSize + 1; k++)
-                {
-                    if ((circles[bPatternSize][circlebit>>3] >> (7-(circlebit & 7))) & 1)
-                    {
-                        if (fPattern)
-                        {
-                            if ((junq[junqbit>>3] >> (7-(junqbit & 7))) & 1)
-                            {
-                                _PlotPix<_TFormat>(pData, k, l, dwDrawEnable, auxSet, color, bPriorityValue, bControlValue);
-                            }
-                            junqbit++;
-                            if (junqbit == 0xff)
-                            {
-                                junqbit = 0;
-                            }
-                        }
-                        else
-                        {
-                            _PlotPix<_TFormat>(pData, k, l, dwDrawEnable, auxSet, color, bPriorityValue, bControlValue);
-                        }
-                    }
-                    circlebit++;
-                }
-            }
-        }
-    }
-    else
-    {
-        REPORTERROR(TEXT("bPatternNR was too high"));
-    }
+	if (bPatternNR < ARRAYSIZE(junqindex))
+	{
+		uint8_t junqbit = junqindex[bPatternNR];
+		if (fRectangle)
+		{
+			uint16_t k, l;
+			for (l = y - wSize; l <= y + wSize; l++)
+			{
+				for (k = x - wSize; k <= (x + wSize + 1); k++)
+				{
+					if (fPattern)
+					{
+						if ( (junq[junqbit>>3] >> (7-(junqbit & 7))) & 1)
+						{
+							_PlotPix<_TFormat>(pData, k, l, dwDrawEnable, auxSet, color, bPriorityValue, bControlValue);
+						}
+						junqbit++;
+						if (junqbit == 0xff)
+						{
+							junqbit = 0;
+						}
+					}
+					else
+					{
+						_PlotPix<_TFormat>(pData, k, l, dwDrawEnable, auxSet, color, bPriorityValue, bControlValue);
+					}
+				}
+			}
+		}
+		else
+		{
+			uint16_t k, l;
+			// Circle
+			int circlebit = 0;
+			for (l = y - wSize; l <= y + wSize; l++)
+			{
+				for (k = x- wSize; k <= x + wSize + 1; k++)
+				{
+					if ((circles[bPatternSize][circlebit>>3] >> (7-(circlebit & 7))) & 1)
+					{
+						if (fPattern)
+						{
+							if ((junq[junqbit>>3] >> (7-(junqbit & 7))) & 1)
+							{
+								_PlotPix<_TFormat>(pData, k, l, dwDrawEnable, auxSet, color, bPriorityValue, bControlValue);
+							}
+							junqbit++;
+							if (junqbit == 0xff)
+							{
+								junqbit = 0;
+							}
+						}
+						else
+						{
+							_PlotPix<_TFormat>(pData, k, l, dwDrawEnable, auxSet, color, bPriorityValue, bControlValue);
+						}
+					}
+					circlebit++;
+				}
+			}
+		}
+	}
+	else
+	{
+		REPORTERROR(TEXT("bPatternNR was too high"));
+	}
 }
 
 
@@ -980,58 +980,58 @@ void _DrawPattern(PicData *pData, int16_t x, int16_t y, typename _TFormat::Pixel
 
 bool CreatePatternBitmap(CBitmap &bitmapOut, uint8_t patternSize, uint8_t patternNR, bool rectangle, bool pattern)
 {
-    uint16_t wSize = (uint16_t)patternSize;
-    uint16_t actualSize = wSize * 2 + 1;
-    size_t dataSize = CX_ACTUAL(actualSize) * actualSize;
-    std::unique_ptr<uint8_t[]> buffer = std::make_unique<uint8_t[]>(dataSize);
-    memset(buffer.get(), 0xff, dataSize);
-    std::unique_ptr<uint8_t[]> aux = std::make_unique<uint8_t[]>(dataSize);
-    memset(aux.get(), 0, dataSize);
-    PicData data =
-    {
-        PicScreenFlags::Visual,
-        buffer.get(),
-        nullptr,
-        nullptr,
-        aux.get(),
-        true,
+	uint16_t wSize = (uint16_t)patternSize;
+	uint16_t actualSize = wSize * 2 + 1;
+	size_t dataSize = CX_ACTUAL(actualSize) * actualSize;
+	std::unique_ptr<uint8_t[]> buffer = std::make_unique<uint8_t[]>(dataSize);
+	memset(buffer.get(), 0xff, dataSize);
+	std::unique_ptr<uint8_t[]> aux = std::make_unique<uint8_t[]>(dataSize);
+	memset(aux.get(), 0, dataSize);
+	PicData data =
+	{
+		PicScreenFlags::Visual,
+		buffer.get(),
+		nullptr,
+		nullptr,
+		aux.get(),
+		true,
 		false, // REVIEW: check this
-        size16(actualSize, actualSize),
-        false
-    };
+		size16(actualSize, actualSize),
+		false
+	};
 
-    _DrawPattern<PlotVGA>(&data,
-        patternSize, patternSize,
-        0, 0, 0, PicScreenFlags::Visual,
-        pattern,
-        patternSize,
-        patternNR,
-        rectangle);
+	_DrawPattern<PlotVGA>(&data,
+		patternSize, patternSize,
+		0, 0, 0, PicScreenFlags::Visual,
+		pattern,
+		patternSize,
+		patternNR,
+		rectangle);
 
-    // Ok, it should be in there. Now convert from 8bpp to 1bpp
-    // For some reason, the mono bitmap stride must be at least 2 bytes (not 1 or 4).
-    size_t bitDataWidth = max(CX_ACTUAL_MONO(actualSize), 2);
-    size_t bitDataSize = bitDataWidth * actualSize;
-    std::unique_ptr<uint8_t[]> bitBuffer = std::make_unique<uint8_t[]>(bitDataSize);
-    memset(bitBuffer.get(), 0, bitDataSize);
-    uint8_t *destRaw = bitBuffer.get();
-    uint8_t *srcRaw = buffer.get();
-    for (size_t y = 0; y < actualSize; y++)
-    {
-        for (size_t x = 0; x < actualSize; x++)
-        {
-            bool white = (srcRaw[x] == 0xff);
-            if (white)
-            {
-                destRaw[x / 8] |= (0x80) >> (x % 8);
-            }
-        }
-        destRaw += bitDataWidth;
-        //srcRaw += CX_ACTUAL(actualSize);
-        srcRaw += actualSize;
-    }
-    BOOL result = bitmapOut.CreateBitmap(actualSize, actualSize, 1, 1, bitBuffer.get());
-    return !!result;
+	// Ok, it should be in there. Now convert from 8bpp to 1bpp
+	// For some reason, the mono bitmap stride must be at least 2 bytes (not 1 or 4).
+	size_t bitDataWidth = max(CX_ACTUAL_MONO(actualSize), 2);
+	size_t bitDataSize = bitDataWidth * actualSize;
+	std::unique_ptr<uint8_t[]> bitBuffer = std::make_unique<uint8_t[]>(bitDataSize);
+	memset(bitBuffer.get(), 0, bitDataSize);
+	uint8_t *destRaw = bitBuffer.get();
+	uint8_t *srcRaw = buffer.get();
+	for (size_t y = 0; y < actualSize; y++)
+	{
+		for (size_t x = 0; x < actualSize; x++)
+		{
+			bool white = (srcRaw[x] == 0xff);
+			if (white)
+			{
+				destRaw[x / 8] |= (0x80) >> (x % 8);
+			}
+		}
+		destRaw += bitDataWidth;
+		//srcRaw += CX_ACTUAL(actualSize);
+		srcRaw += actualSize;
+	}
+	BOOL result = bitmapOut.CreateBitmap(actualSize, actualSize, 1, 1, bitBuffer.get());
+	return !!result;
 }
 
 //
@@ -1040,123 +1040,123 @@ bool CreatePatternBitmap(CBitmap &bitmapOut, uint8_t patternSize, uint8_t patter
 //
 void DrawPatternInRect(int cx, int cy, PicData *pData, int16_t x, int16_t y, EGACOLOR color, uint8_t bPriorityValue, uint8_t bControlValue, PicScreenFlags dwDrawEnable, const PenStyle *pPenStyle)
 {
-    uint16_t wSize = (uint16_t)pPenStyle->bPatternSize;
+	uint16_t wSize = (uint16_t)pPenStyle->bPatternSize;
 
-    // Fix up x and y
-    if (x < wSize)
-    {
-        x = wSize;
-    }
-    if ((x + wSize) > (cx - 1))
-    {
-        x = (cx - 1) - wSize;
-    }
-    if (y < wSize)
-    {
-        y = wSize;
-    }
-    if ((y + wSize) > (cy - 1))
-    {
-        y = (cy - 1) - wSize;
-    }
+	// Fix up x and y
+	if (x < wSize)
+	{
+		x = wSize;
+	}
+	if ((x + wSize) > (cx - 1))
+	{
+		x = (cx - 1) - wSize;
+	}
+	if (y < wSize)
+	{
+		y = wSize;
+	}
+	if ((y + wSize) > (cy - 1))
+	{
+		y = (cy - 1) - wSize;
+	}
 
-    if (pPenStyle->bPatternNR < ARRAYSIZE(junqindex))
-    {
-        uint8_t junqbit = junqindex[pPenStyle->bPatternNR];
-        if (pPenStyle->fRectangle)
-        {
-            uint16_t k, l;
-            for (l = y - wSize; l <= y + wSize; l++)
-            {
-                for (k = x - wSize; k <= (x + wSize + 1); k++)
-                {
-                    if (pPenStyle->fPattern)
-                    {
-                        if ( (junq[junqbit>>3] >> (7-(junqbit & 7))) & 1)
-                        {
-                            _PlotPixNonStd(cx, cy, pData, k, l, dwDrawEnable, color, bPriorityValue, bControlValue);
-                        }
-                        junqbit++;
-                        if (junqbit == 0xff)
-                        {
-                            junqbit = 0;
-                        }
-                    }
-                    else
-                    {
-                        _PlotPixNonStd(cx, cy, pData, k, l, dwDrawEnable, color, bPriorityValue, bControlValue);
-                    }
-                }
-            }
-        }
-        else
-        {
-            uint16_t k, l;
-            // Circle
-            int circlebit = 0;
-            for (l = y - wSize; l <= y + wSize; l++)
-            {
-                for (k = x- wSize; k <= x + wSize + 1; k++)
-                {
-                    if ((circles[pPenStyle->bPatternSize][circlebit>>3] >> (7-(circlebit & 7))) & 1)
-                    {
-                        if (pPenStyle->fPattern)
-                        {
-                            if ((junq[junqbit>>3] >> (7-(junqbit & 7))) & 1)
-                            {
-                                _PlotPixNonStd(cx, cy, pData, k, l, dwDrawEnable, color, bPriorityValue, bControlValue);
-                            }
-                            junqbit++;
-                            if (junqbit == 0xff)
-                            {
-                                junqbit = 0;
-                            }
-                        }
-                        else
-                        {
-                            _PlotPixNonStd(cx, cy, pData, k, l, dwDrawEnable, color, bPriorityValue, bControlValue);
-                        }
-                    }
-                    circlebit++;
-                }
-            }
-        }
-    }
-    else
-    {
-        REPORTERROR(TEXT("bPatternNR was too high"));
-    }
+	if (pPenStyle->bPatternNR < ARRAYSIZE(junqindex))
+	{
+		uint8_t junqbit = junqindex[pPenStyle->bPatternNR];
+		if (pPenStyle->fRectangle)
+		{
+			uint16_t k, l;
+			for (l = y - wSize; l <= y + wSize; l++)
+			{
+				for (k = x - wSize; k <= (x + wSize + 1); k++)
+				{
+					if (pPenStyle->fPattern)
+					{
+						if ( (junq[junqbit>>3] >> (7-(junqbit & 7))) & 1)
+						{
+							_PlotPixNonStd(cx, cy, pData, k, l, dwDrawEnable, color, bPriorityValue, bControlValue);
+						}
+						junqbit++;
+						if (junqbit == 0xff)
+						{
+							junqbit = 0;
+						}
+					}
+					else
+					{
+						_PlotPixNonStd(cx, cy, pData, k, l, dwDrawEnable, color, bPriorityValue, bControlValue);
+					}
+				}
+			}
+		}
+		else
+		{
+			uint16_t k, l;
+			// Circle
+			int circlebit = 0;
+			for (l = y - wSize; l <= y + wSize; l++)
+			{
+				for (k = x- wSize; k <= x + wSize + 1; k++)
+				{
+					if ((circles[pPenStyle->bPatternSize][circlebit>>3] >> (7-(circlebit & 7))) & 1)
+					{
+						if (pPenStyle->fPattern)
+						{
+							if ((junq[junqbit>>3] >> (7-(junqbit & 7))) & 1)
+							{
+								_PlotPixNonStd(cx, cy, pData, k, l, dwDrawEnable, color, bPriorityValue, bControlValue);
+							}
+							junqbit++;
+							if (junqbit == 0xff)
+							{
+								junqbit = 0;
+							}
+						}
+						else
+						{
+							_PlotPixNonStd(cx, cy, pData, k, l, dwDrawEnable, color, bPriorityValue, bControlValue);
+						}
+					}
+					circlebit++;
+				}
+			}
+		}
+	}
+	else
+	{
+		REPORTERROR(TEXT("bPatternNR was too high"));
+	}
 }
 
 CelIndex MakeViewResourceIndexFromCelAndLoop(const ResourceEntity *pvr, int nLoop, int nCel)
 {
-    const RasterComponent &raster = pvr->GetComponent<RasterComponent>();
-    nLoop = nLoop % raster.Loops.size();
-    if (nLoop < 0)
-    {
-        nLoop = raster.Loops.size() + nLoop;
-        assert(nLoop > 0);
-    }
-    const Loop &loop = raster.Loops[nLoop];
-    nCel = nCel % loop.Cels.size();
-    if (nCel < 0)
-    {
-        nCel = loop.Cels.size() + nCel;
-        assert(nCel > 0);
-    }
-    return CelIndex(nLoop, nCel);
+	const RasterComponent &raster = pvr->GetComponent<RasterComponent>();
+	nLoop = nLoop % raster.Loops.size();
+	if (nLoop < 0)
+	{
+		nLoop = raster.Loops.size() + nLoop;
+		assert(nLoop > 0);
+	}
+	const Loop &loop = raster.Loops[nLoop];
+	nCel = nCel % loop.Cels.size();
+	if (nCel < 0)
+	{
+		nCel = loop.Cels.size() + nCel;
+		assert(nCel > 0);
+	}
+	return CelIndex(nLoop, nCel);
 }
 
 int mod(int x, int m) {
-    return (x%m + m) % m;
+	return (x%m + m) % m;
 }
 
 const Cel &GetCel(const ResourceEntity *pvr, int &nLoop, int &nCel)
 {
-    const RasterComponent &raster = pvr->GetComponent<RasterComponent>();
-    nLoop = mod(nLoop, (int)raster.Loops.size());
-    nCel = mod(nCel, (int)raster.Loops[nLoop].Cels.size());
-    return raster.Loops[nLoop].Cels[nCel];
+	const RasterComponent &raster = pvr->GetComponent<RasterComponent>();
+	nLoop = mod(nLoop, (int)raster.Loops.size());
+	nCel = mod(nCel, (int)raster.Loops[nLoop].Cels.size());
+	return raster.Loops[nLoop].Cels[nCel];
 }
 
 //
@@ -1165,22 +1165,22 @@ const Cel &GetCel(const ResourceEntity *pvr, int &nLoop, int &nCel)
 //
 CPoint FindCenterOfView(int16_t xEgo, int16_t yEgo, const ResourceEntity *pvr, int nLoop, int nCel)
 {
-    const Cel &cel = GetCel(pvr, nLoop, nCel);
-    int xiEgo = (int)xEgo + cel.placement.x;
-    int yiEgo = (int)yEgo + cel.placement.y;
-    return CPoint(xiEgo, yiEgo - cel.size.cy / 2);
+	const Cel &cel = GetCel(pvr, nLoop, nCel);
+	int xiEgo = (int)xEgo + cel.placement.x;
+	int yiEgo = (int)yEgo + cel.placement.y;
+	return CPoint(xiEgo, yiEgo - cel.size.cy / 2);
 }
 
 #define YSTEP 2 // We may want to allow the user to change this.
 CRect GetViewBoundsRect(int16_t xEgo, int16_t yEgo, const ResourceEntity *pvr, int nLoop, int nCel)
 {
-    const Cel &cel = GetCel(pvr, nLoop, nCel);
-    CRect rect;
-    rect.left = xEgo - cel.placement.x - (cel.size.cx / 2);
-    rect.right = rect.left + cel.size.cx;
-    rect.bottom = yEgo + 1;
-    rect.top = rect.bottom - YSTEP;
-    return rect;
+	const Cel &cel = GetCel(pvr, nLoop, nCel);
+	CRect rect;
+	rect.left = xEgo - cel.placement.x - (cel.size.cx / 2);
+	rect.right = rect.left + cel.size.cx;
+	rect.bottom = yEgo + 1;
+	rect.top = rect.bottom - YSTEP;
+	return rect;
 }
 
 //
@@ -1189,51 +1189,51 @@ CRect GetViewBoundsRect(int16_t xEgo, int16_t yEgo, const ResourceEntity *pvr, i
 //
 bool CanBeHere(size16 size, const uint8_t *pdataControl, const CRect &rect, uint16_t wControlMask)
 {
-    CRect rcClipped = rect;
-    rcClipped.left = max(rcClipped.left, 0);
-    rcClipped.top = max(rcClipped.top, 0);
-    rcClipped.bottom = min(rcClipped.bottom, size.cy - 1);
-    rcClipped.right = min(rcClipped.right, size.cx - 1);
-    for (int y = rcClipped.top; y <= rcClipped.bottom; y++)
-    {
-        for (int x = rcClipped.left; x <= rcClipped.right; x++)
-        {
-            int p = BUFFEROFFSET_NONSTD(size.cx, size.cy, x, y);
-            assert(pdataControl[p] <= 15);
-            if (wControlMask & (1 << (uint16_t)pdataControl[p]))
-            {
-                return false;
-            }
-        }
-    }
-    return true;
+	CRect rcClipped = rect;
+	rcClipped.left = max(rcClipped.left, 0);
+	rcClipped.top = max(rcClipped.top, 0);
+	rcClipped.bottom = min(rcClipped.bottom, size.cy - 1);
+	rcClipped.right = min(rcClipped.right, size.cx - 1);
+	for (int y = rcClipped.top; y <= rcClipped.bottom; y++)
+	{
+		for (int x = rcClipped.left; x <= rcClipped.right; x++)
+		{
+			int p = BUFFEROFFSET_NONSTD(size.cx, size.cy, x, y);
+			assert(pdataControl[p] <= 15);
+			if (wControlMask & (1 << (uint16_t)pdataControl[p]))
+			{
+				return false;
+			}
+		}
+	}
+	return true;
 }
 
 bool HitTestView(int16_t xCursor, int16_t yCursor, int16_t xEgo, int16_t yEgo, const ResourceEntity *pvr, int nLoop, int nCel)
 {
-    const Cel &cel = GetCel(pvr, nLoop, nCel);
-    int xiEgo = (int)xEgo + cel.placement.x;
-    int yiEgo = (int)yEgo + cel.placement.y;
-    if ((xiEgo >= 0) && (yiEgo >= 0))
-    {
-        return HitTestEgoBox(xCursor, yCursor, (int16_t)xiEgo, (int16_t)yiEgo, cel.size.cx, cel.size.cy);
-    }
-    else
-    {
-        return FALSE;
-    }
+	const Cel &cel = GetCel(pvr, nLoop, nCel);
+	int xiEgo = (int)xEgo + cel.placement.x;
+	int yiEgo = (int)yEgo + cel.placement.y;
+	if ((xiEgo >= 0) && (yiEgo >= 0))
+	{
+		return HitTestEgoBox(xCursor, yCursor, (int16_t)xiEgo, (int16_t)yiEgo, cel.size.cx, cel.size.cy);
+	}
+	else
+	{
+		return FALSE;
+	}
 }
 
 void GetViewRect(CRect *prc, int16_t xEgo, int16_t yEgo, const ResourceEntity *pvr, int nLoop, int nCel)
 {
-    const Cel &cel = GetCel(pvr, nLoop, nCel);
-    int xiEgo = (int)xEgo + cel.placement.x;
-    int yiEgo = (int)yEgo + cel.placement.y;
+	const Cel &cel = GetCel(pvr, nLoop, nCel);
+	int xiEgo = (int)xEgo + cel.placement.x;
+	int yiEgo = (int)yEgo + cel.placement.y;
 
-    prc->top = yiEgo - cel.size.cy;
-    prc->bottom = yiEgo;
-    prc->left = xiEgo - cel.size.cx / 2;
-    prc->right = xiEgo + cel.size.cx / 2;
+	prc->top = yiEgo - cel.size.cy;
+	prc->bottom = yiEgo;
+	prc->left = xiEgo - cel.size.cx / 2;
+	prc->right = xiEgo + cel.size.cx / 2;
 }
 
 
@@ -1242,127 +1242,127 @@ void GetViewRect(CRect *prc, int16_t xEgo, int16_t yEgo, const ResourceEntity *p
 //
 bool HitTestEgoBox(int16_t xCursor, int16_t yCursor, int16_t xEgo, int16_t yEgo, uint16_t cx, uint16_t cy)
 {
-    uint16_t cxHalf = cx / 2;
+	uint16_t cxHalf = cx / 2;
 
-    if (yCursor > yEgo)
-    {
-        return FALSE;
-    }
+	if (yCursor > yEgo)
+	{
+		return FALSE;
+	}
 
-    uint16_t ySafeTop;
-    if (yEgo < cy)
-    {
-        ySafeTop = 0;
-    }
-    else
-    {
-        ySafeTop = yEgo - cy;
-    }
-    if (yCursor < ySafeTop)
-    {
-        return FALSE;
-    }
+	uint16_t ySafeTop;
+	if (yEgo < cy)
+	{
+		ySafeTop = 0;
+	}
+	else
+	{
+		ySafeTop = yEgo - cy;
+	}
+	if (yCursor < ySafeTop)
+	{
+		return FALSE;
+	}
 
-    if (xCursor > (cxHalf + xEgo))
-    {
-        return FALSE;
-    }
+	if (xCursor > (cxHalf + xEgo))
+	{
+		return FALSE;
+	}
 
-    uint16_t xSafeLeft;
-    if (xEgo < cxHalf)
-    {
-        xSafeLeft = 0;
-    }
-    else
-    {
-        xSafeLeft = xEgo - cxHalf;
-    }
-    if (xCursor < xSafeLeft)
-    {
-        return FALSE;
-    }
+	uint16_t xSafeLeft;
+	if (xEgo < cxHalf)
+	{
+		xSafeLeft = 0;
+	}
+	else
+	{
+		xSafeLeft = xEgo - cxHalf;
+	}
+	if (xCursor < xSafeLeft)
+	{
+		return FALSE;
+	}
 
-    return TRUE;
+	return TRUE;
 }
 
 void DrawImageWithPriority(size16 displaySize, uint8_t *pdataDisplay, const uint8_t *pdataPriority, uint8_t *pdataPriorityWrite, uint8_t bEgoPriority, int xLeft, int yTop, uint16_t cx, uint16_t cy, uint16_t cxStride, const uint8_t *pImageData, uint8_t transparent, bool fShowOutline, bool isEGAUndithered)
 {
-    int xRight = xLeft + cx;
-    int yBottom = yTop + cy;
-    int yView = 0;
-    for (int yPic = yTop; yPic < yBottom; yPic++, yView++)
-    {
-        if ((yPic < displaySize.cy) && (yPic >= 0))
-        {
-            int xViewLeft = 0;
-            if (xLeft < 0)
-            {
-                // If we're off the left of the pic, don't copy from the beginning of the view's row
-                xViewLeft = -xLeft;
-            }
-            int xViewRight = cx;
-            if (xRight >= displaySize.cx)
-            {
-                xViewRight -= (xRight - displaySize.cx);
-            }
+	int xRight = xLeft + cx;
+	int yBottom = yTop + cy;
+	int yView = 0;
+	for (int yPic = yTop; yPic < yBottom; yPic++, yView++)
+	{
+		if ((yPic < displaySize.cy) && (yPic >= 0))
+		{
+			int xViewLeft = 0;
+			if (xLeft < 0)
+			{
+				// If we're off the left of the pic, don't copy from the beginning of the view's row
+				xViewLeft = -xLeft;
+			}
+			int xViewRight = cx;
+			if (xRight >= displaySize.cx)
+			{
+				xViewRight -= (xRight - displaySize.cx);
+			}
 
-            int xFirstPixel = -1;
-            int xLastPixel = -1;
-            int xPic = max(0, xLeft);
-            for (int xView = xViewLeft; xView < xViewRight; xView++, xPic++)
-            {
-                int pPicOffset = BUFFEROFFSET_NONSTD(displaySize.cx, displaySize.cy, xPic, yPic);
-                // We can draw something.
-                int pViewOffset = BUFFEROFFSET_NONSTD(cxStride, cy, xView, yView);
-                uint8_t bView = *(pImageData + pViewOffset);
-                if (bView != transparent)
-                {
-                    bool fShowing = (pdataPriority != nullptr) ? ((*(pdataPriority + pPicOffset)) <= bEgoPriority) : true;
-                    if (fShowing)
-                    {
-                        // Copy a pixel!
+			int xFirstPixel = -1;
+			int xLastPixel = -1;
+			int xPic = max(0, xLeft);
+			for (int xView = xViewLeft; xView < xViewRight; xView++, xPic++)
+			{
+				int pPicOffset = BUFFEROFFSET_NONSTD(displaySize.cx, displaySize.cy, xPic, yPic);
+				// We can draw something.
+				int pViewOffset = BUFFEROFFSET_NONSTD(cxStride, cy, xView, yView);
+				uint8_t bView = *(pImageData + pViewOffset);
+				if (bView != transparent)
+				{
+					bool fShowing = (pdataPriority != nullptr) ? ((*(pdataPriority + pPicOffset)) <= bEgoPriority) : true;
+					if (fShowing)
+					{
+						// Copy a pixel!
 						if (isEGAUndithered)
 						{
 							// Duplicate the color into the other slot if undithered.
 							bView |= (bView << 4);
 						}
-                        *(pdataDisplay + pPicOffset) = bView;
-                        xLastPixel = -1;
+						*(pdataDisplay + pPicOffset) = bView;
+						xLastPixel = -1;
 
-                        if (pdataPriorityWrite)
-                        {
-                            *(pdataPriorityWrite + pPicOffset) = bEgoPriority;
-                        }
-                    }
-                    else
-                    {
-                        if (fShowOutline)
-                        {
-                            xLastPixel = xPic;
-                            if (xFirstPixel == -1)
-                            {
-                                xFirstPixel = xPic;
-                            }
-                        }
-                    }
-                }
-            }
-            if (fShowOutline)
-            {
-                if ((xFirstPixel >= 0) && (xFirstPixel < displaySize.cx))
-                {
-                    int pPicOffset = BUFFEROFFSET_NONSTD(displaySize.cx, displaySize.cy, xFirstPixel, yPic);
-                    *(pdataDisplay + pPicOffset) = bEgoPriority;
-                }
-                if ((xLastPixel >= 0) && (xLastPixel < displaySize.cx))
-                {
-                    int pPicOffset = BUFFEROFFSET_NONSTD(displaySize.cx, displaySize.cy, xLastPixel, yPic);
-                    *(pdataDisplay + pPicOffset) = bEgoPriority;
-                }
+						if (pdataPriorityWrite)
+						{
+							*(pdataPriorityWrite + pPicOffset) = bEgoPriority;
+						}
+					}
+					else
+					{
+						if (fShowOutline)
+						{
+							xLastPixel = xPic;
+							if (xFirstPixel == -1)
+							{
+								xFirstPixel = xPic;
+							}
+						}
+					}
+				}
+			}
+			if (fShowOutline)
+			{
+				if ((xFirstPixel >= 0) && (xFirstPixel < displaySize.cx))
+				{
+					int pPicOffset = BUFFEROFFSET_NONSTD(displaySize.cx, displaySize.cy, xFirstPixel, yPic);
+					*(pdataDisplay + pPicOffset) = bEgoPriority;
+				}
+				if ((xLastPixel >= 0) && (xLastPixel < displaySize.cx))
+				{
+					int pPicOffset = BUFFEROFFSET_NONSTD(displaySize.cx, displaySize.cy, xLastPixel, yPic);
+					*(pdataDisplay + pPicOffset) = bEgoPriority;
+				}
 
-            }
-        }
-    }
+			}
+		}
+	}
 }
 
 //
@@ -1370,68 +1370,68 @@ void DrawImageWithPriority(size16 displaySize, uint8_t *pdataDisplay, const uint
 //
 CRect DrawViewWithPriority(size16 displaySize, uint8_t *pdataDisplay, const uint8_t *pdataPriority, uint8_t bEgoPriority, int16_t xIn, int16_t yIn, const ResourceEntity *pvr, int nLoop, int nCel, bool fShowOutline, bool isEGAUndithered)
 {
-    const Cel &cel = GetCel(pvr, nLoop, nCel);
-    uint8_t bTransparent = cel.TransparentColor;
+	const Cel &cel = GetCel(pvr, nLoop, nCel);
+	uint8_t bTransparent = cel.TransparentColor;
 
-    yIn += cel.placement.y;
-    xIn += cel.placement.x;
+	yIn += cel.placement.y;
+	xIn += cel.placement.x;
    
-    int xLeft = xIn - (cel.size.cx / 2);
-    int yTop = yIn - cel.size.cy + 1;
+	int xLeft = xIn - (cel.size.cx / 2);
+	int yTop = yIn - cel.size.cy + 1;
 
-    std::unique_ptr<uint8_t[]> data = std::make_unique<uint8_t[]>(CX_ACTUAL(cel.size.cx) * cel.size.cy);
-    CopyBitmapData(pvr->GetComponent<RasterComponent>(), CelIndex(nLoop, nCel), data.get(), cel.size);
+	std::unique_ptr<uint8_t[]> data = std::make_unique<uint8_t[]>(CX_ACTUAL(cel.size.cx) * cel.size.cy);
+	CopyBitmapData(pvr->GetComponent<RasterComponent>(), CelIndex(nLoop, nCel), data.get(), cel.size);
 
-    DrawImageWithPriority(displaySize, pdataDisplay, pdataPriority, nullptr, bEgoPriority, xLeft, yTop, cel.size.cx, cel.size.cy, cel.GetStride(), &data[0], bTransparent, fShowOutline, isEGAUndithered);
+	DrawImageWithPriority(displaySize, pdataDisplay, pdataPriority, nullptr, bEgoPriority, xLeft, yTop, cel.size.cx, cel.size.cy, cel.GetStride(), &data[0], bTransparent, fShowOutline, isEGAUndithered);
 
-    CRect rc(xLeft, yTop, xLeft + cel.size.cx, yTop + cel.size.cy);
-    if (fShowOutline)
-    {
-        rc.InflateRect(1, 1);
-    }
-    rc.left = max(0, rc.left);
-    rc.top = max(0, rc.top);
-    rc.right = max(rc.left, min(rc.right, displaySize.cx));
-    rc.bottom = max(rc.top, min(rc.bottom, displaySize.cy));
-    return rc;
+	CRect rc(xLeft, yTop, xLeft + cel.size.cx, yTop + cel.size.cy);
+	if (fShowOutline)
+	{
+		rc.InflateRect(1, 1);
+	}
+	rc.left = max(0, rc.left);
+	rc.top = max(0, rc.top);
+	rc.right = max(rc.left, min(rc.right, displaySize.cx));
+	rc.bottom = max(rc.top, min(rc.bottom, displaySize.cy));
+	return rc;
 }
 
 
 void DrawBoxWithPriority(size16 picSize, uint8_t *pdataDisplay, const uint8_t *pdataPriority, uint8_t bEgoPriority, int16_t xIn, int16_t yIn, uint16_t cx, uint16_t cy, bool isDithered)
 {
-    int xMax = picSize.cx - 1;
-    int yMax = picSize.cy - 1;
+	int xMax = picSize.cx - 1;
+	int yMax = picSize.cy - 1;
 
-    uint16_t cxHalf = cx / 2;
-    int16_t xLeft;
-    if (xIn < cxHalf)
-    {
-        xLeft = 0;
-    }
-    else
-    {
-        xLeft = xIn - cxHalf;
-    }
-    int16_t xRight = xIn + cxHalf;
-    if (xRight >= xMax)
-    {
-        xRight = xMax;
-    }
+	uint16_t cxHalf = cx / 2;
+	int16_t xLeft;
+	if (xIn < cxHalf)
+	{
+		xLeft = 0;
+	}
+	else
+	{
+		xLeft = xIn - cxHalf;
+	}
+	int16_t xRight = xIn + cxHalf;
+	if (xRight >= xMax)
+	{
+		xRight = xMax;
+	}
 
-    int16_t yBottom = yIn;
-    if (yBottom > yMax)
-    {
-        yBottom = yMax;
-    }
-    int16_t ySafeTop;
-    if (yIn < cy)
-    {
-        ySafeTop = 0;
-    }
-    else
-    {
-        ySafeTop = yIn - cy;
-    }
+	int16_t yBottom = yIn;
+	if (yBottom > yMax)
+	{
+		yBottom = yMax;
+	}
+	int16_t ySafeTop;
+	if (yIn < cy)
+	{
+		ySafeTop = 0;
+	}
+	else
+	{
+		ySafeTop = yIn - cy;
+	}
 
 	uint8_t whiteValue = isDithered ? 0x0f : 0xff;
 	uint8_t priDisplayValue = bEgoPriority;
@@ -1440,26 +1440,26 @@ void DrawBoxWithPriority(size16 picSize, uint8_t *pdataDisplay, const uint8_t *p
 		priDisplayValue |= (priDisplayValue >> 4);
 	}
 
-    for (int16_t x = xLeft; x <= xRight; x++)
-    {
-        for (int16_t y = ySafeTop; y <= yBottom; y++)
-        {
-            int p = BUFFEROFFSET_NONSTD(picSize.cx, picSize.cy, x, y);
-            if ( (*(pdataPriority + p)) <= bEgoPriority)
-            {
-                // Then draw it.  Avoid using _PlotPix, since we need an aux map for that.
-                if ( ((x - xLeft) < 2) || ((xRight - x) < 2) || ((y - ySafeTop) < 2) || ((yBottom - y) < 2))
-                {
-                    pdataDisplay[p] = whiteValue;
-                }
-                else
-                {
-                    pdataDisplay[p] = priDisplayValue; // the priority colour
-                }
+	for (int16_t x = xLeft; x <= xRight; x++)
+	{
+		for (int16_t y = ySafeTop; y <= yBottom; y++)
+		{
+			int p = BUFFEROFFSET_NONSTD(picSize.cx, picSize.cy, x, y);
+			if ( (*(pdataPriority + p)) <= bEgoPriority)
+			{
+				// Then draw it.  Avoid using _PlotPix, since we need an aux map for that.
+				if ( ((x - xLeft) < 2) || ((xRight - x) < 2) || ((y - ySafeTop) < 2) || ((yBottom - y) < 2))
+				{
+					pdataDisplay[p] = whiteValue;
+				}
+				else
+				{
+					pdataDisplay[p] = priDisplayValue; // the priority colour
+				}
 
-            }
-        }
-    }
+			}
+		}
+	}
 }
 
 #define EMPTY ((__int32)-1)
@@ -1483,14 +1483,14 @@ sPOINT g_pEmpty={EMPTY,EMPTY};
 //
 
 #define FILL_BOUNDS(cx, cy, fx, fy, TFormat) ((((uint8_t)dwDrawEnable) & GET_PIX_AUX((cx), (cy), (fx), (fy))) && \
-                  !(IsFlagSet(dwDrawEnable, PicScreenFlags::Visual) && (TFormat::IsPixelWhite(GET_PIX_VISUAL((cx), (cy), (fx), (fy)), fx, fy))))
+				  !(IsFlagSet(dwDrawEnable, PicScreenFlags::Visual) && (TFormat::IsPixelWhite(GET_PIX_VISUAL((cx), (cy), (fx), (fy)), fx, fy))))
 
 
 inline bool qstore(int displayByteSize, __int16 x,__int16 y, __int32 *prpos)
 {
    if ((*prpos) == displayByteSize)
    {
-       return FALSE;
+	   return FALSE;
    }
    g_buf[*prpos].x = x;
    g_buf[*prpos].y = y;
@@ -1502,7 +1502,7 @@ inline sPOINT qretrieve(__int32 *prpos)
 {
    if (!*prpos)
    {
-       return g_pEmpty;
+	   return g_pEmpty;
    }
 
    (*prpos)--;
@@ -1524,95 +1524,95 @@ std::mutex g_mutexDither;
 template<typename _TFormat>
 void _DitherFill(PicData *pdata, int16_t x, int16_t y, typename  _TFormat::PixelType color, uint8_t bPriorityValue, uint8_t bControlValue, PicScreenFlags dwDrawEnable)
 {
-    PicScreenFlags auxSet = _GetAuxSet<_TFormat>(color, bPriorityValue, bControlValue, dwDrawEnable);
-    dwDrawEnable = auxSet;
+	PicScreenFlags auxSet = _GetAuxSet<_TFormat>(color, bPriorityValue, bControlValue, dwDrawEnable);
+	dwDrawEnable = auxSet;
 
-    // Guard against someone doing a fill with pure white, since this algorithm will hang in that case.
-    // Hero's quest does this, when some pictures are drawn with some palettes.
-    if (_TFormat::EarlyBail(dwDrawEnable, color, bPriorityValue, bControlValue))
-    {
-        return;
-    }
+	// Guard against someone doing a fill with pure white, since this algorithm will hang in that case.
+	// Hero's quest does this, when some pictures are drawn with some palettes.
+	if (_TFormat::EarlyBail(dwDrawEnable, color, bPriorityValue, bControlValue))
+	{
+		return;
+	}
 
-    // If no screen is being drawn to, bail.
-    if (dwDrawEnable == PicScreenFlags::None)
-    {
-        return;
-    }
+	// If no screen is being drawn to, bail.
+	if (dwDrawEnable == PicScreenFlags::None)
+	{
+		return;
+	}
 
-    // Guard access to the buffers we use for dithering.
-    std::lock_guard<std::mutex> lock(g_mutexDither);
+	// Guard access to the buffers we use for dithering.
+	std::lock_guard<std::mutex> lock(g_mutexDither);
 
-    g_commands =0;
+	g_commands =0;
 
-    sPOINT p;
-    __int32 rpos, spos;
+	sPOINT p;
+	__int32 rpos, spos;
 
-    int cx = pdata->size.cx;
-    int cy = pdata->size.cy;
-    int xMax = cx - 1;
-    int yMax = cy - 1;
-    int displayByteSize = cx * cy;
+	int cx = pdata->size.cx;
+	int cy = pdata->size.cy;
+	int xMax = cx - 1;
+	int yMax = cy - 1;
+	int displayByteSize = cx * cy;
 
-    if (!CHECK_RECT(cx, cy, x, y))
-    {
-        return;
-    }
+	if (!CHECK_RECT(cx, cy, x, y))
+	{
+		return;
+	}
 
-    if (FILL_BOUNDS(cx, cy, x, y, _TFormat))
-    {
-        return;
-    }
+	if (FILL_BOUNDS(cx, cy, x, y, _TFormat))
+	{
+		return;
+	}
 
-    __int16 x1, y1;
+	__int16 x1, y1;
 
-    rpos = spos = 0;
+	rpos = spos = 0;
 
-    if (!qstore(displayByteSize, x, y, &rpos))
-    {
-        return;
-    }
+	if (!qstore(displayByteSize, x, y, &rpos))
+	{
+		return;
+	}
 
-    for (;;)
-    {
-        p = qretrieve(&rpos);
-        x1 = p.x;
-        y1 = p.y;
+	for (;;)
+	{
+		p = qretrieve(&rpos);
+		x1 = p.x;
+		y1 = p.y;
 
-        if ((x1 == EMPTY) || (y1 == EMPTY))
-        {
-            return;
-        }
-        else
-        {
-            if (OK_TO_FILL(cx, cy, x1, y1, _TFormat))
-            {
-                _PlotPix<_TFormat>(pdata, (int16_t)x1, (int16_t)y1, dwDrawEnable, auxSet, color, bPriorityValue, bControlValue);
+		if ((x1 == EMPTY) || (y1 == EMPTY))
+		{
+			return;
+		}
+		else
+		{
+			if (OK_TO_FILL(cx, cy, x1, y1, _TFormat))
+			{
+				_PlotPix<_TFormat>(pdata, (int16_t)x1, (int16_t)y1, dwDrawEnable, auxSet, color, bPriorityValue, bControlValue);
 
-                // PERF: Tried removing OK_TO_FILL here, but it made it worse
-                // (It's technically uncessary)
-                if ((y1 != 0) && OK_TO_FILL(cx, cy, x1, y1 - 1, _TFormat))
-                {
-                    if (!qstore(displayByteSize, x1, y1 - 1, &rpos)) break;
-                }
-                if ((x1 != 0) && OK_TO_FILL(cx, cy, x1 - 1, y1, _TFormat))
-                {  
-                    if (!qstore(displayByteSize, x1 - 1, y1, &rpos)) break;
-                }
-                if ((x1 != xMax) && OK_TO_FILL(cx, cy, x1 + 1, y1, _TFormat))
-                { 
-                    if (!qstore(displayByteSize, x1 + 1, y1, &rpos)) break;;
-                }
-                if ((y1 != yMax) && OK_TO_FILL(cx, cy, x1, y1 + 1, _TFormat))
-                {
-                    if (!qstore(displayByteSize, x1, y1 + 1, &rpos)) break;;
-                }
+				// PERF: Tried removing OK_TO_FILL here, but it made it worse
+				// (It's technically uncessary)
+				if ((y1 != 0) && OK_TO_FILL(cx, cy, x1, y1 - 1, _TFormat))
+				{
+					if (!qstore(displayByteSize, x1, y1 - 1, &rpos)) break;
+				}
+				if ((x1 != 0) && OK_TO_FILL(cx, cy, x1 - 1, y1, _TFormat))
+				{  
+					if (!qstore(displayByteSize, x1 - 1, y1, &rpos)) break;
+				}
+				if ((x1 != xMax) && OK_TO_FILL(cx, cy, x1 + 1, y1, _TFormat))
+				{ 
+					if (!qstore(displayByteSize, x1 + 1, y1, &rpos)) break;;
+				}
+				if ((y1 != yMax) && OK_TO_FILL(cx, cy, x1, y1 + 1, _TFormat))
+				{
+					if (!qstore(displayByteSize, x1, y1 + 1, &rpos)) break;;
+				}
 
-                g_commands += 4;
-            }
+				g_commands += 4;
+			}
 
-        }
-    }
+		}
+	}
 }
 
 
@@ -1623,17 +1623,17 @@ void _DitherFill(PicData *pdata, int16_t x, int16_t y, typename  _TFormat::Pixel
 //
 void PicCommand::_CreateLine(int16_t xFrom, int16_t yFrom, int16_t xTo, int16_t yTo)
 {
-    assert(_IsEmpty());
-    type = Line;
-    drawLine.xFrom = xFrom;
-    drawLine.yFrom = yFrom;
-    drawLine.xTo = xTo;
-    drawLine.yTo = yTo;
+	assert(_IsEmpty());
+	type = Line;
+	drawLine.xFrom = xFrom;
+	drawLine.yFrom = yFrom;
+	drawLine.xTo = xTo;
+	drawLine.yTo = yTo;
 }
 
 void LineCommand_Draw(const PicCommand *pCommand, PicData *pData, ViewPort *pState)
 {
-    LineCommand_DrawOnly(pCommand, pData, pState);
+	LineCommand_DrawOnly(pCommand, pData, pState);
 }
 
 //
@@ -1641,12 +1641,12 @@ void LineCommand_Draw(const PicCommand *pCommand, PicData *pData, ViewPort *pSta
 //
 void LineCommand_DrawOnly(const PicCommand *pCommand, PicData *pData, const ViewPort *pState)
 {
-    if (pData->isVGA)
-    {
-        _DitherLine<PlotVGA>(pData,
-            pCommand->drawLine.xFrom, pCommand->drawLine.yFrom, pCommand->drawLine.xTo, pCommand->drawLine.yTo,
-            pState->bPaletteOffset, pState->bPriorityValue, pState->bControlValue, pState->dwDrawEnable);
-    }
+	if (pData->isVGA)
+	{
+		_DitherLine<PlotVGA>(pData,
+			pCommand->drawLine.xFrom, pCommand->drawLine.yFrom, pCommand->drawLine.xTo, pCommand->drawLine.yTo,
+			pState->bPaletteOffset, pState->bPriorityValue, pState->bControlValue, pState->dwDrawEnable);
+	}
 	else if (pData->isUndithered)
 	{
 		_DitherLine<PlotEGAUndithered>(pData,
@@ -1654,11 +1654,11 @@ void LineCommand_DrawOnly(const PicCommand *pCommand, PicData *pData, const View
 			pState->egaColor, pState->bPriorityValue, pState->bControlValue, pState->dwDrawEnable);
 	}
 	else
-    {
-        _DitherLine<PlotEGA>(pData,
-            pCommand->drawLine.xFrom, pCommand->drawLine.yFrom, pCommand->drawLine.xTo, pCommand->drawLine.yTo,
-            pState->egaColor, pState->bPriorityValue, pState->bControlValue, pState->dwDrawEnable);
-    }
+	{
+		_DitherLine<PlotEGA>(pData,
+			pCommand->drawLine.xFrom, pCommand->drawLine.yFrom, pCommand->drawLine.xTo, pCommand->drawLine.yTo,
+			pState->egaColor, pState->bPriorityValue, pState->bControlValue, pState->dwDrawEnable);
+	}
 }
 
 //
@@ -1666,66 +1666,66 @@ void LineCommand_DrawOnly(const PicCommand *pCommand, PicData *pData, const View
 //
 void LineCommand_DrawOverride(PicCommand *pCommand, PicData *pData, EGACOLOR color, uint8_t bPriorityValue, uint8_t bControlValue, PicScreenFlags dwDrawEnable)
 {
-    _DitherLine<PlotEGA>(pData,
-        pCommand->drawLine.xFrom, pCommand->drawLine.yFrom, pCommand->drawLine.xTo, pCommand->drawLine.yTo,
-        color, bPriorityValue, bControlValue, dwDrawEnable);
+	_DitherLine<PlotEGA>(pData,
+		pCommand->drawLine.xFrom, pCommand->drawLine.yFrom, pCommand->drawLine.xTo, pCommand->drawLine.yTo,
+		color, bPriorityValue, bControlValue, dwDrawEnable);
 }
 
 
 void LineCommand_GetName(const PicCommand *pCommand, TCHAR *pszBuf, size_t cchBuf)
 {
-    StringCchPrintf(pszBuf, cchBuf, "Line: %dx%d - %dx%d", pCommand->drawLine.xFrom, pCommand->drawLine.yFrom, pCommand->drawLine.xTo, pCommand->drawLine.yTo);
+	StringCchPrintf(pszBuf, cchBuf, "Line: %dx%d - %dx%d", pCommand->drawLine.xFrom, pCommand->drawLine.yFrom, pCommand->drawLine.xTo, pCommand->drawLine.yTo);
 }
 
 void LineCommand_TODO(PicCommand *pCommand, TCHAR *pszBuf, size_t cchBuf)
 {
-    *pszBuf = 0;
+	*pszBuf = 0;
 }
 
 void LineCommand_Serialize(sci::ostream *pSerial, const PicCommand *pCommand, const PicCommand *pCommandPrev, const PicCommand *pCommandNext, DRAWSIZE dsPrev, DRAWSIZE *pds, SerializedPicState *pState)
 {
-    // This is complex.
-    // To draw a line.
-    // Get the current DRAWSIZE for this line.  Check if the this one is equal to or smaller
-    // than the previous.  If so, add to it.  Otherwise, start a new command.
-    DRAWSIZE ds = DrawSizeFromCoords(pCommand->drawLine.xFrom, pCommand->drawLine.yFrom,
-                                     pCommand->drawLine.xTo, pCommand->drawLine.yTo);
+	// This is complex.
+	// To draw a line.
+	// Get the current DRAWSIZE for this line.  Check if the this one is equal to or smaller
+	// than the previous.  If so, add to it.  Otherwise, start a new command.
+	DRAWSIZE ds = DrawSizeFromCoords(pCommand->drawLine.xFrom, pCommand->drawLine.yFrom,
+									 pCommand->drawLine.xTo, pCommand->drawLine.yTo);
 
-    // We need to start a new command if the previous one was a different kind of command (or none)
-    bool bStartNew = (!pCommandPrev) || (pCommand->type != pCommandPrev->type);
+	// We need to start a new command if the previous one was a different kind of command (or none)
+	bool bStartNew = (!pCommandPrev) || (pCommand->type != pCommandPrev->type);
 
-    // Or if the line ended on a different than this one begins.
-    if (!bStartNew)
-    {
-        bStartNew = ((pCommand->drawLine.xFrom != pCommandPrev->drawLine.xTo) ||
-                    (pCommand->drawLine.yFrom != pCommandPrev->drawLine.yTo));
-    }
+	// Or if the line ended on a different than this one begins.
+	if (!bStartNew)
+	{
+		bStartNew = ((pCommand->drawLine.xFrom != pCommandPrev->drawLine.xTo) ||
+					(pCommand->drawLine.yFrom != pCommandPrev->drawLine.yTo));
+	}
 
-    if (!bStartNew)
-    {
-        // It was the same kind of command.  Maybe we can keep adding to it.  We can do so
-        // if it our DRAWSIZE is less than or equal to the previous DRAWSIZE.
-        // But how can we be sure of the previous DRAWSIZE?  It might expost itself as smaller than
-        // it really was, since the thing before it could have been bigger.  So it needs to be
-        // passed in as a param.
-        bStartNew = (ds > dsPrev);
-    }
+	if (!bStartNew)
+	{
+		// It was the same kind of command.  Maybe we can keep adding to it.  We can do so
+		// if it our DRAWSIZE is less than or equal to the previous DRAWSIZE.
+		// But how can we be sure of the previous DRAWSIZE?  It might expost itself as smaller than
+		// it really was, since the thing before it could have been bigger.  So it needs to be
+		// passed in as a param.
+		bStartNew = (ds > dsPrev);
+	}
 
-    if (bStartNew)
-    {
-        // Start a new command.
-        pSerial->WriteByte(OpcodeFromCommandTypeAndSize(PicCommand::Line, ds));
-        
-        _WriteAbsCoordinate(pSerial, pCommand->drawLine.xFrom, pCommand->drawLine.yFrom);
-        _WriteCoordinate(pSerial, ds, pCommand->drawLine.xFrom, pCommand->drawLine.yFrom, pCommand->drawLine.xTo, pCommand->drawLine.yTo);
-        *pds = ds; // Pass out the DRAWSIZE we used.
-    }
-    else
-    {
-        // Continue from the old command.
-        _WriteCoordinate(pSerial, dsPrev, pCommand->drawLine.xFrom, pCommand->drawLine.yFrom, pCommand->drawLine.xTo, pCommand->drawLine.yTo);
-        *pds = dsPrev;
-    }
+	if (bStartNew)
+	{
+		// Start a new command.
+		pSerial->WriteByte(OpcodeFromCommandTypeAndSize(PicCommand::Line, ds));
+		
+		_WriteAbsCoordinate(pSerial, pCommand->drawLine.xFrom, pCommand->drawLine.yFrom);
+		_WriteCoordinate(pSerial, ds, pCommand->drawLine.xFrom, pCommand->drawLine.yFrom, pCommand->drawLine.xTo, pCommand->drawLine.yTo);
+		*pds = ds; // Pass out the DRAWSIZE we used.
+	}
+	else
+	{
+		// Continue from the old command.
+		_WriteCoordinate(pSerial, dsPrev, pCommand->drawLine.xFrom, pCommand->drawLine.yFrom, pCommand->drawLine.xTo, pCommand->drawLine.yTo);
+		*pds = dsPrev;
+	}
 }
 
 
@@ -1739,44 +1739,44 @@ void LineCommand_Serialize(sci::ostream *pSerial, const PicCommand *pCommand, co
 //
 void PicCommand::_CreatePattern(int16_t x, int16_t y, uint8_t bPatternSize, uint8_t bPatternNR, bool fPattern, bool fRectangle)
 {
-    assert(_IsEmpty());
-    assert(bPatternNR < 128);
+	assert(_IsEmpty());
+	assert(bPatternNR < 128);
 
-    type = Pattern;
-    drawPattern.x = x;
-    drawPattern.y = y;
-    drawPattern.bPatternSize = bPatternSize;
-    drawPattern.bPatternNR = bPatternNR;
+	type = Pattern;
+	drawPattern.x = x;
+	drawPattern.y = y;
+	drawPattern.bPatternSize = bPatternSize;
+	drawPattern.bPatternNR = bPatternNR;
 
-    // Even though the SCI pic resource specifies that PIC_OP_SET_PATTERN is a separate command, we integrate
-    // it into each draw-pattern command.  The avoids the user falling into the trap of drawing a pattern
-    // with a particular fSolid state, and then going back earlier in the pic and changing it (if that is
-    // allowed, this confuses the rendering engine (it may crash, hang, or draw incorrectly) - so this editor will not allow that).
-    drawPattern.wFlags = 0;
-    if (fRectangle)
-    {
-        drawPattern.wFlags |= PATTERN_FLAG_RECTANGLE;
-    }
+	// Even though the SCI pic resource specifies that PIC_OP_SET_PATTERN is a separate command, we integrate
+	// it into each draw-pattern command.  The avoids the user falling into the trap of drawing a pattern
+	// with a particular fSolid state, and then going back earlier in the pic and changing it (if that is
+	// allowed, this confuses the rendering engine (it may crash, hang, or draw incorrectly) - so this editor will not allow that).
+	drawPattern.wFlags = 0;
+	if (fRectangle)
+	{
+		drawPattern.wFlags |= PATTERN_FLAG_RECTANGLE;
+	}
 
-    if (fPattern)
-    {
-        drawPattern.wFlags |= PATTERN_FLAG_USE_PATTERN;        
-    }
+	if (fPattern)
+	{
+		drawPattern.wFlags |= PATTERN_FLAG_USE_PATTERN;		
+	}
 }
 
 // This version doesn't update the pState.  It is used for previewing the pen tool.
 void PatternCommand_Draw_DrawOnly(const PicCommand *pCommand, PicData *pData, const ViewPort *pState)
 {
-    if (pData->isVGA)
-    {
-        _DrawPattern<PlotVGA>(pData,
-            pCommand->drawPattern.x, pCommand->drawPattern.y,
-            pState->bPaletteOffset, pState->bPriorityValue, pState->bControlValue, pState->dwDrawEnable,
-            (pCommand->drawPattern.wFlags & PATTERN_FLAG_USE_PATTERN) != 0,
-            pCommand->drawPattern.bPatternSize,
-            pCommand->drawPattern.bPatternNR,
-            (pCommand->drawPattern.wFlags & PATTERN_FLAG_RECTANGLE) != 0);
-    }
+	if (pData->isVGA)
+	{
+		_DrawPattern<PlotVGA>(pData,
+			pCommand->drawPattern.x, pCommand->drawPattern.y,
+			pState->bPaletteOffset, pState->bPriorityValue, pState->bControlValue, pState->dwDrawEnable,
+			(pCommand->drawPattern.wFlags & PATTERN_FLAG_USE_PATTERN) != 0,
+			pCommand->drawPattern.bPatternSize,
+			pCommand->drawPattern.bPatternNR,
+			(pCommand->drawPattern.wFlags & PATTERN_FLAG_RECTANGLE) != 0);
+	}
 	else if (pData->isUndithered)
 	{
 		_DrawPattern<PlotEGAUndithered>(pData,
@@ -1787,128 +1787,128 @@ void PatternCommand_Draw_DrawOnly(const PicCommand *pCommand, PicData *pData, co
 			pCommand->drawPattern.bPatternNR,
 			(pCommand->drawPattern.wFlags & PATTERN_FLAG_RECTANGLE) != 0);
 	}
-    else
-    {
-        _DrawPattern<PlotEGA>(pData,
-            pCommand->drawPattern.x, pCommand->drawPattern.y,
-            pState->egaColor, pState->bPriorityValue, pState->bControlValue, pState->dwDrawEnable,
-            (pCommand->drawPattern.wFlags & PATTERN_FLAG_USE_PATTERN) != 0,
-            pCommand->drawPattern.bPatternSize,
-            pCommand->drawPattern.bPatternNR,
-            (pCommand->drawPattern.wFlags & PATTERN_FLAG_RECTANGLE) != 0);
-    }
+	else
+	{
+		_DrawPattern<PlotEGA>(pData,
+			pCommand->drawPattern.x, pCommand->drawPattern.y,
+			pState->egaColor, pState->bPriorityValue, pState->bControlValue, pState->dwDrawEnable,
+			(pCommand->drawPattern.wFlags & PATTERN_FLAG_USE_PATTERN) != 0,
+			pCommand->drawPattern.bPatternSize,
+			pCommand->drawPattern.bPatternNR,
+			(pCommand->drawPattern.wFlags & PATTERN_FLAG_RECTANGLE) != 0);
+	}
 }
 
 // This version *only* updates state.
 void PatternCommand_Draw_StateOnly(const PicCommand *pCommand, PicData *pData, ViewPort *pState)
 {
-    // Update some state variables (even though they are part of the command, the view may want to know)
-    pState->bPatternSize = pCommand->drawPattern.bPatternSize;
-    //pState->bPatternCode = pCommand->drawPattern.wFlags;
-    pState->bPatternNR = pState->bPatternNR;
+	// Update some state variables (even though they are part of the command, the view may want to know)
+	pState->bPatternSize = pCommand->drawPattern.bPatternSize;
+	//pState->bPatternCode = pCommand->drawPattern.wFlags;
+	pState->bPatternNR = pState->bPatternNR;
 }
 
 void PatternCommand_Draw(const PicCommand *pCommand, PicData *pData, ViewPort *pState)
 {
-    PatternCommand_Draw_DrawOnly(pCommand, pData, pState);
-    PatternCommand_Draw_StateOnly(pCommand, pData, pState);
+	PatternCommand_Draw_DrawOnly(pCommand, pData, pState);
+	PatternCommand_Draw_StateOnly(pCommand, pData, pState);
 }
 
 void PatternCommand_GetName(const PicCommand *pCommand, TCHAR *pszBuf, size_t cchBuf)
 {
-    char szPatternNumber[10] = {};
-    if (pCommand->drawPattern.wFlags & PATTERN_FLAG_USE_PATTERN)
-    {
-        StringCchPrintf(szPatternNumber, ARRAYSIZE(szPatternNumber), "-%02x", (int)pCommand->drawPattern.bPatternNR);
-    }
-    StringCchPrintf(pszBuf, cchBuf, "Pen: %dx%d %s-%s(%d%s)", pCommand->drawPattern.x, pCommand->drawPattern.y,
-                    pCommand->drawPattern.wFlags & PATTERN_FLAG_USE_PATTERN ? TEXT("Pat") : TEXT("Sld"),
-                    pCommand->drawPattern.wFlags & PATTERN_FLAG_RECTANGLE ? TEXT("R") : TEXT("C"),
-                    pCommand->drawPattern.bPatternSize,
-                    szPatternNumber);
+	char szPatternNumber[10] = {};
+	if (pCommand->drawPattern.wFlags & PATTERN_FLAG_USE_PATTERN)
+	{
+		StringCchPrintf(szPatternNumber, ARRAYSIZE(szPatternNumber), "-%02x", (int)pCommand->drawPattern.bPatternNR);
+	}
+	StringCchPrintf(pszBuf, cchBuf, "Pen: %dx%d %s-%s(%d%s)", pCommand->drawPattern.x, pCommand->drawPattern.y,
+					pCommand->drawPattern.wFlags & PATTERN_FLAG_USE_PATTERN ? TEXT("Pat") : TEXT("Sld"),
+					pCommand->drawPattern.wFlags & PATTERN_FLAG_RECTANGLE ? TEXT("R") : TEXT("C"),
+					pCommand->drawPattern.bPatternSize,
+					szPatternNumber);
 }
 
 void PatternCommand_Serialize(sci::ostream *pSerial, const PicCommand *pCommand, const PicCommand *pCommandPrev, const PicCommand *pCommandNext, DRAWSIZE dsPrev, DRAWSIZE *pds, SerializedPicState *pState)
 {
-    // We need to start a new command if the previous one was a different kind of command;
-    bool bStartNew = (!pCommandPrev) || (pCommand->type != pCommandPrev->type);
+	// We need to start a new command if the previous one was a different kind of command;
+	bool bStartNew = (!pCommandPrev) || (pCommand->type != pCommandPrev->type);
 
-    if (!bStartNew)
-    {
-        // Also, we need to make sure that the previous pattern size and stuff, is equal to ours
-        if ((pCommandPrev->drawPattern.wFlags != pCommand->drawPattern.wFlags) ||
-            (pCommandPrev->drawPattern.bPatternSize != pCommand->drawPattern.bPatternSize))
-        {
-            bStartNew = TRUE;
-        }
-    }
+	if (!bStartNew)
+	{
+		// Also, we need to make sure that the previous pattern size and stuff, is equal to ours
+		if ((pCommandPrev->drawPattern.wFlags != pCommand->drawPattern.wFlags) ||
+			(pCommandPrev->drawPattern.bPatternSize != pCommand->drawPattern.bPatternSize))
+		{
+			bStartNew = TRUE;
+		}
+	}
 
-    if (!bStartNew)
-    {
-        // We can be able to continue from the last pattern command, if the previous DRAWSIZE is more
-        // than the current (or undefined)
-        DRAWSIZE ds = DrawSizeFromCoords(pCommandPrev->drawPattern.x, pCommandPrev->drawPattern.y,
-                                         pCommand->drawPattern.x, pCommand->drawPattern.y);
-        bStartNew = (ds > dsPrev);
-    }
+	if (!bStartNew)
+	{
+		// We can be able to continue from the last pattern command, if the previous DRAWSIZE is more
+		// than the current (or undefined)
+		DRAWSIZE ds = DrawSizeFromCoords(pCommandPrev->drawPattern.x, pCommandPrev->drawPattern.y,
+										 pCommand->drawPattern.x, pCommand->drawPattern.y);
+		bStartNew = (ds > dsPrev);
+	}
 
-    if (bStartNew)
-    {
-        // Start a new command.
-        // We need to figure out what the next command is though, before doing this.
-        // Because we have no idea of the DRAWSIZE to use.
-        DRAWSIZE dsThis;
-        if (!pCommandNext || (pCommand->type != pCommandNext->type))
-        {
-            dsThis = DS_LARGE; // Well, we're just one point.
-        }
-        else
-        {
-            dsThis = DrawSizeFromCoords(pCommand->drawPattern.x, pCommand->drawPattern.y,
-                                        pCommandNext->drawPattern.x, pCommandNext->drawPattern.y);
-        }
+	if (bStartNew)
+	{
+		// Start a new command.
+		// We need to figure out what the next command is though, before doing this.
+		// Because we have no idea of the DRAWSIZE to use.
+		DRAWSIZE dsThis;
+		if (!pCommandNext || (pCommand->type != pCommandNext->type))
+		{
+			dsThis = DS_LARGE; // Well, we're just one point.
+		}
+		else
+		{
+			dsThis = DrawSizeFromCoords(pCommand->drawPattern.x, pCommand->drawPattern.y,
+										pCommandNext->drawPattern.x, pCommandNext->drawPattern.y);
+		}
 
-        // Start the command.  First we'll set the pattern.
-        // We can optimize this by realizing what the current pattern size is
-        if (!pState->fInited ||
-            (pState->wFlags != pCommand->drawPattern.wFlags) ||
-            (pState->bPatternSize != pCommand->drawPattern.bPatternSize))
-        {
+		// Start the command.  First we'll set the pattern.
+		// We can optimize this by realizing what the current pattern size is
+		if (!pState->fInited ||
+			(pState->wFlags != pCommand->drawPattern.wFlags) ||
+			(pState->bPatternSize != pCommand->drawPattern.bPatternSize))
+		{
 
-            pState->fInited = TRUE;
-            pState->wFlags = pCommand->drawPattern.wFlags;
-            pState->bPatternSize = pCommand->drawPattern.bPatternSize;
-            pSerial->WriteByte(PIC_OP_SET_PATTERN);
-            pSerial->WriteByte((pCommand->drawPattern.wFlags) | (pCommand->drawPattern.bPatternSize));
-        }
+			pState->fInited = TRUE;
+			pState->wFlags = pCommand->drawPattern.wFlags;
+			pState->bPatternSize = pCommand->drawPattern.bPatternSize;
+			pSerial->WriteByte(PIC_OP_SET_PATTERN);
+			pSerial->WriteByte((pCommand->drawPattern.wFlags) | (pCommand->drawPattern.bPatternSize));
+		}
 
-        // Write the opcode
-        pSerial->WriteByte(OpcodeFromCommandTypeAndSize(PicCommand::Pattern, dsThis));
+		// Write the opcode
+		pSerial->WriteByte(OpcodeFromCommandTypeAndSize(PicCommand::Pattern, dsThis));
 
-        // If we set the use pattern flag, we also need to write a byte here.
-        if (pCommand->drawPattern.wFlags & PATTERN_FLAG_USE_PATTERN)
-        {
-            // Write the NR byte
-            pSerial->WriteByte(pCommand->drawPattern.bPatternNR << 1);
-        }
+		// If we set the use pattern flag, we also need to write a byte here.
+		if (pCommand->drawPattern.wFlags & PATTERN_FLAG_USE_PATTERN)
+		{
+			// Write the NR byte
+			pSerial->WriteByte(pCommand->drawPattern.bPatternNR << 1);
+		}
 
-        *pds = dsThis;
-        // And we always start with an absolute coord, despite our DRAWSIZE
-        _WriteAbsCoordinate(pSerial, pCommand->drawPattern.x, pCommand->drawPattern.y);
-    }
-    else
-    {
-        // Continue from the last one.
+		*pds = dsThis;
+		// And we always start with an absolute coord, despite our DRAWSIZE
+		_WriteAbsCoordinate(pSerial, pCommand->drawPattern.x, pCommand->drawPattern.y);
+	}
+	else
+	{
+		// Continue from the last one.
 
-        if (pCommand->drawPattern.wFlags & PATTERN_FLAG_USE_PATTERN)
-        {
-            // Write the NR byte
-            pSerial->WriteByte(pCommand->drawPattern.bPatternNR << 1);
-        }
+		if (pCommand->drawPattern.wFlags & PATTERN_FLAG_USE_PATTERN)
+		{
+			// Write the NR byte
+			pSerial->WriteByte(pCommand->drawPattern.bPatternNR << 1);
+		}
 
-        _WriteCoordinate(pSerial, dsPrev, pCommandPrev->drawPattern.x, pCommandPrev->drawPattern.y,
-                                pCommand->drawPattern.x, pCommand->drawPattern.y);
-    }
+		_WriteCoordinate(pSerial, dsPrev, pCommandPrev->drawPattern.x, pCommandPrev->drawPattern.y,
+								pCommand->drawPattern.x, pCommand->drawPattern.y);
+	}
 }
 
 
@@ -1919,43 +1919,43 @@ void PatternCommand_Serialize(sci::ostream *pSerial, const PicCommand *pCommand,
 //
 void PicCommand::_CreateFill(int16_t x, int16_t y)
 {
-    assert(_IsEmpty());
-    type = Fill;
-    fill.x = x;
-    fill.y = y;
+	assert(_IsEmpty());
+	type = Fill;
+	fill.x = x;
+	fill.y = y;
 }
 
 void FillCommand_Draw(const PicCommand *pCommand, PicData *pData, ViewPort *pState)
 {
-    if (pData->isVGA)
-    {
-        _DitherFill<PlotVGA>(pData, pCommand->fill.x, pCommand->fill.y, pState->bPaletteOffset, pState->bPriorityValue, pState->bControlValue, pState->dwDrawEnable);
-    }
+	if (pData->isVGA)
+	{
+		_DitherFill<PlotVGA>(pData, pCommand->fill.x, pCommand->fill.y, pState->bPaletteOffset, pState->bPriorityValue, pState->bControlValue, pState->dwDrawEnable);
+	}
 	else if (pData->isUndithered)
 	{
 		_DitherFill<PlotEGAUndithered>(pData, pCommand->fill.x, pCommand->fill.y, pState->egaColor, pState->bPriorityValue, pState->bControlValue, pState->dwDrawEnable);
 	}
-    else
-    {
-        _DitherFill<PlotEGA>(pData, pCommand->fill.x, pCommand->fill.y, pState->egaColor, pState->bPriorityValue, pState->bControlValue, pState->dwDrawEnable);
-    }
+	else
+	{
+		_DitherFill<PlotEGA>(pData, pCommand->fill.x, pCommand->fill.y, pState->egaColor, pState->bPriorityValue, pState->bControlValue, pState->dwDrawEnable);
+	}
 }
 
 void FillCommand_GetName(const PicCommand *pCommand, TCHAR *pszBuf, size_t cchBuf)
 {
-    StringCchPrintf(pszBuf, cchBuf, "Fill: %dx%d", pCommand->fill.x, pCommand->fill.y);    
+	StringCchPrintf(pszBuf, cchBuf, "Fill: %dx%d", pCommand->fill.x, pCommand->fill.y);	
 }
 
 void FillCommand_Serialize(sci::ostream *pSerial, const PicCommand *pCommand, const PicCommand *pCommandPrev, const PicCommand *pCommandNext, DRAWSIZE dsPrev, DRAWSIZE *pds, SerializedPicState *pState)
 {
-    if (!pCommandPrev || (pCommand->type != pCommandPrev->type))
-    {
-        // The last command was of a different type, so write the opcode.
-        pSerial->WriteByte(PIC_OP_FILL);
-    }
+	if (!pCommandPrev || (pCommand->type != pCommandPrev->type))
+	{
+		// The last command was of a different type, so write the opcode.
+		pSerial->WriteByte(PIC_OP_FILL);
+	}
 
-    // Then the write the absolute coordinate.
-    _WriteAbsCoordinate(pSerial, pCommand->fill.x, pCommand->fill.y);
+	// Then the write the absolute coordinate.
+	_WriteAbsCoordinate(pSerial, pCommand->fill.x, pCommand->fill.y);
 }
 
 
@@ -1964,172 +1964,172 @@ void FillCommand_Serialize(sci::ostream *pSerial, const PicCommand *pCommand, co
 //
 void PicCommand::_CreateSetVisual(uint8_t bPaletteNumber, uint8_t bPaletteIndex)
 {
-    assert(_IsEmpty());
-    type = SetVisual;
-    setVisual.isVGA = false;
-    setVisual.bColor = BYTE_FROM_PALETTE_AND_OFFSET(bPaletteNumber, bPaletteIndex);
+	assert(_IsEmpty());
+	type = SetVisual;
+	setVisual.isVGA = false;
+	setVisual.bColor = BYTE_FROM_PALETTE_AND_OFFSET(bPaletteNumber, bPaletteIndex);
 }
 
 void PicCommand::_CreateSetVisualVGA(uint8_t bColor)
 {
-    assert(_IsEmpty());
-    type = SetVisual;
-    setVisual.isVGA = true;
-    setVisual.bColor = bColor;
+	assert(_IsEmpty());
+	type = SetVisual;
+	setVisual.isVGA = true;
+	setVisual.bColor = bColor;
 }
 
 void SetVisualCommand_Draw(const PicCommand *pCommand, PicData *pData, ViewPort *pState)
 {
-    if (pCommand->setVisual.isVGA)
-    {
-        pState->bPaletteOffset = pCommand->setVisual.bColor;
-    }
-    else
-    {
-        // Obey SCI game behaviour of ignoring bPalette if not zero
-        uint8_t bPaletteToUse = pCommand->setVisual.GetPaletteNumber();
-        if (bPaletteToUse == 0)
-        {
-            bPaletteToUse = pState->bPaletteToDraw;
-        }
-        EGACOLOR *pPalette = GET_PALETTE(pState->pPalettes, bPaletteToUse);
+	if (pCommand->setVisual.isVGA)
+	{
+		pState->bPaletteOffset = pCommand->setVisual.bColor;
+	}
+	else
+	{
+		// Obey SCI game behaviour of ignoring bPalette if not zero
+		uint8_t bPaletteToUse = pCommand->setVisual.GetPaletteNumber();
+		if (bPaletteToUse == 0)
+		{
+			bPaletteToUse = pState->bPaletteToDraw;
+		}
+		EGACOLOR *pPalette = GET_PALETTE(pState->pPalettes, bPaletteToUse);
 
-        // Update the ViewPort
-        pState->bPaletteNumber = pCommand->setVisual.GetPaletteNumber(); // This matters for UI state -> note, it is not necessarily bPaletteToUse.
-        // bPaletteToUse represents the palette to use when drawing stuff right now, but the palette number
-        // encoded in the command, might be different.
-        pState->bPaletteOffset = pCommand->setVisual.GetPaletteIndex();  // This matters for UI state
-        // Set the color we are actually going to draw, given current picstate:
-        if (pState->rgLocked[pState->bPaletteOffset])
-        {
-            // Palette 0 has this index "locked".  So use palette 0 for drawing for this colour.
-            pState->egaColor = pState->pPalettes[pCommand->setVisual.GetPaletteIndex()];
-        }
-        else
-        {
-            // The "normal" case
-            pState->egaColor = pPalette[pCommand->setVisual.GetPaletteIndex()];
-        }
-    }
-    pState->dwDrawEnable |= PicScreenFlags::Visual;
+		// Update the ViewPort
+		pState->bPaletteNumber = pCommand->setVisual.GetPaletteNumber(); // This matters for UI state -> note, it is not necessarily bPaletteToUse.
+		// bPaletteToUse represents the palette to use when drawing stuff right now, but the palette number
+		// encoded in the command, might be different.
+		pState->bPaletteOffset = pCommand->setVisual.GetPaletteIndex();  // This matters for UI state
+		// Set the color we are actually going to draw, given current picstate:
+		if (pState->rgLocked[pState->bPaletteOffset])
+		{
+			// Palette 0 has this index "locked".  So use palette 0 for drawing for this colour.
+			pState->egaColor = pState->pPalettes[pCommand->setVisual.GetPaletteIndex()];
+		}
+		else
+		{
+			// The "normal" case
+			pState->egaColor = pPalette[pCommand->setVisual.GetPaletteIndex()];
+		}
+	}
+	pState->dwDrawEnable |= PicScreenFlags::Visual;
 }
 
 void SetVisualCommand_GetName(const PicCommand *pCommand, TCHAR *pszBuf, size_t cchBuf)
 {
-    if (pCommand->setVisual.isVGA)
-    {
-        StringCchPrintf(pszBuf, cchBuf, "Set Visual: %d", pCommand->setVisual.bColor);;
-    }
-    else
-    {
-        StringCchPrintf(pszBuf, cchBuf, "Set Visual: %d,%d", pCommand->setVisual.GetPaletteNumber(), pCommand->setVisual.GetPaletteIndex());
-    }
+	if (pCommand->setVisual.isVGA)
+	{
+		StringCchPrintf(pszBuf, cchBuf, "Set Visual: %d", pCommand->setVisual.bColor);;
+	}
+	else
+	{
+		StringCchPrintf(pszBuf, cchBuf, "Set Visual: %d,%d", pCommand->setVisual.GetPaletteNumber(), pCommand->setVisual.GetPaletteIndex());
+	}
 }
 
 void SetVisualCommand_Serialize(sci::ostream *pSerial, const PicCommand *pCommand, const PicCommand *pCommandPrev, const PicCommand *pCommandNext, DRAWSIZE dsPrev, DRAWSIZE *pds, SerializedPicState *pState)
 {
-    pSerial->WriteByte(PIC_OP_SET_COLOR);
-    if (pCommand->setVisual.isVGA)
-    {
-        pSerial->WriteByte(pCommand->setVisual.bColor);
-    }
-    else
-    {
-        pSerial->WriteByte(BYTE_FROM_PALETTE_AND_OFFSET(pCommand->setVisual.GetPaletteNumber(), pCommand->setVisual.GetPaletteIndex()));
-    }
+	pSerial->WriteByte(PIC_OP_SET_COLOR);
+	if (pCommand->setVisual.isVGA)
+	{
+		pSerial->WriteByte(pCommand->setVisual.bColor);
+	}
+	else
+	{
+		pSerial->WriteByte(BYTE_FROM_PALETTE_AND_OFFSET(pCommand->setVisual.GetPaletteNumber(), pCommand->setVisual.GetPaletteIndex()));
+	}
 }
 
 void PicCommand::_CreateSetPriority(int16_t bPriorityValue)
 {
-    assert(_IsEmpty());
-    type = SetPriority;
-    setPriority.bPriorityValue = bPriorityValue;
+	assert(_IsEmpty());
+	type = SetPriority;
+	setPriority.bPriorityValue = bPriorityValue;
 }
 
 int16_t ColorIndexToContinuousPriorityValue(uint8_t colorIndex)
 {
-    if (colorIndex == 0)
-    {
-        return -1000;
-    }
-    else if (colorIndex == 255)
-    {
-        return 1000;
-    }
-    else
-    {
-        return colorIndex - (255 - 199) / 2;
-    }
+	if (colorIndex == 0)
+	{
+		return -1000;
+	}
+	else if (colorIndex == 255)
+	{
+		return 1000;
+	}
+	else
+	{
+		return colorIndex - (255 - 199) / 2;
+	}
 }
 
 uint8_t PriorityValueToColorIndex(bool continuousPriority, int16_t priorityValue)
 {
-    if (continuousPriority)
-    {
-        if (priorityValue < 0)
-        {
-            return 0;
-        }
-        else if (priorityValue >= 200)
-        {
-            return 255;
-        }
-        else
-        {
-            // Map 0 to 199 to a nice visible range.
-            return (uint8_t)(priorityValue + (255 - 199) / 2);
-        }
-    }
-    else
-    {
-        assert(priorityValue >= 0 && priorityValue <= 15);
-        return (uint8_t)priorityValue;
-    }
+	if (continuousPriority)
+	{
+		if (priorityValue < 0)
+		{
+			return 0;
+		}
+		else if (priorityValue >= 200)
+		{
+			return 255;
+		}
+		else
+		{
+			// Map 0 to 199 to a nice visible range.
+			return (uint8_t)(priorityValue + (255 - 199) / 2);
+		}
+	}
+	else
+	{
+		assert(priorityValue >= 0 && priorityValue <= 15);
+		return (uint8_t)priorityValue;
+	}
 }
 
 void SetPriorityCommand_Draw(const PicCommand *pCommand, PicData *pData, ViewPort *pState)
 {
-    pState->bPriorityValue = PriorityValueToColorIndex(pData->isContinuousPriority, pCommand->setPriority.bPriorityValue);
-    pState->dwDrawEnable |= PicScreenFlags::Priority;
+	pState->bPriorityValue = PriorityValueToColorIndex(pData->isContinuousPriority, pCommand->setPriority.bPriorityValue);
+	pState->dwDrawEnable |= PicScreenFlags::Priority;
 }
 
 void SetPriorityCommand_GetName(const PicCommand *pCommand, TCHAR *pszBuf, size_t cchBuf)
 {
-    StringCchPrintf(pszBuf, cchBuf, "Set Priority: %d", pCommand->setPriority.bPriorityValue);
+	StringCchPrintf(pszBuf, cchBuf, "Set Priority: %d", pCommand->setPriority.bPriorityValue);
 }
 
 void SetPriorityCommand_Serialize(sci::ostream *pSerial, const PicCommand *pCommand, const PicCommand *pCommandPrev, const PicCommand *pCommandNext, DRAWSIZE dsPrev, DRAWSIZE *pds, SerializedPicState *pState)
 {
-    pSerial->WriteByte(PIC_OP_SET_PRIORITY);
-    int16_t priValue = pCommand->setPriority.bPriorityValue;
-    // This should not be used for the continuous priority for VGA2 pics.
-    assert(priValue >= 0 && priValue <= 15);
-    pSerial->WriteByte((uint8_t)priValue);
+	pSerial->WriteByte(PIC_OP_SET_PRIORITY);
+	int16_t priValue = pCommand->setPriority.bPriorityValue;
+	// This should not be used for the continuous priority for VGA2 pics.
+	assert(priValue >= 0 && priValue <= 15);
+	pSerial->WriteByte((uint8_t)priValue);
 }
 
 
 void PicCommand::_CreateSetControl(uint8_t bControlValue)
 {
-    assert(_IsEmpty());
-    type = SetControl;
-    setControl.bControlValue = bControlValue;
+	assert(_IsEmpty());
+	type = SetControl;
+	setControl.bControlValue = bControlValue;
 }
 
 void SetControlCommand_Draw(const PicCommand *pCommand, PicData *pData, ViewPort *pState)
 {
-    pState->bControlValue = pCommand->setControl.bControlValue;
-    pState->dwDrawEnable |= PicScreenFlags::Control;
+	pState->bControlValue = pCommand->setControl.bControlValue;
+	pState->dwDrawEnable |= PicScreenFlags::Control;
 }
 
 void SetControlCommand_GetName(const PicCommand *pCommand, TCHAR *pszBuf, size_t cchBuf)
 {
-    StringCchPrintf(pszBuf, cchBuf, "Set Control: %d", pCommand->setControl.bControlValue); 
+	StringCchPrintf(pszBuf, cchBuf, "Set Control: %d", pCommand->setControl.bControlValue); 
 }
 
 void SetControlCommand_Serialize(sci::ostream *pSerial, const PicCommand *pCommand, const PicCommand *pCommandPrev, const PicCommand *pCommandNext, DRAWSIZE dsPrev, DRAWSIZE *pds, SerializedPicState *pState)
 {
-    pSerial->WriteByte(PIC_OP_SET_CONTROL);
-    pSerial->WriteByte(pCommand->setControl.bControlValue);
+	pSerial->WriteByte(PIC_OP_SET_CONTROL);
+	pSerial->WriteByte(pCommand->setControl.bControlValue);
 }
 
 
@@ -2137,23 +2137,23 @@ void SetControlCommand_Serialize(sci::ostream *pSerial, const PicCommand *pComma
 
 void PicCommand::_CreateDisableVisual()
 {
-    assert(_IsEmpty());
-    type = DisableVisual;
+	assert(_IsEmpty());
+	type = DisableVisual;
 }
 
 void DisableVisualCommand_Draw(const PicCommand *pCommand, PicData *pData, ViewPort *pState)
 {
-    pState->dwDrawEnable &= ~PicScreenFlags::Visual;
+	pState->dwDrawEnable &= ~PicScreenFlags::Visual;
 }
 
 void DisableVisualCommand_GetName(const PicCommand *pCommand, TCHAR *pszBuf, size_t cchBuf)
 {
-    StringCchPrintf(pszBuf, cchBuf, "Disable Visual");
+	StringCchPrintf(pszBuf, cchBuf, "Disable Visual");
 }
 
 void DisableVisualCommand_Serialize(sci::ostream *pSerial, const PicCommand *pCommand, const PicCommand *pCommandPrev, const PicCommand *pCommandNext, DRAWSIZE dsPrev, DRAWSIZE *pds, SerializedPicState *pState)
 {
-    pSerial->WriteByte(PIC_OP_DISABLE_VISUAL);
+	pSerial->WriteByte(PIC_OP_DISABLE_VISUAL);
 }
 
 
@@ -2162,24 +2162,24 @@ void DisableVisualCommand_Serialize(sci::ostream *pSerial, const PicCommand *pCo
 
 void PicCommand::_CreateDisablePriority()
 {
-    assert(_IsEmpty());
-    type = DisablePriority;
+	assert(_IsEmpty());
+	type = DisablePriority;
 }
 
 void DisablePriorityCommand_Draw(const PicCommand *pCommand, PicData *pData, ViewPort *pState)
 {
-    pState->dwDrawEnable &= ~PicScreenFlags::Priority;
+	pState->dwDrawEnable &= ~PicScreenFlags::Priority;
 }
 
 
 void DisablePriorityCommand_GetName(const PicCommand *pCommand, TCHAR *pszBuf, size_t cchBuf)
 {
-    StringCchPrintf(pszBuf, cchBuf, "Disable Priority");
+	StringCchPrintf(pszBuf, cchBuf, "Disable Priority");
 }
 
 void DisablePriorityCommand_Serialize(sci::ostream *pSerial, const PicCommand *pCommand, const PicCommand *pCommandPrev, const PicCommand *pCommandNext, DRAWSIZE dsPrev, DRAWSIZE *pds, SerializedPicState *pState)
 {
-    pSerial->WriteByte(PIC_OP_DISABLE_PRIORITY);
+	pSerial->WriteByte(PIC_OP_DISABLE_PRIORITY);
 }
 
 
@@ -2187,23 +2187,23 @@ void DisablePriorityCommand_Serialize(sci::ostream *pSerial, const PicCommand *p
 
 void PicCommand::_CreateDisableControl()
 {
-    assert(_IsEmpty());
-    type = DisableControl;
+	assert(_IsEmpty());
+	type = DisableControl;
 }
 
 void DisableControlCommand_Draw(const PicCommand *pCommand, PicData *pData, ViewPort *pState)
 {
-    pState->dwDrawEnable &= ~PicScreenFlags::Control;
+	pState->dwDrawEnable &= ~PicScreenFlags::Control;
 }
 
 void DisableControlCommand_GetName(const PicCommand *pCommand, TCHAR *pszBuf, size_t cchBuf)
 {
-    StringCchPrintf(pszBuf, cchBuf, "Disable Control");
+	StringCchPrintf(pszBuf, cchBuf, "Disable Control");
 }
 
 void DisableControlCommand_Serialize(sci::ostream *pSerial, const PicCommand *pCommand, const PicCommand *pCommandPrev, const PicCommand *pCommandNext, DRAWSIZE dsPrev, DRAWSIZE *pds, SerializedPicState *pState)
 {
-    pSerial->WriteByte(PIC_OP_DISABLE_CONTROL);
+	pSerial->WriteByte(PIC_OP_DISABLE_CONTROL);
 }
 
 
@@ -2212,248 +2212,248 @@ void DisableControlCommand_Serialize(sci::ostream *pSerial, const PicCommand *pC
 //
 void PicCommand::_CreateSetPalette(uint8_t bPaletteNumber, const EGACOLOR *pPalette)
 {
-    assert(_IsEmpty());
-    type = SetPalette;
-    setPalette.bPaletteNumber = bPaletteNumber;
-    setPalette.pPalette = new EGACOLOR[PALETTE_SIZE];
-    assert(sizeof(uint8_t) == sizeof(EGACOLOR));
-    if (setPalette.pPalette)
-    {
-        // If we're experiencing memory stress, then we won't set the palette
-        // here, and the pic will be corrupted. Oh well.
-        CopyMemory(setPalette.pPalette, pPalette, PALETTE_SIZE);
-    }
+	assert(_IsEmpty());
+	type = SetPalette;
+	setPalette.bPaletteNumber = bPaletteNumber;
+	setPalette.pPalette = new EGACOLOR[PALETTE_SIZE];
+	assert(sizeof(uint8_t) == sizeof(EGACOLOR));
+	if (setPalette.pPalette)
+	{
+		// If we're experiencing memory stress, then we won't set the palette
+		// here, and the pic will be corrupted. Oh well.
+		CopyMemory(setPalette.pPalette, pPalette, PALETTE_SIZE);
+	}
 }
 
 void SetPaletteCommand_Draw(const PicCommand *pCommand, PicData *pData, ViewPort *pState)
 {
-    EGACOLOR *pCurrentPalette = GET_PALETTE(pState->pPalettes, pCommand->setPalette.bPaletteNumber);
-    if (pCommand->setPalette.pPalette)
-    {
-        // Could have failed due to memory stress
-        CopyMemory(pCurrentPalette, pCommand->setPalette.pPalette, PALETTE_SIZE);
+	EGACOLOR *pCurrentPalette = GET_PALETTE(pState->pPalettes, pCommand->setPalette.bPaletteNumber);
+	if (pCommand->setPalette.pPalette)
+	{
+		// Could have failed due to memory stress
+		CopyMemory(pCurrentPalette, pCommand->setPalette.pPalette, PALETTE_SIZE);
 
-        if (pCommand->setPalette.bPaletteNumber == pState->bPaletteNumber)
-        {
-            // It's possible that the current color being used was changed by the palette modification
-            // just made.
-            pState->egaColor = pCurrentPalette[pState->bPaletteOffset];
-        }
-    }
+		if (pCommand->setPalette.bPaletteNumber == pState->bPaletteNumber)
+		{
+			// It's possible that the current color being used was changed by the palette modification
+			// just made.
+			pState->egaColor = pCurrentPalette[pState->bPaletteOffset];
+		}
+	}
 }
 
 void SetPaletteCommand_GetName(const PicCommand *pCommand, TCHAR *pszBuf, size_t cchBuf)
 {
-    StringCchPrintf(pszBuf, cchBuf, "Set palette: %d", pCommand->setPalette.bPaletteNumber);
+	StringCchPrintf(pszBuf, cchBuf, "Set palette: %d", pCommand->setPalette.bPaletteNumber);
 }
 
 void SetPaletteCommand_Serialize(sci::ostream *pSerial, const PicCommand *pCommand, const PicCommand *pCommandPrev, const PicCommand *pCommandNext, DRAWSIZE dsPrev, DRAWSIZE *pds, SerializedPicState *pState)
 {
-    // PIC_OP_OPX | PIC_OPX_SET_PALETTE | bPaletteNum | pPalette
-    pSerial->WriteByte(PIC_OP_OPX);
-    pSerial->WriteByte(PIC_OPX_SET_PALETTE);
+	// PIC_OP_OPX | PIC_OPX_SET_PALETTE | bPaletteNum | pPalette
+	pSerial->WriteByte(PIC_OP_OPX);
+	pSerial->WriteByte(PIC_OPX_SET_PALETTE);
 
-    pSerial->WriteByte(pCommand->setPalette.bPaletteNumber);
-    pSerial->WriteBytes((uint8_t*)pCommand->setPalette.pPalette, 40);
+	pSerial->WriteByte(pCommand->setPalette.bPaletteNumber);
+	pSerial->WriteBytes((uint8_t*)pCommand->setPalette.pPalette, 40);
 }
 
 
 void PicCommand::_CreateSetPaletteEntry(uint8_t bPaletteNumber, uint8_t bOffset, EGACOLOR color)
 {
-    type = SetPaletteEntry;
-    assert(bPaletteNumber < 4);
-    setPaletteEntry.bPaletteNumber = bPaletteNumber;
-    assert(bOffset < PALETTE_SIZE);
-    setPaletteEntry.bOffset = bOffset;
-    setPaletteEntry.color = color;
+	type = SetPaletteEntry;
+	assert(bPaletteNumber < 4);
+	setPaletteEntry.bPaletteNumber = bPaletteNumber;
+	assert(bOffset < PALETTE_SIZE);
+	setPaletteEntry.bOffset = bOffset;
+	setPaletteEntry.color = color;
 }
 
 void SetPaletteEntryCommand_Draw(const PicCommand *pCommand, PicData *pData, ViewPort *pState)
 {
-    EGACOLOR *pPalette = GET_PALETTE(pState->pPalettes, pCommand->setPaletteEntry.bPaletteNumber);
-    pPalette[pCommand->setPaletteEntry.bOffset] = pCommand->setPaletteEntry.color;
+	EGACOLOR *pPalette = GET_PALETTE(pState->pPalettes, pCommand->setPaletteEntry.bPaletteNumber);
+	pPalette[pCommand->setPaletteEntry.bOffset] = pCommand->setPaletteEntry.color;
 
-    if (pCommand->setPaletteEntry.bPaletteNumber == pState->bPaletteNumber)
-    {
-        // It's possible that the current color being used was changed by the palette modification
-        // just made.
-        // ACTUALLY - SCI DOES NOT DO THIS.
-        /*
-        if (pCommand->setPaletteEntry.bOffset == pState->bPaletteOffset)
-        {
-            // Yup.  Update the color variable in ViewPort.
-            pState->color = pPalette[pState->bPaletteOffset];
-        }*/
-    }
+	if (pCommand->setPaletteEntry.bPaletteNumber == pState->bPaletteNumber)
+	{
+		// It's possible that the current color being used was changed by the palette modification
+		// just made.
+		// ACTUALLY - SCI DOES NOT DO THIS.
+		/*
+		if (pCommand->setPaletteEntry.bOffset == pState->bPaletteOffset)
+		{
+			// Yup.  Update the color variable in ViewPort.
+			pState->color = pPalette[pState->bPaletteOffset];
+		}*/
+	}
 
-    if (pCommand->setPaletteEntry.bPaletteNumber == 0)
-    {
-        // Lock this color in palette 0.
-        pState->rgLocked[pCommand->setPaletteEntry.bOffset] = 0xff;
-    }
+	if (pCommand->setPaletteEntry.bPaletteNumber == 0)
+	{
+		// Lock this color in palette 0.
+		pState->rgLocked[pCommand->setPaletteEntry.bOffset] = 0xff;
+	}
 }
 
 void SetPaletteEntryCommand_GetName(const PicCommand *pCommand, TCHAR *pszBuf, size_t cchBuf)
 {
-    StringCchPrintf(pszBuf, cchBuf, "Set palette entry: %d,%d", pCommand->setPaletteEntry.bPaletteNumber, pCommand->setPaletteEntry.bOffset);
+	StringCchPrintf(pszBuf, cchBuf, "Set palette entry: %d,%d", pCommand->setPaletteEntry.bPaletteNumber, pCommand->setPaletteEntry.bOffset);
 }
 
 void SetPaletteEntryCommand_Serialize(sci::ostream *pSerial, const PicCommand *pCommand, const PicCommand *pCommandPrev, const PicCommand *pCommandNext, DRAWSIZE dsPrev, DRAWSIZE *pds, SerializedPicState *pState)
 {
-    // PIC_OP_OPX | PIC_OPX_SET_PALETTE_ENTRY | [ (bPaletteNum,offset), color] * n
-    if (!pCommandPrev || (pCommandPrev->type != pCommand->type))
-    {
-        pSerial->WriteByte(PIC_OP_OPX);
-        pSerial->WriteByte(PIC_OPX_SET_PALETTE_ENTRY);
-        // The optimization here is that we don't write the opcodes if the last command was the same
-    }
-    pSerial->WriteByte(BYTE_FROM_PALETTE_AND_OFFSET(pCommand->setPaletteEntry.bPaletteNumber, pCommand->setPaletteEntry.bOffset));
-    pSerial->WriteByte(BYTE_FROM_EGACOLOR(pCommand->setPaletteEntry.color));
+	// PIC_OP_OPX | PIC_OPX_SET_PALETTE_ENTRY | [ (bPaletteNum,offset), color] * n
+	if (!pCommandPrev || (pCommandPrev->type != pCommand->type))
+	{
+		pSerial->WriteByte(PIC_OP_OPX);
+		pSerial->WriteByte(PIC_OPX_SET_PALETTE_ENTRY);
+		// The optimization here is that we don't write the opcodes if the last command was the same
+	}
+	pSerial->WriteByte(BYTE_FROM_PALETTE_AND_OFFSET(pCommand->setPaletteEntry.bPaletteNumber, pCommand->setPaletteEntry.bOffset));
+	pSerial->WriteByte(BYTE_FROM_EGACOLOR(pCommand->setPaletteEntry.color));
 }
 
 
 void PicCommand::CreateSetPriorityBars(const uint16_t *pBars, bool is16Bit, bool isVGA)
 {
-    assert(_IsEmpty());
-    type = SetPriorityBars;
-    setPriorityBars.pPriorityLines = new uint16_t[NumPriorityBars];
-    setPriorityBars.is16Bit = is16Bit;
-    setPriorityBars.isVGA = isVGA;
-    CopyMemory(setPriorityBars.pPriorityLines, pBars, NumPriorityBars * sizeof(*setPriorityBars.pPriorityLines));
+	assert(_IsEmpty());
+	type = SetPriorityBars;
+	setPriorityBars.pPriorityLines = new uint16_t[NumPriorityBars];
+	setPriorityBars.is16Bit = is16Bit;
+	setPriorityBars.isVGA = isVGA;
+	CopyMemory(setPriorityBars.pPriorityLines, pBars, NumPriorityBars * sizeof(*setPriorityBars.pPriorityLines));
 }
 
 void SetPriorityBarsCommand_Draw(const PicCommand *pCommand, PicData *pData, ViewPort *pState)
 {
-    // Just transfer the data? 
-    memcpy(pState->bPriorityLines, pCommand->setPriorityBars.pPriorityLines, sizeof(pState->bPriorityLines));
+	// Just transfer the data? 
+	memcpy(pState->bPriorityLines, pCommand->setPriorityBars.pPriorityLines, sizeof(pState->bPriorityLines));
 }
 
 void SetPriorityBarsCommand_GetName(const PicCommand *pCommand, TCHAR *pszBuf, size_t cchBuf)
 {
-    StringCchPrintf(pszBuf, cchBuf, "Set priority bars");
+	StringCchPrintf(pszBuf, cchBuf, "Set priority bars");
 }
 
 void SetPriorityBarsCommand_Serialize(sci::ostream *pSerial, const PicCommand *pCommand, const PicCommand *pCommandPrev, const PicCommand *pCommandNext, DRAWSIZE dsPrev, DRAWSIZE *pds, SerializedPicState *pState)
 {
-    if (pCommand->setPriorityBars.is16Bit)
-    {
-        assert(false && "This is SCI1.1, we shouldn't reach here.");
-        pSerial->WriteBytes((const uint8_t *)pCommand->setPriorityBars.pPriorityLines, NumPriorityBars * sizeof(*pCommand->setPriorityBars.pPriorityLines));
-    }
-    else
-    {
-        pSerial->WriteByte(0xfe);   // special opcode
-        // The opcode is different in EGA vs VGA
-        pSerial->WriteByte(pCommand->setPriorityBars.isVGA ? 0x4 : 0x8);
-        for (int i = 0; i < NumPriorityBars; i++)
-        {
-            pSerial->WriteByte((uint8_t)pCommand->setPriorityBars.pPriorityLines[i]);
-        }
-    }
+	if (pCommand->setPriorityBars.is16Bit)
+	{
+		assert(false && "This is SCI1.1, we shouldn't reach here.");
+		pSerial->WriteBytes((const uint8_t *)pCommand->setPriorityBars.pPriorityLines, NumPriorityBars * sizeof(*pCommand->setPriorityBars.pPriorityLines));
+	}
+	else
+	{
+		pSerial->WriteByte(0xfe);   // special opcode
+		// The opcode is different in EGA vs VGA
+		pSerial->WriteByte(pCommand->setPriorityBars.isVGA ? 0x4 : 0x8);
+		for (int i = 0; i < NumPriorityBars; i++)
+		{
+			pSerial->WriteByte((uint8_t)pCommand->setPriorityBars.pPriorityLines[i]);
+		}
+	}
 }
 
 void PicCommand::CreateDrawVisualBitmap(const Cel &cel, bool isVGA, int16_t priority)
 {
-    assert(_IsEmpty());
-    type = DrawBitmap;
-    drawVisualBitmap.pCel = new Cel(cel);
-    drawVisualBitmap.isVGA = isVGA;
-    drawVisualBitmap.priority = priority;   // SCI2 only
+	assert(_IsEmpty());
+	type = DrawBitmap;
+	drawVisualBitmap.pCel = new Cel(cel);
+	drawVisualBitmap.isVGA = isVGA;
+	drawVisualBitmap.priority = priority;   // SCI2 only
 }
 
 void DrawVisualBitmap_Draw(const PicCommand *pCommand, PicData *pData, ViewPort *pState)
 {
-    if (pCommand->drawVisualBitmap.pCel)
-    {
-        size16 displaySize = pData->size;
-        Cel &cel = *pCommand->drawVisualBitmap.pCel;
-        // Optimization
+	if (pCommand->drawVisualBitmap.pCel)
+	{
+		size16 displaySize = pData->size;
+		Cel &cel = *pCommand->drawVisualBitmap.pCel;
+		// Optimization
 #if CANT_DO_BECAUSE_OF_TRANS_COLOR
-        if ((cel.size.cx == pData->size.cx) && (cel.size.cy == pData->size.cy))
-        {
-            // Just bit copy everything
-            memcpy(pData->pdataVisual, &cel.Data[0], CX_ACTUAL(cel.size.cx) * cel.size.cy);
-        }
-        else
+		if ((cel.size.cx == pData->size.cx) && (cel.size.cy == pData->size.cy))
+		{
+			// Just bit copy everything
+			memcpy(pData->pdataVisual, &cel.Data[0], CX_ACTUAL(cel.size.cx) * cel.size.cy);
+		}
+		else
 #endif
-        {
-            bool writeToPriorityScreen = false;
-            uint8_t priorityValue = pState->bPriorityValue;
-            if (pCommand->drawVisualBitmap.priority != InvalidPri)
-            {
-                // Handle SCI2 priority as part of bitmap.
-                assert(pData->isContinuousPriority);
-                priorityValue = PriorityValueToColorIndex(true, pCommand->drawVisualBitmap.priority);
-                writeToPriorityScreen = true;
-            }
+		{
+			bool writeToPriorityScreen = false;
+			uint8_t priorityValue = pState->bPriorityValue;
+			if (pCommand->drawVisualBitmap.priority != InvalidPri)
+			{
+				// Handle SCI2 priority as part of bitmap.
+				assert(pData->isContinuousPriority);
+				priorityValue = PriorityValueToColorIndex(true, pCommand->drawVisualBitmap.priority);
+				writeToPriorityScreen = true;
+			}
 
-            // Copy line by line.
-            DrawImageWithPriority(
-                displaySize,
-                pData->pdataVisual,
-                pData->pdataPriority,
-                writeToPriorityScreen ? pData->pdataPriority : nullptr,
-                priorityValue,
-                cel.placement.x,
-                cel.placement.y,
-                cel.size.cx,
-                cel.size.cy,
-                cel.GetStride(),
-                &cel.Data[0],
-                cel.TransparentColor,
-                false,
+			// Copy line by line.
+			DrawImageWithPriority(
+				displaySize,
+				pData->pdataVisual,
+				pData->pdataPriority,
+				writeToPriorityScreen ? pData->pdataPriority : nullptr,
+				priorityValue,
+				cel.placement.x,
+				cel.placement.y,
+				cel.size.cx,
+				cel.size.cy,
+				cel.GetStride(),
+				&cel.Data[0],
+				cel.TransparentColor,
+				false,
 				false);
-        }
+		}
 
-        // Fill in the aux thing (otherwise stuff like LSL6, pic 320 is wrong).
-        for (int y = max(0, cel.placement.y); y < min(pData->size.cy, (cel.placement.y + cel.size.cy)); y++)
-        {
-            for (int x = max(0, cel.placement.x); x < min(pData->size.cx, (cel.placement.x + cel.size.cx)); x++)
-            {
-                pData->pdataAux[BUFFEROFFSET_NONSTD(displaySize.cx, displaySize.cy, x, y)] |= (uint8_t)PicScreenFlags::Visual;
-            }
-        }
+		// Fill in the aux thing (otherwise stuff like LSL6, pic 320 is wrong).
+		for (int y = max(0, cel.placement.y); y < min(pData->size.cy, (cel.placement.y + cel.size.cy)); y++)
+		{
+			for (int x = max(0, cel.placement.x); x < min(pData->size.cx, (cel.placement.x + cel.size.cx)); x++)
+			{
+				pData->pdataAux[BUFFEROFFSET_NONSTD(displaySize.cx, displaySize.cy, x, y)] |= (uint8_t)PicScreenFlags::Visual;
+			}
+		}
 
-    }
+	}
 }
 
 void DrawVisualBitmap_GetName(const PicCommand *pCommand, TCHAR *pszBuf, size_t cchBuf)
 {
-    if (pCommand->drawVisualBitmap.priority == InvalidPri)
-    {
-        StringCchPrintf(pszBuf, cchBuf, "Image (%dx%d),T:%d", pCommand->drawVisualBitmap.pCel->size.cx, pCommand->drawVisualBitmap.pCel->size.cy, pCommand->drawVisualBitmap.pCel->TransparentColor);
-    }
-    else
-    {
-        StringCchPrintf(pszBuf, cchBuf, "Image (%dx%d),P:%d,T:%d", pCommand->drawVisualBitmap.pCel->size.cx, pCommand->drawVisualBitmap.pCel->size.cy, pCommand->drawVisualBitmap.priority, pCommand->drawVisualBitmap.pCel->TransparentColor);
-    }
+	if (pCommand->drawVisualBitmap.priority == InvalidPri)
+	{
+		StringCchPrintf(pszBuf, cchBuf, "Image (%dx%d),T:%d", pCommand->drawVisualBitmap.pCel->size.cx, pCommand->drawVisualBitmap.pCel->size.cy, pCommand->drawVisualBitmap.pCel->TransparentColor);
+	}
+	else
+	{
+		StringCchPrintf(pszBuf, cchBuf, "Image (%dx%d),P:%d,T:%d", pCommand->drawVisualBitmap.pCel->size.cx, pCommand->drawVisualBitmap.pCel->size.cy, pCommand->drawVisualBitmap.priority, pCommand->drawVisualBitmap.pCel->TransparentColor);
+	}
 }
 
 void DrawVisualBitmap_Serialize(sci::ostream *pSerial, const PicCommand *pCommand, const PicCommand *pCommandPrev, const PicCommand *pCommandNext, DRAWSIZE dsPrev, DRAWSIZE *pds, SerializedPicState *pState)
 {
-    assert(pCommand->drawVisualBitmap.priority == InvalidPri);
+	assert(pCommand->drawVisualBitmap.priority == InvalidPri);
 
-    pSerial->WriteByte(0xfe); // Special opcode
-    // The opcode is different in VGA vs EGA
-    pSerial->WriteByte(pCommand->drawVisualBitmap.isVGA ? 0x1 : 0x7);
+	pSerial->WriteByte(0xfe); // Special opcode
+	// The opcode is different in VGA vs EGA
+	pSerial->WriteByte(pCommand->drawVisualBitmap.isVGA ? 0x1 : 0x7);
 
-    Cel *pCel = pCommand->drawVisualBitmap.pCel;
-    _WriteAbsCoordinate(pSerial, pCel->placement.x, pCel->placement.y); // REVIEW: This means no -ve?
-    uint32_t currentOffset = pSerial->tellp(); // Store this place, because we'll need to write the size in.
-    pSerial->WriteWord(0);
-    pSerial->WriteWord(pCel->size.cx);
-    pSerial->WriteWord(pCel->size.cy);
-    pSerial->WriteWord(0);  // Skip 2 (unknown)
-    pSerial->WriteByte(pCel->TransparentColor);
-    WriteImageData(*pSerial, *pCel, pCommand->drawVisualBitmap.isVGA, true);
-    // Write the size back at the beginning.
-    uint32_t finalSize = pSerial->tellp() - currentOffset - sizeof(uint16_t);
-    //if (finalSize > (std::numeric_limits<uint16_t>::max()))
-    if (finalSize > 0xffff)
-    {
-        throw std::exception("Resource too large");
-    }
-    *(reinterpret_cast<uint16_t*>(pSerial->GetInternalPointer() + currentOffset)) = (uint16_t)finalSize;
+	Cel *pCel = pCommand->drawVisualBitmap.pCel;
+	_WriteAbsCoordinate(pSerial, pCel->placement.x, pCel->placement.y); // REVIEW: This means no -ve?
+	uint32_t currentOffset = pSerial->tellp(); // Store this place, because we'll need to write the size in.
+	pSerial->WriteWord(0);
+	pSerial->WriteWord(pCel->size.cx);
+	pSerial->WriteWord(pCel->size.cy);
+	pSerial->WriteWord(0);  // Skip 2 (unknown)
+	pSerial->WriteByte(pCel->TransparentColor);
+	WriteImageData(*pSerial, *pCel, pCommand->drawVisualBitmap.isVGA, true);
+	// Write the size back at the beginning.
+	uint32_t finalSize = pSerial->tellp() - currentOffset - sizeof(uint16_t);
+	//if (finalSize > (std::numeric_limits<uint16_t>::max()))
+	if (finalSize > 0xffff)
+	{
+		throw std::exception("Resource too large");
+	}
+	*(reinterpret_cast<uint16_t*>(pSerial->GetInternalPointer() + currentOffset)) = (uint16_t)finalSize;
 }
 
 
@@ -2462,17 +2462,17 @@ void DrawVisualBitmap_Serialize(sci::ostream *pSerial, const PicCommand *pComman
 //
 void PicCommand::CreateCircle(int16_t xFrom, int16_t yFrom, int16_t xTo, int16_t yTo)
 {
-    assert(_IsEmpty());
-    type = Circle;
-    circle.xFrom = xFrom;
-    circle.yFrom = yFrom;
-    circle.xTo = xTo;
-    circle.yTo = yTo;
+	assert(_IsEmpty());
+	type = Circle;
+	circle.xFrom = xFrom;
+	circle.yFrom = yFrom;
+	circle.xTo = xTo;
+	circle.yTo = yTo;
 }
 
 void CircleCommand_Draw(const PicCommand *pCommand, PicData *pData, ViewPort *pState)
 {
-    CircleCommand_DrawOnly(pCommand, pData, pState);
+	CircleCommand_DrawOnly(pCommand, pData, pState);
 }
 
 //
@@ -2480,65 +2480,65 @@ void CircleCommand_Draw(const PicCommand *pCommand, PicData *pData, ViewPort *pS
 //
 void _CircleHelper(const PicCommand *pCommand, std::vector<PicCommand> &temp)
 {
-    float x1 = static_cast<float>(pCommand->circle.xFrom);
-    float x2 = static_cast<float>(pCommand->circle.xTo);
-    float y1 = static_cast<float>(pCommand->circle.yFrom);
-    float y2 = static_cast<float>(pCommand->circle.yTo);
-    float PI = 3.1515926538f;
-    float t, a, b, tinc, centx, centy;
-    a = abs(0.5f * (x2 - x1));
-    b = abs(0.5f * (y2 - y1));
-    tinc = PI * 2.0f / (a + b);
-    temp.reserve(static_cast<size_t>((a + b)) + 1);
-    centx = ((x1 + x2) + 0.5f) * 0.5f;
-    centy = ((y1 + y2) + 0.5f) * 0.5f;
+	float x1 = static_cast<float>(pCommand->circle.xFrom);
+	float x2 = static_cast<float>(pCommand->circle.xTo);
+	float y1 = static_cast<float>(pCommand->circle.yFrom);
+	float y2 = static_cast<float>(pCommand->circle.yTo);
+	float PI = 3.1515926538f;
+	float t, a, b, tinc, centx, centy;
+	a = abs(0.5f * (x2 - x1));
+	b = abs(0.5f * (y2 - y1));
+	tinc = PI * 2.0f / (a + b);
+	temp.reserve(static_cast<size_t>((a + b)) + 1);
+	centx = ((x1 + x2) + 0.5f) * 0.5f;
+	centy = ((y1 + y2) + 0.5f) * 0.5f;
 
-    float xOrig = centx + a;
-    float yOrig = centy;
-    float xFrom = xOrig;
-    float yFrom = yOrig;
-    for(t = 0; t < PI * 2.0f; t += tinc)
-    {
-        float xTo = centx + a * cos(t);
-        float yTo = centy - b * sin(t);
-        temp.push_back(PicCommand::CreateLine(static_cast<int16_t>(xFrom), static_cast<int16_t>(yFrom), static_cast<int16_t>(xTo), static_cast<int16_t>(yTo)));
-        xFrom = xTo;
-        yFrom = yTo;
-    }
-    // Close it off...
-    temp.push_back(PicCommand::CreateLine(static_cast<int16_t>(xFrom), static_cast<int16_t>(yFrom), static_cast<int16_t>(xOrig), static_cast<int16_t>(yOrig)));
+	float xOrig = centx + a;
+	float yOrig = centy;
+	float xFrom = xOrig;
+	float yFrom = yOrig;
+	for(t = 0; t < PI * 2.0f; t += tinc)
+	{
+		float xTo = centx + a * cos(t);
+		float yTo = centy - b * sin(t);
+		temp.push_back(PicCommand::CreateLine(static_cast<int16_t>(xFrom), static_cast<int16_t>(yFrom), static_cast<int16_t>(xTo), static_cast<int16_t>(yTo)));
+		xFrom = xTo;
+		yFrom = yTo;
+	}
+	// Close it off...
+	temp.push_back(PicCommand::CreateLine(static_cast<int16_t>(xFrom), static_cast<int16_t>(yFrom), static_cast<int16_t>(xOrig), static_cast<int16_t>(yOrig)));
 }
 
 void CircleCommand_DrawOnly(const PicCommand *pCommand, PicData *pData, const ViewPort *pState)
 {
-    std::vector<PicCommand> temp;
-    _CircleHelper(pCommand, temp);
-    size_t cTemps = temp.size();
-    for (size_t i = 0; i < cTemps; i++)
-    {
-        PicCommand &command = temp[i];
-        LineCommand_DrawOnly(&command, pData, pState);
-    }
+	std::vector<PicCommand> temp;
+	_CircleHelper(pCommand, temp);
+	size_t cTemps = temp.size();
+	for (size_t i = 0; i < cTemps; i++)
+	{
+		PicCommand &command = temp[i];
+		LineCommand_DrawOnly(&command, pData, pState);
+	}
 }
 
 void CircleCommand_GetName(const PicCommand *pCommand, TCHAR *pszBuf, size_t cchBuf)
 {
-    StringCchPrintf(pszBuf, cchBuf, "Circle: %dx%d - %dx%d", pCommand->circle.xFrom, pCommand->circle.yFrom, pCommand->circle.xTo, pCommand->circle.yTo);
+	StringCchPrintf(pszBuf, cchBuf, "Circle: %dx%d - %dx%d", pCommand->circle.xFrom, pCommand->circle.yFrom, pCommand->circle.xTo, pCommand->circle.yTo);
 }
 void CircleCommand_Serialize(sci::ostream *pSerial, const PicCommand *pCommand, const PicCommand *pCommandPrev, const PicCommand *pCommandNext, DRAWSIZE dsPrev, DRAWSIZE *pds, SerializedPicState *pState)
 {
-    std::vector<PicCommand> temp;
-    _CircleHelper(pCommand, temp);
+	std::vector<PicCommand> temp;
+	_CircleHelper(pCommand, temp);
 
-    PicCommand commandPrev;
-    size_t cTemps = temp.size();
-    *pds = dsPrev;
-    for (size_t i = 0; i < cTemps; i++)
-    {
-        const PicCommand &command = temp[i];
-        Command_Serialize(pSerial, &command, (i == 0) ? nullptr : &commandPrev, (i == (cTemps - 1)) ? pCommandNext : &temp[i + 1], *pds, pds, pState);
-        commandPrev = command;
-    }
+	PicCommand commandPrev;
+	size_t cTemps = temp.size();
+	*pds = dsPrev;
+	for (size_t i = 0; i < cTemps; i++)
+	{
+		const PicCommand &command = temp[i];
+		Command_Serialize(pSerial, &command, (i == 0) ? nullptr : &commandPrev, (i == (cTemps - 1)) ? pCommandNext : &temp[i + 1], *pds, pds, pState);
+		commandPrev = command;
+	}
 }
 
 
@@ -2551,181 +2551,181 @@ void CircleCommand_Serialize(sci::ostream *pSerial, const PicCommand *pCommand, 
 //
 COLORREF Command_GetColor(const PicCommand *pCommand)
 {
-    // By default, things are black.
-    COLORREF color;
-    switch (pCommand->type)
-    {
-    case PicCommand::SetPalette:
-    case PicCommand::SetPaletteEntry:
-        color = RGB(180, 0, 0);
-        break;
-    case PicCommand::SetVisual:
-    case PicCommand::SetPriority:
-    case PicCommand::SetControl:
-        color = RGB(0, 0, 180);
-        break;
-    case PicCommand::DisableVisual:
-    case PicCommand::DisablePriority:
-    case PicCommand::DisableControl:
-        color = RGB(128, 128, 128);
-        break;
+	// By default, things are black.
+	COLORREF color;
+	switch (pCommand->type)
+	{
+	case PicCommand::SetPalette:
+	case PicCommand::SetPaletteEntry:
+		color = RGB(180, 0, 0);
+		break;
+	case PicCommand::SetVisual:
+	case PicCommand::SetPriority:
+	case PicCommand::SetControl:
+		color = RGB(0, 0, 180);
+		break;
+	case PicCommand::DisableVisual:
+	case PicCommand::DisablePriority:
+	case PicCommand::DisableControl:
+		color = RGB(128, 128, 128);
+		break;
 
-    case PicCommand::Fill:
-        color = RGB(180, 0, 180);
-        break;
+	case PicCommand::Fill:
+		color = RGB(180, 0, 180);
+		break;
 
-    case PicCommand::Line:
-        color = RGB(0, 180, 0);
-        break;
+	case PicCommand::Line:
+		color = RGB(0, 180, 0);
+		break;
 
-    default:
-        color = RGB(0, 0, 0);
-        break;
-    }
-    return color;
+	default:
+		color = RGB(0, 0, 0);
+		break;
+	}
+	return color;
 }
 
 PicCommand::PicCommand()
 {
-    memset(this, 0, sizeof(PicCommand));
-    type = None;
+	memset(this, 0, sizeof(PicCommand));
+	type = None;
 }
 
 // Do a deep copy of certain commands
 void PicCommand::_MaybeDeepCopy(const PicCommand &src)
 {
-    if (src.type == SetPalette)
-    {
-        // Reallocate the palette
-        setPalette.pPalette = new EGACOLOR[PALETTE_SIZE];
-        memcpy(setPalette.pPalette, src.setPalette.pPalette, sizeof(EGACOLOR) * PALETTE_SIZE);
-    }
-    else if (src.type == DrawBitmap)
-    {
-        drawVisualBitmap.pCel = new Cel(*src.drawVisualBitmap.pCel);
-    }
-    else if (src.type == SetPriorityBars)
-    {
-        setPriorityBars.pPriorityLines = new uint16_t[NumPriorityBars];
-        memcpy(setPriorityBars.pPriorityLines, src.setPriorityBars.pPriorityLines, NumPriorityBars * sizeof(*setPriorityBars.pPriorityLines));
-    }
+	if (src.type == SetPalette)
+	{
+		// Reallocate the palette
+		setPalette.pPalette = new EGACOLOR[PALETTE_SIZE];
+		memcpy(setPalette.pPalette, src.setPalette.pPalette, sizeof(EGACOLOR) * PALETTE_SIZE);
+	}
+	else if (src.type == DrawBitmap)
+	{
+		drawVisualBitmap.pCel = new Cel(*src.drawVisualBitmap.pCel);
+	}
+	else if (src.type == SetPriorityBars)
+	{
+		setPriorityBars.pPriorityLines = new uint16_t[NumPriorityBars];
+		memcpy(setPriorityBars.pPriorityLines, src.setPriorityBars.pPriorityLines, NumPriorityBars * sizeof(*setPriorityBars.pPriorityLines));
+	}
 }
 
 // Copy constructor
 PicCommand::PicCommand(const PicCommand& src)
 {
-    memcpy(this, &src, sizeof(PicCommand));
-    _MaybeDeepCopy(src);
+	memcpy(this, &src, sizeof(PicCommand));
+	_MaybeDeepCopy(src);
 }
 
 // For deserialization from clipboard:
 bool PicCommand::Initialize(sci::istream &byteStream)
 {
-    _CleanUp();
-    memset(this, 0, sizeof(PicCommand));
-    byteStream >> *this;
-    if (byteStream.good())
-    {
-        assert(type <= CommandTypeMax); // That we have a valid command!
-        if (type == SetPalette)
-        {
-            // Allocate the palette
-            setPalette.pPalette = new EGACOLOR[PALETTE_SIZE];
-            byteStream.read_data((uint8_t*)setPalette.pPalette, sizeof(*setPalette.pPalette) * PALETTE_SIZE);
-        }
-        else if (type == SetPriorityBars)
-        {
-            setPriorityBars.pPriorityLines = new uint16_t[NumPriorityBars];
-            byteStream.read_data((uint8_t*)setPriorityBars.pPriorityLines, sizeof(*setPriorityBars.pPriorityLines) * NumPriorityBars);
-        }
-        else if (type == DrawBitmap)
-        {
-            drawVisualBitmap.pCel = new Cel();
-            DeserializeCelRuntime(byteStream, *drawVisualBitmap.pCel);
-        }
-    }
-    return byteStream.good();
+	_CleanUp();
+	memset(this, 0, sizeof(PicCommand));
+	byteStream >> *this;
+	if (byteStream.good())
+	{
+		assert(type <= CommandTypeMax); // That we have a valid command!
+		if (type == SetPalette)
+		{
+			// Allocate the palette
+			setPalette.pPalette = new EGACOLOR[PALETTE_SIZE];
+			byteStream.read_data((uint8_t*)setPalette.pPalette, sizeof(*setPalette.pPalette) * PALETTE_SIZE);
+		}
+		else if (type == SetPriorityBars)
+		{
+			setPriorityBars.pPriorityLines = new uint16_t[NumPriorityBars];
+			byteStream.read_data((uint8_t*)setPriorityBars.pPriorityLines, sizeof(*setPriorityBars.pPriorityLines) * NumPriorityBars);
+		}
+		else if (type == DrawBitmap)
+		{
+			drawVisualBitmap.pCel = new Cel();
+			DeserializeCelRuntime(byteStream, *drawVisualBitmap.pCel);
+		}
+	}
+	return byteStream.good();
 }
 
 // Serialization for clipboard
 void PicCommand::SerializeForClipboard(sci::ostream *pSerial) const
 {
-    pSerial->WriteBytes((uint8_t*)this, sizeof(PicCommand));
-    if (type == SetPalette)
-    {
-        pSerial->WriteBytes((uint8_t*)setPalette.pPalette, sizeof(*setPalette.pPalette) * PALETTE_SIZE);
-    }
-    else if (type == SetPriorityBars)
-    {
-        pSerial->WriteBytes((uint8_t*)setPriorityBars.pPriorityLines, sizeof(*setPriorityBars.pPriorityLines) * NumPriorityBars);
-    }
-    else if (type == DrawBitmap)
-    {
-        SerializeCelRuntime(*pSerial, *drawVisualBitmap.pCel);
-    }
+	pSerial->WriteBytes((uint8_t*)this, sizeof(PicCommand));
+	if (type == SetPalette)
+	{
+		pSerial->WriteBytes((uint8_t*)setPalette.pPalette, sizeof(*setPalette.pPalette) * PALETTE_SIZE);
+	}
+	else if (type == SetPriorityBars)
+	{
+		pSerial->WriteBytes((uint8_t*)setPriorityBars.pPriorityLines, sizeof(*setPriorityBars.pPriorityLines) * NumPriorityBars);
+	}
+	else if (type == DrawBitmap)
+	{
+		SerializeCelRuntime(*pSerial, *drawVisualBitmap.pCel);
+	}
 }
 
 PicCommand::~PicCommand()
 {
-    _CleanUp();
+	_CleanUp();
 }
 
 PicCommand& PicCommand::operator=(const PicCommand& src)
 {
-    if (this != &src)
-    {
-        _CleanUp(); // Delete any existing data.
-        memcpy(this, &src, sizeof(PicCommand));
-        _MaybeDeepCopy(src);
-    }
-    return(*this);
+	if (this != &src)
+	{
+		_CleanUp(); // Delete any existing data.
+		memcpy(this, &src, sizeof(PicCommand));
+		_MaybeDeepCopy(src);
+	}
+	return(*this);
 }
 
 bool PicCommand::_IsEmpty()
 {
-    // Check some things that would indicate this command is empty
-    return (type == None) && (setPalette.pPalette == nullptr);
+	// Check some things that would indicate this command is empty
+	return (type == None) && (setPalette.pPalette == nullptr);
 }
 
 void PicCommand::_CleanUp()
 {
-    // Clean up any allocated data
-    switch (type)
-    {
-    case SetPalette:
-        delete[] setPalette.pPalette;
-        setPalette.pPalette = nullptr;
-        break;
-    case SetPriorityBars:
-        delete[] setPriorityBars.pPriorityLines;
-        setPriorityBars.pPriorityLines = nullptr;
-        break;
-    case DrawBitmap:
-        delete drawVisualBitmap.pCel;
-        drawVisualBitmap.pCel = nullptr;
-        break;
-    }
-    type = None; // Set command type to none
+	// Clean up any allocated data
+	switch (type)
+	{
+	case SetPalette:
+		delete[] setPalette.pPalette;
+		setPalette.pPalette = nullptr;
+		break;
+	case SetPriorityBars:
+		delete[] setPriorityBars.pPriorityLines;
+		setPriorityBars.pPriorityLines = nullptr;
+		break;
+	case DrawBitmap:
+		delete drawVisualBitmap.pCel;
+		drawVisualBitmap.pCel = nullptr;
+		break;
+	}
+	type = None; // Set command type to none
 }
 
 bool operator==(const PenStyle &one, const PenStyle &two)
 {
-    return one.fPattern == two.fPattern &&
-        one.fRectangle == two.fRectangle &&
-        one.fRandomNR == two.fRandomNR &&
-        one.bPatternSize == two.bPatternSize &&
-        one.bPatternNR == two.bPatternNR;
+	return one.fPattern == two.fPattern &&
+		one.fRectangle == two.fRectangle &&
+		one.fRandomNR == two.fRandomNR &&
+		one.bPatternSize == two.bPatternSize &&
+		one.bPatternNR == two.bPatternNR;
 }
 
 bool operator!=(const PenStyle &one, const PenStyle &two)
 {
-    return !(one == two);
+	return !(one == two);
 }
 
 void PicData::EnsureInBounds(int &x, int &y)
 {
-    x = min(x, size.cx - 1);
-    y = min(y, size.cy - 1);
-    x = max(x, 0);
-    y = max(y, 0);
+	x = min(x, size.cx - 1);
+	y = min(y, size.cy - 1);
+	x = max(x, 0);
+	y = max(y, 0);
 }

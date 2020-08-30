@@ -21,29 +21,29 @@ GNU General Public License for more details.
 using namespace std;
 
 RotateArbitraryDialog::RotateArbitraryDialog(int degrees, CWnd* pParent /*=NULL*/)
-    : CExtResizableDialog(RotateArbitraryDialog::IDD, pParent), _degrees(degrees)
+	: CExtResizableDialog(RotateArbitraryDialog::IDD, pParent), _degrees(degrees)
 {
 }
 
 void RotateArbitraryDialog::DoDataExchange(CDataExchange* pDX)
 {
-    CDialog::DoDataExchange(pDX);
-    ShowSizeGrip(FALSE);
+	CDialog::DoDataExchange(pDX);
+	ShowSizeGrip(FALSE);
 
-    DDX_Control(pDX, IDC_EDITDEGREES, m_wndEditDegrees);
-    m_wndEditDegrees.LimitText(3);
-    m_wndEditDegrees.SetWindowText(fmt::format("{0}", _degrees).c_str());
+	DDX_Control(pDX, IDC_EDITDEGREES, m_wndEditDegrees);
+	m_wndEditDegrees.LimitText(3);
+	m_wndEditDegrees.SetWindowText(fmt::format("{0}", _degrees).c_str());
 
-    // Visuals
-    DDX_Control(pDX, IDOK, m_wndOk);
-    DDX_Control(pDX, IDCANCEL, m_wndCancel);
-    DDX_Control(pDX, IDC_STATIC1, m_wndLabel1);
+	// Visuals
+	DDX_Control(pDX, IDOK, m_wndOk);
+	DDX_Control(pDX, IDCANCEL, m_wndCancel);
+	DDX_Control(pDX, IDC_STATIC1, m_wndLabel1);
 }
 
 void RotateArbitraryDialog::OnOK()
 {
-    CString str;
-    m_wndEditDegrees.GetWindowText(str);
-    _degrees = StrToInt(str);
-    __super::OnOK();
+	CString str;
+	m_wndEditDegrees.GetWindowText(str);
+	_degrees = StrToInt(str);
+	__super::OnOK();
 }

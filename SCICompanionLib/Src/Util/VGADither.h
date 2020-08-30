@@ -1,15 +1,15 @@
 /***************************************************************************
-    Copyright (c) 2015 Philip Fortier
+	Copyright (c) 2015 Philip Fortier
 
-    This program is free software; you can redistribute it and/or
-    modify it under the terms of the GNU General Public License
-    as published by the Free Software Foundation; either version 2
-    of the License, or (at your option) any later version.
+	This program is free software; you can redistribute it and/or
+	modify it under the terms of the GNU General Public License
+	as published by the Free Software Foundation; either version 2
+	of the License, or (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
 ***************************************************************************/
 #pragma once
 
@@ -23,66 +23,66 @@ public:
 
 struct RGBError
 {
-    RGBError() : r(0), g(0), b(0) {}
-    int16_t r;
-    int16_t g;
-    int16_t b;
+	RGBError() : r(0), g(0), b(0) {}
+	int16_t r;
+	int16_t g;
+	int16_t b;
 
-    RGBError operator*(int16_t m)
-    {
-        RGBError error = *this;
-        error.r *= m;
-        error.g *= m;
-        error.b *= m;
-        return error;
-    }
-    RGBError &operator+=(const RGBError &error)
-    {
-        r += error.r;
-        g += error.g;
-        b += error.b;
-        return *this;
-    }
+	RGBError operator*(int16_t m)
+	{
+		RGBError error = *this;
+		error.r *= m;
+		error.g *= m;
+		error.b *= m;
+		return error;
+	}
+	RGBError &operator+=(const RGBError &error)
+	{
+		r += error.r;
+		g += error.g;
+		b += error.b;
+		return *this;
+	}
 };
 
 template<>
 class dither_traits<RGBQUAD>
 {
 public:
-    typedef RGBError error_type;
+	typedef RGBError error_type;
 };
 
 template<>
 class dither_traits<uint8_t>
 {
 public:
-    typedef int16_t error_type;
+	typedef int16_t error_type;
 };
 
 struct OffsetAndWeight
 {
-    int x;
-    int y;
-    int weight;
+	int x;
+	int y;
+	int weight;
 };
 
 class FloydSteinberg
 {
 public:
-    static const int ExpandX = 2;
-    static const int ExpandY = 1;
-    static const int Divisor = 16;
-    static const OffsetAndWeight Matrix[4];
+	static const int ExpandX = 2;
+	static const int ExpandY = 1;
+	static const int Divisor = 16;
+	static const OffsetAndWeight Matrix[4];
 };
 
 
 class JarvisJudiceNinke
 {
 public:
-    static const int ExpandX = 4;
-    static const int ExpandY = 2;
-    static const int Divisor = 42;
-    static const OffsetAndWeight Matrix[12];
+	static const int ExpandX = 4;
+	static const int ExpandY = 2;
+	static const int Divisor = 42;
+	static const OffsetAndWeight Matrix[12];
 };
 
 uint8_t ClampTo8(int16_t in);
@@ -97,43 +97,43 @@ template<typename T, typename _TAlgorithm>
 class ErrorDiffusionDither
 {
 public:
-    typedef typename dither_traits<T>::error_type TError;
-    typedef _TAlgorithm Algorithm;
+	typedef typename dither_traits<T>::error_type TError;
+	typedef _TAlgorithm Algorithm;
 
-    ErrorDiffusionDither(int cx, int cy)
-    {
-        _cxE = cx + Algorithm::ExpandX;   // Room for below left and right
-        _cyE = cy + Algorithm::ExpandY;   // Room for below
-        _error = std::make_unique<TError[]>(_cxE * _cyE);
-    }
+	ErrorDiffusionDither(int cx, int cy)
+	{
+		_cxE = cx + Algorithm::ExpandX;   // Room for below left and right
+		_cyE = cy + Algorithm::ExpandY;   // Room for below
+		_error = std::make_unique<TError[]>(_cxE * _cyE);
+	}
 
-    T ApplyErrorAt(T rgb, int x, int y)
-    {
-        TError errorAccum = _error[y * _cxE + x];
-        return AdjustWithError(rgb, errorAccum, Algorithm::Divisor);
-    }
+	T ApplyErrorAt(T rgb, int x, int y)
+	{
+		TError errorAccum = _error[y * _cxE + x];
+		return AdjustWithError(rgb, errorAccum, Algorithm::Divisor);
+	}
 
-    void PropagateError(T rgbOrig, T rgbChosen, int x, int y)
-    {
-        // Propagate the error to nearby pixels using the floyd-steinberg algorithm
-        TError errorBase = CalculateError(rgbOrig, rgbChosen);
+	void PropagateError(T rgbOrig, T rgbChosen, int x, int y)
+	{
+		// Propagate the error to nearby pixels using the floyd-steinberg algorithm
+		TError errorBase = CalculateError(rgbOrig, rgbChosen);
 
-        for (auto &offsetAndWeight : Algorithm::Matrix)
-        {
-            int index = (y + offsetAndWeight.y) * _cxE + x + offsetAndWeight.x;
-            TError temp = _error[index];
-            temp += errorBase * offsetAndWeight.weight;
-            // Trying to fix error with JarvisJudiceNinke where completely transparent pixels
-            // Overall, things should average out, not sure why I'm getting error values beyond our range.
-            // _error[index] = ClampToSpan(temp, Algorithm::Divisor);
-            _error[index] = temp;
-        }
-    }
+		for (auto &offsetAndWeight : Algorithm::Matrix)
+		{
+			int index = (y + offsetAndWeight.y) * _cxE + x + offsetAndWeight.x;
+			TError temp = _error[index];
+			temp += errorBase * offsetAndWeight.weight;
+			// Trying to fix error with JarvisJudiceNinke where completely transparent pixels
+			// Overall, things should average out, not sure why I'm getting error values beyond our range.
+			// _error[index] = ClampToSpan(temp, Algorithm::Divisor);
+			_error[index] = temp;
+		}
+	}
 
 private:
-    std::unique_ptr<TError[]> _error;
-    int _cxE;
-    int _cyE;
+	std::unique_ptr<TError[]> _error;
+	int _cxE;
+	int _cyE;
 };
 
 extern int16_t BayerMatrix[4][4];
@@ -142,43 +142,43 @@ template<typename T>
 class NoDither
 {
 public:
-    NoDither(int cx, int cy) {}
-    T ApplyErrorAt(T rgb, int x, int y)
-    {
-        return rgb;
-    }
+	NoDither(int cx, int cy) {}
+	T ApplyErrorAt(T rgb, int x, int y)
+	{
+		return rgb;
+	}
 
-    void PropagateError(T rgbOrig, T rgbChosen, int x, int y) {}
+	void PropagateError(T rgbOrig, T rgbChosen, int x, int y) {}
 };
 
 template<typename T>
 class OrderedDither
 {
 public:
-    typedef typename dither_traits<T>::error_type TError;
-    static const int MatrixSize = 4;
-    static const int Divisor = (MatrixSize * MatrixSize) + 1;
+	typedef typename dither_traits<T>::error_type TError;
+	static const int MatrixSize = 4;
+	static const int Divisor = (MatrixSize * MatrixSize) + 1;
 
-    OrderedDither(int cx, int cy)
-    {
-        // Scale the matrix to 0-255. So basically, this only works for white/black dithering.
-        for (int y = 0; y < MatrixSize; y++)
-        {
-            for (int x = 0; x < MatrixSize; x++)
-            {
-                _matrix[x][y] = BayerMatrix[x][y] * 255 - 128 * Divisor;
-            }
-        }
-    }
+	OrderedDither(int cx, int cy)
+	{
+		// Scale the matrix to 0-255. So basically, this only works for white/black dithering.
+		for (int y = 0; y < MatrixSize; y++)
+		{
+			for (int x = 0; x < MatrixSize; x++)
+			{
+				_matrix[x][y] = BayerMatrix[x][y] * 255 - 128 * Divisor;
+			}
+		}
+	}
 
-    T ApplyErrorAt(T rgb, int x, int y)
-    {
-        TError errorAccum = _matrix[x % MatrixSize][y % MatrixSize];
-        return AdjustWithError(rgb, errorAccum, Divisor);
-    }
+	T ApplyErrorAt(T rgb, int x, int y)
+	{
+		TError errorAccum = _matrix[x % MatrixSize][y % MatrixSize];
+		return AdjustWithError(rgb, errorAccum, Divisor);
+	}
 
-    void PropagateError(T rgbOrig, T rgbChosen, int x, int y) {}
+	void PropagateError(T rgbOrig, T rgbChosen, int x, int y) {}
 
 private:
-    int16_t _matrix[MatrixSize][MatrixSize];
+	int16_t _matrix[MatrixSize][MatrixSize];
 };

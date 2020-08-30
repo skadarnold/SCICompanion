@@ -1,15 +1,15 @@
 /***************************************************************************
-    Copyright (c) 2015 Philip Fortier
+	Copyright (c) 2015 Philip Fortier
 
-    This program is free software; you can redistribute it and/or
-    modify it under the terms of the GNU General Public License
-    as published by the Free Software Foundation; either version 2
-    of the License, or (at your option) any later version.
+	This program is free software; you can redistribute it and/or
+	modify it under the terms of the GNU General Public License
+	as published by the Free Software Foundation; either version 2
+	of the License, or (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
 ***************************************************************************/
 //
 // Pic Command classes
@@ -18,12 +18,12 @@
 
 struct PenStyle
 {
-    PenStyle() : bPatternSize(0), bPatternNR(0), fRandomNR(true), fRectangle(false), fPattern(false) {}
-    bool fPattern;
-    bool fRectangle;
-    bool fRandomNR;
-    uint8_t bPatternSize;
-    uint8_t bPatternNR;
+	PenStyle() : bPatternSize(0), bPatternNR(0), fRandomNR(true), fRectangle(false), fPattern(false) {}
+	bool fPattern;
+	bool fRectangle;
+	bool fRandomNR;
+	uint8_t bPatternSize;
+	uint8_t bPatternNR;
 };
 
 bool operator==(const PenStyle &one, const PenStyle &two);

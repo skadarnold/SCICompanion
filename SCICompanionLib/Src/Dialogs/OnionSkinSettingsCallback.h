@@ -16,5 +16,5 @@ GNU General Public License for more details.
 class IOnionSkinCallback
 {
 public:
-    virtual void OnOnionSkinChanged() = 0;
+	virtual void OnOnionSkinChanged() = 0;
 };

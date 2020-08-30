@@ -1,15 +1,15 @@
 /***************************************************************************
-    Copyright (c) 2015 Philip Fortier
+	Copyright (c) 2015 Philip Fortier
 
-    This program is free software; you can redistribute it and/or
-    modify it under the terms of the GNU General Public License
-    as published by the Free Software Foundation; either version 2
-    of the License, or (at your option) any later version.
+	This program is free software; you can redistribute it and/or
+	modify it under the terms of the GNU General Public License
+	as published by the Free Software Foundation; either version 2
+	of the License, or (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
 ***************************************************************************/
 #pragma once
 
@@ -18,74 +18,74 @@
 // The polymorphic base
 template <typename T1, typename Result>
 struct delegate_base { // Ref counting added 2002-09-22
-    int ref_count; // delegate_base's are refcounted
+	int ref_count; // delegate_base's are refcounted
 
-    delegate_base() : ref_count(0) { }
+	delegate_base() : ref_count(0) { }
 
-    void addref() {
-        ++ref_count;
-    }
+	void addref() {
+		++ref_count;
+	}
 
-    void release() {
-        if(--ref_count < 0)
-            delete this;
-    }
+	void release() {
+		if(--ref_count < 0)
+			delete this;
+	}
 
-    virtual ~delegate_base() { } // Added 2002-09-22
-    virtual Result operator()(T1 v1) = 0;
+	virtual ~delegate_base() { } // Added 2002-09-22
+	virtual Result operator()(T1 v1) = 0;
 };
 
 // The actual implementation of the delegate
 template <typename Class, typename T1, typename Result>
 struct delegate_impl : public delegate_base<T1, Result> {
-    typedef Result (Class::* MethodType)(T1);
-    Class*          obj;
-    MethodType      method;
+	typedef Result (Class::* MethodType)(T1);
+	Class*		  obj;
+	MethodType	  method;
 
-    delegate_impl(Class* obj_, MethodType method_) : 
-            obj(obj_), method(method_) { }
+	delegate_impl(Class* obj_, MethodType method_) : 
+			obj(obj_), method(method_) { }
 
-    Result operator()(T1 v1) {
-        return (obj->*method)(v1);
-    }
+	Result operator()(T1 v1) {
+		return (obj->*method)(v1);
+	}
 };
 
 template <typename T1, typename Result>
 struct delegate {
-    // Notice the type: delegate_base<T1, 
-    // Result> - no Class in sight!
-    delegate_base<T1, Result>*        pDelegateImpl;
+	// Notice the type: delegate_base<T1, 
+	// Result> - no Class in sight!
+	delegate_base<T1, Result>*		pDelegateImpl;
 
-    // The templated constructor - The presence of Class 
-    // does not "pollute" the class itself
-    template <typename Class, typename T1, typename Result>
-    delegate(Class* obj, Result (Class::* method)(T1)) 
-        : pDelegateImpl(new delegate_impl<Class, 
-        T1, Result>(obj, method)) { 
-            pDelegateImpl->addref(); // Added 2002-09-22
-        }
+	// The templated constructor - The presence of Class 
+	// does not "pollute" the class itself
+	template <typename Class, typename T1, typename Result>
+	delegate(Class* obj, Result (Class::* method)(T1)) 
+		: pDelegateImpl(new delegate_impl<Class, 
+		T1, Result>(obj, method)) { 
+			pDelegateImpl->addref(); // Added 2002-09-22
+		}
 
-        // Copy constructor and assignment operator 
-        // added 2002-09-27
-        delegate(const delegate<T1, 
-            Result>& other) {
-            pDelegateImpl = other.pDelegateImpl;
-            pDelegateImpl->addref();
-        }
+		// Copy constructor and assignment operator 
+		// added 2002-09-27
+		delegate(const delegate<T1, 
+			Result>& other) {
+			pDelegateImpl = other.pDelegateImpl;
+			pDelegateImpl->addref();
+		}
 
-        delegate<T1, Result>& operator=(const delegate<T1, 
-            Result>& other) {
-            pDelegateImpl->release();
-            pDelegateImpl = other.pDelegateImpl;
-            pDelegateImpl->addref();
-            return *this;
-        }
+		delegate<T1, Result>& operator=(const delegate<T1, 
+			Result>& other) {
+			pDelegateImpl->release();
+			pDelegateImpl = other.pDelegateImpl;
+			pDelegateImpl->addref();
+			return *this;
+		}
 
-        ~delegate() { pDelegateImpl->release(); 
-            } // Added & modified 2002-09-22
+		~delegate() { pDelegateImpl->release(); 
+			} // Added & modified 2002-09-22
 
-        // Forward the delegate to the delegate implementation
-        Result operator()(T1 v1) {
-            return (*pDelegateImpl)(v1);
-        }
+		// Forward the delegate to the delegate implementation
+		Result operator()(T1 v1) {
+			return (*pDelegateImpl)(v1);
+		}
 };

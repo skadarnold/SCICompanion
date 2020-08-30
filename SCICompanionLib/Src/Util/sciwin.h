@@ -18,33 +18,33 @@ GNU General Public License for more details.
 class OpenClipboardGuard
 {
 public:
-    OpenClipboardGuard(HWND hwnd)
-    {
-        _open = OpenClipboard(hwnd);
-    }
-    OpenClipboardGuard(CWnd *pWnd)
-    {
-        _open = pWnd->OpenClipboard();
-    }
+	OpenClipboardGuard(HWND hwnd)
+	{
+		_open = OpenClipboard(hwnd);
+	}
+	OpenClipboardGuard(CWnd *pWnd)
+	{
+		_open = pWnd->OpenClipboard();
+	}
 
-    BOOL IsOpen() { return _open; }
+	BOOL IsOpen() { return _open; }
 
-    ~OpenClipboardGuard()
-    {
-        Close();
-    }
+	~OpenClipboardGuard()
+	{
+		Close();
+	}
 
-    void Close()
-    {
-        if (_open)
-        {
-            CloseClipboard();
-            _open = FALSE;
-        }
-    }
+	void Close()
+	{
+		if (_open)
+		{
+			CloseClipboard();
+			_open = FALSE;
+		}
+	}
 
 private:
-    BOOL _open;
+	BOOL _open;
 };
 
 

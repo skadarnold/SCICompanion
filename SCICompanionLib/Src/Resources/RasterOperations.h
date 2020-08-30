@@ -1,15 +1,15 @@
 /***************************************************************************
-    Copyright (c) 2015 Philip Fortier
+	Copyright (c) 2015 Philip Fortier
 
-    This program is free software; you can redistribute it and/or
-    modify it under the terms of the GNU General Public License
-    as published by the Free Software Foundation; either version 2
-    of the License, or (at your option) any later version.
+	This program is free software; you can redistribute it and/or
+	modify it under the terms of the GNU General Public License
+	as published by the Free Software Foundation; either version 2
+	of the License, or (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
 ***************************************************************************/
 #pragma once
 #include "Components.h"
@@ -17,38 +17,38 @@
 
 enum class RasterChangeHint
 {
-    None = 0x0000,
-    CelSelection = 0x0001,
-    LoopSelection = 0x0002,
-    Cel = 0x0004,
-    Loop = 0x0008,
-    NewView = 0x0010,
-    Color = 0x0020,
-    PenStyle = 0x0040,
-    SampleText = 0x0080,
-    ApplyToAll = 0x0100,
-    PaletteChoice = 0x0200,
+	None = 0x0000,
+	CelSelection = 0x0001,
+	LoopSelection = 0x0002,
+	Cel = 0x0004,
+	Loop = 0x0008,
+	NewView = 0x0010,
+	Color = 0x0020,
+	PenStyle = 0x0040,
+	SampleText = 0x0080,
+	ApplyToAll = 0x0100,
+	PaletteChoice = 0x0200,
 };
 
 DEFINE_ENUM_FLAGS(RasterChangeHint, uint32_t)
 
 struct RasterChange
 {
-    RasterChange() {}
-    RasterChange(RasterChangeHint hint, CelIndex index) : hint(hint), index(index) {}
-    RasterChange(RasterChangeHint hint) : hint(hint) {}
-    RasterChange(const RasterChange &src) = default;
-    RasterChange& operator=(const RasterChange &src) = default;
+	RasterChange() {}
+	RasterChange(RasterChangeHint hint, CelIndex index) : hint(hint), index(index) {}
+	RasterChange(RasterChangeHint hint) : hint(hint) {}
+	RasterChange(const RasterChange &src) = default;
+	RasterChange& operator=(const RasterChange &src) = default;
 
-    RasterChangeHint hint;
-    CelIndex index;
+	RasterChangeHint hint;
+	CelIndex index;
 };
 
 enum class RasterResizeFlags
 {
-    Normal,
-    AnchorBottomRight,
-    Stretch,
+	Normal,
+	AnchorBottomRight,
+	Stretch,
 };
 
 class ResourceEntity;
@@ -60,9 +60,9 @@ struct Loop;
 
 enum class BitmapScaleOptions
 {
-    None = 0,
-    AllowMag = 0x1,
-    AllowMin = 0x2,
+	None = 0,
+	AllowMag = 0x1,
+	AllowMin = 0x2,
 };
 DEFINE_ENUM_FLAGS(BitmapScaleOptions, uint8_t)
 
@@ -81,7 +81,7 @@ RasterChange SetSize(RasterComponent &raster, CelIndex celIndex, size16 size, Ra
 RasterChange SetGroupSize(RasterComponent &raster, int cCels, CelIndex *rgdwIndex, const size16 *rgSizes, RasterResizeFlags resizeFlags);
 RasterChange RotateGroup(RasterComponent &raster, int cCels, CelIndex *rgdwIndex, int degress);
 RasterChange FillEmpty(RasterComponent &raster, CelIndex celIndex, size16 size);
-bool ClampSize(const RasterComponent &raster, size16 &size);    // True if we clamped
+bool ClampSize(const RasterComponent &raster, size16 &size);	// True if we clamped
 void CreateDegenerate(Cel &cel, uint8_t bColor);
 RasterChange MirrorLoopFrom(Loop &loop, uint8_t nOriginal, const Loop &orig);
 void UpdateMirrors(RasterComponent &raster, int nLoop);

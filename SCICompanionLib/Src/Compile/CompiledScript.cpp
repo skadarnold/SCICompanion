@@ -1427,4 +1427,3 @@ bool ObjectFileScriptLookups::_LoadSCOFile(WORD wScript)
 	}
 	return fRet;
 }
-

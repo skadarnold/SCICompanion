@@ -680,4 +680,3 @@ void ForEachLoop::Accept(ISyntaxNodeVisitor &visitor) const { visitor.Enter(*thi
 #ifdef KAWA_GETPOLY
 void GetPolyStatement::Accept(ISyntaxNodeVisitor &visitor) const { visitor.Enter(*this); visitor.Visit(*this); visitor.Leave(*this); }
 #endif
-

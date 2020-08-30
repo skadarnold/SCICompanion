@@ -29,8 +29,8 @@ struct TextComponent;
 enum OutputContext
 {
 	OC_Stack		= 0,
-	OC_Accumulator  = 1,
-	OC_Unknown	  = 2,
+	OC_Accumulator	= 1,
+	OC_Unknown		= 2,
 };
 
 enum VariableModifier

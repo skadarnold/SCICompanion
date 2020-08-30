@@ -68,4 +68,3 @@ void ConvertFromToPaletteDialog::OnOK()
 
 BEGIN_MESSAGE_MAP(ConvertFromToPaletteDialog, CExtResizableDialog)
 END_MESSAGE_MAP()
-

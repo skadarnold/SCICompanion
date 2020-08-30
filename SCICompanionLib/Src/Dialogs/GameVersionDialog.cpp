@@ -360,4 +360,3 @@ void CGameVersionDialog::OnViewMessageMap()
 	FileDescriptorMessageMap messageMapFileDescriptor(appState->GetResourceMap().GetGameFolder());
 	_OnViewResourceMap(messageMapFileDescriptor, versionTest, appState->GetResourceMap().GetGameFolder());
 }
-

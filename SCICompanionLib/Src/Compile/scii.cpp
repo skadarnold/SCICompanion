@@ -871,12 +871,9 @@ bool scii::_is_label_instruction()
 	return (_bOpcode == Opcode::BNT) || (_bOpcode == Opcode::BT) || (_bOpcode == Opcode::JMP) || (_bOpcode == Opcode::CALL);
 }
 
-
-
 // This craziness is so that code_pos can be used in a multimap.
 // We use the node pointer as a < comparator.  Just something consistent but meaningless.
 bool operator<(const code_pos &_Right, const code_pos &_Left)
 {
 	return _Right._Mynode() < _Left._Mynode();
 }
-

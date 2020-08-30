@@ -38,4 +38,3 @@ END_MESSAGE_MAP()
 
 
 // CSCIFontDialog message handlers
-

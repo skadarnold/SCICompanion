@@ -58,4 +58,3 @@ void CChooseColorDialogVGA::OnColorClick(BYTE bIndex, int nID, BOOL fLeftClick)
 		EndDialog(IDOK);
 	}
 }
-

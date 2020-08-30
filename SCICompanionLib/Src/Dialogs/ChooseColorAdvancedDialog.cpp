@@ -350,4 +350,3 @@ void CChooseColorAdvancedDialog::OnColorClick(BYTE bIndex, int nID, BOOL fLeftCl
 		EndDialog(IDOK);
 	}
 }
-

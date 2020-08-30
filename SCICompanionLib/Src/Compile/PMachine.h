@@ -219,29 +219,28 @@ bool IsOpcode(const std::string &theString);
 // Variable operands
 // bit "-1" is operand size
 // bit 0,1 -> type of variable
-#define VO_GLOBAL		   0x00
-#define VO_LOCAL			0x01
-#define VO_TEMP			 0x02
-#define VO_PARAM			0x03
-#define VO_TYPEMASK		 0x03
+#define VO_GLOBAL				0x00
+#define VO_LOCAL				0x01
+#define VO_TEMP					0x02
+#define VO_PARAM				0x03
+#define VO_TYPEMASK				0x03
 // bit 2
-#define VO_STACK			0x04
-#define VO_ACC			  0x00
+#define VO_STACK				0x04
+#define VO_ACC					0x00
 // bit 3
-#define VO_ACC_AS_INDEX_MOD 0x08
+#define VO_ACC_AS_INDEX_MOD		0x08
 // bit 4,5
-#define VO_LOAD			 0x00 // -> to acc or stack
-#define VO_STORE			0x10 // -> in variable
-#define VO_INC_AND_LOAD	 0x20
-#define VO_DEC_AND_LOAD	 0x30
+#define VO_LOAD					0x00 // -> to acc or stack
+#define VO_STORE				0x10 // -> in variable
+#define VO_INC_AND_LOAD			0x20
+#define VO_DEC_AND_LOAD			0x30
 
 // The lea instruction (load effective address into acc)
 // bits 0-1  (actually bits 1-2)
-#define LEA_GLOBAL		   0x00 // REVIEW -> make them static const BYTE or something.
-#define LEA_LOCAL			0x01
-#define LEA_TEMP			 0x02
-#define LEA_PARAM			0x03
-#define LEA_VARIABLEMASK	 0x03
+#define LEA_GLOBAL				0x00 // REVIEW -> make them static const BYTE or something.
+#define LEA_LOCAL				0x01
+#define LEA_TEMP				0x02
+#define LEA_PARAM				0x03
+#define LEA_VARIABLEMASK		0x03
 // bit 3	 (actually bit 4)
-#define LEA_ACC_AS_INDEX_MOD 0x08
-
+#define LEA_ACC_AS_INDEX_MOD	0x08

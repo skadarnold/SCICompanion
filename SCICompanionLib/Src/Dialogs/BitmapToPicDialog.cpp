@@ -1095,4 +1095,3 @@ BOOL CBitmapToPicDialog::OnInitDialog()
 
 	return TRUE;
 }
-

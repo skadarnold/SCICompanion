@@ -139,6 +139,3 @@ enum class BinaryOperator;
 // (e.g. int can be converted to string if the int is a zero value)
 //
 bool DoesTypeMatch(CompileContext &context, SpeciesIndex destType, const SpeciesIndex sourceType, const BinaryOperator *binOp = nullptr, const sci::SyntaxNode *pStatement = NULL);
-
-
-

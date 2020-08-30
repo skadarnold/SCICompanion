@@ -121,5 +121,3 @@ void CBaseColorDialog::_SetPosition()
 		MoveWindow(&rcNew);
 	}
 }
-
-

@@ -24,6 +24,8 @@
 
 // Still a WIP.
 
+// is it really? -- K
+
 /*
 	Suggested syntax:
 	

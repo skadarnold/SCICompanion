@@ -314,4 +314,3 @@ private:
 // This craziness is so that code_pos can be used in a multimap.
 // We use the node pointer as a < comparator.  Just something consistent but meaningless.
 bool operator<(const code_pos &_Right, const code_pos &_Left);
-

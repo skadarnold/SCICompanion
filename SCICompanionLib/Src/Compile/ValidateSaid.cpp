@@ -375,5 +375,4 @@ void ValidateSaids(CompileLog &log, const Vocab000 &vocab000)
 
 	//ListMostPopularOfType(log, vocab000, WordClass::ImperativeVerb, saidsUsedInScripts);
 	ListMostPopularVerbs(log, rootsUsedInScripts);
-
 }

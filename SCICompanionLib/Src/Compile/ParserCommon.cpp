@@ -40,4 +40,3 @@ int charToI(char ch)
 		return (ch - 'A' + 10);
 	}
 }
-

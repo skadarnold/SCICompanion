@@ -2,7 +2,7 @@
 #include "GenerateDocsDialog.h"
 
 /***************************************************************************
-Copyright (c) 2015 Philip Fortier
+Copyright (c) 2020 Philip Fortier
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License

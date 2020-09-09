@@ -1152,7 +1152,7 @@ WORD _GetImmediateFromCodeNode(ConsumptionNode &node, ConsumptionNode *pNodePrev
 				//HACK: LSL3DEMO uses "ldi 57, push" to push an "init" selector, but this isn't properly decompiled
 				//unlike the "proper" method, "pushi 57". So IF the previous node was an LDI, return *its* first operand instead.
 				//This is *almost* the same as Opcode::DUP down below but I specifically want to use LDI/PUSH pairs only.
-				if (pNodePrevious)
+				if (pNodePrevious && pNodePrevious->_hasPos)
 				{
 					if (pNodePrevious->pos->get_opcode() == Opcode::LDI)
 					{

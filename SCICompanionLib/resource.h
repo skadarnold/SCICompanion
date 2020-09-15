@@ -1236,6 +1236,7 @@
 #define ID_VIEW_SHRINKWRAPCEL           33363
 #define ID_INDICATOR_PRI                59138
 #define ID_INDICATOR_COORDS             59142
+#define IDC_NO_DBUGSTR_CALLS            59143
 
 // Next default values for new objects
 // 

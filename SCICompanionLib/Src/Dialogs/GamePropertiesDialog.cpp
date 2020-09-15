@@ -31,6 +31,7 @@ CGamePropertiesDialog::CGamePropertiesDialog(RunLogic &runLogic, CWnd* pParent /
 	_fAspectRatioStart = appState->GetResourceMap().Helper().GetUseSierraAspectRatio(!!appState->_fUseOriginalAspectRatioDefault);
 	_fPatchFileStart = appState->GetResourceMap().Helper().GetResourceSaveLocation(ResourceSaveLocation::Default) == ResourceSaveLocation::Patch;
 	_fUnditherStart = appState->GetResourceMap().Helper().GetUndither();
+	_fNoDbugStr = appState->GetResourceMap().Helper().GetNoDbugStr();
 }
 
 CGamePropertiesDialog::~CGamePropertiesDialog()
@@ -77,6 +78,9 @@ void CGamePropertiesDialog::DoDataExchange(CDataExchange* pDX)
 		// Not an option for VGA
 		m_wndCheckUnditherEGA.EnableWindow(FALSE);
 	}
+
+	DDX_Control(pDX, IDC_NO_DBUGSTR_CALLS, m_wndCheckNoDbugStr);
+	m_wndCheckNoDbugStr.SetCheck(_fNoDbugStr ? BST_CHECKED : BST_UNCHECKED);
 
 	if (!_initialized)
 	{
@@ -203,6 +207,12 @@ void CGamePropertiesDialog::OnOK()
 	if (unditherEGA != _fUnditherStart)
 	{
 		appState->GetResourceMap().Helper().SetUndither(unditherEGA);
+	}
+
+	bool noDbugStr = m_wndCheckNoDbugStr.GetCheck() == BST_CHECKED;
+	if (noDbugStr != _fNoDbugStr)
+	{
+		appState->GetResourceMap().Helper().SetNoDbugStr(noDbugStr);
 	}
 
 	bool usePatchFiles = m_wndCheckPatchFiles.GetCheck() == BST_CHECKED;

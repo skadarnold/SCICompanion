@@ -32,6 +32,7 @@ const std::string LanguageValueSCI = "sci";
 const std::string AspectRatioKey = "UseSierraAspectRatio";
 const std::string UnditherKey = "UnditherEGA";
 const std::string PatchFileKey = "SaveToPatchFiles";
+const std::string NoDbugStrKey = "NoDbugStr";
 const std::string TrueValue = "true";
 const std::string FalseValue = "false";
 const std::string GenerateDebugInfoKey = "GenerateDebugInfo";
@@ -261,6 +262,16 @@ bool GameFolderHelper::GetUndither() const
 void GameFolderHelper::SetUndither(bool undither) const
 {
 	SetIniString(GameSection, UnditherKey, undither ? TrueValue : FalseValue);
+}
+bool GameFolderHelper::GetNoDbugStr() const
+{
+	std::string value = GetIniString(GameSection, NoDbugStrKey, FalseValue.c_str());
+	std::transform(value.begin(), value.end(), value.begin(), ::tolower);
+	return value == TrueValue;
+}
+void GameFolderHelper::SetNoDbugStr(bool noDbug) const
+{
+	SetIniString(GameSection, NoDbugStrKey, noDbug ? TrueValue : FalseValue);
 }
 
 bool GameFolderHelper::GetGenerateDebugInfo() const

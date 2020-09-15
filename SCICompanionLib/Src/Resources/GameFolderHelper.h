@@ -74,6 +74,8 @@ public:
 	void SetUseSierraAspectRatio(bool useSierra) const;
 	bool GetUndither() const;
 	void SetUndither(bool undither) const;
+	bool GetNoDbugStr() const;
+	void SetNoDbugStr(bool dbugStr) const;
 
 	bool GetGenerateDebugInfo() const;
 

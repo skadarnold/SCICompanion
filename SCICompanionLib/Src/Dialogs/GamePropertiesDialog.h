@@ -57,6 +57,7 @@ private:
 	CExtCheckBox m_wndCheckAspectRatio;
 	CExtCheckBox m_wndCheckPatchFiles;
 	CExtCheckBox m_wndCheckUnditherEGA;
+	CExtCheckBox m_wndCheckNoDbugStr;
 
 	std::unordered_map<std::string, std::string> _optionToExe;
 	std::unordered_map<std::string, std::string> _optionToParams;
@@ -68,6 +69,7 @@ private:
 	bool _fPatchFileStart;
 	bool _wasAspectRatioChanged;
 	bool _fUnditherStart;
+	bool _fNoDbugStr;
 
 	bool _gameNeedsReload;
 

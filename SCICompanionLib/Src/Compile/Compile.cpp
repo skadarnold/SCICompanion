@@ -18,6 +18,7 @@
 //
 
 #include "stdafx.h"
+#include "AppState.h"
 #include "ScriptOMAll.h"
 #include "CompileInterfaces.h"
 #include "CompileContext.h"
@@ -1813,6 +1814,19 @@ CodeResult ProcedureCall::OutputByteCode(CompileContext &context) const
 	// callk: call a kernel -> specify the kernel func index.
 	// call: internal call -> use a relative position
 
+	WORD wScript, wIndex;
+	string classOwner;
+	ProcedureType procType = context.LookupProc(_innerName, wScript, wIndex, classOwner);
+
+	if (_innerName == "DbugStr" && procType == ProcedureType::ProcedureKernel)
+	{
+		if (appState->GetResourceMap().Helper().GetNoDbugStr())
+		{
+			context.ReportWarning(this, "DbugStr disabled");
+			return 0;
+		}
+	}
+
 	// Put in a fake opcode for the time being - we'll add our push later (we need to know
 	// how many parameters we're pushing, before we know which instruction to use).
 	context.code().inst(GetLineNumber(), Opcode::INDETERMINATE);
@@ -1832,9 +1846,6 @@ CodeResult ProcedureCall::OutputByteCode(CompileContext &context) const
 	// Now go back and put in our parameter count (note: we don't include the parameter count in the number of parameters used)
 	PushImmediateAt(context, wCallBytes / 2, parameterCountInstruction, GetLineNumber());
 
-	WORD wScript, wIndex;
-	string classOwner;
-	ProcedureType procType = context.LookupProc(_innerName, wScript, wIndex, classOwner);
 	switch (procType)
 	{
 	case ProcedureMain:

@@ -445,7 +445,8 @@ void MidiPlayer::_OnStreamDone()
 			if (_dwLoopPoint != SoundComponent::LoopPointNone)
 			{
 				// Cue the loop point. We start playing events *after* the loop point, not at the loop point.
-				CueTickPosition(_dwLoopPoint + 1);
+				//KAWA: is this actually true? Ravi Iyengar's docs say they're not. Gotta wait for more feedback...
+				CueTickPosition(_dwLoopPoint); //+ 1)
 			}
 			else
 			{

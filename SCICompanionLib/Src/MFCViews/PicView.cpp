@@ -883,6 +883,15 @@ void _ExportGIFDrawCallback(PicScreenFlags dwDrawFlags, const PicData &data, Plo
 }
 const TCHAR g_rgszGIFFilter[] = TEXT("GIF Files (*.gif)|*.gif|All Files (*.*)|*.*");
 
+RGBQUAD cgaPalette[] =
+{
+	{ 0x00, 0x00, 0x00 }, { 0xA0, 0x00, 0x00 }, { 0x00, 0xA0, 0x00 }, { 0xA0, 0xA0, 0x00 },
+	{ 0x00, 0x00, 0xA0 }, { 0xA0, 0x00, 0xA0 }, { 0x00, 0x50, 0xA0 }, { 0xA0, 0xA0, 0xA0 },
+	{ 0x50, 0x50, 0x50 }, { 0xFF, 0x50, 0x50 }, { 0x50, 0xFF, 0x00 }, { 0xFF, 0xFF, 0x50 },
+	{ 0x50, 0x50, 0xFF }, { 0xFF, 0x50, 0xFF }, { 0x50, 0xFF, 0xFF }, { 0xFF, 0xFF, 0xFF },
+};
+uint8_t stdPaletteMapping[256];
+
 void CPicView::OnExportAsAnimatedGIF()
 {
 	exportGIFCels.clear();
@@ -910,44 +919,24 @@ void CPicView::OnExportAsAnimatedGIF()
 
 		//KAWA: HACK HACK HACK HACK because Phil's code only works if there's a 999.pal
 		int colorCount = 16;
-		RGBQUAD *colors;
-		uint8_t *paletteMapping;
+		const RGBQUAD *colors;
+		const uint8_t *paletteMapping;
 		const PaletteComponent *palette = _GetPalette();
 		if (palette)
 		{
 			colorCount = ARRAYSIZE(palette->Colors);
-			colors = (RGBQUAD*)palette->Colors;
-			paletteMapping = (uint8_t*)palette->Mapping;
+			colors = palette->Colors;
+			paletteMapping = palette->Mapping;
 		}
 		else
 		{
-			colors = (RGBQUAD*)calloc(16, sizeof(RGBQUAD));
-			colors[1].rgbBlue = 0x80;
-			colors[2].rgbGreen = 0x80;
-			colors[3].rgbBlue = colors[3].rgbGreen = 0x80;
-			colors[4].rgbRed = 0x80;
-			colors[5].rgbRed = colors[5].rgbBlue = 0x80;
-			colors[6].rgbRed = 0x80; colors[6].rgbGreen = 0x40;
-			colors[7].rgbRed = colors[7].rgbGreen = colors[7].rgbBlue = 0x80;
-			colors[8].rgbRed = colors[8].rgbGreen = colors[8].rgbBlue = 0x40;
-			colors[9].rgbBlue = 0xFF;
-			colors[10].rgbGreen = 0xFF;
-			colors[11].rgbBlue = colors[11].rgbGreen = 0xFF;
-			colors[12].rgbRed = 0xFF;
-			colors[13].rgbRed = colors[13].rgbBlue = 0xFF;
-			colors[14].rgbRed = colors[14].rgbGreen = 0xFF;
-			colors[15].rgbRed = colors[15].rgbGreen = colors[15].rgbBlue = 0xFF;
-			paletteMapping = (uint8_t*)malloc(256);
-			for (int i = 0; i < 256; i++) paletteMapping[i] = i;
+			colors = cgaPalette;
+			paletteMapping = stdPaletteMapping;
+			for (int i = 0; i < 256; i++) stdPaletteMapping[i] = i;
 		}
 		SaveCelsAndPaletteToGIFFile(strFileName, exportGIFCels, colorCount, colors, paletteMapping, 0xff,
 			GIFConfiguration(4, 100, 100) // 1 second at beginning and end, otherwise no.
 		);
-		if (colorCount == 16)
-		{
-			free((void*)colors);
-			free((void*)paletteMapping);
-		}
 
 		exportGIFCels.clear();
 	}

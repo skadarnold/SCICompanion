@@ -746,6 +746,16 @@ BEGIN
         MENUITEM "Manage decompilation",        ID_SCRIPT_MANAGEDECOMPILATION
         MENUITEM "Validate all Saids",          ID_SCRIPT_VALIDATEALLSAIDS
     END
+    POPUP "&Window"
+    BEGIN
+        MENUITEM "Preview",                     33123
+    END
+    POPUP "Pl&ugins"
+    BEGIN
+        MENUITEM "Plugin1",                     ID_PLUGINS_PLUGIN1
+        MENUITEM SEPARATOR
+        MENUITEM "Open Plugins folder",         ID_PLUGINS_OPENPLUGINSFOLDER
+    END
     POPUP "&Help"
     BEGIN
         MENUITEM "SCI Companion &Help",         ID_HELP_SCICOMPANION
@@ -758,16 +768,6 @@ BEGIN
         MENUITEM SEPARATOR
         MENUITEM "Report a &bug or issue",      ID_HELP_EMAIL
         MENUITEM "&About SCI Companion...",     ID_APP_ABOUT
-    END
-    POPUP "&Window"
-    BEGIN
-        MENUITEM "Preview",                     33123
-    END
-    POPUP "Pl&ugins"
-    BEGIN
-        MENUITEM "Plugin1",                     ID_PLUGINS_PLUGIN1
-        MENUITEM SEPARATOR
-        MENUITEM "Open Plugins folder",         ID_PLUGINS_OPENPLUGINSFOLDER
     END
 END
 
@@ -1067,7 +1067,7 @@ CAPTION "About SCICompanion"
 FONT 9, "Segoe UI", 0, 0, 0x1
 BEGIN
     ICON            IDR_MAINFRAME,IDC_STATIC4,11,17,20,20
-    LTEXT           "SCICompanion version 3.2.2.0",IDC_STATIC1,50,7,121,8,SS_NOPREFIX
+    LTEXT           "SCICompanion version 3.2.3.0",IDC_STATIC1,50,7,121,8,SS_NOPREFIX
     LTEXT           "© 2020 IceFall Games",IDC_STATIC2,50,25,119,8
     DEFPUSHBUTTON   "OK",IDOK,238,7,50,16,BS_FLAT | WS_GROUP
     EDITTEXT        IDC_EDIT1,50,41,238,127,ES_MULTILINE | ES_READONLY | ES_AUTOVSCROLL | WS_VSCROLL
@@ -2401,8 +2401,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 3,2,1,0
- PRODUCTVERSION 3,2,1,0
+ FILEVERSION 3,2,3,0
+ PRODUCTVERSION 3,2,3,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -2419,12 +2419,12 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "IceFall Games"
             VALUE "FileDescription", "SCICompanion"
-            VALUE "FileVersion", "3.2.2.0"
+            VALUE "FileVersion", "3.2.3.0"
             VALUE "InternalName", "SCICompanion.exe"
             VALUE "LegalCopyright", "© IceFall Games.  All rights reserved."
             VALUE "OriginalFilename", "SCICompanion.exe"
             VALUE "ProductName", "SCI Companion 3"
-            VALUE "ProductVersion", "3.2.2.0"
+            VALUE "ProductVersion", "3.2.3.0"
         END
     END
     BLOCK "VarFileInfo"

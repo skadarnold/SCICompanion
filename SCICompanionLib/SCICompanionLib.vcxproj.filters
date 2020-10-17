@@ -1820,6 +1820,9 @@
     <ClInclude Include="Src\Resources\Vocab99x.h">
       <Filter>Header Files\Resources</Filter>
     </ClInclude>
+    <ClInclude Include="DrawPixelCallback.h">
+      <Filter>Header Files\Resources</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="SCICompanionLib.def">

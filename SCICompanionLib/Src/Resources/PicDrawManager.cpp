@@ -135,10 +135,10 @@ HBITMAP PicDrawManager::CreateBitmap(PicScreen screen, PicPosition pos, size16 s
 	return _CreateBitmap(GetScreenData(screen, pos), size, cx, cy, colors, colorCount, pbmi, pBitsDest);
 }
 
-const uint8_t *PicDrawManager::GetPicBits(PicScreen screen, PicPosition pos, size16 size)
+const uint8_t *PicDrawManager::GetPicBits(PicScreen screen, PicPosition pos, size16 size, DrawPixelCallback drawPixelCallback)
 {
 	_EnsureBufferPool(size);
-	_RedrawBuffers(nullptr, PicScreenToFlags(screen), PicPositionToFlags(pos));
+	_RedrawBuffers(nullptr, PicScreenToFlags(screen), PicPositionToFlags(pos), false, drawPixelCallback);
 	return GetScreenData(screen, pos);
 }
 
@@ -241,7 +241,7 @@ void PicDrawManager::_EnsureInitialBuffers(PicScreenFlags screenFlags)
 
 static int g_redrawDebug = 0;
 
-void PicDrawManager::_RedrawBuffers(ViewPort *pState, PicScreenFlags screenFlags, PicPositionFlags picPositionFlags, bool assertIfCausedRedraw)
+void PicDrawManager::_RedrawBuffers(ViewPort *pState, PicScreenFlags screenFlags, PicPositionFlags picPositionFlags, bool assertIfCausedRedraw, DrawPixelCallback drawPixelCallback)
 {
 	size16 size = _GetPicSize();
 	_EnsureBufferPool(size);
@@ -349,7 +349,8 @@ void PicDrawManager::_RedrawBuffers(ViewPort *pState, PicScreenFlags screenFlags
 			_isVGA,
 			_isUndithered,
 			_GetPicSize(),
-			_isContinuousPri
+			_isContinuousPri,
+			drawPixelCallback
 		};
 
 		// Now draw!
@@ -382,7 +383,8 @@ void PicDrawManager::_RedrawBuffers(ViewPort *pState, PicScreenFlags screenFlags
 				_isVGA,
 				_isUndithered,
 				_GetPicSize(),
-				_isContinuousPri
+				_isContinuousPri,
+				nullptr
 			};
 
 			// OutputDebugString("Drawing plguins\n");
@@ -426,7 +428,8 @@ void PicDrawManager::_RedrawBuffers(ViewPort *pState, PicScreenFlags screenFlags
 				_isVGA,
 				_isUndithered,
 				_GetPicSize(),
-				_isContinuousPri
+				_isContinuousPri,
+				nullptr
 			};
 
 			// Now draw!
@@ -696,7 +699,8 @@ ptrdiff_t PicDrawManager::PosFromPoint(int x, int y, ptrdiff_t iStart)
 		_isVGA,
 		_isUndithered,
 		_GetPicSize(),
-		_isContinuousPri
+		_isContinuousPri,
+		nullptr
 	};
 
 	return GetLastChangedSpot(*_pPicWeak, data, state, x, y);

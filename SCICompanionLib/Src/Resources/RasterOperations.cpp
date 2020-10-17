@@ -136,6 +136,12 @@ void ReallocBits(
 	}
 }
 
+void ScaleInPlace(Cel &cel, int scaleFactor)
+{
+	size16 newSize = size16(cel.size.cx * scaleFactor, cel.size.cy * scaleFactor);
+	ReallocBits(cel, newSize, true, false, false, 0, RasterResizeFlags::Stretch);
+}
+
 void ReallocBits(
 	RasterComponent &raster,
 	CelIndex celIndex,
@@ -802,7 +808,7 @@ Cel Scale2X(const Cel &orig)
 	origSize.cx *= 2;
 	origSize.cy *= 2;
 	Cel destCel(size16(origSize), point16(orig.placement), orig.TransparentColor);
-	destCel.Data.allocate(destCel.size.cy * destCel.GetStride() * destCel.size.cx);
+	destCel.Data.allocate(destCel.size.cy * destCel.GetStride());
 
 	for (int y = 0; y < (int)orig.size.cy; y++)
 	{

@@ -106,3 +106,6 @@ RasterChangeHint ShrinkWrapCel(RasterComponent &raster, CelIndex celIndex);
 // These don't adhere to any persisted format. Use only at runtime.
 void SerializeCelRuntime(sci::ostream &out, const Cel &cel);
 void DeserializeCelRuntime(sci::istream &in, Cel &cel);
+
+RasterChange QuantizeCel(RasterComponent &raster, CelIndex celIndex, int numLevels, bool gammaCorrected);
+void ScaleInPlace(Cel &cel, int scaleFactor);

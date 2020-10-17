@@ -869,7 +869,7 @@ void CNewRasterResourceDocument::ExportAsGif()
 		{
 			_GetColors(raster, nullptr, &paletteMapping, &colorCount, &colors);
 		}
-		SaveCelsAndPaletteToGIFFile(strFileName, raster.Loops[_nLoop].Cels, colorCount, colors, paletteMapping, raster.Loops[_nLoop].Cels[0].TransparentColor);
+		SaveCelsAndPaletteToGIFFile(strFileName, raster.Loops[_nLoop].Cels, colorCount, colors, paletteMapping, raster.Loops[_nLoop].Cels[0].TransparentColor, GIFConfiguration());
 	}
 }
 

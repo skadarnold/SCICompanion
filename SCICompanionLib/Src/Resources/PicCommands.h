@@ -24,6 +24,7 @@ namespace sci
 
 #include "PicCommandsCommon.h"
 #include "Components.h" // Cel
+#include "DrawPixelCallback.h"
 
 // fwd decl
 class ResourceEntity;
@@ -92,8 +93,6 @@ public:
 	uint16_t bPriorityLines[NumPriorityBars];
 };
 
-
-
 struct PicData
 {
 	PicScreenFlags dwMapsToRedraw;
@@ -105,6 +104,9 @@ struct PicData
 	bool isUndithered;
 	size16 size;
 	bool isContinuousPriority;
+
+	// Optional callback when a pixel is drawn
+	DrawPixelCallback drawPixelCallback;
 
 	void EnsureInBounds(int &x, int &y);
 };

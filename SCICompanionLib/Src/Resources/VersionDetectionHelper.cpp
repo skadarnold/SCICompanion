@@ -781,6 +781,11 @@ void SniffSCIVersion(GameFolderHelper &helper)
 			if (headerSize == 0x26)
 			{
 				helper.Version.PicFormat = PicFormat::VGA1_1;
+
+				//KAWA: Assume if the pictures are VGA11, the views are too.
+				if (helper.Version.ViewFormat == ViewFormat::VGA1)
+					helper.Version.ViewFormat = ViewFormat::VGA1_1;
+
 			}
 			break;
 		}

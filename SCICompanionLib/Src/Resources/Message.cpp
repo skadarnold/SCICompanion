@@ -144,6 +144,62 @@ void MessageReadFrom_4000(TextComponent &messageComponent, sci::istream &byteStr
 	ResolveReferences(messageComponent);
 }
 
+void MessageWriteTo_2102(const TextComponent &messageComponent, sci::ostream &byteStream)
+{
+	//UNTESTED
+	byteStream.WriteWord((uint16_t)messageComponent.Texts.size());
+
+	uint16_t textOffset = (uint16_t)(byteStream.tellp() + (4) * messageComponent.Texts.size());
+	for (const TextEntry &entry : messageComponent.Texts)
+	{
+		byteStream << entry.Noun;
+		byteStream << entry.Verb;
+		byteStream << textOffset;
+		textOffset += (uint16_t)(entry.Text.length() + 1);
+	}
+
+	for (const TextEntry &entry : messageComponent.Texts)
+	{
+		byteStream << entry.Text;
+	}
+
+	uint16_t totalSize = (uint16_t)byteStream.tellp();
+}
+
+void MessageWriteTo_3411(const TextComponent &messageComponent, sci::ostream &byteStream)
+{
+	uint32_t fillThisIn = byteStream.tellp();
+	byteStream.WriteWord(0); // We'll fill this in later
+	uint32_t startCount = byteStream.tellp();
+	byteStream.WriteWord((uint16_t)messageComponent.Texts.size());
+
+	uint16_t textOffset = (uint16_t)(byteStream.tellp() + (5 + 2 + 3) * messageComponent.Texts.size());
+	for (const TextEntry &entry : messageComponent.Texts)
+	{
+		byteStream << entry.Noun;
+		byteStream << entry.Verb;
+		byteStream << entry.Condition;
+		byteStream << entry.Sequence;
+		byteStream << entry.Talker;
+		byteStream << textOffset;
+		//Come back to check these later.
+		byteStream << (byte)0;
+		byteStream << (byte)0;
+		byteStream << (byte)0;
+		textOffset += (uint16_t)(entry.Text.length() + 1);
+	}
+
+	for (const TextEntry &entry : messageComponent.Texts)
+	{
+		byteStream << entry.Text;
+	}
+
+	uint16_t totalSize = (uint16_t)byteStream.tellp();
+	uint16_t offsetToEnd = (uint16_t)(byteStream.tellp() - startCount);
+	*(reinterpret_cast<uint16_t*>(byteStream.GetInternalPointer() + fillThisIn)) = offsetToEnd;
+	// NOTE: This may need to be padded to WORD boundary
+}
+
 void MessageWriteTo_4000(const TextComponent &messageComponent, sci::ostream &byteStream)
 {
 	uint32_t fillThisIn = byteStream.tellp();
@@ -218,13 +274,11 @@ void MessageWriteTo(const ResourceEntity &resource, sci::ostream &byteStream, st
 	byteStream.WriteWord(0);	// Unknown
 	if (message.msgVersion <= 0x835)
 	{
-		assert(false && "not implemented");
-		//MessageWriteTo_2102(message, byteStream);
+		MessageWriteTo_2102(message, byteStream);
 	}
 	else if (message.msgVersion <= 0xd53)
 	{
-		assert(false && "not implemented");
-		//MessageWriteTo_3411(message, byteStream);
+		MessageWriteTo_3411(message, byteStream);
 	}
 	else
 	{

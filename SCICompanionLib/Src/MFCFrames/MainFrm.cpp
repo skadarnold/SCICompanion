@@ -1805,39 +1805,93 @@ int ResourceNumberFromFileName(PCTSTR pszFileName)
 //
 void CMainFrame::OnFileAddResource()
 {
-	CFileDialog fileDialog(TRUE, nullptr, nullptr, OFN_HIDEREADONLY | OFN_NOCHANGEDIR, g_szResourceFilter);
+	//KAWA: added OFN_ALLOWMULTISELECT
+	CFileDialog fileDialog(TRUE, nullptr, nullptr, OFN_HIDEREADONLY | OFN_NOCHANGEDIR | OFN_ALLOWMULTISELECT, g_szResourceFilter);
 	if (IDOK == fileDialog.DoModal())
 	{
-		CString strFileName = fileDialog.GetPathName();
+		CString strFileName;
 
-		int number = -1;
-		std::string resNameFromFilename;
-		MatchesResourceFilenameFormat((PCSTR)strFileName, appState->GetVersion(), &number, resNameFromFilename);
-
-		// Get a resource number and package
-		SaveResourceDialog srd(false, ResourceType::None);
-		srd.Init(appState->GetVersion().DefaultVolumeFile, number, resNameFromFilename);
-		if (IDOK == srd.DoModal())
+		//KAWA: first count the amount so we can do the regular thing if only one item was chosen.
+		auto multiPos = fileDialog.GetStartPosition();
+		auto multiCount = 0;
+		while (multiPos && multiCount < 2)
 		{
-			int iResourceNumber = srd.GetResourceNumber();
-			int iPackageNumber = srd.GetPackageNumber();
-			ResourceBlob data;
-			HRESULT hr = data.CreateFromFile(nullptr, (PCSTR)strFileName, appState->GetVersion(), appState->GetResourceMap().GetDefaultResourceSaveLocation(), iPackageNumber, iResourceNumber);
-			if (!srd.GetName().empty())
+			strFileName = fileDialog.GetNextPathName(multiPos);
+			multiCount++;
+		}
+		if (multiCount == 1)
+		{
+			//KAWA: single file, so we can do the old thing here.
+
+			//CString strFileName = fileDialog.GetPathName();
+
+			int number = -1;
+			std::string resNameFromFilename;
+			MatchesResourceFilenameFormat((PCSTR)strFileName, appState->GetVersion(), &number, resNameFromFilename);
+
+			// Get a resource number and package
+			SaveResourceDialog srd(false, ResourceType::None);
+			srd.Init(appState->GetVersion().DefaultVolumeFile, number, resNameFromFilename);
+			if (IDOK == srd.DoModal())
 			{
-				data.SetName(srd.GetName().c_str());
+				int iResourceNumber = srd.GetResourceNumber();
+				int iPackageNumber = srd.GetPackageNumber();
+				ResourceBlob data;
+				HRESULT hr = data.CreateFromFile(nullptr, (PCSTR)strFileName, appState->GetVersion(), appState->GetResourceMap().GetDefaultResourceSaveLocation(), iPackageNumber, iResourceNumber);
+				if (!srd.GetName().empty())
+				{
+					data.SetName(srd.GetName().c_str());
+				}
+				else
+				{
+					data.SetName(nullptr);
+				}
+				if (SUCCEEDED(hr))
+				{
+					appState->GetResourceMap().AppendResource(data);
+				}
+				else
+				{
+					DisplayFileError(hr, TRUE, strFileName);
+				}
 			}
-			else
+		}
+		else
+		{
+			//KAWA: start over and *don't* use the SaveResourceDialog.
+			multiPos = fileDialog.GetStartPosition();
+			vector<CompileResult> statResults;
+			while (multiPos)
 			{
+				strFileName = fileDialog.GetNextPathName(multiPos);
+
+				int number = -1;
+				std::string resNameFromFilename;
+				MatchesResourceFilenameFormat((PCSTR)strFileName, appState->GetVersion(), &number, resNameFromFilename);
+
+				if (number == -1)
+				{
+					statResults.emplace_back(fmt::format("Multi-file import: could not identify \"{0}\", skipped.", strFileName), CompileResult::CompileResultType::CRT_Message);
+					continue;
+				}
+
+				ResourceBlob data;
+				HRESULT hr = data.CreateFromFile(nullptr, (PCSTR)strFileName, appState->GetVersion(), appState->GetResourceMap().GetDefaultResourceSaveLocation(), appState->GetVersion().DefaultVolumeFile, number);
 				data.SetName(nullptr);
+				if (SUCCEEDED(hr))
+				{
+					appState->GetResourceMap().AppendResource(data);
+					//statResults.emplace_back(fmt::format("Multi-file import: imported \"{0}\" as {1} #{2}.", strFileName, ResourceDisplayNameFromType(data.GetType()), number), CompileResult::CompileResultType::CRT_Message);
+				}
+				else
+				{
+					DisplayFileError(hr, TRUE, strFileName);
+				}
 			}
-			if (SUCCEEDED(hr))
+
+			if (statResults.size())
 			{
-				appState->GetResourceMap().AppendResource(data);
-			}
-			else
-			{
-				DisplayFileError(hr, TRUE, strFileName);
+				appState->OutputResults(OutputPaneType::Compile, statResults);
 			}
 		}
 	}

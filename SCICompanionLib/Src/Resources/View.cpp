@@ -1004,6 +1004,14 @@ void ViewReadFromVGA11Helper(ResourceEntity &resource, sci::istream &byteStream,
 	assert(header.loopHeaderSize >= sizeof(LoopHeader_VGA11));   // 16
 	assert(header.celHeaderSize >= sizeof(CelHeader_VGA11));	 // 32
 
+	//KAWA: Detect SCI1.0 views and drop down a version instead. MAYBE FIND A BETTER DIFFERENCE?
+	if (header.loopHeaderSize > 32)
+	{
+		byteStream.seekg(0);
+		ViewReadFromVersioned(resource, byteStream, true);
+		return;
+	}
+
 	// 36 is common in SCI1.1, 52 is common in SCI2. But sometimes we'll see 36 in SCI2.
 	assert((header.celHeaderSize == 36) || (header.celHeaderSize == 52));
 

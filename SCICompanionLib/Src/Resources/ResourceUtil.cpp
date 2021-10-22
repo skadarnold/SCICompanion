@@ -103,7 +103,8 @@ bool MatchesResourceFilenameFormat(const std::string &filename, ResourceType typ
 	std::smatch cm;
 	std::string regexSearchBase = (version.MapFormat > ResourceMapFormat::SCI0) ? resInfo.pszNameMatch_SCI1 : resInfo.pszNameMatch_SCI0;
 	std::string regexSearchNumber = fmt::format(regexSearchBase, "(\\d+)");
-	if (std::regex_search(filename, cm, std::regex(regexSearchNumber)) && (cm.size() > 1))
+	//KAWA: added case insensitivity so "VIEW.123" will work just as well as "view.123".
+	if (std::regex_search(filename, cm, std::regex(regexSearchNumber, std::regex_constants::icase)) && (cm.size() > 1))
 	{
 		std::string number = cm[1];
 		*numberOut = StrToInt(number.c_str());
@@ -119,7 +120,7 @@ bool MatchesResourceFilenameFormat(const std::string &filename, ResourceType typ
 		// \- -> -
 		// \w -> number, letter, underscore
 		regexSearchNumber = fmt::format(regexSearchBase, "((?:\\.|\\-|\\w?)+)");
-		if (std::regex_search(filename, cm, std::regex(regexSearchNumber)) && (cm.size() > 1))
+		if (std::regex_search(filename, cm, std::regex(regexSearchNumber, std::regex_constants::icase)) && (cm.size() > 1))
 		{
 			*numberOut = -1;
 			nameOut = cm[1];

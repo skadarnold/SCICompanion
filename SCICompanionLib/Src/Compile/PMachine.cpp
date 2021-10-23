@@ -26,7 +26,7 @@ Opcode RawToOpcode(const SCIVersion &version, uint8_t rawOpcode)
 				return Opcode::LineNumber;
 		}
 	}
-#if PHIL_LDMSTM
+#if ENABLE_LDMSTM
 	else
 	{
 		switch (rawOpcode)
@@ -53,7 +53,7 @@ uint8_t OpcodeToRaw(const SCIVersion &version, Opcode opcode, bool wide)
 				return 0x7e;
 		}
 	}
-#if PHIL_LDMSTM
+#if ENABLE_LDMSTM
 	else
 	{
 		switch (opcode)
@@ -121,7 +121,7 @@ OperandType OpArgTypes_SCI0[TOTAL_OPCODES][3] = {
 	/*rest*/	 {otPVAR,otEMPTY,otEMPTY},
 	/*lea*/	  {otUINT,otUINT,otEMPTY},
 	/*selfID*/   {otEMPTY,otEMPTY,otEMPTY},
-#ifdef PHIL_LDMSTM
+#ifdef ENABLE_LDMSTM
 	/*stm*/{ otEMPTY,otEMPTY,otEMPTY },
 #else
 	/**/		 {otEMPTY,otEMPTY,otEMPTY},
@@ -143,7 +143,7 @@ OperandType OpArgTypes_SCI0[TOTAL_OPCODES][3] = {
 	/*push1*/	{otEMPTY,otEMPTY,otEMPTY},
 	/*push2*/	{otEMPTY,otEMPTY,otEMPTY},
 	/*pushSelf*/ {otEMPTY,otEMPTY,otEMPTY},
-#ifdef PHIL_LDMSTM
+#ifdef ENABLE_LDMSTM
 	/*ldm*/{ otEMPTY,otEMPTY,otEMPTY },
 #else
 	/**/		 {otEMPTY,otEMPTY,otEMPTY},
@@ -272,7 +272,7 @@ OperandType OpArgTypes_SCI2[TOTAL_OPCODES][3] = {
 	/*rest*/{ otPVAR, otEMPTY, otEMPTY },
 	/*lea*/{ otUINT, otUINT, otEMPTY },
 	/*selfID*/{ otEMPTY, otEMPTY, otEMPTY },
-#ifdef PHIL_LDMSTM
+#ifdef ENABLE_LDMSTM
 	/*stm*/{ otEMPTY,otEMPTY,otEMPTY },
 #else
 	/**/{ otEMPTY,otEMPTY,otEMPTY },
@@ -294,7 +294,7 @@ OperandType OpArgTypes_SCI2[TOTAL_OPCODES][3] = {
 	/*push1*/{ otEMPTY, otEMPTY, otEMPTY },
 	/*push2*/{ otEMPTY, otEMPTY, otEMPTY },
 	/*pushSelf*/{ otEMPTY, otEMPTY, otEMPTY },
-#ifdef PHIL_LDMSTM
+#ifdef ENABLE_LDMSTM
 	/*ldm*/{ otEMPTY,otEMPTY,otEMPTY },
 #else
 	/**/{ otEMPTY,otEMPTY,otEMPTY },
@@ -373,7 +373,7 @@ OperandType OpArgTypes_SCI2[TOTAL_OPCODES][3] = {
 
 OperandType filenameOperands[3] = { otDEBUGSTRING, otEMPTY, otEMPTY };
 OperandType lineNumberOperands[3] = { otUINT16, otEMPTY, otEMPTY };
-#ifdef PHIL_LDMSTM
+#ifdef ENABLE_LDMSTM
 OperandType stmldmOperands[3] = { otEMPTY, otEMPTY, otEMPTY };
 #endif
 
@@ -393,7 +393,7 @@ const OperandType *GetOperandTypes(const SCIVersion &version, Opcode opcode)
 	}
 	else
 	{
-#ifdef PHIL_LDMSTM
+#ifdef ENABLE_LDMSTM
 		switch (opcode)
 		{
 		case Opcode::LDM:
@@ -407,7 +407,7 @@ const OperandType *GetOperandTypes(const SCIVersion &version, Opcode opcode)
 }
 
 // Corresponds to Opcode enum
-#ifdef PHIL_LDMSTM
+#ifdef ENABLE_LDMSTM
 char *OpcodeNames[133]={
 #else
 char *OpcodeNames[131] = {
@@ -545,7 +545,7 @@ char *OpcodeNames[131] = {
 	"-spi",
 	"_file_",
 	"_line_",
-#ifdef PHIL_LDMSTM
+#ifdef ENABLE_LDMSTM
 	"ldm",
 	"stm",
 #endif

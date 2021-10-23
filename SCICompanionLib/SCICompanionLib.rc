@@ -3,7 +3,7 @@
 #include "resource.h"
 
 //TODO: figure out how to make this work with project properties -- K
-#define KAWA_NODEBUGSTUFF
+#define DISABLE_DEBUGSTUFF
 
 #define APSTUDIO_READONLY_SYMBOLS
 /////////////////////////////////////////////////////////////////////////////
@@ -740,7 +740,7 @@ BEGIN
         MENUITEM "View &object file",           ID_SCRIPT_VIEWOBJECTFILE
         MENUITEM "View &script resource",       ID_SCRIPT_VIEWSCRIPTRESOURCE
         MENUITEM "View syntax &tree",           ID_SCRIPT_VIEWSYNTAXTREE
-#ifndef KAWA_NODEBUGSTUFF
+#ifndef DISABLE_DEBUGSTUFF
         MENUITEM "Class hierarchy",             ID_CLASSBROWSER
 #endif
         MENUITEM "Manage decompilation",        ID_SCRIPT_MANAGEDECOMPILATION
@@ -959,7 +959,7 @@ END
 
 IDR_MAINFRAME ACCELERATORS
 BEGIN
-#ifndef KAWA_NODEBUGSTUFF
+#ifndef DISABLE_DEBUGSTUFF
     "B",            ID_CLASSBROWSER,        VIRTKEY, ALT, NOINVERT
 #endif
     VK_F8,          ID_COMPILE,             VIRTKEY, NOINVERT
@@ -1916,7 +1916,7 @@ BEGIN
     PUSHBUTTON      "Clear SCO",IDC_CLEARSCO,241,73,54,14
     GROUPBOX        "Options",IDC_GROUPOPTIONS,174,24,123,69
     LTEXT           "SCO:",IDC_INSTRUCTIONS,174,96,18,8
-#ifdef KAWA_NODEBUGSTUFF
+#ifdef DISABLE_DEBUGSTUFF
     CONTROL         "",IDC_TREESCO,"SysTreeView32",TVS_EDITLABELS | WS_BORDER | WS_HSCROLL | WS_TABSTOP,174,108,123,188
 #else
     CONTROL         "",IDC_TREESCO,"SysTreeView32",TVS_EDITLABELS | WS_BORDER | WS_HSCROLL | WS_TABSTOP,174,108,123,113

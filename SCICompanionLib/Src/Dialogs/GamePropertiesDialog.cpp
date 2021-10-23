@@ -58,7 +58,7 @@ void CGamePropertiesDialog::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_COMBOLANGUAGE, m_wndComboLanguage);
 	LangSyntax lang = appState->GetResourceMap().Helper().GetDefaultGameLanguage();
 	m_wndComboLanguage.SetCurSel((int)lang);
-#ifdef KAWA_NOSTUDIO
+#ifdef DISABLE_STUDIO
 	m_wndComboLanguage.EnableWindow(FALSE);
 #endif
 
@@ -179,7 +179,7 @@ void CGamePropertiesDialog::OnOK()
 	}
 
 	LangSyntax lang = appState->GetResourceMap().Helper().GetDefaultGameLanguage();
-#ifndef KAWA_NOSTUDIO
+#ifndef DISABLE_STUDIO
 	int curSel = 0;
 #else
 	int curSel = m_wndComboLanguage.GetCurSel();

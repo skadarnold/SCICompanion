@@ -32,7 +32,7 @@ uint16_t FontTraits::ValidateCharCount(uint16_t charCount) const
 	else
 	{
 		// A max of 256 chars.
-#ifndef KAWA_FONTLIMITBREAK
+#ifndef DISABLE_FONTLIMIT
 		charCount = min(256, charCount);
 #endif
 	}
@@ -97,7 +97,7 @@ void FontReadFrom(ResourceEntity &resource, sci::istream &byteStream, const std:
 
 	// Some validation
 	// TODO: report a status error 
-#ifndef KAWA_FONTLIMITBREAK
+#ifndef DISABLE_FONTLIMIT
 	cChars = min(256, cChars);
 #endif
 	// 1 - 128 seems reasonable for line height
@@ -196,7 +196,7 @@ void GetCharacterLabel(PTSTR  pszLabel, size_t cch, int nCel)
 {
 	if (nCel < 32)
 	{
-#ifdef KAWA_HEXFONTS
+#ifdef ENABLE_FONTNUMSINHEX
 		StringCchPrintf(pszLabel, cch, TEXT("(%X)"), nCel);
 	}
 	else

@@ -6,10 +6,10 @@
 #include "Operators.h"
 #include "OperatorTables.h"
 #include "format.h"
-#ifdef PHIL_FOREACH
+#ifdef ENABLE_FOREACH
 #include "ScriptMakerHelper.h"
 #endif
-#ifdef KAWA_GETPOLY
+#ifdef ENABLE_GETPOLY
 #include "Polygon.h"
 #include "AppState.h"
 #endif
@@ -90,10 +90,10 @@ vector<string> SCIStatementKeywords =
 
 vector<string> SCIKeywords =
 {
-#ifdef PHIL_EXISTS
+#ifdef ENABLE_EXISTS
 	"&exists",
 #endif
-#ifdef KAWA_GETPOLY
+#ifdef ENABLE_GETPOLY
 	"&getpoly",
 #endif
 	"&tmp",
@@ -113,7 +113,7 @@ vector<string> SCIKeywords =
 	"extern"		// ** For linking public procedures
 	"file#"		 // ** Procedure forward declarations
 	"for",
-#ifdef PHIL_FOREACH
+#ifdef ENABLE_FOREACH
 	"foreach",
 #endif
 	"global"		// ** For global var declarations
@@ -136,7 +136,7 @@ vector<string> SCIKeywords =
 	"switch",
 	"switchto",
 	"text#",
-#ifdef PHIL_VERBS
+#ifdef ENABLE_VERBS
 	"verbs",
 #endif
 	"while",
@@ -383,7 +383,7 @@ void SetCaseA(MatchResult &match, const ParserSCI *pParser, SyntaxContext *pCont
 	}
 }
 
-#ifdef PHIL_EXISTS
+#ifdef ENABLE_EXISTS
 void ExistsA(MatchResult &match, const ParserSCI *pParser, SyntaxContext *pContext, const streamIt &stream)
 {
 	if (match.Result())
@@ -397,7 +397,7 @@ void ExistsA(MatchResult &match, const ParserSCI *pParser, SyntaxContext *pConte
 }
 #endif
 
-#ifdef PHIL_VERBS
+#ifdef ENABLE_VERBS
 unique_ptr<FunctionSignature> _CreateVerbHandlerSignature()
 {
 	unique_ptr<FunctionSignature> signature = make_unique<FunctionSignature>();
@@ -783,7 +783,7 @@ void AddProcedureFwdA(MatchResult &match, const ParserSCI *pParser, SyntaxContex
 	}
 }
 
-#ifdef PHIL_FOREACH
+#ifdef ENABLE_FOREACH
 void SetIterationVariableA(MatchResult &match, const ParserSCI *pParser, SyntaxContext *pContext, const streamIt &stream)
 {
 	if (match.Result())
@@ -792,7 +792,7 @@ void SetIterationVariableA(MatchResult &match, const ParserSCI *pParser, SyntaxC
 	}
 }
 
-#ifdef PHIL_LDMSTM
+#ifdef ENABLE_LDMSTM
 void SetIsReferenceA(MatchResult &match, const ParserSCI *pParser, SyntaxContext *pContext, const streamIt &stream)
 {
 	if (match.Result())
@@ -803,7 +803,7 @@ void SetIsReferenceA(MatchResult &match, const ParserSCI *pParser, SyntaxContext
 #endif
 #endif
 
-#ifdef PHIL_LDMSTM
+#ifdef ENABLE_LDMSTM
 void DerefLValueA(MatchResult &match, const ParserSCI *pParser, SyntaxContext *pContext, const streamIt &stream)
 {
 	if (match.Result())
@@ -827,7 +827,7 @@ SCISyntaxParser::SCISyntaxParser() :
 	colon(char_p(":")),
 	equalSign(char_p("=")),
 	question(char_p("?")),
-#ifdef PHIL_LDMSTM
+#ifdef ENABLE_LDMSTM
 	period(char_p("*")),
 	ampersand(char_p("&")),
 #endif
@@ -906,7 +906,7 @@ void SCISyntaxParser::Load()
 
 	size_of = keyword_p("&sizeof") >> alphanumNK_p[{nullptr, ParseAutoCompleteContext::PureValue}];
 
-#ifdef PHIL_EXISTS
+#ifdef ENABLE_EXISTS
 	exists_statement = keyword_p("&exists")[SetStatementA<BinaryOp>] >> alphanumNK_p[{ExistsA, ParseAutoCompleteContext::PureValue}];
 #endif
 
@@ -930,7 +930,7 @@ void SCISyntaxParser::Load()
 		| squotedstring_p[{ComplexValueStringA<ValueType::Said>, ParseAutoCompleteContext::Block}]
 		| bracestring_p[{ComplexValueStringA<ValueType::String>, ParseAutoCompleteContext::Block}]
 		| (-pointer[ComplexValuePointerA] >> rvalue_variable)
-#ifdef PHIL_LDMSTM
+#ifdef ENABLE_LDMSTM
 		| (period >> general_token[ComplexValueStringA<ValueType::Deref>])
 #endif
 		| selector_literal[ComplexValueStringA<ValueType::Selector>]
@@ -991,17 +991,17 @@ void SCISyntaxParser::Load()
 		>> wrapped_code_block[AddLooperCodeBlockA]
 		>> *statement[AddStatementA<ForLoop>];
 
-#ifdef PHIL_FOREACH
+#ifdef ENABLE_FOREACH
 	foreach_loop =
 		keyword_p("foreach")[SetStatementA<ForEachLoop>]
-#ifdef PHIL_LDMSTM
+#ifdef ENABLE_LDMSTM
 		>> -ampersand[SetIsReferenceA]
 #endif
 		>> general_token[SetIterationVariableA]
 		>> statement[StatementBindTo1stA<ForEachLoop, errCollectionArg>]
 		>> *statement[AddStatementA<ForEachLoop>];
 #endif
-#ifdef KAWA_GETPOLY
+#ifdef ENABLE_GETPOLY
 	getpoly_statement =
 		keyword_p("&getpoly")[SetStatementA<GetPolyStatement>]
 		>> statement[StatementBindTo1stA<GetPolyStatement, nullptr>];
@@ -1077,7 +1077,7 @@ void SCISyntaxParser::Load()
 	// blarg	or   [blarg statement]
 	lvalue = (opbracket >> general_token[{SetStatementNameA<LValue>, ParseAutoCompleteContext::LValue}] >> statement[LValueIndexerA] >> clbracket) |
 		keyword_p("argc")[SetStatementNameToParamTotalA<LValue>] |
-#ifdef PHIL_LDMSTM
+#ifdef ENABLE_LDMSTM
 		(period >> general_token[{DerefLValueA, ParseAutoCompleteContext::LValue}]) |
 #endif
 		general_token[{SetStatementNameA<LValue>, ParseAutoCompleteContext::LValue}];
@@ -1151,16 +1151,16 @@ void SCISyntaxParser::Load()
 		naryassoc_operation |
 		narycompare_operation |
 		return_statement |
-#ifdef PHIL_EXISTS
+#ifdef ENABLE_EXISTS
 		exists_statement |
 #endif
 		if_statement |
 		while_loop |
 		for_loop |
-#ifdef PHIL_FOREACH
+#ifdef ENABLE_FOREACH
 		foreach_loop |
 #endif
-#ifdef KAWA_GETPOLY
+#ifdef ENABLE_GETPOLY
 		getpoly_statement |
 #endif
 		cond_statement |
@@ -1226,7 +1226,7 @@ void SCISyntaxParser::Load()
 
 	method_decl = keyword_p("method")[{CreateMethodA, ParseAutoCompleteContext::ClassLevelKeyword}] >> method_base[FunctionCloseA];
 
-#ifdef PHIL_VERBS
+#ifdef ENABLE_VERBS
 	verb_clause =
 		alwaysmatch_p[StartStatementA]
 		>> (oppar[SetStatementA<VerbClauseStatement>]
@@ -1251,7 +1251,7 @@ void SCISyntaxParser::Load()
 			(
 			methods_fwd |
 			method_decl[FinishClassMethodA] |
-#ifdef PHIL_VERBS
+#ifdef ENABLE_VERBS
 			verb_handler_decl[FinishVerbHandlerA] | 
 #endif
 			procedure_decl[FinishClassProcedureA]) >> clpar);
@@ -1356,7 +1356,7 @@ void SCISyntaxParser::Load()
 
 }
 
-#ifdef PHIL_VERBS
+#ifdef ENABLE_VERBS
 unique_ptr<CaseStatement> _MakeVerbHandlerElse()
 {
 	unique_ptr<CaseStatement> theCase = make_unique<CaseStatement>();
@@ -1426,7 +1426,7 @@ void _ProcessClassForVerbHandlers(Script &script, ClassDefinition &theClass)
 }
 #endif
 
-#ifdef PHIL_FOREACH
+#ifdef ENABLE_FOREACH
 bool _IsItADeclaredVariable(const VariableDeclVector &varDecls, const string &name)
 {
 	return find_if(varDecls.begin(), varDecls.end(), [&name](const auto &varDecl) { return varDecl->GetName() == name; }) != varDecls.end();
@@ -1496,7 +1496,7 @@ void _ProcessForEach(ICompileLog &log, Script &script, FunctionBase &func, ForEa
 	string iterationVariableOrig = theForEach.IterationVariable;
 
 	string newIterationVariable;
-#ifdef PHIL_LDMSTM
+#ifdef ENABLE_LDMSTM
 	bool isReference = theForEach.IsReference;
 	if (!isReference)
 #endif
@@ -1562,12 +1562,12 @@ void _ProcessForEach(ICompileLog &log, Script &script, FunctionBase &func, ForEa
 		thePlusPlus->SetStatement1(_MakeTokenStatement(loopIndexName));
 		forLoop->SetLooper(_WrapInCodeBlock(move(thePlusPlus)));
 
-#ifdef PHIL_LDMSTM
+#ifdef ENABLE_LDMSTM
 		if (!isReference)
 		{
 #endif
 			_ReplaceIterationVariable(log, script, theForEach, iterationVariableOrig, newIterationVariable);
-#ifdef PHIL_LDMSTM
+#ifdef ENABLE_LDMSTM
 		}
 		else
 		{
@@ -1620,7 +1620,7 @@ void _ProcessForEach(ICompileLog &log, Script &script, FunctionBase &func, ForEa
 		// Transfer code to forloop
 		swap(forLoop->GetStatements(), theForEach.GetStatements());
 
-#ifdef PHIL_LDMSTM
+#ifdef ENABLE_LDMSTM
 		if (!isReference)
 #endif
 		{
@@ -1677,13 +1677,13 @@ void _ProcessForEach(ICompileLog &log, Script &script, FunctionBase &func, ForEa
 		whileLoop->SetCondition(move(condition));
 
 		// Now the meat of the loop
-#ifdef PHIL_LDMSTM
+#ifdef ENABLE_LDMSTM
 		if (!isReference)
 		{
 #endif
 			// This is the same as in a buffer-based foreach
 			_ReplaceIterationVariable(log, script, theForEach, iterationVariableOrig, newIterationVariable);
-#ifdef PHIL_LDMSTM
+#ifdef ENABLE_LDMSTM
 		}
 		else
 		{
@@ -1736,7 +1736,7 @@ void _ProcessForEach(ICompileLog &log, Script &script, FunctionBase &func, ForEa
 		// Transfer code to whileLoop
 		swap(whileLoop->GetStatements(), theForEach.GetStatements());
 
-#ifdef PHIL_LDMSTM
+#ifdef ENABLE_LDMSTM
 		if (!isReference)
 #endif
 		{
@@ -1791,7 +1791,7 @@ void _ProcessForEaches(ICompileLog &log, Script &script)
 }
 #endif
 
-#ifdef KAWA_GETPOLY
+#ifdef ENABLE_GETPOLY
 void _ProcessGetPoly(ICompileLog &log, Script &script, FunctionBase &func, GetPolyStatement &theGetPoly)
 {
 	if (theGetPoly.GetStatement1()->GetNodeType() == sci::NodeType::NodeTypeComplexValue)
@@ -1912,13 +1912,13 @@ void PostProcessScript(ICompileLog *pLog, Script &script)
 	{
 		// This could be a class too (not just instance). The main game class is public.
 		instance.SetPublic(script.IsExport(instance.GetName()));
-#ifdef PHIL_VERBS
+#ifdef ENABLE_VERBS
 		_ProcessClassForVerbHandlers(script, instance);
 #endif
 	}
 		);
 
-#ifdef PHIL_FOREACH
+#ifdef ENABLE_FOREACH
 	// Re-work foreach's into for loops (only for compiles where there is a log, e.g. actual compiles)
 	if (pLog)
 	{
@@ -1926,7 +1926,7 @@ void PostProcessScript(ICompileLog *pLog, Script &script)
 	}
 #endif
 
-#ifdef KAWA_GETPOLY
+#ifdef ENABLE_GETPOLY
 	if (pLog)
 	{
 		_ProcessGetPolys(*pLog, script);

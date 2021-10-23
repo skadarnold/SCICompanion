@@ -147,14 +147,14 @@ namespace sci
 	class GlobalDeclaration;
 	class ExternDeclaration;
 
-#ifdef PHIL_VERBS
+#ifdef ENABLE_VERBS
 	class VerbHandlerDefinition;
 	class VerbClauseStatement;
 #endif
-#ifdef PHIL_FOREACH
+#ifdef ENABLE_FOREACH
 	class ForEachLoop; 
 #endif
-#ifdef KAWA_GETPOLY
+#ifdef ENABLE_GETPOLY
 	class GetPolyStatement;
 #endif
 
@@ -204,14 +204,14 @@ namespace sci
 		virtual void Visit(const SelectorDeclaration &selectorDef) = 0;
 		virtual void Visit(const GlobalDeclaration &globalDecl) = 0;
 		virtual void Visit(const ExternDeclaration &externDecl) = 0;
-#ifdef PHIL_VERBS
+#ifdef ENABLE_VERBS
 		virtual void Visit(const VerbHandlerDefinition &globalDecl) = 0;
 		virtual void Visit(const VerbClauseStatement &externDecl) = 0;
 #endif
-#ifdef PHIL_FOREACH
+#ifdef ENABLE_FOREACH
 		virtual void Visit(const ForEachLoop &forEachLoop) = 0; 
 #endif
-#ifdef KAWA_GETPOLY
+#ifdef ENABLE_GETPOLY
 		virtual void Visit(const GetPolyStatement &getPolyStatement) = 0;
 #endif
 
@@ -395,7 +395,7 @@ namespace sci
 	class EnumAll : public IExploreNode
 	{
 	public:
-#ifdef PHIL_FOREACH
+#ifdef ENABLE_FOREACH
 		EnumAll(sci::SyntaxNode &script, _TFunc func) : _func(func) { script.Traverse(*this); }
 #else
 		EnumAll(sci::Script &script, _TFunc func) : _func(func) { script.Traverse(*this); }
@@ -413,7 +413,7 @@ namespace sci
 	};
 
 	template<typename _T, typename _TFunc>
-#ifdef PHIL_FOREACH
+#ifdef ENABLE_FOREACH
 	void EnumScriptElements(SyntaxNode &script, _TFunc func)
 #else
 	void EnumScriptElements(Script &script, _TFunc func)
@@ -751,7 +751,7 @@ namespace sci
 		DECLARE_NODE_TYPE(NodeTypeVariableDeclaration)
 	public:
 		VariableDecl();
-#if defined(PHIL_LDMSTM) || defined(PHIL_FOREACH)
+#if defined(ENABLE_LDMSTM) || defined(ENABLE_FOREACH)
 		VariableDecl(const std::string &name); 
 #endif
 		VariableDecl(const VariableDecl &src) = delete;
@@ -859,7 +859,7 @@ namespace sci
 		void AddVariable(std::unique_ptr<VariableDecl> pVar) { _tempVars.push_back(std::move(pVar)); }
 		std::string ToString() const;
 		const VariableDeclVector &GetVariables() const { return _tempVars; }
-#ifdef PHIL_FOREACH
+#ifdef ENABLE_FOREACH
 		VariableDeclVector &GetVariablesNC() { return _tempVars; }
 #endif
 		const ClassDefinition *GetOwnerClass() const { return _pOwnerClass; }
@@ -967,7 +967,7 @@ namespace sci
 		ClassPropertyVector &GetPropertiesNC() { return _properties; }
 		const MethodVector &GetMethods() const { return _methods; }
 		MethodVector &GetMethodsNC() { return _methods; }
-#ifdef PHIL_VERBS
+#ifdef ENABLE_VERBS
 		std::vector<std::unique_ptr<VerbHandlerDefinition>> &GetVerbHandlers() { return _verbHandlers; }
 #endif
 		bool GetPropertyConst(PCTSTR pszName, PropertyValue &value) const;
@@ -987,7 +987,7 @@ namespace sci
 		void AddProperty(std::unique_ptr<ClassProperty> classProp) { _properties.push_back(move(classProp)); }
 		void AddProperty(const std::string &name, uint16_t value);
 		void AddMethod(std::unique_ptr<MethodDefinition> method) { _methods.push_back(std::move(method)); }
-#ifdef PHIL_VERBS
+#ifdef ENABLE_VERBS
 		void AddVerbHandler(std::unique_ptr<VerbHandlerDefinition> verbHandler);
 #endif
 
@@ -1012,7 +1012,7 @@ namespace sci
 		bool _fInstance; // Instance or class.
 		ClassPropertyVector _properties;
 		MethodVector _methods;
-#ifdef PHIL_VERBS
+#ifdef ENABLE_VERBS
 		std::vector<std::unique_ptr<VerbHandlerDefinition>> _verbHandlers;
 #endif
 	};

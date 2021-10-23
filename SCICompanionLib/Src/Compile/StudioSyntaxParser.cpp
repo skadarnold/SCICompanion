@@ -459,7 +459,7 @@ char const errVarName[] = "Expected variable name.";
 char const errFileNameString[] = "Expected file name string.";
 char const errElse[] = "Expected else clause.";
 char const errNoKeywordOrSelector[] = "No keyword or selector permitted here.";
-#ifdef PHIL_FOREACH
+#ifdef ENABLE_FOREACH
 char const errCollectionArg[] = "Expected collection."; 
 #endif
 

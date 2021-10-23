@@ -409,10 +409,10 @@ const std::vector<std::string> &GetTopLevelKeywords(LangSyntax lang)
 std::vector<std::string> codeLevelKeywordsSCI =
 {
 	// Sorted
-#ifdef PHIL_EXISTS
+#ifdef ENABLE_EXISTS
 	_T("&exists"),
 #endif
-#ifdef KAWA_GETPOLY
+#ifdef ENABLE_GETPOLY
 	_T("&getpoly"),
 #endif
 	_T("&rest"),
@@ -430,7 +430,7 @@ std::vector<std::string> codeLevelKeywordsSCI =
 	_T("enum"),
 	_T("false"),
 	_T("for"),
-#ifdef PHIL_FOREACH
+#ifdef ENABLE_FOREACH
 	_T("foreach"),
 #endif
 	_T("if"),
@@ -520,7 +520,7 @@ bool IsValueKeyword(LangSyntax lang, const std::string &word)
 }
 
 std::vector<std::string> classLevelKeywordsStudio = {  "method", "properties" };
-#ifdef PHIL_VERBS
+#ifdef ENABLE_VERBS
 std::vector<std::string> classLevelKeywordsSCI = { "method", "properties", "procedure", "verbs" };
 #else
 std::vector<std::string> classLevelKeywordsSCI = { "method", "properties", "procedure" };

@@ -952,7 +952,7 @@ void PropertyValueBase::PreScan(CompileContext &context)
 		} // I guess we can have instances and stuff here too, so we'll delay..
 		break;
 
-#ifdef PHIL_EXISTS
+#ifdef ENABLE_EXISTS
 	case ValueType::ParameterIndex:
 	{
 		bool found = false;
@@ -1151,7 +1151,7 @@ CodeResult PropertyValueBase::OutputByteCode(CompileContext &context) const
 		wType = DataTypePointer;
 		break;
 
-#ifdef PHIL_LDMSTM
+#ifdef ENABLE_LDMSTM
 	case ValueType::Deref:
 	{
 		WORD wInstanceScript;
@@ -1452,7 +1452,7 @@ CodeResult SendCall::OutputByteCode(CompileContext &context) const
 				// "send" though.  So it's possible the indexer is not there.
 				const SyntaxNode *pIndexer = _object3->GetIndexer();
 
-#ifndef PHIL_LDMSTM
+#ifndef ENABLE_LDMSTM
 				BYTE bOpcodeMod = VO_LOAD | VO_ACC;
 #endif
 				WORD wNumber;
@@ -1463,7 +1463,7 @@ CodeResult SendCall::OutputByteCode(CompileContext &context) const
 				case ResolvedToken::ScriptVariable:
 				case ResolvedToken::Parameter:
 				case ResolvedToken::TempVariable:
-#ifdef PHIL_LDMSTM
+#ifdef ENABLE_LDMSTM
 					VariableOperand(context, wNumber, TokenTypeToVOType(tokenType) | VO_LOAD | VO_ACC, GetLineNumber(), pIndexer);
 					if (_object3->IsDeref)
 					{
@@ -1477,7 +1477,7 @@ CodeResult SendCall::OutputByteCode(CompileContext &context) const
 				case ResolvedToken::ClassProperty:
 					// Load the property into the accumulator
 					LoadProperty(context, wNumber, false, GetLineNumber());
-#ifdef PHIL_LDMSTM
+#ifdef ENABLE_LDMSTM
 					if (_object3->IsDeref)
 					{
 						// Value at address in acc will now be put in acc:
@@ -1778,7 +1778,7 @@ CodeResult CodeBlock::OutputByteCode(CompileContext &context) const
 	return CodeResult(wBytes, result.GetType());
 }
 
-#ifdef PHIL_FOREACH
+#ifdef ENABLE_FOREACH
 CodeResult ForEachLoop::OutputByteCode(CompileContext &context) const
 {
 	WORD wBytes = 0;
@@ -2046,7 +2046,7 @@ CodeResult Assignment::OutputByteCode(CompileContext &context) const
 	BinaryOperator theBinaryOperator = GetBinaryOpFromAssignment(Operator);
 	if (theBinaryOperator != BinaryOperator::None)
 	{
-#ifdef PHIL_LDMSTM
+#ifdef ENABLE_LDMSTM
 		if (_variable->IsDeref)
 		{
 			context.ReportError(_variable.get(), "Only standard assignment operations are permitted on pointer dereferneces.");
@@ -2160,7 +2160,7 @@ CodeResult Assignment::OutputByteCode(CompileContext &context) const
 		case ResolvedToken::Parameter:
 		case ResolvedToken::TempVariable:
 		{
-#ifdef PHIL_LDMSTM
+#ifdef ENABLE_LDMSTM
 			if (_variable->IsDeref)
 			{
 				VariableOperand(context, wIndex, TokenTypeToVOType(tokenType) | VO_LOAD | VO_STACK, GetLineNumber(), pIndexer);
@@ -2190,7 +2190,7 @@ CodeResult Assignment::OutputByteCode(CompileContext &context) const
 		case ResolvedToken::ClassProperty:
 			assert(pIndexer == nullptr || context.HasErrors());
 			StoreProperty(context, wIndex, false, GetLineNumber());  // false -> accumulator
-#ifdef PHIL_LDMSTM
+#ifdef ENABLE_LDMSTM
 			if (_variable->IsDeref)
 			{
 				// Prop value gets pushed onto stack
@@ -3147,7 +3147,7 @@ CodeResult ContinueStatement::OutputByteCode(CompileContext &context) const
 	return 0; // void
 }
 
-#ifdef PHIL_VERBS
+#ifdef ENABLE_VERBS
 CodeResult VerbClauseStatement::OutputByteCode(CompileContext &context) const
 {
 	// Should never be called.
@@ -3737,7 +3737,7 @@ void WhileLoop::PreScan(CompileContext &context)
 	ForwardPreScan2(_segments, context);
 }
 
-#ifdef PHIL_FOREACH
+#ifdef ENABLE_FOREACH
 void ForEachLoop::PreScan(CompileContext &context)
 {
 	// These things should have been cleared out:
@@ -3747,7 +3747,7 @@ void ForEachLoop::PreScan(CompileContext &context)
 }
 #endif
 
-#ifdef KAWA_GETPOLY
+#ifdef ENABLE_GETPOLY
 void GetPolyStatement::PreScan(CompileContext &context) {}
 CodeResult GetPolyStatement::OutputByteCode(CompileContext &context) const
 {

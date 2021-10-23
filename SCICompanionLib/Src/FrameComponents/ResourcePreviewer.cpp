@@ -440,7 +440,7 @@ void VocabPreviewer::_Populate(const std::vector<std::string> &names, const bool
 	{
 		if (prependNumber)
 		{
-#ifdef KAWA_VOCABPREVIEWS
+#ifdef ENABLE_MOREVOCABPREVIEWS
 			// Match selector list format
 			text << index << " (0x" << std::hex << (index) << std::dec << "): ";
 #else
@@ -501,7 +501,7 @@ void VocabPreviewer::SetResource(const ResourceBlob &blob)
 	{
 		switch (iNumber)
 		{
-#ifdef KAWA_VOCABPREVIEWS
+#ifdef ENABLE_MOREVOCABPREVIEWS
 		case 994: //KAWA - object offsets
 		{
 			//SV: OBJECT | OFFSET
@@ -560,7 +560,7 @@ void VocabPreviewer::SetResource(const ResourceBlob &blob)
 			}
 		}
 		break;
-#ifdef KAWA_VOCABPREVIEWS
+#ifdef ENABLE_MOREVOCABPREVIEWS
 		/* case 998: //KAWA - opcodes
 		{
 			//SV: OPCODE / 2 | INSTRUCTION | FLAGS
@@ -627,7 +627,7 @@ void FontPreviewer::SetResource(const ResourceBlob &blob)
 	// Show a preview of entire font.
 	std::stringstream ss;
 	RasterComponent &rasterComponent = _pFont->GetComponent<RasterComponent>();
-#ifndef KAWA_FONTLIMITBREAK
+#ifndef DISABLE_FONTLIMIT
 	for (size_t i = 0; i < rasterComponent.Loops[0].Cels.size(); i++)
 #else
 	for (size_t i = 0; i < min(rasterComponent.Loops[0].Cels.size(), 255); i++)

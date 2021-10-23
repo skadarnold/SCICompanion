@@ -27,7 +27,7 @@ enum class PolygonType
 namespace sci
 {
 	class ProcedureCall;
-#ifdef KAWA_GETPOLY
+#ifdef ENABLE_GETPOLY
 	class SendCall;
 #endif
 }
@@ -85,7 +85,7 @@ bool operator==(const PolygonComponent &one, const PolygonComponent &two);
 bool operator!=(const PolygonComponent &one, const PolygonComponent &two);
 
 std::unique_ptr<PolygonComponent> CreatePolygonComponent(const std::string &polyFolder, int picNumber);
-#ifdef KAWA_GETPOLY
+#ifdef ENABLE_GETPOLY
 std::unique_ptr<sci::SendCall> GetSetUpPolyProcedureCall();
 #else
 std::unique_ptr<sci::ProcedureCall> GetSetUpPolyProcedureCall(int picResource);

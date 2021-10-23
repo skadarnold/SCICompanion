@@ -236,17 +236,17 @@ std::string GetPropertyText(const PropertyValueBase &prop)
 		case ValueType::Pointer:
 			mw << "@" << CleanTokenSCI(prop.GetStringValue());
 			break;
-#ifdef PHIL_FOREACH
+#ifdef ENABLE_FOREACH
 		case ValueType::ArraySize:
 			mw << "&sizeof " << CleanTokenSCI(prop.GetStringValue());
 			break;
 #endif
-#ifdef PHIL_EXISTS
+#ifdef ENABLE_EXISTS
 		case ValueType::ParameterIndex:
 			mw << "&exists " << CleanTokenSCI(prop.GetStringValue());
 			break;
 #endif
-#ifdef PHIL_LDMSTM
+#ifdef ENABLE_LDMSTM
 		case ValueType::Deref:
 			mw << "*" << CleanTokenSCI(prop.GetStringValue());
 			break;
@@ -1215,7 +1215,7 @@ public:
 		_MaybeNewLineIndent();
 
 		GO_INLINE;
-#ifdef PHIL_LDMSTM
+#ifdef ENABLE_LDMSTM
 		if (lValue.IsDeref)
 		{
 			out.out << "*";
@@ -1929,7 +1929,7 @@ public:
 		out.out << selector.GetName() << " " << selector.Index;
 	}
 
-#ifdef PHIL_VERBS
+#ifdef ENABLE_VERBS
 	void Visit(const VerbClauseStatement &vc)
 	{
 		out.out << "VerbClauseStatement";
@@ -1940,14 +1940,14 @@ public:
 	}
 #endif
 
-#ifdef PHIL_FOREACH
+#ifdef ENABLE_FOREACH
 	void Visit(const ForEachLoop &vc)
 	{
 		_MaybeIndentAcceptChildren(vc.FinalCode);
 	}
 #endif
 
-#ifdef KAWA_GETPOLY
+#ifdef ENABLE_GETPOLY
 	void Visit(const GetPolyStatement &gp) override
 	{
 		_MaybeIndentAcceptChildren(gp.FinalCode);

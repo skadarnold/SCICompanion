@@ -69,7 +69,7 @@ namespace sci
 	{
 		DECLARE_NODE_TYPE(NodeTypeLValue)
 	public:
-#ifdef PHIL_LDMSTM
+#ifdef ENABLE_LDMSTM
 		LValue() : NamedNode(), IsDeref(false) { }
 		LValue(const std::string &name) : NamedNode(name), IsDeref(false) { }
 #else
@@ -92,7 +92,7 @@ namespace sci
 		
 		void Accept(ISyntaxNodeVisitor &visitor) const override;
 
-#ifdef PHIL_LDMSTM
+#ifdef ENABLE_LDMSTM
 		bool IsDeref;
 #endif
 	private:
@@ -400,7 +400,7 @@ namespace sci
 		CondStatement& operator=(const CondStatement& src) = delete;
 	};
 
-#ifdef PHIL_VERBS
+#ifdef ENABLE_VERBS
 	class VerbClauseStatement : public SyntaxNode, public StatementsNode
 	{
 		DECLARE_NODE_TYPE(NodeTypeVerbClause)
@@ -430,12 +430,12 @@ namespace sci
 	};
 #endif
 
-#ifdef PHIL_FOREACH
+#ifdef ENABLE_FOREACH
 	class ForEachLoop : public SyntaxNode, public StatementsNode, public OneStatementNode
 	{
 		DECLARE_NODE_TYPE(NodeTypeForEach)
 	public:
-#ifdef PHIL_LDMSTM
+#ifdef ENABLE_LDMSTM
 		ForEachLoop() : IsReference(false) {}
 #else
 		ForEachLoop() {}
@@ -449,7 +449,7 @@ namespace sci
 		void Traverse(IExploreNode &en);
 		// The collection is in _statement1, and the inner code is in _segments.
 		std::string IterationVariable;
-#ifdef PHIL_LDMSTM
+#ifdef ENABLE_LDMSTM
 		bool IsReference;
 #endif
 
@@ -458,7 +458,7 @@ namespace sci
 	};
 #endif
 
-#ifdef KAWA_GETPOLY
+#ifdef ENABLE_GETPOLY
 	class GetPolyStatement : public SyntaxNode, public OneStatementNode
 	{
 		DECLARE_NODE_TYPE(NodeTypeGetPoly)

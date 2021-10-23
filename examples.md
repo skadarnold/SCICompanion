@@ -1,6 +1,6 @@
 ## `&exists`
 `&exists` serves to make the processing of optional arguments clearer.
-```lisp
+```clojure
 (method (posn theX theY theZ)
 	(if (>= argc 1)
 		(= x theX)
@@ -13,7 +13,7 @@
 	(self forceUpd:)
 )
 ```
-```lisp
+```clojure
 (method (posn theX theY theZ)
 	(if (&exists theX)
 		(= x theX)
@@ -31,7 +31,7 @@
 
 ## `LDM`/`STM` opcodes
 Why write cumbersome `Memory` kernel calls when you can use `*` and get proper pointers?
-```lisp
+```clojure
 ; Given a local array...
 (procedure (DerefTest &tmp ptr)
 	(= ptr @numbers) ; Take the address of the numbers array.
@@ -45,7 +45,7 @@ Why write cumbersome `Memory` kernel calls when you can use `*` and get proper p
 ```
 
 ## `foreach`
-```lisp
+```clojure
 ; No need to predeclare n, a &tmp variable is made for you.
 (foreach n anArray
 	; (do something with n)
@@ -61,11 +61,10 @@ Why write cumbersome `Memory` kernel calls when you can use `*` and get proper p
 	; (do something with n)
 )
 ```
-Iterating over a collection is different from how Phil's `foreach` does it so watch out.
 
 ## `verbs`
-Another one that's quite distinct from Phil's, the `verbs` block expands into a standard SCI11 `doVerb` method.
-```lisp
+The `verbs` block expands into a standard SCI11 `doVerb` method, as a way to write them in a more terse style.
+```clojure
 (instance anExample of Prop
 	(verbs
 		(V_TALK
@@ -79,14 +78,6 @@ Another one that's quite distinct from Phil's, the `verbs` block expands into a 
 ```
 Once expanded, an `else` handler to call the superclass' `doVerb` is thrown in for free.
 
-But wait. Phil's experimental branch has no `verbs`. It has `nearVerbs`, `farVerbs`, and `invVerbs`! That's
-true, and that's tailored towards the interpreter used for *Cascadia Quest* and such. This is more generically
-appropriate for SCI11.
-
-("Where's the second parameter" you might ask. I checked the leaked SCI16 template, and there's no such
-parameter to be found. I checked the SCI Companion SCI11 template, and it didn't *use* `param2`, just blindly
-passed it to `super`. I did find a use in *Police Quest 3* though, but that's not SCI11.)
-
 ## `&getpoly`
 SCI Companion's polygon editor is great, but the way the data it produces is used results in a major code smell.
 Polygons take local variable space, and there are three methods to process them for use. The `&getpoly` keyword
@@ -99,6 +90,7 @@ To use `&getpoly`, give each individual polygon a distinct name (the blank strin
 ```lisp
 (gRoom addObstacle: (&getpoly "room"))
 ```
-You can pass as many `(&getpoly "...")` calls to `addObstacle` at once as you'd like. Once all your rooms have
+The default polygon, with a blank name field, listed as "Default", and named `P_Default#` in the `.shp` file, can be addressed with just `(&getpoly "")`.
+You may pass as many `(&getpoly "...")` calls to `addObstacle` at once as you'd like. Once all your rooms have
 been converted at your leisure, you can safely remove `AddPolygonsToRoom` and its support procedures from your
 *Main* script.

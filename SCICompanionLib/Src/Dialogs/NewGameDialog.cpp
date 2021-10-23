@@ -126,7 +126,7 @@ void NewGameDialog::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_STATIC4, m_wndStatic4);
 	DDX_Control(pDX, IDC_COMBOLANGUAGE, m_wndComboLanguage);
 	m_wndComboLanguage.SetCurSel(0);
-#ifdef KAWA_NOSTUDIO
+#ifdef DISABLE_STUDIO
 	m_wndComboLanguage.EnableWindow(FALSE);
 #endif
 

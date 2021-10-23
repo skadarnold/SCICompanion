@@ -199,7 +199,7 @@ enum class Opcode : uint8_t
 	Filename = 128,
 	LineNumber = 129,
 
-#ifdef PHIL_LDMSTM
+#ifdef ENABLE_LDMSTM
 	// My extensions that don't fit into short/wide variations.
 	LDM = 130,
 	STM = 131,

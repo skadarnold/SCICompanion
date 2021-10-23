@@ -1298,7 +1298,7 @@ bool GenerateScriptResource_SCI0(Script &script, PrecompiledHeaders &headers, Co
 
 	context.FixupSinksAndSources(output, output);
 
-#ifdef PHIL_UNUSEDINSTANCES
+#ifdef ENABLE_UNUSEDINSTANCEWARNINGS
 	// Some validation
 	for (const auto &instance : script.GetClasses())
 	{
@@ -1566,7 +1566,7 @@ bool GenerateScriptResource_SCI11(Script &script, PrecompiledHeaders &headers, C
 		}
 	}
 
-#ifdef PHIL_UNUSEDINSTANCES
+#ifdef ENABLE_UNUSEDINSTANCEWARNINGS
 	// Some validation
 	for (const auto &instance : script.GetClasses())
 	{

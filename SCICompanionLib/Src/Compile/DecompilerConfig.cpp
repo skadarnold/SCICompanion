@@ -162,7 +162,7 @@ public:
 		_ResolveValuesHelper(binaryOp.GetStatement2(), { binaryOp.GetStatement1() });
 	}
 
-#ifdef KAWA_FORCEDSCRIPTNAMES
+#ifdef ENABLE_FORCEDSCRIPTNAMES
 	bool ResolveForcedScriptName(int index, std::string &scriptName) const
 	{
 		if (_table->contains_qualified("kawaForcedScriptNames"))
@@ -384,7 +384,7 @@ private:
 		}
 	}
 
-#ifdef KAWA_GLOBALS
+#ifdef ENABLE_FORCEDGLOBALS
 	/*
 	void _CacheGlobals()
 	{

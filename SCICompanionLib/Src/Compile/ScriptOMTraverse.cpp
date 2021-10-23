@@ -165,7 +165,7 @@ void WhileLoop::Traverse(IExploreNode &en)
 	_innerCondition->Traverse(en);
 	ForwardTraverse2(_segments, en);
 }
-#if PHIL_FOREACH
+#if ENABLE_FOREACH
 void ForEachLoop::Traverse(IExploreNode &en)
 {
 	ExploreNodeBlock enb(en, *this);
@@ -176,7 +176,7 @@ void ForEachLoop::Traverse(IExploreNode &en)
 	ForwardTraverse2(_segments, en);
 }
 #endif
-#if KAWA_GETPOLY
+#if ENABLE_GETPOLY
 void GetPolyStatement::Traverse(IExploreNode &en)
 {
 	ExploreNodeBlock enb(en, *this);
@@ -224,7 +224,7 @@ void ClassDefinition::Traverse(IExploreNode &en)
 {
 	ExploreNodeBlock enb(en, *this);
 	ForwardTraverse2(_methods, en);
-#ifdef PHIL_VERBS
+#ifdef ENABLE_VERBS
 	ForwardTraverse2(_verbHandlers, en);
 #endif
 	ForwardTraverse2(_properties, en);

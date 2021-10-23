@@ -166,7 +166,7 @@ void _MassagePrint(ProcedureCall &proc, DecompileLookups &lookups)
 	}
 }
 
-#ifdef KAWA_DISPLAYMASSAGE
+#ifdef ENABLE_DISPLAYMASSAGE
 void _MassageDisplay(ProcedureCall &proc, DecompileLookups &lookups)
 {
 	size_t parameterIndex = 1;
@@ -228,7 +228,7 @@ void _MassageProcedureCall(ProcedureCall &proc, DecompileLookups &lookups)
 	{
 		_MassagePrint(proc, lookups);
 	}
-#ifdef KAWA_DISPLAYMASSAGE
+#ifdef ENABLE_DISPLAYMASSAGE
 	else if (proc.GetName() == "Display")
 	{
 		_MassageDisplay(proc, lookups);

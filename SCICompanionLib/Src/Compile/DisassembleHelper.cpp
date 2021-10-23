@@ -18,7 +18,7 @@
 #include "Vocab000.h"
 using namespace std;
 
-#ifdef KAWA_GLOBALS
+#ifdef ENABLE_FORCEDGLOBALS
 const char* const kawaGlobalsSCI0[] =
 {
 	"gEgo", "gGame", "gRoom", "gSpeed", "gQuit", "gCast", "gRegions",
@@ -51,7 +51,7 @@ string _GetLocalVariableName(int index, uint16_t scriptNum)
 }
 string _GetGlobalVariableName(int index)
 {
-#ifdef KAWA_GLOBALS
+#ifdef ENABLE_FORCEDGLOBALS
 	if (index < 27 && kawaGlobalsSCI0[index] != 0)
 	{
 		return string(kawaGlobalsSCI0[index]);

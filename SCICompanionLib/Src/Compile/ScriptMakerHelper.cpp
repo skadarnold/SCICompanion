@@ -27,7 +27,7 @@ void _SetSendVariableTarget(SendCall &send, const std::string &target)
 	send.SetLValue(move(lValue));
 }
 
-#ifdef PHIL_FOREACH
+#ifdef ENABLE_FOREACH
 unique_ptr<sci::CodeBlock> _WrapInCodeBlock(unique_ptr<sci::SyntaxNode> pNode)
 {
 	unique_ptr<CodeBlock> codeBlock = make_unique<CodeBlock>();
@@ -54,7 +54,7 @@ unique_ptr<SyntaxNode> _MakeTokenStatement(const string &token)
 	return unique_ptr<SyntaxNode>(move(pValue));
 }
 
-#ifdef PHIL_FOREACH
+#ifdef ENABLE_FOREACH
 unique_ptr<SyntaxNode> _MakeStringStatement(const string &token, ValueType valuetype)
 {
 	unique_ptr<ComplexPropertyValue> pValue = std::make_unique<ComplexPropertyValue>();
@@ -63,7 +63,7 @@ unique_ptr<SyntaxNode> _MakeStringStatement(const string &token, ValueType value
 }
 #endif
 
-#ifdef PHIL_LDMSTM
+#ifdef ENABLE_LDMSTM
 void _AddAssignment(StatementsNode &method, const string &lvalueName, const string &assigned)
 #else
 void _AddAssignment(MethodDefinition &method, const string &lvalueName, const string &assigned)
@@ -78,7 +78,7 @@ void _AddAssignment(MethodDefinition &method, const string &lvalueName, const st
 	_AddStatement(method, std::move(pEquals));
 }
 
-#ifdef PHIL_FOREACH
+#ifdef ENABLE_FOREACH
 unique_ptr<sci::SyntaxNode> _MakeBinaryOp(BinaryOperator op, std::unique_ptr<sci::SyntaxNode> one, std::unique_ptr<sci::SyntaxNode> two)
 {
 	unique_ptr<BinaryOp> binop = make_unique<BinaryOp>();
@@ -107,7 +107,7 @@ void _AddBasicSwitch(MethodDefinition &method, const string &switchValue, const 
 	_AddStatement(method, std::move(pSwitch));
 }
 
-#ifdef PHIL_FOREACH
+#ifdef ENABLE_FOREACH
 unique_ptr<SyntaxNode> _MakeSimpleSend(const string &objectName, const string &propName)
 {
 	unique_ptr<SendCall> pSend = std::make_unique<SendCall>();

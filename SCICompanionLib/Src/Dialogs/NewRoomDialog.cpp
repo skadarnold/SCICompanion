@@ -285,7 +285,7 @@ void CNewRoomDialog::_PrepareBuffer()
 		script.AddInclude(messagefileInclude);
 	}
 
-#ifndef KAWA_GETPOLY
+#ifndef ENABLE_GETPOLY
 	if (includePolys)
 	{
 		string polyfileInclude = fmt::format("{0}.shp", _nPicScript);
@@ -358,7 +358,7 @@ void CNewRoomDialog::_PrepareBuffer()
 				
 			if (includePolys)
 			{
-#ifdef KAWA_GETPOLY
+#ifdef ENABLE_GETPOLY
 				_AddStatement(*pInit, GetSetUpPolyProcedureCall());
 				//_AddComment(*pInit, "(gRoom addObstacle: (getpoly {Room}))", sci::CommentType::Indented);
 #else

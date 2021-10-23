@@ -35,7 +35,7 @@ public:
 	virtual void ResolveProcedureCallParameterTypes(sci::ProcedureCall &procCall) const = 0;
 	virtual void ResolveSwitchStatementValues(sci::SwitchStatement &switchStatement) const = 0;
 	virtual void ResolveBinaryOpValues(sci::BinaryOp &binaryOp) const = 0;
-#ifdef KAWA_FORCEDSCRIPTNAMES
+#ifdef ENABLE_FORCEDSCRIPTNAMES
 	virtual bool ResolveForcedScriptName(int index, std::string &scriptName) const = 0;
 #endif
 	virtual bool IsBitfieldProperty(const std::string &propertyName) const = 0;
@@ -48,7 +48,7 @@ public:
 
 std::unique_ptr<IDecompilerConfig> CreateDecompilerConfig(const GameFolderHelper &helper, const SelectorTable &selectorTable);
 
-#ifdef KAWA_GLOBALS
+#ifdef ENABLE_FORCEDGLOBALS
 //in disassemblehelper.cpp
 extern std::vector<std::string> kawaGlobals;
 #endif

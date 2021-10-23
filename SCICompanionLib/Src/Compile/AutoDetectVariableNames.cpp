@@ -431,14 +431,14 @@ public:
 	void Visit(const SelectorDeclaration &selectorDef) override {}
 	void Visit(const GlobalDeclaration &globalDecl) override {}
 	void Visit(const ExternDeclaration &externDecl) override {}
-#ifdef PHIL_VERBS
+#ifdef ENABLE_VERBS
 	void Visit(const VerbClauseStatement &verbClause) override {}
 	void Visit(const VerbHandlerDefinition &verbHandler) override {}
 #endif
-#ifdef PHIL_FOREACH
+#ifdef ENABLE_FOREACH
 	void Visit(const ForEachLoop &foreachLoop) override {}
 #endif
-#ifdef KAWA_GETPOLY
+#ifdef ENABLE_GETPOLY
 	void Visit(const GetPolyStatement &getPolyStatement) override {}
 #endif
 
@@ -548,14 +548,14 @@ public:
 	void Visit(const SelectorDeclaration &selectorDef) override {}
 	void Visit(const GlobalDeclaration &globalDecl) override {}
 	void Visit(const ExternDeclaration &externDecl) override {}
-#ifdef PHIL_VERBS
+#ifdef ENABLE_VERBS
 	void Visit(const VerbClauseStatement &verbClause) override {}
 	void Visit(const VerbHandlerDefinition &verbHandler) override {}
 #endif
-#ifdef PHIL_FOREACH
+#ifdef ENABLE_FOREACH
 	void Visit(const ForEachLoop &forEachLoop) override {}
 #endif
-#ifdef KAWA_GETPOLY
+#ifdef ENABLE_GETPOLY
 	void Visit(const GetPolyStatement &getPolyStatement) override {}
 #endif
 

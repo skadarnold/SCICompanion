@@ -74,7 +74,7 @@ void DecompileDialog::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_ASSIGNFILENAMES, m_wndSetFilenames);
 	DDX_Control(pDX, IDC_DECOMPILECANCEL, m_wndDecomileCancel);
 	DDX_Control(pDX, IDC_DECOMPILESTATUS, m_wndStatus);
-#ifndef KAWA_NODEBUGSTUFF
+#ifndef DISABLE_DEBUGSTUFF
 	DDX_Control(pDX, IDC_CHECKCONTROLFLOW, m_wndDebugControlFlow);
 	DDX_Control(pDX, IDC_CHECKINSTRUCTIONCONSUMPTION, m_wndDebugInstConsumption);
 	DDX_Control(pDX, IDC_CHECKASM, m_wndAsm);
@@ -625,7 +625,7 @@ void DecompileDialog::OnBnClickedDecompile()
 {
 	m_wndResults.SetWindowTextA("");
 
-#ifdef KAWA_NODEBUGSTUFF
+#ifdef DISABLE_DEBUGSTUFF
 	_debugControlFlow = false;
 	_debugInstConsumption = false;
 	_debugAsm = false;
@@ -714,7 +714,7 @@ void DecompileDialog::_AssignFilenames()
 	unordered_set<string> importantClasses = { "Game" }; // e.g. needed for KQ6, 994
 
 	unordered_set<string> usedNames;
-#ifdef KAWA_FORCEDSCRIPTNAMES
+#ifdef ENABLE_FORCEDSCRIPTNAMES
 	_decompilerConfig = CreateDecompilerConfig(_helper, _lookups->GetSelectorTable());
 #endif
 
@@ -724,7 +724,7 @@ void DecompileDialog::_AssignFilenames()
 		for (CompiledScript *script : lookups->GetGlobalClassTable().GetAllScripts())
 		{
 			string suggestedName;
-#ifndef KAWA_FORCEDSCRIPTNAMES
+#ifndef ENABLE_FORCEDSCRIPTNAMES
 			if (script->GetScriptNumber() == 0)
 			{
 				suggestedName = "Main";

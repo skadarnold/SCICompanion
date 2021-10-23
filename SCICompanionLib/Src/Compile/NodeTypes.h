@@ -66,14 +66,14 @@ namespace sci
 		NodeTypeExtern,
 		NodeTypeSelector,
 
-#ifdef PHIL_VERBS
+#ifdef ENABLE_VERBS
 		NodeTypeVerbClause,
 		NodeTypeVerbHandler,
 #endif
-#ifdef PHIL_FOREACH
+#ifdef ENABLE_FOREACH
 		NodeTypeForEach,
 #endif
-#ifdef KAWA_GETPOLY
+#ifdef ENABLE_GETPOLY
 		NodeTypeGetPoly,
 #endif
 	};

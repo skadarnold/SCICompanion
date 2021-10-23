@@ -482,7 +482,7 @@ Consumption _GetInstructionConsumption(scii &inst, DecompileLookups *lookups)
 		fPutsOnStack = true;
 		break;
 
-#ifdef PHIL_LDMSTM
+#ifdef ENABLE_LDMSTM
 	case Opcode::LDM:
 		fChangesAcc = true;
 		fEatsAcc = true;

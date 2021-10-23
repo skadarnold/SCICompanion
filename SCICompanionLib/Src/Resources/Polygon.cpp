@@ -67,7 +67,7 @@ const string AccessType[] =
 	"PContainedAccess",
 };
 
-#ifdef KAWA_GETPOLY
+#ifdef ENABLE_GETPOLY
 unique_ptr<SendCall> GetSetUpPolyProcedureCall()
 {
 	auto gRoom = make_unique<SendCall>();

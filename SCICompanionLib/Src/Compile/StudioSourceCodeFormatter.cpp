@@ -799,14 +799,14 @@ public:
 	void Visit(const ExternDeclaration &theExtern) override {}
 	void Visit(const SelectorDeclaration &selector) override {}
 
-#ifdef PHIL_VERBS
+#ifdef ENABLE_VERBS
 	void Visit(const VerbClauseStatement &vc) override {}
 	void Visit(const VerbHandlerDefinition &vc) override {}
 #endif
-#ifdef PHIL_FOREACH
+#ifdef ENABLE_FOREACH
 	void Visit(const ForEachLoop &vc) override {}
 #endif
-#ifdef KAWA_GETPOLY
+#ifdef ENABLE_GETPOLY
 	void Visit(const GetPolyStatement &gp) override {}
 #endif
 

@@ -1467,7 +1467,7 @@ std::vector<std::string> CompileContext::GetStringsThatWereWritten()
 	return strings;
 }
 
-#ifdef PHIL_UNUSEDINSTANCES
+#ifdef ENABLE_UNUSEDINSTANCEWARNINGS
 bool CompileContext::WasInstanceReferenceWritten(const std::string &instanceName) const
 {
 	bool result = false;

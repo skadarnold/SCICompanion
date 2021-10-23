@@ -441,7 +441,7 @@ Script *Decompile(const GameFolderHelper &helper, const CompiledScript &compiled
 	// First, the objects (instances, classes)
 	for (auto &object : compiledScript._objects)
 	{
-#ifdef KAWA_FILE993
+#ifdef FORCE_FILE993TOFILE
 		//Force script 993 class 0 to be "File"
 		if (compiledScript.GetScriptNumber() == 993)
 		{

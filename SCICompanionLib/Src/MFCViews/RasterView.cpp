@@ -2575,7 +2575,7 @@ void CRasterView::_OnPaste(bool fTransparent, bool provideOptions)
 							g_vgaPaletteMapping,
 							convertStatus
 							);
-#ifndef KAWA_NOTRANSPARENCYNAG
+#ifndef DISABLE_TRANSPARENCYNAG
 						if (IsFlagSet(convertStatus, BitmapConvertStatus::MappedToTransparentColor))
 						{
 							vector<pair<int, string>> buttons = { { MessageBoxCustomization::Yes, "Try again" }, { MessageBoxCustomization::No, "This is OK"} };

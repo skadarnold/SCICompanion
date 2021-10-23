@@ -383,7 +383,7 @@ void VariableDecl::AddSimpleInitializer(const PropertyValue &value)
 	AddStatement(make_unique<PropertyValue>(value));
 }
 
-#if defined(PHIL_LDMSTM) || defined(PHIL_FOREACH)
+#if defined(ENABLE_LDMSTM) || defined(ENABLE_FOREACH)
 VariableDecl::VariableDecl(const std::string &name) : StatementsNode(), TypedNode(), _size(1), _unspecifiedSize(false), _name(name) {}
 #endif
 
@@ -543,7 +543,7 @@ StatementsNode::StatementsNode(SyntaxNodeVector statements) : _segments(std::mov
 
 }
 
-#ifdef PHIL_VERBS
+#ifdef ENABLE_VERBS
 void ClassDefinition::AddVerbHandler(std::unique_ptr<VerbHandlerDefinition> verbHandler)
 {
 	_verbHandlers.push_back(std::move(verbHandler));
@@ -670,13 +670,13 @@ void ClassDefDeclaration::Accept(ISyntaxNodeVisitor &visitor) const { visitor.En
 void SelectorDeclaration::Accept(ISyntaxNodeVisitor &visitor) const { visitor.Enter(*this); visitor.Visit(*this); visitor.Leave(*this); }
 void GlobalDeclaration::Accept(ISyntaxNodeVisitor &visitor) const { visitor.Enter(*this); visitor.Visit(*this); visitor.Leave(*this); }
 void ExternDeclaration::Accept(ISyntaxNodeVisitor &visitor) const { visitor.Enter(*this); visitor.Visit(*this); visitor.Leave(*this); }
-#ifdef PHIL_VERBS
+#ifdef ENABLE_VERBS
 void VerbHandlerDefinition::Accept(ISyntaxNodeVisitor &visitor) const { visitor.Enter(*this); visitor.Visit(*this); visitor.Leave(*this); }
 void VerbClauseStatement::Accept(ISyntaxNodeVisitor &visitor) const { visitor.Enter(*this); visitor.Visit(*this); visitor.Leave(*this); }
 #endif
-#ifdef PHIL_FOREACH
+#ifdef ENABLE_FOREACH
 void ForEachLoop::Accept(ISyntaxNodeVisitor &visitor) const { visitor.Enter(*this); visitor.Visit(*this); visitor.Leave(*this); }
 #endif
-#ifdef KAWA_GETPOLY
+#ifdef ENABLE_GETPOLY
 void GetPolyStatement::Accept(ISyntaxNodeVisitor &visitor) const { visitor.Enter(*this); visitor.Visit(*this); visitor.Leave(*this); }
 #endif

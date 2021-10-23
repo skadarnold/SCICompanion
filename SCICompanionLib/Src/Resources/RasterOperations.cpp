@@ -596,7 +596,7 @@ RasterChange InsertCel(RasterComponent &raster, CelIndex celIndex, bool before, 
 	if (IsValidLoopCel(raster, celIndex))
 	{
 		Loop &loop = raster.Loops[celIndex.loop];
-#ifndef KAWA_FONTLIMITBREAK
+#ifndef DISABLE_FONTLIMIT
 		if (loop.Cels.size() >= 256)
 		{
 			// "too many cels".  SCI Companion doesn't support more than 128.

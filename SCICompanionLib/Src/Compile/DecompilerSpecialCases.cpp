@@ -116,7 +116,7 @@ void _MassagePrint(ProcedureCall &proc, DecompileLookups &lookups)
 {
 	size_t parameterIndex = 1;
 	std::string dummy;
-	if (_DoesProcedureStartWithTextTuple(proc, lookups, false, dummy))
+	if (_DoesProcedureStartWithTextTuple(proc, lookups, lookups.SubstituteTextTuples, dummy))
 	{
 		parameterIndex++;
 	}

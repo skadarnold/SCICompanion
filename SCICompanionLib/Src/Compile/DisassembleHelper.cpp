@@ -85,6 +85,7 @@ bool _IsPreferredWord(const std::string &word)
 		|| (word == "eat")
 		|| (word == "throw")
 		|| (word == "run")
+		|| (word == "pod")
 
 		);
 

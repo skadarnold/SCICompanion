@@ -509,7 +509,7 @@ HRESULT ResourceBlob::CreateFromHandle(PCTSTR pszName, HANDLE hFile, int iPackag
 		sci::streamOwner streamOwner(hFile, header.cbCompressed);
 		_DecompressFromBits(streamOwner.getReader(), false);
 		_AssignDefaultResourceSourceFlags(*this, saveLocation);
-	}	
+	}
 	return hr;
 }
 
@@ -588,13 +588,10 @@ HRESULT ResourceBlob::SaveToHandle(HANDLE hFile, bool fNoHeader, DWORD *pcbWritt
 			uint8_t secondByte = 0x00;
 			if (header.Version.PackageFormat >= ResourcePackageFormat::SCI11)
 			{
-				if (header.Type == ResourceType::View)
+				//KAWA: https://sciprogramming.com/community/index.php?topic=1966.msg15135#msg15135
+				if (header.Type == ResourceType::View || header.Type == ResourceType::Pic)
 				{
 					secondByte = 0x80;
-				}
-				else if (header.Type == ResourceType::Pic)
-				{
-					secondByte = 0x81;
 				}
 			}
 			w |= ((uint16_t)secondByte) << 8;

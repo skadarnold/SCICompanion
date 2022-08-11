@@ -287,7 +287,7 @@ void ExportResourceAsBitmap(const ResourceEntity &resourceEntity)
 			// Get a file name
 			std::string name = data.GetName();
 			name += ".bmp";
-			CFileDialog fileDialog(FALSE, nullptr, name.c_str(), OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_NOCHANGEDIR, "Bitmaps (*.bitmap)|*.bitmap|All files (*.*)|*.*|");
+			CFileDialog fileDialog(FALSE, nullptr, name.c_str(), OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_NOCHANGEDIR, "Bitmaps (*.bitmap)|*.bitmap|All files (*.*)|*.*||");
 			if (IDOK == fileDialog.DoModal())
 			{
 				std::string fileName = (PCSTR)fileDialog.GetPathName();

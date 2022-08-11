@@ -892,7 +892,7 @@ void _ExportGIFDrawCallback(PicScreenFlags dwDrawFlags, const PicData &data, Plo
 		}
 	}
 }
-const TCHAR g_rgszGIFFilter[] = TEXT("GIF Files (*.gif)|*.gif|All Files (*.*)|*.*");
+const TCHAR g_rgszGIFFilter[] = TEXT("GIF Files (*.gif)|*.gif|All Files (*.*)|*.*||");
 
 RGBQUAD cgaPalette[] =
 {
@@ -1052,7 +1052,7 @@ void CPicView::_CleanUpPaste()
 
 
 // These are the formats that GDI+ uses.
-extern TCHAR g_szGdiplusFilter[] = "Image Files|*.jpg;*.jpeg;*.bmp;*.gif;*.png;*.tif;*.tiff;*.emf|All Files|*.*|";
+extern TCHAR g_szGdiplusFilter[] = "Image Files|*.jpg;*.jpeg;*.bmp;*.gif;*.png;*.tif;*.tiff;*.emf|All Files|*.*||";
 
 void CPicView::OnTraceBitmap()
 {

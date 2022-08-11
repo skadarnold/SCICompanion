@@ -403,7 +403,7 @@ void AudioPlaybackUI<T>::OnRecord()
 template <typename T>
 void AudioPlaybackUI<T>::OnBrowse()
 {
-	CFileDialog fileDialog(TRUE, nullptr, nullptr, 0, "WAV files (*.wav)|*.wav|All Files|*.*|");
+	CFileDialog fileDialog(TRUE, nullptr, nullptr, 0, "WAV files (*.wav)|*.wav|All Files|*.*||");
 	fileDialog.m_ofn.lpstrTitle = "Add wav to game";
 	if (IDOK == fileDialog.DoModal())
 	{
@@ -422,7 +422,7 @@ void AudioPlaybackUI<T>::OnBrowse()
 template <typename T>
 void AudioPlaybackUI<T>::OnExport()
 {
-	CFileDialog fileDialog(FALSE, ".wav", nullptr, 0, "WAV files (*.wav)|*.wav|All Files|*.*|");
+	CFileDialog fileDialog(FALSE, ".wav", nullptr, 0, "WAV files (*.wav)|*.wav|All Files|*.*||");
 	fileDialog.m_ofn.lpstrTitle = "Export as .wav";
 	if (IDOK == fileDialog.DoModal())
 	{

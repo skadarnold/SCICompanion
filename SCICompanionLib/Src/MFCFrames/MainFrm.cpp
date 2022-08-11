@@ -1739,21 +1739,21 @@ const TCHAR* g_szResourceSpecByType[(int)ResourceType::Max] =
 	PATCH_FILE_HEAP
 };
 
-const TCHAR g_szResourceFilter[] = TEXT("All resources|" PATCH_FILE_TYPES "|"
-	"Pics (pic.*)|pic.*;*.p56|"
-	"Views (view.*)|view.*;*.v56|"
-	"Vocabs (vocab.*)|vocab.*;*.voc|"
-	"Fonts (font.*)|font.*;*.fon|"
-	"Cursors (cursor.*)|cursor.*;*.cur|"
-	"Texts (test.*)|text.*;*.tex|"
-	"Sounds (sound.*)|sound.*;*.snd|"
-	"Patches (patch.*)|patch.*;*.pat|"
-	"Scripts (script.*)|script.*;*.scr|"
-	"Messages (*.msg)|*.msg|"
-	"Palettes (*.pal)|*.pal|"
-	"Audio (*.aud)|*.aud|"
-	"CD Audio (*.cda)|*.cda|"
-	"All files (*.*)|*.*|");
+const TCHAR g_szResourceFilter[] = TEXT("All resources|" PATCH_FILE_TYPES "||"
+	"Pics (pic.*)|pic.*;*.p56||"
+	"Views (view.*)|view.*;*.v56||"
+	"Vocabs (vocab.*)|vocab.*;*.voc||"
+	"Fonts (font.*)|font.*;*.fon||"
+	"Cursors (cursor.*)|cursor.*;*.cur||"
+	"Texts (test.*)|text.*;*.tex||"
+	"Sounds (sound.*)|sound.*;*.snd||"
+	"Patches (patch.*)|patch.*;*.pat||"
+	"Scripts (script.*)|script.*;*.scr||"
+	"Messages (*.msg)|*.msg||"
+	"Palettes (*.pal)|*.pal||"
+	"Audio (*.aud)|*.aud||"
+	"CD Audio (*.cda)|*.cda||"
+	"All files (*.*)|*.*||");
 
 //
 // Opens a resource from a file

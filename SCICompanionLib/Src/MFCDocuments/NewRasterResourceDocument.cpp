@@ -838,7 +838,7 @@ void CNewRasterResourceDocument::OnAnimate()
 	}
 }
 
-const TCHAR g_rgszHeaderFilter[] = TEXT("GIF Files (*.gif)|*.gif|All Files (*.*)|*.*");
+const TCHAR g_rgszHeaderFilter[] = TEXT("GIF Files (*.gif)|*.gif|All Files (*.*)|*.*||");
 
 void CNewRasterResourceDocument::ExportAsGif()
 {

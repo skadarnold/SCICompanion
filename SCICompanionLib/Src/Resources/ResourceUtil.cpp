@@ -44,7 +44,7 @@ SCI_RESOURCE_INFO g_resourceInfo[18] =
 	{ "heap", "Heap", "heap.{}", "{}.hep", "heap\\.{}", "{}\\.hep" },
 };
 
-const char filterString[] = "{0} resources ({1})|{1}|All files (*.*)|*.*|";
+const char filterString[] = "{0} resources ({1})|{1}|All files (*.*)|*.*||";
 
 std::string GetFileDialogFilterFor(ResourceType type, SCIVersion version)
 {

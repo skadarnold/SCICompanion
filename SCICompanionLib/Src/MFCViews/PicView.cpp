@@ -820,24 +820,31 @@ void CPicView::EditVGAPalette()
 			}
 		}
 
-		GetDocument()->ApplyChanges<PaletteComponent>(
-			[&cels, this](PaletteComponent &palette)
+		try
 		{
-			GetDocument()->SetPreviewPalette(&palette);
-			PicChangeHint hint = PicChangeHint::None;
-			PaletteComponent copy = palette;
-			PaletteEditorDialog paletteEditor(this, palette, cels, true);
-			if (IDOK == paletteEditor.DoModal())
+			GetDocument()->ApplyChanges<PaletteComponent>(
+				[&cels, this](PaletteComponent &palette)
 			{
-				if (copy != palette)
+				GetDocument()->SetPreviewPalette(&palette);
+				PicChangeHint hint = PicChangeHint::None;
+				PaletteComponent copy = palette;
+				PaletteEditorDialog paletteEditor(this, palette, cels, true);
+				if (IDOK == paletteEditor.DoModal())
 				{
-					hint |= PicChangeHint::Palette;
+					if (copy != palette)
+					{
+						hint |= PicChangeHint::Palette;
+					}
 				}
+				GetDocument()->SetPreviewPalette(nullptr);
+				return WrapHint(hint);
 			}
-			GetDocument()->SetPreviewPalette(nullptr);
-			return WrapHint(hint);
+			);
 		}
-		);
+		catch (std::exception x)
+		{
+			MessageBox("\"NYEEEH!\"\n\n\nNah, seriously. You may have tried to open the palette editor on a VGA Picture without having any \"Draw Bitmap\" commands in it. This message is only here so you don't CTD from an unhandled exception.", "Kawa raises a fist to the sky and says");
+		}
 	}
 }
 

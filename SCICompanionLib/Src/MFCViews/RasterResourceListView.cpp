@@ -149,7 +149,7 @@ BOOL CRasterResourceListCtrl::SetItemImage(int nItem, int nImageIndex)
 // Finds the smallest cel that is at least as big in each dimension as "dimensions".
 CelIndex _FindBestPreviewCel(int dimensions, RasterComponent &raster)
 {
-	CelIndex bestCelIndex;
+	CelIndex bestCelIndex = 0;
 	int minGap = dimensions;
 	for (int nLoop = 0; nLoop < raster.LoopCount(); nLoop++)
 	{

@@ -166,7 +166,7 @@ void AudioWaveformUI::SetRawLipSyncData(std::vector<alignment_result> &rawLipSyn
 		for (size_t i = 0; i < result.m_phonemes.size(); i++)
 		{
 
-			UILipSyncData uiData = { prevTime, result.m_phonemeEndTimes[i], converter.to_bytes(result.m_phonemes[i]) };
+			UILipSyncData uiData = { (uint32_t)prevTime, (uint32_t)result.m_phonemeEndTimes[i], converter.to_bytes(result.m_phonemes[i]) };
 			_rawLipSyncData.push_back(uiData);
 			prevTime = result.m_phonemeEndTimes[i];
 		}

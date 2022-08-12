@@ -1369,7 +1369,7 @@ void ReadChannel(sci::istream &stream, std::vector<SoundEvent> &events, DWORD &t
 		SoundEvent event;
 		// Get the delta time
 		_GetDeltaTime(stream, &event.wTimeDelta);
-		uint8_t bStatus;
+		uint8_t bStatus = 0;
 		if (stream.good())
 		{
 			totalTicks += event.wTimeDelta;

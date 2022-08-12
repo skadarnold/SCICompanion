@@ -1237,7 +1237,7 @@ BOOL _GetMenuItem(PCTSTR pszText, CMenu *pMenu, UINT *pnID)
 	UINT nCount = pMenu->GetMenuItemCount();
 	for (UINT i = 0; i < nCount; i++)
 	{
-		TCHAR szBuffer[MAX_PATH];
+		TCHAR szBuffer[MAX_PATH] = { 0 };
 		MENUITEMINFO mii = { 0 };
 		mii.cbSize = sizeof(mii);
 		mii.fMask = MIIM_STRING;

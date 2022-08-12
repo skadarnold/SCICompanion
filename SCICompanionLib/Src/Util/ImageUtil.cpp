@@ -884,7 +884,7 @@ bool EncodeResourceInBitmap(const ResourceBlob &blob, const BITMAPINFO &info, BY
 {
 	const BYTE *pResourceByte = blob.GetData();
 	DWORD cb = blob.GetLength();
-	BMP_ENCODEDRESOURCE_HEADER header = { (WORD)cb, 0x80 | (int)blob.GetType() };
+	BMP_ENCODEDRESOURCE_HEADER header = { (WORD)cb, (WORD)(0x80 | (int)blob.GetType()) };
 	cb += sizeof(header);
 
 	DWORD dwSizeBmp = (info.bmiHeader.biBitCount / 8) * CX_ACTUAL(info.bmiHeader.biWidth) * info.bmiHeader.biHeight;

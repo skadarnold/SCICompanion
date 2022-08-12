@@ -241,7 +241,7 @@ void QuickScriptsSidePane::_OpenItem(int iItem)
 {
 	if (iItem != -1) // Could be -1 if user clicked on the background.
 	{
-		TCHAR szName[MAX_PATH];
+		TCHAR szName[MAX_PATH] = { 0 };
 		LVITEM item = { 0 };
 		item.iItem = iItem;
 		item.pszText = szName;

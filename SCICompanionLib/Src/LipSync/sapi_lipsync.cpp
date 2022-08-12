@@ -222,7 +222,7 @@ bool sapi_lipsync::loadAudio(const std::wstring& audioFile)
             m_err = L"Error: Can't open audio file";
             throw(hr);
         }
-        GUID guid; // unused
+		GUID guid = { 0 }; // unused
         hr = this->m_audioStream->GetFormat(&guid, &m_pWaveFmt);
         if (hr != S_OK)
         {

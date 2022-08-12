@@ -238,7 +238,7 @@ int CCrystalTextView::_CalcActualLineLength(int nLineIndex, int nTo)
 	if (nLength > 0)
 	{
 		LPCTSTR pszLine = GetLineChars(nLineIndex);
-		LPTSTR pszChars = (LPTSTR) _alloca(sizeof(TCHAR) * (nLength + 1));
+		LPTSTR pszChars = (LPTSTR) _malloca(sizeof(TCHAR) * (nLength + 1));
 		memcpy(pszChars, pszLine, sizeof(TCHAR) * nLength);
 		pszChars[nLength] = 0;
 		LPTSTR pszCurrent = pszChars;
@@ -683,7 +683,7 @@ void CCrystalTextView::DrawSingleLine(CDC *pdc, const CRect &rc, int nLineIndex)
 	//	Parse the line
 	LPCTSTR pszChars = GetLineChars(nLineIndex);
 	DWORD dwCookie = GetParseCookie(nLineIndex - 1);
-	TEXTBLOCK *pBuf = (TEXTBLOCK *) _alloca(sizeof(TEXTBLOCK) * nLength * 3);
+	TEXTBLOCK *pBuf = (TEXTBLOCK *) _malloca(sizeof(TEXTBLOCK) * nLength * 3);
 	int nBlocks = 0;
 	m_pdwParseCookies[nLineIndex] = ParseLine(dwCookie, nLineIndex, pBuf, nBlocks);
 	ASSERT(m_pdwParseCookies[nLineIndex] != (DWORD) -1);

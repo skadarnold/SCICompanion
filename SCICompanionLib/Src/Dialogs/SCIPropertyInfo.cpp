@@ -151,7 +151,7 @@ HRESULT CDefinesEnumString::Next(ULONG celt, LPOLESTR *rgelt, ULONG *pceltFetche
 		if (SUCCEEDED(hr))
 		{
 			MultiByteToWideChar(CP_ACP, 0, strWord, -1, rgelt[*pceltFetched], cch);
-			*pceltFetched++;
+			pceltFetched++;
 			celt--;
 		}
 		_iIndex++;

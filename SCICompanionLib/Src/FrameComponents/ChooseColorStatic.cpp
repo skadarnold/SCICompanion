@@ -775,6 +775,7 @@ void CChooseBrushStatic::_DrawItem(CDC *pDC, int cx, int cy)
 		COLORREF bgColor = (bPaletteIndex == _bSelectedColorIndex) ? RGB(255, 255, 255) : (g_PaintManager->GetColor(COLOR_BTNFACE));
 		bmi._colors[0xe] = RGBQUADFromCOLORREF(bgColor);
 #pragma warning(suppress: 6386)
+#pragma warning(suppress: 6201)
 		bmi._colors[-1] = RGBQUADFromCOLORREF(g_PaintManager->GetColor(COLOR_BTNTEXT)); // REVIEW: Not sure why I'm using -1
 		StretchDIBits((HDC)*pDC, rectSquare.left, rectSquare.top, RECTWIDTH(rectSquare), RECTHEIGHT(rectSquare),
 			0, 0, PATTERN_PAINT_SIZE, PATTERN_PAINT_SIZE, &dataBrush, &bmi, DIB_RGB_COLORS, SRCCOPY);					

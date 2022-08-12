@@ -203,8 +203,8 @@ int decompressLZW(BYTE *dest, BYTE *src, int length, int complength)
 	WORD token; /* The last received value */
 	WORD maxtoken = 0x200; /* The biggest token */
 
-	WORD tokenlist[4096]; /* pointers to dest[] */
-	WORD tokenlengthlist[4096]; /* char length of each token */
+	WORD tokenlist[4096] = { 0 }; /* pointers to dest[] */
+	WORD tokenlengthlist[4096] = { 0 }; /* char length of each token */
 	WORD tokenctr = 0x102; /* no. of registered tokens (starts here)*/
 
 	WORD tokenlastlength = 0;

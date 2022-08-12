@@ -256,7 +256,7 @@ void CBitmapToPicDialog::DoDataExchange(CDataExchange* pDX)
 	// Enable the convert button if we have a bitmap
 	((CButton*)GetDlgItem(IDC_BUTTONCONVERT))->EnableWindow(_pbmpCurrent != nullptr);
 
-	int nID;
+	int nID = 0;
 	switch(_iAlgorithm)
 	{
 	case 1:

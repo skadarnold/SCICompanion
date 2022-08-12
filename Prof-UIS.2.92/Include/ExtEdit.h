@@ -348,7 +348,7 @@ public:
 		ASSERT_VALID( this ); ASSERT( ::IsWindow( m_hWnd ) ); ASSERT( m_bRichMode );
 		CHARRANGE cr; cr.cpMin = cr.cpMax = 0;
 		::SendMessage( m_hWnd, EM_EXGETSEL, 0, (LPARAM)&cr );
-		LPTSTR lpsz = (LPTSTR)_alloca((cr.cpMax - cr.cpMin + 1)*2);
+		LPTSTR lpsz = (LPTSTR)_malloca((cr.cpMax - cr.cpMin + 1)*2);
 		lpsz[0] = NULL;
 		::SendMessage( m_hWnd, EM_GETSELTEXT, 0, (LPARAM)lpsz );
 		return lpsz;

@@ -310,7 +310,7 @@ BOOL CCrystalTextBuffer::LoadFromFile(LPCTSTR pszFileName, int nCrlfStyle /*= CR
 		int nCurrentLength = 0;
 
 		const DWORD dwBufSize = 32768;
-		char *pcBuf = (char *) _alloca(dwBufSize);
+		char *pcBuf = (char *) _malloca(dwBufSize);
 		DWORD dwCurSize;
 		if (! ::ReadFile(hFile, pcBuf, dwBufSize, &dwCurSize, NULL))
 			__leave;

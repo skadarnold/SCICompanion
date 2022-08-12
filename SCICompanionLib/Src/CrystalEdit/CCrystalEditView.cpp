@@ -1303,7 +1303,7 @@ void CCrystalEditView::OnEditOperation(int nAction, LPCTSTR pszText)
 			if ((nPos + nTabs) > 0)
 			{
 				//	Insert part of the previous line
-				TCHAR *pszInsertStr = (TCHAR *) _alloca(sizeof(TCHAR) * (nPos + nTabs + 1));
+				TCHAR *pszInsertStr = (TCHAR *) _malloca(sizeof(TCHAR) * (nPos + nTabs + 1));
                 // Prev whitespace:
 				_tcsncpy(pszInsertStr, pszLineChars, nPos);
                 pszInsertStr[nPos] = 0;

@@ -561,7 +561,7 @@ bool CompiledScript::_LoadSCI0_SCI1(sci::istream &byteStream)
 						uint16_t wCodeLength = wSectionSize - 4;
 						uint16_t wCodePosTO = static_cast<uint16_t>(byteStream.tellg());
 						byteStream.seekg(wCodeLength); // Skip this section.
-						CodeSection section = { wCodePosTO, wCodePosTO + wCodeLength };
+						CodeSection section = { wCodePosTO, (uint16_t)(wCodePosTO + wCodeLength) };
 						_codeSections.push_back(section);
 					}
 					break;

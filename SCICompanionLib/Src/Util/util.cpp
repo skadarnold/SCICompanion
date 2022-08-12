@@ -357,7 +357,7 @@ EGACOLOR GetClosestEGAColorFromSet(int iAlgorithm, bool gammaCorrected, COLORREF
 	for (int iIndex = 0; iIndex < cColors; iIndex++)
 	{
 		BYTE egaIndex = EGACOLOR_TO_BYTE(rgColors[iIndex]);
-		int closeness;
+		int closeness =  0;
 		switch (iAlgorithm)
 		{
 		case 1:
@@ -524,7 +524,7 @@ const std::string MakeFile(PCSTR pszContent, const std::string &filename)
 
 std::string MakeTextFile(PCSTR pszContent, const std::string &filename)
 {
-	char szTempPath[MAX_PATH];
+	char szTempPath[MAX_PATH] = { 0 };
 	bool fOk = false;
 	if (PathIsRelative(filename.c_str()))
 	{
@@ -930,7 +930,7 @@ void throw_if(bool value, const char *message)
 std::string GetMessageFromLastError(const std::string &details)
 {
 	LPVOID lpMsgBuf;
-	LPVOID lpDisplayBuf;
+	LPTSTR lpDisplayBuf;
 	DWORD dw = GetLastError();
 
 	FormatMessage(
@@ -945,9 +945,9 @@ std::string GetMessageFromLastError(const std::string &details)
 
 	// Display the error message and exit the process
 
-	lpDisplayBuf = (LPVOID)LocalAlloc(LMEM_ZEROINIT,
+	lpDisplayBuf = (LPTSTR)LocalAlloc(LMEM_ZEROINIT,
 		(lstrlen((LPCTSTR)lpMsgBuf) + lstrlen((LPCTSTR)details.c_str()) + 40) * sizeof(TCHAR));
-	StringCchPrintf((LPTSTR)lpDisplayBuf,
+	StringCchPrintf(lpDisplayBuf,
 		LocalSize(lpDisplayBuf) / sizeof(TCHAR),
 		TEXT("%s failed with error %d: %s"),
 		details.c_str(), dw, lpMsgBuf);

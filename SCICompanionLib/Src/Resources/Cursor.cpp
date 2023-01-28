@@ -90,7 +90,7 @@ void CursorReadFromSCI1(ResourceEntity &resource, sci::istream &byteStream, cons
 	CursorReadFromVersioned(resource, byteStream, false);
 }
 
-void CursorWriteTo(const ResourceEntity &resource, sci::ostream &byteStream, std::map<BlobKey, uint32_t> &propertyBag)
+void CursorWriteToSCI0(const ResourceEntity &resource, sci::ostream &byteStream, std::map<BlobKey, uint32_t> &propertyBag)
 {
 	// We only ever have one cel and one loop
 	const Cel &cel = resource.GetComponent<RasterComponent>().Loops[0].Cels[0];
@@ -131,6 +131,54 @@ void CursorWriteTo(const ResourceEntity &resource, sci::ostream &byteStream, std
 	byteStream.WriteBytes((uint8_t*)rgwMask, sizeof(rgwMask));
 	byteStream.WriteBytes((uint8_t*)rgwWhiteOrBlack, sizeof(rgwWhiteOrBlack));
 }
+
+void CursorWriteToSCI1(const ResourceEntity &resource, sci::ostream &byteStream, std::map<BlobKey, uint32_t> &propertyBag)
+{
+	// We only ever have one cel and one loop
+	const Cel &cel = resource.GetComponent<RasterComponent>().Loops[0].Cels[0];
+
+	byteStream.WriteWord(0);
+	// The hot spot
+	// REVIEW: some cursors have 480 and 320 in the first two spots.  Do we need to preserve that?
+	byteStream.WriteWord(cel.placement.y == 8 ? 0x00ff : 0x0000);
+
+	uint16_t rgwMask[16];
+	ZeroMemory(rgwMask, sizeof(rgwMask));
+	uint16_t rgwWhiteOrBlack[16];
+	ZeroMemory(rgwWhiteOrBlack, sizeof(rgwWhiteOrBlack));
+	for (int iRow = 0; iRow < CursorDimensions; iRow++)
+	{
+		for (int iCol = 0; iCol < CursorDimensions; iCol++)
+		{
+			int iIndex = CursorDimensions * (CursorDimensions - 1 - iRow) + iCol;
+			switch (cel.Data[iIndex])
+			{
+			case 0x0f: // White
+				rgwWhiteOrBlack[iRow] |= (1 << (CursorDimensions - 1 - iCol));
+				break;
+
+			case 0x00: // Black
+					   // Nothing to set, it's already 0
+				break;
+
+			case 0x07: //KAWA: Transparent
+				rgwWhiteOrBlack[iRow] |= (1 << (CursorDimensions - 1 - iCol));
+				rgwMask[iRow] |= (1 << (CursorDimensions - 1 - iCol));
+				break;
+
+			default:   // Transparent
+				assert(cel.Data[iIndex] == CursorTransparent);
+				// Set the bit to indicate it's transparrent
+				rgwMask[iRow] |= (1 << (CursorDimensions - 1 - iCol));
+				break;
+			}
+		}
+	}
+
+	byteStream.WriteBytes((uint8_t*)rgwMask, sizeof(rgwMask));
+	byteStream.WriteBytes((uint8_t*)rgwWhiteOrBlack, sizeof(rgwWhiteOrBlack));
+}
+
 
 uint8_t cursorPaletteMapping0[] ={ 0, 0xf, 0x3, 0x3 };
 
@@ -179,7 +227,7 @@ ResourceTraits cursorTraitsEGA =
 {
 	ResourceType::Cursor,
 	&CursorReadFromSCI0,
-	&CursorWriteTo,
+	&CursorWriteToSCI0,
 	&NoValidationFunc,
 	nullptr
 };
@@ -188,7 +236,7 @@ ResourceTraits cursorTraitsVGA =
 {
 	ResourceType::Cursor,
 	&CursorReadFromSCI1,
-	nullptr,
+	&CursorWriteToSCI1,
 	&NoValidationFunc
 };
 

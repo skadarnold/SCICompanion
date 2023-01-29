@@ -144,7 +144,11 @@ struct SCIVersion
 		//  SCI0	999
 		//  SCI1+   16384
 		//  SCI2	64999   (guessed)
-		return SeparateHeapResources ? ((PackageFormat >= ResourcePackageFormat::SCI2) ? 64999 : 16384) : 999;
+		if (PackageFormat >= ResourcePackageFormat::SCI2)
+			return 64999;
+		if (PackageFormat >= ResourcePackageFormat::SCI1)
+			return 16384;
+		return 999;
 	}
 };
 

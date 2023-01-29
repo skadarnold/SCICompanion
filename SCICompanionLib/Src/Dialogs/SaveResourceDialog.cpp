@@ -93,9 +93,13 @@ BOOL SaveResourceDialog::_ValidateData()
 	// The audio map is resource 65535, so allow that through.
 	if ((_iResourceNumber < 0) || (_iResourceNumber > appState->GetVersion().GetMaximumResourceNumber() && _iResourceNumber != 0xFFFF))
 	{
-		AfxMessageBox(TEXT("Please specify a resource number between 0 and 999"),
-					  MB_OK | MB_APPLMODAL | MB_ICONSTOP);
-		fRet = FALSE;	
+		if (appState->GetVersion().PackageFormat >= ResourcePackageFormat::SCI2)
+			AfxMessageBox(TEXT("Please specify a resource number between 0 and 64999."), MB_OK | MB_APPLMODAL | MB_ICONSTOP);
+		else if (appState->GetVersion().PackageFormat >= ResourcePackageFormat::SCI1)
+			AfxMessageBox(TEXT("Please specify a resource number between 0 and 16384."), MB_OK | MB_APPLMODAL | MB_ICONSTOP);
+		else 
+			AfxMessageBox(TEXT("Please specify a resource number between 0 and 999."), MB_OK | MB_APPLMODAL | MB_ICONSTOP);
+		fRet = FALSE;
 	}
 	else if ((_iPackageNumber < appState->GetVersion().DefaultVolumeFile) || (_iPackageNumber > 63))
 	{

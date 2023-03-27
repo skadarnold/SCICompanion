@@ -155,6 +155,9 @@ csx/
 # Windows Store app package directory
 AppPackages/
 
+# Visual Studio dir created in newer versions
+.vs/
+
 # Others
 sql/
 *.Cache

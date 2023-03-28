@@ -295,7 +295,7 @@ bool _ReadStringSCI(_TContext *pContext, _It &stream, std::string &str)
 		bool addedSpace = false;
 		bool lookingForSecondHex = false;
 		int chHex = 0;
-		while ((ch = *(++stream)) && ((ch != Q2) || (chPrev == '\\')))
+		while ((ch = *(++stream)) && ((ch != Q2) || fEscape))
 		{
 			chPrev = ch;
 			bool processCharNormally = true;
@@ -325,6 +325,10 @@ bool _ReadStringSCI(_TContext *pContext, _It &stream, std::string &str)
 					case '_':
 						// \_ is an underscore.
 						str += "_";
+						break;
+					case '\\':
+						// "\\" should output a single backslash, "\"
+						str += '\\';
 						break;
 					case Q2:
 						str += Q2;

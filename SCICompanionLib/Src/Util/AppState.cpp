@@ -853,6 +853,7 @@ char* AppState::GetAboutText()
 	return
 		"By Phil Fortier (IceFall Games)\r\n"
 		"Modified by Kawa (Firrhna Productions)\r\n"
+		"Additional contributions by Laurence Dougal Myers (https://www.laurencemyers.com.au)\r\n"
 		"\r\n"
 		"Parts of code (""Crystal Edit"" text editor) by Andrei Stcherbatchenko\r\n"
 		"Contains decompression routines from the ScummVM project.\r\n"

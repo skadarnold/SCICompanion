@@ -295,7 +295,7 @@ bool _ReadStringSCI(_TContext *pContext, _It &stream, std::string &str)
 		bool addedSpace = false;
 		bool lookingForSecondHex = false;
 		int chHex = 0;
-		while ((ch = *(++stream)) && ((ch != Q2) || (chPrev == '\\')))
+		while ((ch = *(++stream)) && ((ch != Q2) || fEscape))
 		{
 			chPrev = ch;
 			bool processCharNormally = true;
@@ -326,6 +326,10 @@ bool _ReadStringSCI(_TContext *pContext, _It &stream, std::string &str)
 						// \_ is an underscore.
 						str += "_";
 						break;
+					case '\\':
+						// "\\" should output a single backslash, "\"
+						str += '\\';
+						break;
 					case Q2:
 						str += Q2;
 						break;
@@ -338,12 +342,8 @@ bool _ReadStringSCI(_TContext *pContext, _It &stream, std::string &str)
 						}
 						else
 						{
-							str += "\\"; // Add it, the following char was not an escape char
-							//processCharNormally = true; // Add the current char too
-							/* This is actually broken? "sciAudio\\command.con" is mangled into "sciAudio\\mmand.con"
-							 * and that's just plain wrong. From testing, removing this line lets the whole string
-							 * survive unscathed. -- Kawa
-							 */
+							// The following char was not an escape char. Don't output the "\" char, just the one that followed.
+							processCharNormally = true; // Add the current char
 						}
 				}
 			}

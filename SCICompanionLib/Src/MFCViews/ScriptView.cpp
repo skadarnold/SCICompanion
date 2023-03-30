@@ -682,6 +682,24 @@ BOOL IsSCINumber(LPCTSTR pszChars, int nLength)
 	return IsStudioNumber(pszChars, nLength);
 }
 
+BOOL IsStringCharEscaped(LPCTSTR pszChars, int indexOfChar)
+{
+	BOOL isEscaped{ FALSE };
+	if (indexOfChar != 0)
+	{
+		for (int i{ indexOfChar - 1 }; i >= 0; i--)
+		{
+			if (pszChars[i] == '\\') {
+				isEscaped = !isEscaped;
+			}
+			else {
+				break;
+			}
+		}
+	}
+	return isEscaped;
+}
+
 #define DEFINE_BLOCK(pos, colorindex)	\
 	ASSERT((pos) >= 0 && (pos) <= nLength);\
 	if (pBuf != nullptr)\
@@ -818,7 +836,7 @@ DWORD CScriptView::_ParseLineSCI(DWORD dwCookie, int nLineIndex, TEXTBLOCK *pBuf
 		//	String constant "...."
 		if (dwCookie & COOKIE_STRING)
 		{
-			if (pszChars[I] == '"' && (I == 0 || pszChars[I - 1] != '\\'))
+			if (pszChars[I] == '"' && !IsStringCharEscaped(pszChars, I))
 			{
 				dwCookie &= ~COOKIE_STRING;
 				bRedefineBlock = TRUE;
@@ -829,7 +847,7 @@ DWORD CScriptView::_ParseLineSCI(DWORD dwCookie, int nLineIndex, TEXTBLOCK *pBuf
 		// Internal string {....}
 		if (dwCookie & COOKIE_INTERNALSTRING)
 		{
-			if (pszChars[I] == '}' && (I == 0 || pszChars[I - 1] != '\\'))
+			if (pszChars[I] == '}' && !IsStringCharEscaped(pszChars, I))
 			{
 				dwCookie &= ~COOKIE_INTERNALSTRING;
 				bRedefineBlock = TRUE;
@@ -840,7 +858,7 @@ DWORD CScriptView::_ParseLineSCI(DWORD dwCookie, int nLineIndex, TEXTBLOCK *pBuf
 		//	Said spec '..'
 		if (dwCookie & COOKIE_CHAR)
 		{
-			if (pszChars[I] == '\'' && (I == 0 || pszChars[I - 1] != '\\'))
+			if (pszChars[I] == '\'' && !IsStringCharEscaped(pszChars, I))
 			{
 				dwCookie &= ~COOKIE_CHAR;
 				bRedefineBlock = TRUE;

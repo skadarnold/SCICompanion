@@ -2189,7 +2189,6 @@ CodeResult Assignment::OutputByteCode(CompileContext &context) const
 			break;
 		case ResolvedToken::ClassProperty:
 			assert(pIndexer == nullptr || context.HasErrors());
-			StoreProperty(context, wIndex, false, GetLineNumber());  // false -> accumulator
 #ifdef ENABLE_LDMSTM
 			if (_variable->IsDeref)
 			{
@@ -2203,6 +2202,8 @@ CodeResult Assignment::OutputByteCode(CompileContext &context) const
 			{
 				StoreProperty(context, wIndex, false, GetLineNumber());  // false -> accumulator
 			}
+#else
+			StoreProperty(context, wIndex, false, GetLineNumber());  // false -> accumulator
 #endif
 			break;
 		}

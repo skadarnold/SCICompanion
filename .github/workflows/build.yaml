@@ -44,6 +44,10 @@ jobs:
         msbuild SCICompanion.sln /m /p:Configuration=${{ matrix.configuration }} /p:Platform=${{ matrix.platform }} /p:VisualStudioVersion=14.0 /p:WindowsTargetPlatformVersion=8.1
         mkdir artifacts
         copy ${{ matrix.configuration }}\*.exe artifacts
+        Get-ChildItem ${{ matrix.configuration }} -Directory |
+        Foreach-Object {
+            Copy-Item -Path $_.FullName -Destination "artifacts" -recurse
+        }
 
     - name: Upload Artifacts
       uses: actions/upload-artifact@v3

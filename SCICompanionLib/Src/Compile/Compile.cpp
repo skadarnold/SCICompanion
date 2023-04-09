@@ -553,22 +553,43 @@ void PushImmediateAt(CompileContext &context, WORD wValue, code_pos pos, int lin
 }
 
 //
-// We can do optimizations if the indexer is actually just an immediate value
+// This used to perform an optimization, where an indexed local variable would be
+// optimized to a direct reference to the value. However, that optimization
+// could cause problems later when auto-detecting variable names, and one local holding
+// an array of 34 items would be split 3 locals; the array values before the indexed value,
+// the indexed value, and the rest.
+// e.g.
+// (local
+//   [local0 5] = [1 2 3 4 5]
+// )
+// ... later ...
+// (= temp [local0 2])
 //
-bool CanDoIndexOptimization(const SyntaxNode *pIndexer, WORD &wIndex)
+// would become
+//
+// (local
+//   [local0 2] = [1 2]
+//   local1 = 3
+//   [local2 2] = [4 5]
+// )
+// ... later ...
+// (= temp local1)
+//
+// The problem seems to be in AutoDetectVariableNames, where e.g. `local2` might get a name that's
+//  already used by another variable.
+// At least we can avoid the issue by not optimizing.
+//
+bool IsIndexedByImmediateNumber(const SyntaxNode *pIndexer)
 {
-	bool fIndexerOptimize = false;
 	if (pIndexer->GetNodeType() == ComplexPropertyValue::MyNodeType)
 	{
 		const ComplexPropertyValue *pValue = static_cast<const ComplexPropertyValue*>(pIndexer);
 		if (pValue->GetType() == ValueType::Number)
 		{
-			// Instead of using a fancy instruction, just add to the index of the thing we have.
-			wIndex += pValue->GetNumberValue();
-			fIndexerOptimize = true;
+			return true;
 		}
 	}
-	return fIndexerOptimize;
+	return false;
 }
 
 
@@ -628,16 +649,10 @@ void VariableOperand(CompileContext &context, WORD wIndex, BYTE bOpcode, int lin
 {
 	if (pIndexer)
 	{
-		// Put the indexer value in the accumulator.
-		// First check if we can optimize this though... is the indexer just an immediate?
-		if (!CanDoIndexOptimization(pIndexer, wIndex))
-		{
-			// No optimization :-(
-			// Ask the indexer to put its value in the accumulator, and use this as an index for our operation.
-			COutputContext accContext(context, OC_Accumulator);
-			pIndexer->OutputByteCode(context);
-			bOpcode |= VO_ACC_AS_INDEX_MOD;
-		}
+		// Ask the indexer to put its value in the accumulator, and use this as an index for our operation.
+		COutputContext accContext(context, OC_Accumulator);
+		pIndexer->OutputByteCode(context);
+		bOpcode |= VO_ACC_AS_INDEX_MOD;
 	}
 	// REVIEW: we might be able to do extra error checking here, if an index is out of bounds
 	// (could happen with index optimization for immediate array indicies)
@@ -653,16 +668,10 @@ void LoadEffectiveAddress(CompileContext &context, WORD wIndex, BYTE bVarType, c
 {
 	if (pIndexer)
 	{
-		// Put the indexer value in the accumulator
-		// First check if we can optimize this though... is the indexer just an immediate?
-		if (!CanDoIndexOptimization(pIndexer, wIndex))
-		{
-			// No optimization :-(
-			// Ask the indexer to put its value in teh accumulator, and use this as an index for our operation.
-			COutputContext accContext(context, OC_Accumulator);
-			pIndexer->OutputByteCode(context);
-			bVarType |= LEA_ACC_AS_INDEX_MOD;
-		}
+		// Ask the indexer to put its value in teh accumulator, and use this as an index for our operation.
+		COutputContext accContext(context, OC_Accumulator);
+		pIndexer->OutputByteCode(context);
+		bVarType |= LEA_ACC_AS_INDEX_MOD;
 	}
 	context.code().inst(lineNumber, Opcode::LEA, bVarType << 1, wIndex);
 }
@@ -1223,13 +1232,9 @@ CodeResult PropertyValueBase::OutputByteCode(CompileContext &context) const
 				case ResolvedToken::ScriptString:
 					{
 						context.code().inst(GetLineNumber(), (oc == OC_Stack) ? Opcode::LOFSS : Opcode::LOFSA, context.GetTempToken(ValueType::String, context.GetScriptStringFromToken(_stringValue)));
-						WORD wImmediateIndex = 0;
-						if (GetIndexer())
+						if (GetIndexer() && !IsIndexedByImmediateNumber(GetIndexer()))
 						{
-							if (!CanDoIndexOptimization(GetIndexer(), wImmediateIndex))
-							{
-								context.ReportError(GetIndexer(), "Expected an integer for the index.");
-							}
+							context.ReportError(GetIndexer(), "Expected an integer for the index.");
 						}
 					}
 					break;
@@ -2054,15 +2059,6 @@ CodeResult Assignment::OutputByteCode(CompileContext &context) const
 #endif
 		// This is something like +=, *=, etc...
 
-		// If we have an indexer, check here if it's an immediate value (this optimization is in
-		// VariableOperand, but things are much simple for the += type operations when the indexer is
-		// immediate).
-		if (pIndexer && CanDoIndexOptimization(pIndexer, wIndex))
-		{
-			// Get rid of this... we'll just use the adjusted the index.
-			pIndexer = nullptr;
-		}
-
 		BYTE bOpcodeMod = VO_LOAD | VO_STACK; // ????
 		switch (tokenType)
 		{
@@ -2133,11 +2129,6 @@ CodeResult Assignment::OutputByteCode(CompileContext &context) const
 		SpeciesIndex wValueType;
 		// Regular = assignment
 		// The indexer will use the accumulator, so that means we'll need to use the stack for the value in that case
-		if (pIndexer && CanDoIndexOptimization(pIndexer, wIndex))
-		{
-			// Get rid of this... we'll just use the adjusted the index.
-			pIndexer = nullptr;
-		}
 		ocWhereWePutValue = OC_Accumulator; // Always the accumulator.
 		bool fValueWasOnStack;
 		// Write the value
@@ -3386,13 +3377,9 @@ CodeResult Asm::OutputByteCode(CompileContext &context) const
 											case ResolvedToken::ScriptString:
 											{
 												args[i] = context.GetTempToken(ValueType::String, context.GetScriptStringFromToken(pValue->GetStringValue()));
-												WORD wImmediateIndex = 0;
-												if (pValue->GetIndexer())
+												if (pValue->GetIndexer() && !IsIndexedByImmediateNumber(pValue->GetIndexer()))
 												{
-													if (!CanDoIndexOptimization(pValue->GetIndexer(), wImmediateIndex))
-													{
-														context.ReportError(pValue->GetIndexer(), "Expected an integer for the index.");
-													}
+													context.ReportError(pValue->GetIndexer(), "Expected an integer for the index.");
 												}
 											}
 											break;

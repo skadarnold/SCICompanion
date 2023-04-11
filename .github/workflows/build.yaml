@@ -1,0 +1,49 @@
+name: Build SCI Companion
+
+on:
+  workflow_call:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    strategy:
+      matrix:
+        configuration: [Kawa]
+        platform: [Win32]
+
+    steps:
+    - uses: actions/checkout@v3
+
+    # Add msbuild action
+    - name: Add MSBuild to PATH
+      uses: microsoft/setup-msbuild@v1.1
+
+    # Install VS 2015 (Platform Tools v140), and Windows 8.1 SDK. See: https://stackoverflow.com/a/74673996/953887
+    - name: Install MSVC 2015 (v140) and Windows 8.1 SDK
+      shell: powershell
+      run: |
+        $VS_BTOOLS_EXE="vs_buildtools.exe"
+        $VS_BTOOLS_URI="https://aka.ms/vs/15/release/vs_buildtools.exe"
+        Invoke-WebRequest -Uri $VS_BTOOLS_URI -OutFile $VS_BTOOLS_EXE
+        Start-Process -FilePath ./vs_BuildTools.exe -ArgumentList `
+        "--add", "Microsoft.VisualStudio.Component.VC.140", `
+        "--add", "Microsoft.VisualStudio.Component.Windows81SDK", `
+        "--quiet", "--norestart", "--force", "--wait" -Wait -PassThru
+
+    # Compile the solution
+    - name: Build
+      run: |
+        msbuild SCICompanion.sln /m /p:Configuration=${{ matrix.configuration }} /p:Platform=${{ matrix.platform }} /p:VisualStudioVersion=14.0 /p:WindowsTargetPlatformVersion=8.1
+        mkdir artifacts
+        copy ${{ matrix.configuration }}\*.exe artifacts
+        Get-ChildItem ${{ matrix.configuration }} -Directory |
+        Foreach-Object {
+            Copy-Item -Path $_.FullName -Destination "artifacts" -recurse
+        }
+
+    - name: Upload Artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: SCICompanion-${{ matrix.configuration }}-${{ matrix.platform }}-${{ github.sha }}
+        path: artifacts

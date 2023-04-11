@@ -1,0 +1,77 @@
+name: Nightly Build
+
+on:
+  schedule:
+    - cron: '15 7 * * *'
+
+jobs:
+  # Only execute if the current commit does _not_ have a tag that starts with "nightly/".
+  # This is intended to avoid creating a nightly build if there's no changes.
+  check-should-execute:
+    runs-on: windows-latest
+    outputs:
+      should_execute: ${{ steps.should_execute_step.outputs.should_execute }}
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Get tags
+        run: git fetch --tags origin
+
+      - id: should_execute_step
+        shell: bash
+        run: |
+          git tag --points-at ${{ github.sha }}
+          if [ $(git tag --list nightly/* --points-at HEAD) ]; then
+            echo "Nightly tag found, skipping build."
+          else
+            echo "No nightly tag found, building."
+            echo "should_execute=true" >> $GITHUB_OUTPUT
+          fi
+
+  build:
+    needs: check-should-execute
+    if: ${{ needs.check-should-execute.outputs.should_execute }}
+    uses: ./.github/workflows/build.yaml
+
+  create-nightly-release:
+    runs-on: windows-latest
+
+    needs: [check-should-execute, build]
+    if: ${{ needs.check-should-execute.outputs.should_execute }}
+
+    permissions:
+      contents: write
+
+    steps:
+    - name: Download artifacts
+      uses: actions/download-artifact@v3
+      with:
+        path: release-artifacts/
+
+    - name: Get the current date (UTC)
+      id: get-date
+      shell: bash
+      run: |
+        echo "nightly_date=$(date -u +%Y-%m-%d)" >> $GITHUB_OUTPUT
+    
+    # actions/download-artifact will unzip each artifact to its own directory, so we need to re-zip them.
+    # We'll also replace the commit SHA with the date in the zip file name.
+    - name: Re-zip each artifact
+      shell: powershell
+      run: |
+        Get-ChildItem release-artifacts -Directory |
+        Foreach-Object {
+            Compress-Archive -Path $_.FullName -DestinationPath ("release-artifacts/" + ($_ -replace "[0-9a-z]{40}","${{ steps.get-date.outputs.nightly_date }}") + ".zip")
+        }
+
+    - name: Create a release
+      uses: ncipollo/release-action@v1
+      with:
+        artifactErrorsFailBuild: true
+        artifacts: "release-artifacts/*.zip"
+        commit: ${{ github.sha }}
+        generateReleaseNotes: true
+        name: Nightly build for ${{ steps.get-date.outputs.nightly_date }} 
+        prerelease: true
+        skipIfReleaseExists: true
+        tag: nightly/${{ steps.get-date.outputs.nightly_date }}

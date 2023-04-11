@@ -4107,7 +4107,7 @@ void CPicView::_UpdateCursor()
 		{
 			if (_fShowPriorityLines && _fPriLineHover && (_priBarMoveIndex != -1))
 			{
-				SetCursor(LoadCursor(NULL, MAKEINTRESOURCE(IDC_SIZENS)));
+				SetCursor(LoadCursor(NULL, IDC_SIZENS));
 			}
 			else
 			{
@@ -4126,7 +4126,7 @@ void CPicView::_UpdateCursor()
 
 				if (fUseDefault)
 				{
-					SetCursor(LoadCursor(NULL, MAKEINTRESOURCE(IDC_ARROW)));
+					SetCursor(LoadCursor(NULL, IDC_ARROW));
 				}
 			}
 		}

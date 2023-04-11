@@ -647,7 +647,7 @@ CSize ViewCelListBox::_CalcRequiredBitmapSize()
 
 BOOL ViewCelListBox::OnSetCursor(CWnd *pWnd, UINT nHitTest, UINT message)
 {
-	SetCursor(LoadCursor(NULL, MAKEINTRESOURCE(IDC_ARROW)));
+	SetCursor(LoadCursor(NULL, IDC_ARROW));
 	return TRUE;
 }
 

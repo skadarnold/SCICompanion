@@ -482,8 +482,8 @@ void CMDITabsDialogBar::DrawItem(LPDRAWITEMSTRUCT pdis)
 		{
 			TRIVERTEX vertices[2] =
 			{
-				{ rcGradient.left, rcGradient.top, GetRValue(blended) * 256, GetGValue(blended) * 256, GetBValue(blended) * 256, 65280 },
-				{ rcGradient.right, rcGradient.bottom, GetRValue(backgroundColor) * 256, GetGValue(backgroundColor) * 256, GetBValue(backgroundColor) * 256, (COLOR16)65280 },
+				{ rcGradient.left, rcGradient.top, GetRValue(blended) * 256u, GetGValue(blended) * 256u, GetBValue(blended) * 256u, 65280u },
+				{ rcGradient.right, rcGradient.bottom, GetRValue(backgroundColor) * 256u, GetGValue(backgroundColor) * 256u, GetBValue(backgroundColor) * 256u, (COLOR16)65280u },
 			};
 			GRADIENT_RECT gradRects[1] = { 0, 1 };
 			dc.GradientFill(vertices, ARRAYSIZE(vertices), gradRects, ARRAYSIZE(gradRects), GRADIENT_FILL_RECT_V);
@@ -495,10 +495,10 @@ void CMDITabsDialogBar::DrawItem(LPDRAWITEMSTRUCT pdis)
 
 			TRIVERTEX vertices[3] =
 			{
-				{ rcGradient.left, rcGradient.top, GetRValue(blended) * 256, GetGValue(blended) * 256, GetBValue(blended) * 256, 65280 },
+				{ rcGradient.left, rcGradient.top, GetRValue(blended) * 256u, GetGValue(blended) * 256u, GetBValue(blended) * 256u, 65280 },
 				// -1 because using right again seems to cause some div by zero and mess up GDI
-				{ rcGradient.right - 1, rcGradient.top + dy, GetRValue(backgroundColor) * 256, GetGValue(backgroundColor) * 256, GetBValue(backgroundColor) * 256, (COLOR16)65280 },
-				{ rcGradient.right, rcGradient.bottom, GetRValue(backgroundColor) * 256, GetGValue(backgroundColor) * 256, GetBValue(backgroundColor) * 256, (COLOR16)65280 },
+				{ rcGradient.right - 1, rcGradient.top + dy, GetRValue(backgroundColor) * 256u, GetGValue(backgroundColor) * 256u, GetBValue(backgroundColor) * 256u, (COLOR16)65280u },
+				{ rcGradient.right, rcGradient.bottom, GetRValue(backgroundColor) * 256u, GetGValue(backgroundColor) * 256u, GetBValue(backgroundColor) * 256u, (COLOR16)65280u },
 			};
 			GRADIENT_RECT gradRects[2] = { { 0, 1 }, { 1, 2 } };
 			dc.GradientFill(vertices, ARRAYSIZE(vertices), gradRects, ARRAYSIZE(gradRects), GRADIENT_FILL_RECT_V);

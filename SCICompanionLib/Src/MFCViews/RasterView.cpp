@@ -1760,13 +1760,13 @@ void CRasterView::_UpdateCursor()
 			else
 			{
 				// No cursor for current tool, or else we're outside the view.
-				SetCursor(LoadCursor(NULL, MAKEINTRESOURCE(IDC_ARROW)));
+				SetCursor(LoadCursor(NULL, IDC_ARROW));
 			}
 		}
 	}
 	else
 	{
-		PSTR iCursor = MAKEINTRESOURCE(IDC_ARROW);  // Just some default value
+		LPCSTR iCursor = IDC_ARROW;  // Just some default value
 		RasterResizeFlags anchor = RasterResizeFlags::Normal;
 		if (GetKeyState(VK_CONTROL) & 0x8000)
 		{
@@ -3754,7 +3754,7 @@ void CRasterView::ShrinkWrapCels()
 	CNewRasterResourceDocument *pDoc = GetDoc();
 	if (pDoc)
 	{
-		bool fApplyToAll = pDoc->GetApplyToAllCels();
+		bool fApplyToAll = pDoc->GetApplyToAllCels() == TRUE;
 		CelIndex celIndex = pDoc->GetSelectedIndex();
 		pDoc->ApplyChanges<RasterComponent>(
 			[celIndex, fApplyToAll](RasterComponent &raster)

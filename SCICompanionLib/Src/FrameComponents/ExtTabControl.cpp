@@ -64,10 +64,10 @@ void ExtTabControl::DrawItem(LPDRAWITEMSTRUCT pdis)
 			// Blend between our main color and the background color for the top part of the gradient (so the gradient isn't so extreme)
 			TRIVERTEX selectedVertices[3] =
 			{
-				{ rcGradient.left, rcGradient.top, GetRValue(accentColor) * 256, GetGValue(accentColor) * 256, GetBValue(accentColor) * 256, 65280 },
+				{ rcGradient.left, rcGradient.top, GetRValue(accentColor) * 256u, GetGValue(accentColor) * 256u, GetBValue(accentColor) * 256u, 65280u },
 				// -1 because using right again seems to cause some div by zero and mess up GDI
-				{ rcGradient.right - 1, rcGradient.top + dy, GetRValue(backgroundColor) * 256, GetGValue(backgroundColor) * 256, GetBValue(backgroundColor) * 256, (COLOR16)65280 },
-				{ rcGradient.right, rcGradient.bottom, GetRValue(backgroundColor) * 256, GetGValue(backgroundColor) * 256, GetBValue(backgroundColor) * 256, (COLOR16)65280 },
+				{ rcGradient.right - 1, rcGradient.top + dy, GetRValue(backgroundColor) * 256u, GetGValue(backgroundColor) * 256u, GetBValue(backgroundColor) * 256u, (COLOR16)65280u },
+				{ rcGradient.right, rcGradient.bottom, GetRValue(backgroundColor) * 256u, GetGValue(backgroundColor) * 256u, GetBValue(backgroundColor) * 256u, (COLOR16)65280u },
 			};
 			vertices = selectedVertices;
 			vertexCount = ARRAYSIZE(selectedVertices);
@@ -89,8 +89,8 @@ void ExtTabControl::DrawItem(LPDRAWITEMSTRUCT pdis)
 			// Blend between our main color and the background color for the top part of the gradient (so the gradient isn't so extreme)
 			TRIVERTEX selectedVertices[2] =
 			{
-				{ topLeft.x, topLeft.y, GetRValue(accentColor) * 256, GetGValue(accentColor) * 256, GetBValue(accentColor) * 256, (COLOR16)65280 },
-				{ bottomRight.x, bottomRight.y, GetRValue(backgroundColor) * 256, GetGValue(backgroundColor) * 256, GetBValue(backgroundColor) * 256, (COLOR16)65280 },
+				{ topLeft.x, topLeft.y, GetRValue(accentColor) * 256u, GetGValue(accentColor) * 256u, GetBValue(accentColor) * 256u, (COLOR16)65280u },
+				{ bottomRight.x, bottomRight.y, GetRValue(backgroundColor) * 256u, GetGValue(backgroundColor) * 256u, GetBValue(backgroundColor) * 256u, (COLOR16)65280u },
 			};
 			vertices = selectedVertices;
 			vertexCount = ARRAYSIZE(selectedVertices);

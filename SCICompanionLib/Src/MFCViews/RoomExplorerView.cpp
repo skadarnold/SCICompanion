@@ -1067,7 +1067,7 @@ void CRoomExplorerView::_UpdateCursor()
 		SetCursor(LoadCursor(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDC_CURSORLEFT)));
 		break;
 	default:
-		SetCursor(LoadCursor(NULL, MAKEINTRESOURCE(IDC_ARROW)));
+		SetCursor(LoadCursor(NULL, IDC_ARROW));
 	}
 }
 

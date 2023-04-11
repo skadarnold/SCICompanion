@@ -49,7 +49,7 @@ void ResolveReferences(TextComponent &messageComponent)
 
 void UnresolveReferences(TextComponent &messageComponent)
 {
-	for (int i = 0; i < messageComponent.Texts.size(); i++)
+	for (size_t i = 0; i < messageComponent.Texts.size(); i++)
 	{
 		TextEntry entry = messageComponent.Texts[i];
 		messageComponent.Texts[i].Reference = 0; //assume it is not!

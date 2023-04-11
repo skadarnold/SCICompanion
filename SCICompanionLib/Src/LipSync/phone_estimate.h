@@ -137,7 +137,7 @@ public:
 		type of phoneme into account, generally unvoiced phonemes
 		have the shortest hold, followed by voiced phonemes, and
 		dipthongs generally hold the longest */
-	typedef enum phoneme_type
+	enum phoneme_type
 	{
 		silence,	///< phoneme is a silence phoneme
 		unvoiced,	///< phoneme is an unvoiced phoneme

@@ -1,14 +1,7 @@
-# Using GitHub Actions, build a C++ program targeting MS VS 2015 and the Windows 8.1 SDK
-# Use the image "windows-latest"
-# Use msbuild to build the solution
-# Target VS 2015
-# Target the Windows 8.1 SDK
-# Build the solution
-# Copy the output to the artifacts directory
+name: Build SCI Companion
 
-name: Build Windows
-
-on: [push]
+on:
+  workflow_call:
 
 jobs:
   build:

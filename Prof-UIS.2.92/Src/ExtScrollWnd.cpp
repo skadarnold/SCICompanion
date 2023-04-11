@@ -2261,8 +2261,8 @@ if( nStepSize > nScrollLimit )
 				rcArea = _psbd.GetAreaRect( CExtPaintManager::e_scroll_bar_mouse_hover_type_t(m_nSBMHT) );
 				if( m_bProcessingOutClick != bProcessingOutClick )
 				{
-					bool bAnimationLocked = AnimationClient_CacheGeneratorIsLocked();
-					if( ! bAnimationLocked )
+					bool _bAnimationLocked = AnimationClient_CacheGeneratorIsLocked();
+					if( ! _bAnimationLocked )
 					{
 						AnimationClient_CacheGeneratorLock();
 //						if( AnimationClient_StateGet(true).IsEmpty() )
@@ -2272,7 +2272,7 @@ if( nStepSize > nScrollLimit )
 								);
 					}
 					m_bProcessingOutClick = bProcessingOutClick;
-					if( ! bAnimationLocked )
+					if( ! _bAnimationLocked )
 					{
  						AnimationClient_CacheNextStateMinInfo(
 							true,
@@ -5411,15 +5411,15 @@ if( ! bVirtualMode )
 					} // switch( CExtPaintManager::e_scroll_bar_mouse_hover_type_t(nSBMHT) )
 				} // if( m_bSendEqualNotifications || _GetScrollPos( bHorz, true ) != nScrollPos )
 
-				INT nScrollLimit =
+				INT _nScrollLimit =
 						  nMaxPos
 						- nMinPos
 						- nPageSize
 						+ 1
 						;
-				ASSERT( nScrollLimit >= 0 );
-				if( nStepSize > nScrollLimit )
-					nStepSize = nScrollLimit;
+				ASSERT( _nScrollLimit >= 0 );
+				if( nStepSize > _nScrollLimit )
+					nStepSize = _nScrollLimit;
 
 				rcArea = rcArea2;
 			}
@@ -5485,16 +5485,16 @@ if( ! bVirtualMode )
 				}
 			}
 
-			INT nScrollLimit =
+			INT _nScrollLimit =
 					  nMaxPos
 					- nMinPos
 					- nPageSize
 					+ 1
 					;
-			ASSERT( nScrollLimit >= 0 );
-			ASSERT( nScrollLimit >= 0 );
-			if( nStepSize > nScrollLimit )
-				nStepSize = nScrollLimit;
+			ASSERT( _nScrollLimit >= 0 );
+			ASSERT( _nScrollLimit >= 0 );
+			if( nStepSize > _nScrollLimit )
+				nStepSize = _nScrollLimit;
 
 			rcArea = rcSbH_thumb;
 			continue;
@@ -10516,10 +10516,10 @@ bool bRecalc = false;
 		m_bProcessingCancelMode = false;
 		if( m_nVkPressed == nChar && pRCI_LastSupportingPressed != NULL && pRCI_LastSupportingPressed->CalcEffectiveRect().PtInRect( point ) )
 		{
-			POSITION pos = _listHtBranch.GetHeadPosition();
-			for( pResetStyleRCI = NULL; pos != NULL; )
+			POSITION _pos = _listHtBranch.GetHeadPosition();
+			for( pResetStyleRCI = NULL; _pos != NULL; )
 			{
-				CExtRichContentHitTestInfo::ht_item_t & _ht_item = _listHtBranch.GetNext( pos );
+				CExtRichContentHitTestInfo::ht_item_t & _ht_item = _listHtBranch.GetNext( _pos );
 				__EXT_DEBUG_RICH_CONTENT_ASSERT( _ht_item.m_pRCI != NULL );
 				HWND hWndOwn = m_hWnd;
 				if( nRepCnt == 0 )
@@ -10737,7 +10737,7 @@ bool bShift = ( (::GetAsyncKeyState(VK_SHIFT)&0x8000) != 0 ) ? true : false;
 				break;
 			ASSERT( LPVOID(pNewFocusRCI) != LPVOID(m_pRCI_focus) );
 			ASSERT( pNewFocusRCI->IsParticipantOfFocus() );
-			bool bHaveElementsWithResetStyles = false;
+			bool _bHaveElementsWithResetStyles = false;
 
 #if (defined __EXT_RCS_WND_APPLY_HOVER_RESET_WORKAROUND__)
 			// BEGIN // temporarily solution, reset hovered state to avoid incorrect inheritance from parent element inside OnRcsResetElementStates()
@@ -10758,7 +10758,7 @@ bool bShift = ( (::GetAsyncKeyState(VK_SHIFT)&0x8000) != 0 ) ? true : false;
 			{
 				m_pRCI_focus->RciEvent_OnFocusLeave( m_hWnd, pNewFocusRCI );
 				if( OnRcsResetElementStates( m_pRCI_focus, statesFocusOnly, CExtRichStyleDescription::e_ui_yn_unspecified ) )
-					bHaveElementsWithResetStyles = true;
+					_bHaveElementsWithResetStyles = true;
 			}
 			m_pRCI_focus = pNewFocusRCI;
 			bRecalcPassed = true;
@@ -10770,8 +10770,8 @@ bool bShift = ( (::GetAsyncKeyState(VK_SHIFT)&0x8000) != 0 ) ? true : false;
 			m_pRCI_focus->RciEvent_OnFocusEnter( m_hWnd, pOldFocusRCI );
 			OnSwInvalidate( m_bRedrawErase );
 			if( OnRcsResetElementStates( m_pRCI_focus, statesFocusOnly, CExtRichStyleDescription::e_ui_yn_yes ) )
-				bHaveElementsWithResetStyles = true;
-			if( ! bHaveElementsWithResetStyles )
+				_bHaveElementsWithResetStyles = true;
+			if( ! _bHaveElementsWithResetStyles )
 				return true;
 			if( ! bQuickReStyleMode )
 			{

@@ -40,8 +40,8 @@
 
 #define __EXT_SUBCLASS_PROFUISCTRL( hWnd, class_name ) \
 { \
-	CWnd * pWnd = CWnd::FromHandlePermanent( hWnd ); \
-	if( pWnd == NULL ) \
+	CWnd * _pWnd = CWnd::FromHandlePermanent( hWnd ); \
+	if( _pWnd == NULL ) \
 	{ \
 		class class_name##Dynamic : public class_name \
 		{ \
@@ -50,11 +50,11 @@
 				delete this; \
 			} \
 		}; \
-		pWnd = new class_name##Dynamic; \
-		ASSERT_VALID( pWnd ); \
-		pWnd->SubclassWindow( hWnd ); \
-		if( pWnd->IsWindowVisible() ) \
-			pWnd->RedrawWindow( NULL, NULL, RDW_INVALIDATE|RDW_UPDATENOW|RDW_ERASE|RDW_ERASENOW|RDW_ALLCHILDREN|RDW_FRAME ); \
+		_pWnd = new class_name##Dynamic; \
+		ASSERT_VALID( _pWnd ); \
+		_pWnd->SubclassWindow( hWnd ); \
+		if( _pWnd->IsWindowVisible() ) \
+			_pWnd->RedrawWindow( NULL, NULL, RDW_INVALIDATE|RDW_UPDATENOW|RDW_ERASE|RDW_ERASENOW|RDW_ALLCHILDREN|RDW_FRAME ); \
 	} \
 }
 

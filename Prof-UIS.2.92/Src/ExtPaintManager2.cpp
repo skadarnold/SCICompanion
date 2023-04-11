@@ -3755,8 +3755,8 @@ CExtPaintManager::SCROLLBARSKINDATA * pSBSD =
 			CExtStatusControlBar * pWndParent = DYNAMIC_DOWNCAST( CExtStatusControlBar, (((CExtZoomScrollBar*)m_pHelperSrc)->GetParent()) );
 			if( pWndParent != NULL )
 			{
-				CExtPaintManager * pPM = ((CExtZoomScrollBar*)m_pHelperSrc)->PmBridge_GetPM();
-				ASSERT_VALID( pPM );
+				CExtPaintManager * _pPM = ((CExtZoomScrollBar*)m_pHelperSrc)->PmBridge_GetPM();
+				ASSERT_VALID( _pPM );
 				CRect rcPaint, _rcClient;
 				pWndParent->GetWindowRect( &rcPaint );
 				((CExtZoomScrollBar*)m_pHelperSrc)->ScreenToClient( &rcPaint );
@@ -3766,27 +3766,27 @@ CExtPaintManager::SCROLLBARSKINDATA * pSBSD =
 				if( pWndParent->m_bCompleteRepaint )
 				{
 					dc.OffsetViewportOrg(   _rcClient.left, 0 );
-					bool bRet = pPM->StatusBar_EraseBackground( dc, rcPaint, pWndParent );
+					bool bRet = _pPM->StatusBar_EraseBackground( dc, rcPaint, pWndParent );
 					dc.OffsetViewportOrg( - _rcClient.left, 0 );
 					if( ! bRet )
 					{
-						bool bTransparent = false;
-						if( pPM->GetCb2DbTransparentMode(pWndParent) )
+						bool _bTransparent = false;
+						if( _pPM->GetCb2DbTransparentMode(pWndParent) )
 						{
-							if( pPM->PaintDockerBkgnd( true, dc, ((CExtZoomScrollBar*)m_pHelperSrc) ) )
-								bTransparent = true;
+							if( _pPM->PaintDockerBkgnd( true, dc, ((CExtZoomScrollBar*)m_pHelperSrc) ) )
+								_bTransparent = true;
 						}
-						if( ! bTransparent )
+						if( ! _bTransparent )
 							dc.FillSolidRect( 
 								&rcPaint, 
-								pPM->GetColor( CExtPaintManager::CLR_3DFACE_OUT, pWndParent ) 
+								_pPM->GetColor( CExtPaintManager::CLR_3DFACE_OUT, pWndParent ) 
 								);
 					}
 					INT nIndex = pWndParent->CommandToIndex( ((CExtZoomScrollBar*)m_pHelperSrc)->GetDlgCtrlID() );
 					if( nIndex >= 0 )
 					{
 						dc.OffsetViewportOrg( _rcClient.left, 0 );
-						pPM->StatusBar_ErasePaneBackground( dc, nIndex, rcPaint, pWndParent );
+						_pPM->StatusBar_ErasePaneBackground( dc, nIndex, rcPaint, pWndParent );
 						dc.OffsetViewportOrg( -_rcClient.left, 0 );
 						bTransparent = true;
 					}
@@ -4362,13 +4362,13 @@ CExtZoomScrollBar * pZoomer = DYNAMIC_DOWNCAST( CExtZoomScrollBar, m_pHelperSrc 
 				dc.OffsetViewportOrg( - _rcClient.left, 0 );
 				if( ! bRet )
 				{
-					bool bTransparent = false;
+					bool _bTransparent = false;
 					if( pPM->GetCb2DbTransparentMode(pWndParent) )
 					{
 						if( pPM->PaintDockerBkgnd( true, dc, pZoomer ) )
-							bTransparent = true;
+							_bTransparent = true;
 					}
-					if( ! bTransparent )
+					if( ! _bTransparent )
 						dc.FillSolidRect( 
 							&rcPaint, 
 							pPM->GetColor( CExtPaintManager::CLR_3DFACE_OUT, pWndParent ) 

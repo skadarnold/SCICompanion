@@ -190,7 +190,7 @@ class __PROF_UIS_API CExtUxTheme
 {
 public:
 
-	typedef enum __EXT_UX_THEMESIZE
+	enum __EXT_UX_THEMESIZE
 	{
 		__EXT_UX_TS_MIN,             // minimum size
 		__EXT_UX_TS_TRUE,            // size without stretching
@@ -211,7 +211,7 @@ public:
 		int iValues[__EXT_UX_MAX_INTLIST_COUNT];
 	} __EXT_UX_INTLIST, *__EXT_UX_PINTLIST;
 
-	typedef enum __EXT_UX_PROPERTYORIGIN
+	enum __EXT_UX_PROPERTYORIGIN
 	{
 		__EXT_UX_PO_STATE,           // property was found in the state section
 		__EXT_UX_PO_PART,            // property was found in the part section
@@ -1348,7 +1348,7 @@ public:
 	} __EXT_DWM_BLURBEHIND, *__EXT_PDWM_BLURBEHIND;
 	
 	// Window attributes
-	typedef enum __EXT_DWMWINDOWATTRIBUTE
+	enum __EXT_DWMWINDOWATTRIBUTE
 	{
 		__EXT_DWMWA_NCRENDERING_ENABLED = 1,   // [get] Is non-client rendering enabled/disabled
 		__EXT_DWMWA_NCRENDERING_POLICY,        // [set] Non-client rendering policy
@@ -1362,7 +1362,7 @@ public:
 	};
 	
 	// Non-client rendering policy attribute values
-	typedef enum __EXT_DWMNCRENDERINGPOLICY
+	enum __EXT_DWMNCRENDERINGPOLICY
 	{
 		__EXT_DWMNCRP_USEWINDOWSTYLE, // Enable/disable non-client rendering based on window style
 		__EXT_DWMNCRP_DISABLED,       // Disabled non-client rendering; window style is ignored

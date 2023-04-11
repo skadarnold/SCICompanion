@@ -669,13 +669,13 @@ dc.SetBkColor ( PmBridge_GetPM()->GetColor( bSelMode ? COLOR_HIGHLIGHT : COLOR_W
 				&&	(dwStyle & LBS_NOSEL) == 0 
 				)
 			{
-				COLORREF clrTextOld = 
+				COLORREF _clrTextOld = 
 					dc.SetTextColor( RGB(255,255,255) );
 				COLORREF clrBkOld =
 					dc.SetBkColor( RGB(0,0,0) );
 				dc.DrawFocusRect( &rcItem );
 				dc.SetBkColor( clrBkOld );
-				dc.SetTextColor( clrTextOld );
+				dc.SetTextColor( _clrTextOld );
 			}
 			
 			dc.SelectObject( pOldFont );

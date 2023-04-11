@@ -3593,12 +3593,12 @@ DWORD dwReserved = 0;
 				pCBI->m_arrBarID.SetSize( wIdCount );
 				for( wIdIndex = 0; wIdIndex < wIdCount; wIdIndex++ )
 				{
-					DWORD dw;
-					ar >> dw;
+					DWORD _dw;
+					ar >> _dw;
 #if (_MFC_VER >= 0x900)
-					pCBI->m_arrBarID.SetAt( wIdIndex, (UINT)dw );
+					pCBI->m_arrBarID.SetAt( wIdIndex, (UINT)_dw );
 #else
-					pCBI->m_arrBarID.SetAt( wIdIndex, (LPVOID)(__EXT_MFC_DWORD_PTR)dw );
+					pCBI->m_arrBarID.SetAt( wIdIndex, (LPVOID)(__EXT_MFC_DWORD_PTR)_dw );
 #endif
 				} // for( wIdIndex = 0; wIdIndex < wIdCount; wIdIndex++ )
 			} // for( wBarInfoIndex = 0; wBarInfoIndex < wBarInfoCount; wBarInfoIndex++ )
@@ -4542,9 +4542,9 @@ void CExtControlBar::InternalDockStateBar::StateGet(
 	
 	m_nMRUWidth = pBar->m_nMRUWidth;
 
-CRect m_rcBar;
-	pBar->GetWindowRect( &m_rcBar );
-	pBar->m_pDockBar->ScreenToClient( &m_rcBar );
+CRect _m_rcBar;
+	pBar->GetWindowRect( &_m_rcBar );
+	pBar->m_pDockBar->ScreenToClient( &_m_rcBar );
 
 	m_ptFloatPos = pBar->m_ptFloatHelper;
 	m_sizeDockedH = pBar->m_sizeDockedH; // + sizeNcArea;
@@ -10792,8 +10792,8 @@ void CExtControlBar::_RowResizingStop( bool bCancel )
 						_GetNextRowBars( true, vNextRow );
 					else
 						_GetNextRowBars( false, vNextRow );
-					INT nCountOfBars = (INT)vNextRow.GetSize();
-					for( INT nBar = 0; nBar < nCountOfBars; nBar++ )
+					INT _nCountOfBars = (INT)vNextRow.GetSize();
+					for( INT nBar = 0; nBar < _nCountOfBars; nBar++ )
 					{
 						CExtControlBar * pBar = (CExtControlBar *)vNextRow[ nBar ];
 						ASSERT_VALID( pBar );
@@ -11401,10 +11401,10 @@ INT nMinTrackerOffset = bHorz ?
 				pExtBar = NULL;
 			if( pExtBar == NULL )
 			{
-				CRect rcBarWnd;
-				pBar->GetWindowRect( &rcBarWnd );
+				CRect _rcBarWnd;
+				pBar->GetWindowRect( &_rcBarWnd );
 				nMinTrackerOffset += bHorz ?
-					rcBarWnd.Width() : rcBarWnd.Height();
+					_rcBarWnd.Width() : _rcBarWnd.Height();
 			} // if( pExtBar == NULL )
 			else
 			{
@@ -11454,10 +11454,10 @@ INT nMaxTrackerOffset = 0;
 				pExtBar = NULL;
 			if( pExtBar == NULL )
 			{
-				CRect rcBarWnd;
-				pBar->GetWindowRect( &rcBarWnd );
+				CRect _rcBarWnd;
+				pBar->GetWindowRect( &_rcBarWnd );
 				nMaxTrackerOffset -= bHorz ?
-					rcBarWnd.Width() : rcBarWnd.Height();
+					_rcBarWnd.Width() : _rcBarWnd.Height();
 			} // if( pExtBar == NULL )
 			else
 			{
@@ -15702,17 +15702,17 @@ CControlBar * pBarPrev =
 	{
 		CRect wrPrevBar;
 		pBarPrev->GetWindowRect( &wrPrevBar );
-		INT m_nSpaceAvailBySideBefore = bHorz
+		INT _m_nSpaceAvailBySideBefore = bHorz
 			? m_rcSrc.left - wrPrevBar.right
 			: m_rcSrc.top - wrPrevBar.bottom;
-		ASSERT( m_nSpaceAvailBySideBefore >= 0 );
+		ASSERT( _m_nSpaceAvailBySideBefore >= 0 );
 	} // if( pBarPrev != NULL )
 	else
 	{
-		INT m_nSpaceAvailBySideBefore = bHorz
+		INT _m_nSpaceAvailBySideBefore = bHorz
 			? m_rcSrc.left - wrDockBar.left
 			: m_rcSrc.top - wrDockBar.top;
-		ASSERT( m_nSpaceAvailBySideBefore >= 0 );
+		ASSERT( _m_nSpaceAvailBySideBefore >= 0 );
 	} // else from if( pBarPrev != NULL )
 
 CControlBar * pBarNext =
@@ -15729,17 +15729,17 @@ CControlBar * pBarNext =
 	{
 		CRect wrNextBar;
 		pBarNext->GetWindowRect( &wrNextBar );
-		INT m_nSpaceAvailBySideAfter = bHorz
+		INT _m_nSpaceAvailBySideAfter = bHorz
 			? m_rcSrc.left - wrNextBar.right
 			: m_rcSrc.top - wrNextBar.bottom;
-		ASSERT( m_nSpaceAvailBySideAfter >= 0 );
+		ASSERT( _m_nSpaceAvailBySideAfter >= 0 );
 	} // if( pBarNext != NULL )
 	else
 	{
-		INT m_nSpaceAvailBySideBefore = bHorz
+		INT _m_nSpaceAvailBySideBefore = bHorz
 			? wrDockBar.right - m_rcSrc.right
 			: wrDockBar.bottom - m_rcSrc.bottom;
-		ASSERT( m_nSpaceAvailBySideBefore >= 0 );
+		ASSERT( _m_nSpaceAvailBySideBefore >= 0 );
 	} // else from if( pBarNext != NULL )
 }
 
@@ -16729,19 +16729,19 @@ bool bForceFloat = bForceFloatMode;
 					)
 				{ // if dockmarker is state applyable
 					m_eCDT = pDynDockMarkerWnd->GetCDT();
-					HWND hWnd = pDynDockMarkerWnd->GetMarkerTargetHWND();
-					if( hWnd != NULL )
+					HWND _hWnd = pDynDockMarkerWnd->GetMarkerTargetHWND();
+					if( _hWnd != NULL )
 					{
-						if( ::IsWindow(hWnd) )
+						if( ::IsWindow(_hWnd) )
 						{
-							CWnd * pWnd = CWnd::FromHandlePermanent( hWnd );
-							if( pWnd != NULL )
+							CWnd * _pWnd = CWnd::FromHandlePermanent( _hWnd );
+							if( _pWnd != NULL )
 							{
 #if (!defined __EXT_MFC_NO_TAB_CONTROLBARS)
 								if( m_eCDT == __ECDT_2005_BAR_NEW_TAB )
 								{
 									CExtDynTabControlBar * pTabbedBar =
-										DYNAMIC_DOWNCAST( CExtDynTabControlBar, pWnd );
+										DYNAMIC_DOWNCAST( CExtDynTabControlBar, _pWnd );
 									if( pTabbedBar != NULL )
 									{
 										if( m_pExtBarSrc->_CanDockToTabbedContainers( pTabbedBar ) )
@@ -16773,7 +16773,7 @@ bool bForceFloat = bForceFloatMode;
 									else
 									{
 										CExtControlBar * pDestBar =
-											DYNAMIC_DOWNCAST( CExtControlBar, pWnd );
+											DYNAMIC_DOWNCAST( CExtControlBar, _pWnd );
 										if(		pDestBar == NULL
 											||	(! m_pExtBarSrc->_CanDockToTabbedContainers( pDestBar ) )
 											||	(! pDestBar->_CanDockToTabbedContainers( m_pExtBarSrc ) )
@@ -16795,7 +16795,7 @@ bool bForceFloat = bForceFloatMode;
 										)
 								{
 									CExtControlBar * pDestBar =
-										DYNAMIC_DOWNCAST( CExtControlBar, pWnd );
+										DYNAMIC_DOWNCAST( CExtControlBar, _pWnd );
 									if(		pDestBar == NULL
 										//|| (! m_pExtBarSrc->_CanDockToTabbedContainers( pDestBar ) )
 										||	(! m_pExtBarSrc->_CanDockLTRB( pDestBar ) )
@@ -24468,13 +24468,13 @@ int nBarCount = (int)vBars.GetSize();
 		else
 #endif // (!defined __EXT_MFC_NO_TAB_CONTROLBARS)
 		{
-			CExtDynControlBar * pDynBar =
+			CExtDynControlBar * _pDynBar =
 				DYNAMIC_DOWNCAST( CExtDynControlBar, pExtBar );
-			if( pDynBar != NULL )
+			if( _pDynBar != NULL )
 			{
 #if (!defined __EXT_MFC_NO_TAB_CONTROLBARS)
 				pDynTabControlBar =
-					DYNAMIC_DOWNCAST( CExtDynTabControlBar, pDynBar );
+					DYNAMIC_DOWNCAST( CExtDynTabControlBar, _pDynBar );
 				if( pDynTabControlBar != NULL )
 					hWndDynamicTarget = pDynTabControlBar->GetSafeHwnd();
 				else
@@ -24482,7 +24482,7 @@ int nBarCount = (int)vBars.GetSize();
 				{
 					hWndDynamicTarget =
 						stat_AnalyzeDynBar(
-							pDynBar,
+							_pDynBar,
 							ptCursor
 							);
 					if( hWndDynamicTarget == NULL )
@@ -24661,13 +24661,13 @@ CPoint ptCursor;
 						__EXT_MFC_ULONG_PTR dwStyle = ::__EXT_MFC_GetWindowLong( hWndDynamicTarget, GWL_STYLE );
 						if( (dwStyle&WS_VISIBLE) == 0 )
 							continue;
-						CRect rcWnd;
-						::GetWindowRect( hWndDynamicTarget, &rcWnd );
-						if( ! rcWnd.PtInRect(ptCursor) )
+						CRect _rcWnd;
+						::GetWindowRect( hWndDynamicTarget, &_rcWnd );
+						if( ! _rcWnd.PtInRect(ptCursor) )
 							continue;
-						CWnd * pWnd =
+						CWnd * _pWnd =
 							CWnd::FromHandlePermanent( hWndDynamicTarget );
-						if( pWnd == NULL )
+						if( _pWnd == NULL )
 							break;
 						if( g_hWndLastDynamicTarget == hWndDynamicTarget )
 						{
@@ -24675,7 +24675,7 @@ CPoint ptCursor;
 							break;
 						}
 						CExtControlBar * pBar =
-							DYNAMIC_DOWNCAST( CExtControlBar, pWnd );
+							DYNAMIC_DOWNCAST( CExtControlBar, _pWnd );
 						if( pBar == NULL )
 							continue;
 #if (!defined __EXT_MFC_NO_TAB_CONTROLBARS)
@@ -25569,9 +25569,9 @@ CRect rcBtnScreen( m_rc );
 			pBar->SetFocus();
 		((CExtDynamicControlBar *)pBar)->m_bWindowActive = true;
 		pBar->PostMessage( WM_NCPAINT );
-		HWND hWndBar = pBar->m_hWnd;
+		HWND _hWndBar = pBar->m_hWnd;
 		CExtPopupMenuWnd::PassMsgLoop( true );
-		if( ! ::IsWindow(hWndBar) )
+		if( ! ::IsWindow(_hWndBar) )
 			return true;
 	}
 	CExtPaintManager::stat_PassPaintMessages();
@@ -26061,9 +26061,9 @@ CExtDynamicControlBar * pSameKindOfBar =
 			);
 	if( pSameKindOfBar != NULL )
 	{
-		CExtDynamicControlBar::eDynamicBarState_t eDBS =
+		CExtDynamicControlBar::eDynamicBarState_t _eDBS =
 			pSameKindOfBar->BarStateGet();
-		if( eDBS != CExtDynamicControlBar::__EDBS_DOCKED )
+		if( _eDBS != CExtDynamicControlBar::__EDBS_DOCKED )
 			return false;
 	} // if( pSameKindOfBar != NULL )
 	return CExtControlBar::_CanDockLTRB( pDestBar );
@@ -29106,8 +29106,8 @@ bool bPersistentBar = pBar->IsPersistentBar();
 		if( pBar->m_pDockBar != NULL )
 		{
 			CMiniDockFrameWnd * pMiniFrame = NULL;
-			CWnd * pWnd = pBar->GetParentFrame();
-			if( pWnd != NULL )
+			CWnd * _pWnd = pBar->GetParentFrame();
+			if( _pWnd != NULL )
 			{
 				pMiniFrame = 
 					DYNAMIC_DOWNCAST(

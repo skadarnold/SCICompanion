@@ -368,8 +368,8 @@ DWORD dwCreateStyle = dwStyle & ~(WS_HSCROLL|WS_VSCROLL);
 #endif //_MFC_VER < 0x700
 		dwCreateStyle &= ~WS_BORDER;
 	VERIFY( AfxDeferRegisterClass( AFX_WNDMDIFRAME_REG ) );
-static const TCHAR _afxWndMDIFrame[] = AFX_WNDMDIFRAME;
-	if( ! CreateEx( WS_EX_CONTROLPARENT, _afxWndMDIFrame, NULL, dwCreateStyle, 0, 0, 0, 0, pParentWnd->m_hWnd, (HMENU)nID, NULL ) )
+static const TCHAR my_afxWndMDIFrame[] = AFX_WNDMDIFRAME;
+	if( ! CreateEx( WS_EX_CONTROLPARENT, my_afxWndMDIFrame, NULL, dwCreateStyle, 0, 0, 0, 0, pParentWnd->m_hWnd, (HMENU)nID, NULL ) )
 		return FALSE;
 	TRY
 	{
@@ -1371,11 +1371,11 @@ int cy = (rectClient.bottom - rectInside.bottom) -
 		{
 			CWnd* pScrollBar = GetDlgItem( AFX_IDW_HSCROLL_FIRST + col );
 			ASSERT( pScrollBar != NULL );
-			int cx = m_pColInfo[col].nCurSize;
+			int _cx = m_pColInfo[col].nCurSize;
 			if( col == 0 && m_nCols < m_nMaxCols )
-				x += cxSplitterBox, cx -= cxSplitterBox;
-			stat_DeferClientPos( &layout, pScrollBar, x, y, cx, cy, TRUE );
-			x += cx + m_cxSplitterGap;
+				x += cxSplitterBox, _cx -= cxSplitterBox;
+			stat_DeferClientPos( &layout, pScrollBar, x, y, _cx, cy, TRUE );
+			x += _cx + m_cxSplitterGap;
 		}
 	}
 	if( m_bHasVScroll )
@@ -1401,11 +1401,11 @@ int cy = (rectClient.bottom - rectInside.bottom) -
 		{
 			CWnd* pScrollBar = GetDlgItem( AFX_IDW_VSCROLL_FIRST + row );
 			ASSERT(pScrollBar != NULL);
-			int cy = m_pRowInfo[row].nCurSize;
+			int _cy = m_pRowInfo[row].nCurSize;
 			if( row == 0 && m_nRows < m_nMaxRows )
-				y += cySplitterBox, cy -= cySplitterBox;
-			stat_DeferClientPos( &layout, pScrollBar, x, y, cx, cy, TRUE );
-			y += cy + m_cySplitterGap;
+				y += cySplitterBox, _cy -= cySplitterBox;
+			stat_DeferClientPos( &layout, pScrollBar, x, y, cx, _cy, TRUE );
+			y += _cy + m_cySplitterGap;
 		}
 	}
 
@@ -1413,16 +1413,16 @@ int cy = (rectClient.bottom - rectInside.bottom) -
 		int x = rectClient.left;
 		for( int col = 0; col < m_nCols; col++ )
 		{
-			int cx = m_pColInfo[col].nCurSize;
+			int _cx = m_pColInfo[col].nCurSize;
 			int y = rectClient.top;
 			for( int row = 0; row < m_nRows; row++)
 			{
-				int cy = m_pRowInfo[row].nCurSize;
+				int _cy = m_pRowInfo[row].nCurSize;
 				CWnd* pWnd = GetPane(row, col);
-				stat_DeferClientPos( &layout, pWnd, x, y, cx, cy, FALSE );
-				y += cy + m_cySplitterGap;
+				stat_DeferClientPos( &layout, pWnd, x, y, _cx, _cy, FALSE );
+				y += _cy + m_cySplitterGap;
 			}
-			x += cx + m_cxSplitterGap;
+			x += _cx + m_cxSplitterGap;
 		}
 	}
 
@@ -1474,10 +1474,10 @@ int row = 0;
 			if( col == m_nCols-1 && m_bHasVScroll)
 				cx += afxData.cxVScroll - __EXT_MFC_CX_BORDER;
 			int y = rect.top;
-			for( int row = 0; row < m_nRows; row++)
+			for( int _row = 0; _row < m_nRows; _row++)
 			{
-				int cy = m_pRowInfo[row].nCurSize + 2*m_cyBorder;
-				if( row == m_nRows-1 && m_bHasHScroll)
+				int cy = m_pRowInfo[_row].nCurSize + 2*m_cyBorder;
+				if( _row == m_nRows-1 && m_bHasHScroll)
 					cy += afxData.cyHScroll - __EXT_MFC_CY_BORDER;
 				OnDrawSplitter( pDC, splitBorder, CRect( x, y, x+cx, y+cy ) );
 				y += cy + m_cySplitterGap - 2*m_cyBorder;

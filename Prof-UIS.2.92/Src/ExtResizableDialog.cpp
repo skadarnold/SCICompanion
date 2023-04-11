@@ -709,8 +709,8 @@ bool CExtResizablePropertyPage::OnHookWndMsg(
 							BOOL (AFX_MSG_CALL CWnd::*pfn_bD)( CDC* );
 						} mmf;
 						mmf.pfn = lpEntry->pfn;
-						LRESULT lResult =  (this->*mmf.pfn_bD)( CDC::FromHandle( ( HDC ) wParam ) );
-						return lResult > 0L ? true : false;
+						LRESULT _lResult =  (this->*mmf.pfn_bD)( CDC::FromHandle( ( HDC ) wParam ) );
+						return _lResult > 0L ? true : false;
 					} // if( lpEntry != NULL )
 
 					HDC hDC = reinterpret_cast < HDC > (wParam);
@@ -1284,9 +1284,9 @@ bool CExtResizablePropertySheet::OnHookWndMsg(
 							BOOL (AFX_MSG_CALL CWnd::*pfn_bD)( CDC* );
 						} mmf;
 						mmf.pfn = lpEntry->pfn;
-						LRESULT lResult = 
+						LRESULT _lResult = 
 							(this->*mmf.pfn_bD)( CDC::FromHandle( ( HDC ) wParam ) );
-						return lResult > 0L ? true : false;
+						return _lResult > 0L ? true : false;
 					} // if( lpEntry != NULL )
 
 					if(		(GetStyle() & WS_CLIPCHILDREN) != 0

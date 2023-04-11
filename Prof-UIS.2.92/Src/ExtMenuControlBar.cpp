@@ -2292,10 +2292,10 @@ UINT nMsg = pMsg->message;
 					{
 						CExtToolControlBar * pToolBar = (CExtToolControlBar *)
 							_listVisibleToolBars.GetNext( pos );
-						int nBtnIdx = pToolBar->GetButtonByAccessKey( szChar[0] );
-						if( nBtnIdx < 0 )
+						int _nBtnIdx = pToolBar->GetButtonByAccessKey( szChar[0] );
+						if( _nBtnIdx < 0 )
 							continue;
-						CExtBarButton * pTBB = pToolBar->GetButton( nBtnIdx );
+						CExtBarButton * pTBB = pToolBar->GetButton( _nBtnIdx );
 						ASSERT_VALID( pTBB );
 						ASSERT( !pTBB->IsSeparator() );
 						if( ! CExtPopupMenuWnd::IsMenuTracking() )
@@ -2309,7 +2309,7 @@ UINT nMsg = pMsg->message;
 						{
 							CExtToolControlBar::g_bMenuTrackingExpanded = false;
 							pToolBar->TrackButtonMenu(
-								nBtnIdx,
+								_nBtnIdx,
 								true,
 								false,
 								m_bUseFastKeyboardMenuTracking

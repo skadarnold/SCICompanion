@@ -6766,23 +6766,23 @@ COLORREF clrTextRestore = dc.GetTextColor();
 				);
 			if( nLenTextExtended > 0 )
 			{
-				CFont * pOldFont = dc.SelectObject( &m_FontNormal );
+				CFont * _pOldFont = dc.SelectObject( &m_FontNormal );
 				CExtRichContentLayout::stat_DrawText(
 					dc.m_hDC,
 					_pmid.m_sExtendedText, nLenTextExtended,
 					&rcDrawTextExtended,
 					dwDtAlignFlags, 0
 					);
-				dc.SelectObject( pOldFont );
+				dc.SelectObject( _pOldFont );
 			}
 		}
 		else
 		{
 			CRect rcDrawTextOffs = rcDrawText;
 			rcDrawTextOffs.OffsetRect( 1, 1 );
-			COLORREF clrTextRestore = COLORREF(-1L);
+			COLORREF _clrTextRestore = COLORREF(-1L);
 			if( _pmid.m_clrForceMenuText == COLORREF(-1L) )
-				clrTextRestore = 
+				_clrTextRestore = 
 					dc.SetTextColor(
 						GetColor(
 							COLOR_3DHILIGHT,
@@ -6811,17 +6811,17 @@ COLORREF clrTextRestore = dc.GetTextColor();
 				);
 			if( nLenTextExtended > 0 )
 			{
-				CFont * pOldFont = dc.SelectObject( &m_FontNormal );
+				CFont * _pOldFont = dc.SelectObject( &m_FontNormal );
 				CExtRichContentLayout::stat_DrawText(
 					dc.m_hDC,
 					_pmid.m_sExtendedText, nLenTextExtended,
 					&rcDrawTextExtended,
 					dwDtAlignFlags, 0
 					);
-				dc.SelectObject( pOldFont );
+				dc.SelectObject( _pOldFont );
 			}
-			if( clrTextRestore != COLORREF(-1L) )
-				dc.SetTextColor( clrTextRestore );
+			if( _clrTextRestore != COLORREF(-1L) )
+				dc.SetTextColor( _clrTextRestore );
 		}
 	}
 	else
@@ -6833,7 +6833,7 @@ COLORREF clrTextRestore = dc.GetTextColor();
 			CExtRichContentLayout::stat_DrawText( dc.m_hDC, LPCTSTR(_sText), rcDrawText, 0, 0, NULL, NULL, 0, 0, 0, NULL, &_DSD );
 			if( nLenTextExtended > 0 )
 			{
-				CFont * pOldFont = dc.SelectObject( &m_FontNormal );
+				CFont * _pOldFont = dc.SelectObject( &m_FontNormal );
 				COLORREF clrOldTextColor = COLORREF(-1L);
 				if( ! _pmid.m_bEnabled )
 					clrOldTextColor = dc.SetTextColor( GetColor(COLOR_3DSHADOW) );
@@ -6845,7 +6845,7 @@ COLORREF clrTextRestore = dc.GetTextColor();
 					);
 				if( ! _pmid.m_bEnabled )
 					dc.SetTextColor( clrOldTextColor );
-				dc.SelectObject( pOldFont );
+				dc.SelectObject( _pOldFont );
 			}
 		}
 		else
@@ -6858,14 +6858,14 @@ COLORREF clrTextRestore = dc.GetTextColor();
 				);
 			if( nLenTextExtended > 0 )
 			{
-				CFont * pOldFont = dc.SelectObject( &m_FontNormal );
+				CFont * _pOldFont = dc.SelectObject( &m_FontNormal );
 				CExtRichContentLayout::stat_DrawText(
 					dc.m_hDC,
 					_pmid.m_sExtendedText, nLenTextExtended,
 					&rcDrawTextExtended,
 					dwDtAlignFlags, 0
 					);
-				dc.SelectObject( pOldFont );
+				dc.SelectObject( _pOldFont );
 			}
 		}
 	}
@@ -6920,9 +6920,9 @@ COLORREF clrTextRestore = dc.GetTextColor();
 			{
 				CRect rcDrawTextOffs = rcDrawText;
 				rcDrawTextOffs.OffsetRect( 1, 1 );
-				COLORREF clrTextRestore = COLORREF(-1L);
+				COLORREF _clrTextRestore = COLORREF(-1L);
 				if( _pmid.m_clrForceMenuText == COLORREF(-1L) )
-					clrTextRestore = 
+					_clrTextRestore = 
 						dc.SetTextColor(
 							GetColor(
 								COLOR_3DHILIGHT,
@@ -6949,8 +6949,8 @@ COLORREF clrTextRestore = dc.GetTextColor();
 					&rcDrawText,
 					DT_SINGLELINE|dwDtAlignFlags, 0
 					);
-				if( clrTextRestore != COLORREF(-1L) )
-					dc.SetTextColor( clrTextRestore );
+				if( _clrTextRestore != COLORREF(-1L) )
+					dc.SetTextColor( _clrTextRestore );
 			} // else from if( _pmid.m_bEnabled )
 		} // if( bRTL )
 		else
@@ -7590,9 +7590,9 @@ INT nLenTextExtended = ( _pmid.m_sExtendedText != NULL ) ? INT( _tcslen( _pmid.m
 	CExtRichContentLayout::stat_DrawText( dc.m_hDC, LPCTSTR(_sText), _sText.GetLength(), &rcDrawText, DT_SINGLELINE|dwDtAlignFlags, 0 );
 	if( nLenTextExtended > 0 )
 	{
-		CFont * pOldFont = dc.SelectObject( &m_FontNormal );
+		CFont * _pOldFont = dc.SelectObject( &m_FontNormal );
 		CExtRichContentLayout::stat_DrawText( dc.m_hDC, _pmid.m_sExtendedText, nLenTextExtended, &rcDrawTextExtended, dwDtAlignFlags, 0 );
-		dc.SelectObject( pOldFont );
+		dc.SelectObject( _pOldFont );
 	}
 
 	if( ! _sAccelText.IsEmpty() )
@@ -8302,7 +8302,7 @@ bool bCloseTheme = true;
 
 		if( nLenTextExtended > 0 )
 		{
-			CFont * pOldFont = dc.SelectObject( &m_FontNormal );
+			CFont * _pOldFont = dc.SelectObject( &m_FontNormal );
 /*
 			hr =
 				g_PaintManager.m_UxTheme.DrawThemeText(
@@ -8322,7 +8322,7 @@ bool bCloseTheme = true;
 				dc.m_hDC, LPCTSTR(_pmid.m_sExtendedText), nLenTextExtended, &rcDrawTextExtended, dwDtAlignFlags, 0,
 				hWnd, VSCLASS_MENU, 0, MENU_POPUPITEM, nMenuItemStateID
 				);
-			dc.SelectObject( pOldFont );
+			dc.SelectObject( _pOldFont );
 		}
 
 		if( ! _sAccelText.IsEmpty() )
@@ -8628,7 +8628,7 @@ INT nLenTextExtended = ( _pmid.m_sExtendedText != NULL ) ? INT( _tcslen( _pmid.m
 	
 	if( nLenTextExtended > 0 )
 	{
-		CFont * pOldFont = dc.SelectObject( &m_FontNormal );
+		CFont * _pOldFont = dc.SelectObject( &m_FontNormal );
 		COLORREF clrOldTextColor = COLORREF(-1L);
 		if( ! _pmid.m_bEnabled )
 			clrOldTextColor = dc.SetTextColor( GetColor(COLOR_3DSHADOW) );
@@ -8640,7 +8640,7 @@ INT nLenTextExtended = ( _pmid.m_sExtendedText != NULL ) ? INT( _tcslen( _pmid.m
 			);
 		if( ! _pmid.m_bEnabled )
 			dc.SetTextColor( clrOldTextColor );
-		dc.SelectObject( pOldFont );
+		dc.SelectObject( _pOldFont );
 	}
 
 	if( ! _sAccelText.IsEmpty() )

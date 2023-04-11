@@ -2133,10 +2133,10 @@ void CExtComboBoxBase::OnFilterPopupListSyncContents(
 			for( INT nIndex = 0; nIndex < arrTextToRemove.GetSize(); nIndex++ ) 
 			{
 				CString sTextToRemove = arrTextToRemove[ nIndex ];
-				INT nLenght = sTextToRemove.GetLength();
-				CString sItemTextPart = sItemTextToCompare.Left( nLenght );
+				INT nLength = sTextToRemove.GetLength();
+				CString sItemTextPart = sItemTextToCompare.Left(nLength);
 				if( sItemTextPart.CompareNoCase( sTextToRemove ) == 0 )
-					sItemTextToCompare.Delete( 0, nLenght );
+					sItemTextToCompare.Delete( 0, nLength);
 			}
 
 			if(	sFilterText.CompareNoCase( sItemTextToCompare.Left( nLenght ) ) == 0 )

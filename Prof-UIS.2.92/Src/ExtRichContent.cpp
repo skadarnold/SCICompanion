@@ -4866,7 +4866,7 @@ const CExtRichContentItem * pRCI = m_pParent;
 	for( ; pRCI != NULL; pRCI = pRCI->m_pParent )
 	{
 		rcEffectiveLayout.OffsetRect( - pRCI->m_ptScrollPos );
-		CExtRichStyleDescription::e_position_t eP = pRCI->GetPosition();
+		eP = pRCI->GetPosition();
 		if( eP == CExtRichStyleDescription::ep_absolute || eP == CExtRichStyleDescription::ep_fixed )
 			break;
 	}
@@ -6143,9 +6143,9 @@ int nClassLen = str.GetLength();
 		// first sub-case, try to find global class (some_class)
 		listClassNames.AddTail( _strClass );
 		// second sub-case, try to find tag specific class (p.some_class)
-		CExtSafeString strLocal;
-		strLocal.Format( _T("%s.%s"), LPCTSTR(strGenericTagName), LPCTSTR(_strClass) );
-		listClassNames.AddTail( strLocal );
+		CExtSafeString mystrLocal;
+		mystrLocal.Format( _T("%s.%s"), LPCTSTR(strGenericTagName), LPCTSTR(_strClass) );
+		listClassNames.AddTail( mystrLocal );
 	} // if( nPreviousSpacePos < nClassLen )
 	if( listClassNames.GetCount() == 0 )
 		return;
@@ -6160,9 +6160,9 @@ POSITION posCssStoreAttempt = pRCI->m_layout.m_listLayoutCSS.GetHeadPosition();
 		POSITION posClassName = listClassNames.GetHeadPosition();
 		for( ; posClassName != NULL; )
 		{
-			CExtSafeString & _strClass = listClassNames.GetNext( posClassName );
-			__EXT_DEBUG_RICH_CONTENT_ASSERT( ! _strClass.IsEmpty() );
-			pRCL->CssClassMerge( pRCI, LPCTSTR(_strClass), styleChanging, styleCurrent );
+			CExtSafeString & my_strClass = listClassNames.GetNext( posClassName );
+			__EXT_DEBUG_RICH_CONTENT_ASSERT( ! my_strClass.IsEmpty() );
+			pRCL->CssClassMerge( pRCI, LPCTSTR(my_strClass), styleChanging, styleCurrent );
 		} // for( ; posClassName != NULL; )
 	} // for( ; posCssStoreAttempt != NULL; )
 }
@@ -7240,8 +7240,8 @@ CExtSafeString str = LPCTSTR(pStylesParmHI->m_strTagPV);
 					break;
 				
 				int nFirst = ( nCommaPrevPos >= 0 ) ? nCommaPrevPos : 0;
-				int nCount = nCommaPos - nFirst;
-				strRectPart = str.Mid( nFirst, nCount );
+				int _nCount = nCommaPos - nFirst;
+				strRectPart = str.Mid( nFirst, _nCount );
 				if( strRectPart.IsEmpty() )
 				{
 					styleChanging.m_eCI = CExtRichStyleDescription::eci_auto;
@@ -13262,12 +13262,12 @@ TRACE( LPCTSTR(strDebugTrace) );
 						}
 						__EXT_DEBUG_RICH_CONTENT_ASSERT( nNewColCount >= sizeDim.cx );
 
-						LONG nColNo, nRowNo;
+						LONG _nColNo, _nRowNo;
 						if( nNewColCount > sizeDim.cx )
 						{ // re-initialize table rows to new col counts
-							for( nRowNo = 0; nRowNo < sizeDim.cy; nRowNo ++ )
+							for( _nRowNo = 0; _nRowNo < sizeDim.cy; _nRowNo ++ )
 							{
-								CExtRichTableRow * pRow = aTable.GetAt( nRowNo );
+								CExtRichTableRow * pRow = aTable.GetAt( _nRowNo );
 								__EXT_DEBUG_RICH_CONTENT_ASSERT( pRow != NULL );
 								pRow->Init( nNewColCount );
 							}
@@ -13283,18 +13283,18 @@ TRACE( LPCTSTR(strDebugTrace) );
 						} // re-initialize table rows to new col counts
 						// now we need to pre-measure layout after the rowspan/colspan rules was applied
 //aTable.SpanInfoArray_Init();
-						for( nRowNo = 0; nRowNo < sizeDim.cy; nRowNo ++ )
+						for( _nRowNo = 0; _nRowNo < sizeDim.cy; _nRowNo ++ )
 						{
-							CExtRichTableRow * pRow = aTable.GetAt( nRowNo );
+							CExtRichTableRow * pRow = aTable.GetAt( _nRowNo );
 							__EXT_DEBUG_RICH_CONTENT_ASSERT( pRow != NULL );
 							CExtRichContentItem * pTableRowHI = pRow->m_pRCI_TableRow;
 							pTableRowHI;
 							__EXT_DEBUG_RICH_CONTENT_ASSERT( pTableRowHI != NULL );
-							for( nColNo = 0; nColNo < sizeDim.cx; nColNo ++ )
+							for( _nColNo = 0; _nColNo < sizeDim.cx; _nColNo ++ )
 							{
 // if( pRow->GetSize() >= nColNo )
 // 	continue;
-								CExtRichContentItem * pTableCellHI = pRow->GetAt( nColNo );
+								CExtRichContentItem * pTableCellHI = pRow->GetAt( _nColNo );
 								if( pTableCellHI == NULL )
 									continue;
 								CRect _rcStartLayout( 0, 0, __EXT_RICH_CONTENT_BIG_EXTENT, __EXT_RICH_CONTENT_BIG_EXTENT );
@@ -13310,16 +13310,16 @@ TRACE( LPCTSTR(strDebugTrace) );
 								pRow->m_nRowHeightMin = max( pRow->m_nRowHeightMin, pTableCellHI->m_sizePreCalc.cy );
 								if( sizeSpan.cx > 1 || sizeSpan.cy > 1 )
 									continue;
-								LONG nColWidthBeforeCur = aTable.m_arrCWcur[ nColNo ];
-								LONG nColWidthBeforeMin = aTable.m_arrCWmin[ nColNo ];
+								LONG nColWidthBeforeCur = aTable.m_arrCWcur[ _nColNo ];
+								LONG nColWidthBeforeMin = aTable.m_arrCWmin[ _nColNo ];
 								LONG nColWidthAfterCur = max( nColWidthBeforeCur, pTableCellHI->m_sizePreCalc.cx );
 								LONG nColWidthAfterMin = max( nColWidthBeforeMin, pTableCellHI->m_sizeMaxChild.cx );
 								nColWidthAfterMin += pTableCellHI->GetEffectiveStyle().m_rcBorder.right; // !!!
 								nColWidthAfterCur = max( nColWidthAfterCur, nColWidthAfterMin ); // !!!
 								if( nColWidthAfterCur != nColWidthBeforeCur )
-									aTable.m_arrCWcur.SetAt( nColNo, nColWidthAfterCur );
+									aTable.m_arrCWcur.SetAt( _nColNo, nColWidthAfterCur );
 								if( nColWidthAfterMin != nColWidthBeforeMin )
-									aTable.m_arrCWmin.SetAt( nColNo, nColWidthAfterMin );
+									aTable.m_arrCWmin.SetAt( _nColNo, nColWidthAfterMin );
 							} // for( nColNo = 0; nColNo < sizeDim.cx; nColNo ++ )
 						} // for( nRowNo = 0; nRowNo < sizeDim.cy; nRowNo ++ )
 					} // if we have colspan/rowspan, then make table larger, recompute row/column counts
@@ -13701,23 +13701,23 @@ POSITION posWS = _listLineLayout.GetHeadPosition();
 		CExtRichContentItem * pLastWalkSpaceHI = NULL;
 		for( ; posAlignRestSpaces != NULL; )
 		{
-			CExtRichContentItem * pRCI = _listItems.GetNext( posAlignRestSpaces );
-			__EXT_DEBUG_RICH_CONTENT_ASSERT( pRCI != NULL );
-			if(		pRCI->m_eType == __EHIT_TEXT_RANGE
-				||	pRCI->IsNoWrapSequence()
-				||	pRCI->GetDisplay() == CExtRichStyleDescription::ed_inline_table
-				||	pRCI->GetDisplay() == CExtRichStyleDescription::ed_inline_block
+			CExtRichContentItem * _pRCI = _listItems.GetNext( posAlignRestSpaces );
+			__EXT_DEBUG_RICH_CONTENT_ASSERT( _pRCI != NULL );
+			if(		_pRCI->m_eType == __EHIT_TEXT_RANGE
+				||	_pRCI->IsNoWrapSequence()
+				||	_pRCI->GetDisplay() == CExtRichStyleDescription::ed_inline_table
+				||	_pRCI->GetDisplay() == CExtRichStyleDescription::ed_inline_block
 				)
 			{
 				if( pLastWalkSpaceHI != NULL )
 				{
-					pLastWalkSpaceHI->m_rcLayout.right = pRCI->m_rcLayout.left + nShift + nFixedSpace;
+					pLastWalkSpaceHI->m_rcLayout.right = _pRCI->m_rcLayout.left + nShift + nFixedSpace;
 					if( nRestSpace > 0 )
 						pLastWalkSpaceHI->m_rcLayout.right += 1;
 				}
 				break;
 			}
-			pLastWalkSpaceHI = pRCI;
+			pLastWalkSpaceHI = _pRCI;
 		}
 		nShift += nFixedSpace;
 		if( nRestSpace > 0 )
@@ -14192,45 +14192,45 @@ POSITION posTemp = posLineEOF;
 //						||	pSavedHI->GetDisplay() == CExtRichStyleDescription::ed_inline_table
 						) ? true : false;
 
-					CExtRichContentItem * pFtRCI = pSavedHI;
-					const CExtRichStyleDescription & styleElemFT = pFtRCI->GetEffectiveStyle();
-					if(		styleElemFT.m_eF == CExtRichStyleDescription::ef_left
-						||	styleElemFT.m_eF == CExtRichStyleDescription::ef_right
+					CExtRichContentItem * _pFtRCI = pSavedHI;
+					const CExtRichStyleDescription & mystyleElemFT = _pFtRCI->GetEffectiveStyle();
+					if(		mystyleElemFT.m_eF == CExtRichStyleDescription::ef_left
+						||	mystyleElemFT.m_eF == CExtRichStyleDescription::ef_right
 						)
 					{
 						CList < CExtRichContentItem *, CExtRichContentItem * > & listFloat =
-							( styleElemFT.m_eF == CExtRichStyleDescription::ef_left )
+							( mystyleElemFT.m_eF == CExtRichStyleDescription::ef_left )
 							? listFloatLeft : listFloatRight;
-						if(		pFtRCI->GetDisplay() != CExtRichStyleDescription::ed_none
-							&&	listFloat.Find( pFtRCI ) == NULL
+						if(		_pFtRCI->GetDisplay() != CExtRichStyleDescription::ed_none
+							&&	listFloat.Find( _pFtRCI ) == NULL
 							)
 						{
-							listFloat.AddTail( pFtRCI );
+							listFloat.AddTail( _pFtRCI );
 							INT nTopLineY = rcLayout.top;
-							INT nBottomLineY = nTopLineY + pFtRCI->m_sizePreCalc.cy;
+							INT nBottomLineY = nTopLineY + _pFtRCI->m_sizePreCalc.cy;
 							CRect rcFtElem;
-							if( styleElemFT.m_eF == CExtRichStyleDescription::ef_left )
-								rcFtElem.SetRect( rcLayout.left, nTopLineY, rcLayout.left + pFtRCI->m_sizePreCalc.cx, nBottomLineY );
+							if( mystyleElemFT.m_eF == CExtRichStyleDescription::ef_left )
+								rcFtElem.SetRect( rcLayout.left, nTopLineY, rcLayout.left + _pFtRCI->m_sizePreCalc.cx, nBottomLineY );
 							else
-								rcFtElem.SetRect( rcLayout.right - pFtRCI->m_sizePreCalc.cx, nTopLineY, rcLayout.right, nBottomLineY );
-							pFtRCI->m_rcLayout = rcFtElem;
-							pFtRCI->DoLayout( dc, rcFtElem, pRCIFA, false );
-							rcFtElem.bottom = rcFtElem.top + pFtRCI->m_rcLayout.Height();
-							if( styleElemFT.m_eF == CExtRichStyleDescription::ef_left )
-								rcFtElem.right = rcFtElem.left + pFtRCI->m_rcLayout.Width();
+								rcFtElem.SetRect( rcLayout.right - _pFtRCI->m_sizePreCalc.cx, nTopLineY, rcLayout.right, nBottomLineY );
+							_pFtRCI->m_rcLayout = rcFtElem;
+							_pFtRCI->DoLayout( dc, rcFtElem, pRCIFA, false );
+							rcFtElem.bottom = rcFtElem.top + _pFtRCI->m_rcLayout.Height();
+							if( mystyleElemFT.m_eF == CExtRichStyleDescription::ef_left )
+								rcFtElem.right = rcFtElem.left + _pFtRCI->m_rcLayout.Width();
 							else
-								rcFtElem.left = rcFtElem.right - pFtRCI->m_rcLayout.Width();
-							pFtRCI->m_rcLayout = rcFtElem;
-							if( styleElemFT.m_eF == CExtRichStyleDescription::ef_left )
-								rcLayout.left += pFtRCI->m_rcLayout.Width();
+								rcFtElem.left = rcFtElem.right - _pFtRCI->m_rcLayout.Width();
+							_pFtRCI->m_rcLayout = rcFtElem;
+							if( mystyleElemFT.m_eF == CExtRichStyleDescription::ef_left )
+								rcLayout.left += _pFtRCI->m_rcLayout.Width();
 							else
-								rcLayout.right -= pFtRCI->m_rcLayout.Width();
+								rcLayout.right -= _pFtRCI->m_rcLayout.Width();
 							bForceLineStartMode = true;
 							pos = posLineStart;
 							rcPrevious.left = rcPrevious.right = rcLayout.left;
 							rcStartLine = rcPrevious;
 							CSize sizeShift( 0, 0 );
-							if( styleElemFT.m_eF == CExtRichStyleDescription::ef_left )
+							if( mystyleElemFT.m_eF == CExtRichStyleDescription::ef_left )
 							{
 								if( rcFtElem.right > rcLayout.right && ( ! listFloatRight.IsEmpty() ) )
 								{
@@ -14248,7 +14248,7 @@ POSITION posTemp = posLineEOF;
 							}
 							if( sizeShift.cy > 0 )
 							{
-								pFtRCI->OffsetSubTree( sizeShift, true, true, true );
+								_pFtRCI->OffsetSubTree( sizeShift, true, true, true );
 								rcStartLine.top += sizeShift.cy;
 								rcStartLine.bottom += sizeShift.cy;
 								rcLayout.top += sizeShift.cy;
@@ -14449,18 +14449,18 @@ POSITION posTemp = posLineEOF;
 							LONG nWidthOfLine = 0;
 							for( ; posWalkLine != _posLineEOF && posWalkLine != NULL ; )
 							{
-								CExtRichContentItem * pRCI = _listItems.GetNext( posWalkLine );
-								__EXT_DEBUG_RICH_CONTENT_ASSERT( pRCI != NULL );
-								if(		pRCI->IsParagraphItem() 
-									||	pRCI->m_rcLayout.IsRectEmpty() 
+								CExtRichContentItem * _pRCI = _listItems.GetNext( posWalkLine );
+								__EXT_DEBUG_RICH_CONTENT_ASSERT( _pRCI != NULL );
+								if(		_pRCI->IsParagraphItem() 
+									||	_pRCI->m_rcLayout.IsRectEmpty() 
 									)
 									continue;
-								int nHelperTmAscent = pRCI->GetHelperTmAscent();
-								if(		pRCI->GetDisplay() == CExtRichStyleDescription::ed_inline_table
-									||	pRCI->GetDisplay() == CExtRichStyleDescription::ed_inline_block
+								int nHelperTmAscent = _pRCI->GetHelperTmAscent();
+								if(		_pRCI->GetDisplay() == CExtRichStyleDescription::ed_inline_table
+									||	_pRCI->GetDisplay() == CExtRichStyleDescription::ed_inline_block
 									)
-									nHelperTmAscent = pRCI->m_rcLayout.Height();
-								pRCI->OffsetSubTree(
+									nHelperTmAscent = _pRCI->m_rcLayout.Height();
+								_pRCI->OffsetSubTree(
 											CSize(
 													0
 												,	nHelperTmAscentMax 
@@ -14470,7 +14470,7 @@ POSITION posTemp = posLineEOF;
 											true, true
 											);
 
-								nWidthOfLine += pRCI->m_rcLayout.Width();
+								nWidthOfLine += _pRCI->m_rcLayout.Width();
 							}
 
 							CPoint ptStyleOffset( 0, 0 );
@@ -14506,9 +14506,9 @@ POSITION posTemp = posLineEOF;
 							posWalkLine = posSaved;
 							for( ; posWalkLine != _posLineEOF && posWalkLine != NULL ; )
 							{
-								CExtRichContentItem * pRCI = _listItems.GetNext( posWalkLine );
-								__EXT_DEBUG_RICH_CONTENT_ASSERT( pRCI != NULL );
- 								if(		pRCI->IsParagraphItem() 
+								CExtRichContentItem * _pRCI = _listItems.GetNext( posWalkLine );
+								__EXT_DEBUG_RICH_CONTENT_ASSERT( _pRCI != NULL );
+ 								if(		_pRCI->IsParagraphItem() 
 									//||	pRCI->GetDisplay() == CExtRichStyleDescription::ed_table
 									)
  									break;
@@ -14518,25 +14518,25 @@ POSITION posTemp = posLineEOF;
 									)
 									continue;
 */
-								if( pRCI->m_rcLayout.IsRectEmpty() )
+								if( _pRCI->m_rcLayout.IsRectEmpty() )
 									continue;
 								if( ptStyleOffset.x != 0 || ptStyleOffset.y != 0 )
-									pRCI->OffsetSubTree( CSize( ptStyleOffset.x, ptStyleOffset.y ), true, true );
+									_pRCI->OffsetSubTree( CSize( ptStyleOffset.x, ptStyleOffset.y ), true, true );
 
-								if(		(! pRCI->IsNoLayoutRectItem() )
-									&&	pRCI->m_rcLayout.left < pRCI->m_rcLayout.right && pRCI->m_rcLayout.top < pRCI->m_rcLayout.bottom
+								if(		(! _pRCI->IsNoLayoutRectItem() )
+									&&	_pRCI->m_rcLayout.left < _pRCI->m_rcLayout.right && _pRCI->m_rcLayout.top < _pRCI->m_rcLayout.bottom
 									)
 								{
 									if( bHaveInitialUnionLayout )
 									{
-										m_rcLayout.left = min( m_rcLayout.left, pRCI->m_rcLayout.left );
-										m_rcLayout.right = max( m_rcLayout.right, pRCI->m_rcLayout.right );
-										m_rcLayout.top = min( m_rcLayout.top, pRCI->m_rcLayout.top );
-										m_rcLayout.bottom = max( m_rcLayout.bottom, pRCI->m_rcLayout.bottom );
+										m_rcLayout.left = min( m_rcLayout.left, _pRCI->m_rcLayout.left );
+										m_rcLayout.right = max( m_rcLayout.right, _pRCI->m_rcLayout.right );
+										m_rcLayout.top = min( m_rcLayout.top, _pRCI->m_rcLayout.top );
+										m_rcLayout.bottom = max( m_rcLayout.bottom, _pRCI->m_rcLayout.bottom );
 									}
 									else 
 									{
-										m_rcLayout.SetRect( pRCI->m_rcLayout.TopLeft(), pRCI->m_rcLayout.BottomRight() );
+										m_rcLayout.SetRect( _pRCI->m_rcLayout.TopLeft(), _pRCI->m_rcLayout.BottomRight() );
 										bHaveInitialUnionLayout = true;
 									}
 								}
@@ -14556,33 +14556,33 @@ POSITION posTemp = posLineEOF;
 							bDoLineAreaUnion = false;
 							CRect rcLine(0,0,0,0);
 
- 							POSITION posWalkLine = posLineStart;
+ 							POSITION _posWalkLine = posLineStart;
 
-							for( ; posWalkLine != posLineEOF && posWalkLine != NULL ; )
+							for( ; _posWalkLine != posLineEOF && _posWalkLine != NULL ; )
 							{
-								CExtRichContentItem * pRCI = _listItems.GetNext( posWalkLine );
-								__EXT_DEBUG_RICH_CONTENT_ASSERT( pRCI != NULL );
- 								if(		pRCI->IsParagraphItem() 
+								CExtRichContentItem * _pRCI = _listItems.GetNext( _posWalkLine );
+								__EXT_DEBUG_RICH_CONTENT_ASSERT( _pRCI != NULL );
+ 								if(		_pRCI->IsParagraphItem() 
 									//||	pRCI->GetDisplay() == CExtRichStyleDescription::ed_table
 									)
  									break;
-								if( pRCI->m_rcLayout.IsRectEmpty() )
+								if( _pRCI->m_rcLayout.IsRectEmpty() )
 									continue;
 
 								if(	/*	(! pRCI->IsNoLayoutRectItem() )*/
-									/*&&	*/pRCI->m_rcLayout.left < pRCI->m_rcLayout.right && pRCI->m_rcLayout.top < pRCI->m_rcLayout.bottom
+									/*&&	*/_pRCI->m_rcLayout.left < _pRCI->m_rcLayout.right && _pRCI->m_rcLayout.top < _pRCI->m_rcLayout.bottom
 									)
 								{
 									if( bHaveInitialLineLayout )
 									{
-										rcLine.left = min( rcLine.left, pRCI->m_rcLayout.left );
-										rcLine.right = max( rcLine.right, pRCI->m_rcLayout.right );
-										rcLine.top = min( rcLine.top, pRCI->m_rcLayout.top );
-										rcLine.bottom = max( rcLine.bottom, pRCI->m_rcLayout.bottom );
+										rcLine.left = min( rcLine.left, _pRCI->m_rcLayout.left );
+										rcLine.right = max( rcLine.right, _pRCI->m_rcLayout.right );
+										rcLine.top = min( rcLine.top, _pRCI->m_rcLayout.top );
+										rcLine.bottom = max( rcLine.bottom, _pRCI->m_rcLayout.bottom );
 									}
 									else 
 									{
-										rcLine.SetRect( pRCI->m_rcLayout.TopLeft(), pRCI->m_rcLayout.BottomRight() );
+										rcLine.SetRect( _pRCI->m_rcLayout.TopLeft(), _pRCI->m_rcLayout.BottomRight() );
 										bHaveInitialLineLayout = true;
 									}
 								}
@@ -14596,15 +14596,15 @@ POSITION posTemp = posLineEOF;
 								posWalkLine = posLineStart;
 								for( ; posWalkLine != posLineEOF && posWalkLine != NULL ; )
 								{
-									CExtRichContentItem * pRCI = _listItems.GetNext( posWalkLine );
-									__EXT_DEBUG_RICH_CONTENT_ASSERT( pRCI != NULL );
- 									if(		pRCI->IsParagraphItem() 
+									CExtRichContentItem * _pRCI = _listItems.GetNext( posWalkLine );
+									__EXT_DEBUG_RICH_CONTENT_ASSERT( _pRCI != NULL );
+ 									if(		_pRCI->IsParagraphItem() 
 										//||	pRCI->GetDisplay() == CExtRichStyleDescription::ed_table
 										)
  										break;
-									if( pRCI->m_rcLayout.IsRectEmpty() )
+									if( _pRCI->m_rcLayout.IsRectEmpty() )
 										continue;
-									pRCI->OffsetSubTree(
+									_pRCI->OffsetSubTree(
 												CSize(
 														0
 													,	_nLineShift
@@ -14678,15 +14678,15 @@ POSITION posTemp = posLineEOF;
 							for( ; posWalkLine != posLineEOF && posWalkLine != NULL ; )
 							{
 								posLineSaved = posWalkLine;
-								CExtRichContentItem * pRCI = _listItems.GetNext( posWalkLine );
-								__EXT_DEBUG_RICH_CONTENT_ASSERT( pRCI != NULL );
- 								if(		pRCI->IsParagraphItem() 
+								CExtRichContentItem * _pRCI = _listItems.GetNext( posWalkLine );
+								__EXT_DEBUG_RICH_CONTENT_ASSERT( _pRCI != NULL );
+ 								if(		_pRCI->IsParagraphItem() 
 									//||	pRCI->GetDisplay() == CExtRichStyleDescription::ed_table
 									)
  									break;
-								if( pRCI->IsParagraphItem() || pRCI->m_rcLayout.IsRectEmpty() )
+								if( _pRCI->IsParagraphItem() || _pRCI->m_rcLayout.IsRectEmpty() )
 									continue;
-								rcPrevious.top = max( rcPrevious.top, pRCI->m_rcLayout.bottom );
+								rcPrevious.top = max( rcPrevious.top, _pRCI->m_rcLayout.bottom );
 							}
 							rcPrevious.bottom = rcPrevious.top; 
 							rcPrevious.left = rcLayout.left;
@@ -14768,35 +14768,35 @@ POSITION posTemp = posLineEOF;
 							POSITION posReview = posPrevLine;
 							for( ; posReview != posLineStart; )
 							{
-								CExtRichContentItem * pRCI = _listItems.GetNext( posReview );
-								__EXT_DEBUG_RICH_CONTENT_ASSERT( pRCI != NULL );
-								if(		pRCI->IsParagraphItem() 
-									||	pRCI->m_rcLayout.IsRectEmpty()
+								CExtRichContentItem * _pRCI = _listItems.GetNext( posReview );
+								__EXT_DEBUG_RICH_CONTENT_ASSERT( _pRCI != NULL );
+								if(		_pRCI->IsParagraphItem() 
+									||	_pRCI->m_rcLayout.IsRectEmpty()
 									)
 									continue;
-								const CExtRichStyleDescription & styleElemFT = pRCI->GetEffectiveStyle();
-								if(		styleElemFT.m_eD != CExtRichStyleDescription::ed_inline
-									||	styleElemFT.m_eF == CExtRichStyleDescription::ef_left
-									||	styleElemFT.m_eF == CExtRichStyleDescription::ef_right
+								const CExtRichStyleDescription & mystyleElemFT = _pRCI->GetEffectiveStyle();
+								if(		mystyleElemFT.m_eD != CExtRichStyleDescription::ed_inline
+									||	mystyleElemFT.m_eF == CExtRichStyleDescription::ef_left
+									||	mystyleElemFT.m_eF == CExtRichStyleDescription::ef_right
 									)
 									continue;
 								if(	/*	(! pRCI->IsNoLayoutRectItem() )*/
-									/*&&	*/pRCI->m_rcLayout.left < pRCI->m_rcLayout.right && pRCI->m_rcLayout.top < pRCI->m_rcLayout.bottom
+									/*&&	*/_pRCI->m_rcLayout.left < _pRCI->m_rcLayout.right && _pRCI->m_rcLayout.top < _pRCI->m_rcLayout.bottom
 									)
 								{
 									if( bHaveInitialLineLayout )
 									{
-										rcLine.left = min( rcLine.left, pRCI->m_rcLayout.left );
-										rcLine.right = max( rcLine.right, pRCI->m_rcLayout.right );
-										rcLine.top = min( rcLine.top, pRCI->m_rcLayout.top );
-										rcLine.bottom = max( rcLine.bottom, pRCI->m_rcLayout.bottom );
+										rcLine.left = min( rcLine.left, _pRCI->m_rcLayout.left );
+										rcLine.right = max( rcLine.right, _pRCI->m_rcLayout.right );
+										rcLine.top = min( rcLine.top, _pRCI->m_rcLayout.top );
+										rcLine.bottom = max( rcLine.bottom, _pRCI->m_rcLayout.bottom );
 									}
 									else 
 									{
-										rcLine.SetRect( pRCI->m_rcLayout.TopLeft(), pRCI->m_rcLayout.BottomRight() );
+										rcLine.SetRect( _pRCI->m_rcLayout.TopLeft(), _pRCI->m_rcLayout.BottomRight() );
 										bHaveInitialLineLayout = true;
 									}
-									if( pRCI->m_rcLayout.right > rcLayout.right )
+									if( _pRCI->m_rcLayout.right > rcLayout.right )
 									{
 										bMoveLine = true;
 										//break;
@@ -14808,13 +14808,13 @@ POSITION posTemp = posLineEOF;
 								INT nTargetY = INT_MAX;
 								if( ! listFloatLeft.IsEmpty() )
 								{
-									CExtRichContentItem * pFtRCI = listFloatLeft.GetTail();
-									nTargetY = min( nTargetY, pFtRCI->m_rcLayout.bottom );
+									CExtRichContentItem * _pFtRCI = listFloatLeft.GetTail();
+									nTargetY = min( nTargetY, _pFtRCI->m_rcLayout.bottom );
 								}
 								if( ! listFloatRight.IsEmpty() )
 								{
-									CExtRichContentItem * pFtRCI = listFloatRight.GetTail();
-									nTargetY = min( nTargetY, pFtRCI->m_rcLayout.bottom );
+									CExtRichContentItem * _pFtRCI = listFloatRight.GetTail();
+									nTargetY = min( nTargetY, _pFtRCI->m_rcLayout.bottom );
 								}
 								if( nTargetY != INT_MAX && nTargetY > rcLine.top )
 								{
@@ -14822,19 +14822,19 @@ POSITION posTemp = posLineEOF;
 									posReview = posPrevLine;
 									for( ; posReview != posLineStart; )
 									{
-										CExtRichContentItem * pRCI = _listItems.GetNext( posReview );
-										__EXT_DEBUG_RICH_CONTENT_ASSERT( pRCI != NULL );
-										if(		pRCI->IsParagraphItem() 
-											||	pRCI->m_rcLayout.IsRectEmpty()
+										CExtRichContentItem * _pRCI = _listItems.GetNext( posReview );
+										__EXT_DEBUG_RICH_CONTENT_ASSERT( _pRCI != NULL );
+										if(		_pRCI->IsParagraphItem() 
+											||	_pRCI->m_rcLayout.IsRectEmpty()
 											)
 											continue;
-										const CExtRichStyleDescription & styleElemFT = pRCI->GetEffectiveStyle();
-										if(		styleElemFT.m_eD != CExtRichStyleDescription::ed_inline
-											||	styleElemFT.m_eF == CExtRichStyleDescription::ef_left
-											||	styleElemFT.m_eF == CExtRichStyleDescription::ef_right
+										const CExtRichStyleDescription & mystyleElemFT = _pRCI->GetEffectiveStyle();
+										if(		mystyleElemFT.m_eD != CExtRichStyleDescription::ed_inline
+											||	mystyleElemFT.m_eF == CExtRichStyleDescription::ef_left
+											||	mystyleElemFT.m_eF == CExtRichStyleDescription::ef_right
 											)
 											continue;
-										pRCI->OffsetSubTree( sizeLineShift );
+										_pRCI->OffsetSubTree( sizeLineShift );
 									}
 									bForceLineStartMode = true;
 									pos = posLineStart = posPrevLine;
@@ -14842,11 +14842,11 @@ POSITION posTemp = posLineEOF;
 							}
 							for( ; ! listFloatLeft.IsEmpty(); )
 							{
-								CExtRichContentItem * pFtRCI = listFloatLeft.GetTail();
-								if( pFtRCI->m_rcLayout.bottom > rcStartLine.top )
+								CExtRichContentItem * _pFtRCI = listFloatLeft.GetTail();
+								if( _pFtRCI->m_rcLayout.bottom > rcStartLine.top )
 									break;
 								listFloatLeft.RemoveTail();
-								rcLayout.left -= pFtRCI->m_rcLayout.Width();;
+								rcLayout.left -= _pFtRCI->m_rcLayout.Width();;
 								rcPrevious.left = rcPrevious.right = rcLayout.left;
 								rcStartLine = rcPrevious;
 								bForceLineStartMode = true;
@@ -14854,11 +14854,11 @@ POSITION posTemp = posLineEOF;
 							}
 							for( ; ! listFloatRight.IsEmpty(); )
 							{
-								CExtRichContentItem * pFtRCI = listFloatRight.GetTail();
-								if( pFtRCI->m_rcLayout.bottom > rcStartLine.top )
+								CExtRichContentItem * _pFtRCI = listFloatRight.GetTail();
+								if( _pFtRCI->m_rcLayout.bottom > rcStartLine.top )
 									break;
 								listFloatRight.RemoveTail();
-								rcLayout.right += pFtRCI->m_rcLayout.Width();
+								rcLayout.right += _pFtRCI->m_rcLayout.Width();
 								//rcPrevious.left = rcPrevious.right = rcLayout.left;
 								//rcStartLine = rcPrevious;
 								//bForceLineStartMode = true;
@@ -14878,19 +14878,19 @@ POSITION posTemp = posLineEOF;
 						LONG nWidthOfLine = 0;
 						for( ; posWalkLine != posLineEOF && posWalkLine != NULL ; )
 						{
-							CExtRichContentItem * pRCI = _listItems.GetNext( posWalkLine );
-							__EXT_DEBUG_RICH_CONTENT_ASSERT( pRCI != NULL );
-							if(		pRCI->IsParagraphItem() 
-								||	pRCI->m_rcLayout.IsRectEmpty() 
-								||	pRCI->GetDisplay() == CExtRichStyleDescription::ed_table
+							CExtRichContentItem * _pRCI = _listItems.GetNext( posWalkLine );
+							__EXT_DEBUG_RICH_CONTENT_ASSERT( _pRCI != NULL );
+							if(		_pRCI->IsParagraphItem() 
+								||	_pRCI->m_rcLayout.IsRectEmpty() 
+								||	_pRCI->GetDisplay() == CExtRichStyleDescription::ed_table
 								)
 								continue;
-							int nHelperTmAscent = pRCI->GetHelperTmAscent();
-							if(		pRCI->GetDisplay() == CExtRichStyleDescription::ed_inline_table
-								||	pRCI->GetDisplay() == CExtRichStyleDescription::ed_inline_block
+							int nHelperTmAscent = _pRCI->GetHelperTmAscent();
+							if(		_pRCI->GetDisplay() == CExtRichStyleDescription::ed_inline_table
+								||	_pRCI->GetDisplay() == CExtRichStyleDescription::ed_inline_block
 								)
-								nHelperTmAscent = pRCI->m_rcLayout.Height();
-							pRCI->OffsetSubTree(
+								nHelperTmAscent = _pRCI->m_rcLayout.Height();
+							_pRCI->OffsetSubTree(
 										CSize(
 												0
 											,	nHelperTmAscentMax 
@@ -14900,7 +14900,7 @@ POSITION posTemp = posLineEOF;
 										true, true
 										);
 
-							nWidthOfLine += pRCI->m_rcLayout.Width();
+							nWidthOfLine += _pRCI->m_rcLayout.Width();
 						}
 						CPoint ptStyleOffset( 0, 0 );
 						CExtRichStyleDescription::e_align_horz_t eaH = styleNext.m_eaH;
@@ -14935,9 +14935,9 @@ POSITION posTemp = posLineEOF;
 						posWalkLine = posSaved;
 						for( ; posWalkLine != posLineEOF && posWalkLine != NULL ; )
 						{
-							CExtRichContentItem * pRCI = _listItems.GetNext( posWalkLine );
-							__EXT_DEBUG_RICH_CONTENT_ASSERT( pRCI != NULL );
- 							if(		pRCI->IsParagraphItem() 
+							CExtRichContentItem * _pRCI = _listItems.GetNext( posWalkLine );
+							__EXT_DEBUG_RICH_CONTENT_ASSERT( _pRCI != NULL );
+ 							if(		_pRCI->IsParagraphItem() 
 								//||	pRCI->GetDisplay() == CExtRichStyleDescription::ed_table
 								)
  								break;
@@ -14947,26 +14947,26 @@ POSITION posTemp = posLineEOF;
 								)
 								continue;
 */
-							if( pRCI->m_rcLayout.IsRectEmpty() )
+							if( _pRCI->m_rcLayout.IsRectEmpty() )
 								continue;
 							if( ptStyleOffset.x != 0 || ptStyleOffset.y != 0 )
 								//pRCI->m_rcLayout.OffsetRect( ptStyleOffset );
-								pRCI->OffsetSubTree( CSize( ptStyleOffset.x, ptStyleOffset.y ), true, true );
+								_pRCI->OffsetSubTree( CSize( ptStyleOffset.x, ptStyleOffset.y ), true, true );
 
-							if(		(! pRCI->IsNoLayoutRectItem() )
-								&&	pRCI->m_rcLayout.left < pRCI->m_rcLayout.right && pRCI->m_rcLayout.top < pRCI->m_rcLayout.bottom
+							if(		(! _pRCI->IsNoLayoutRectItem() )
+								&&	_pRCI->m_rcLayout.left < _pRCI->m_rcLayout.right && _pRCI->m_rcLayout.top < _pRCI->m_rcLayout.bottom
 								)
 							{
 								if( bHaveInitialUnionLayout )
 								{
-									m_rcLayout.left = min( m_rcLayout.left, pRCI->m_rcLayout.left );
-									m_rcLayout.right = max( m_rcLayout.right, pRCI->m_rcLayout.right );
-									m_rcLayout.top = min( m_rcLayout.top, pRCI->m_rcLayout.top );
-									m_rcLayout.bottom = max( m_rcLayout.bottom, pRCI->m_rcLayout.bottom );
+									m_rcLayout.left = min( m_rcLayout.left, _pRCI->m_rcLayout.left );
+									m_rcLayout.right = max( m_rcLayout.right, _pRCI->m_rcLayout.right );
+									m_rcLayout.top = min( m_rcLayout.top, _pRCI->m_rcLayout.top );
+									m_rcLayout.bottom = max( m_rcLayout.bottom, _pRCI->m_rcLayout.bottom );
 								}
 								else 
 								{
-									m_rcLayout.SetRect( pRCI->m_rcLayout.TopLeft(), pRCI->m_rcLayout.BottomRight() );
+									m_rcLayout.SetRect( _pRCI->m_rcLayout.TopLeft(), _pRCI->m_rcLayout.BottomRight() );
 									bHaveInitialUnionLayout = true;
 								}
 							}
@@ -14981,33 +14981,33 @@ POSITION posTemp = posLineEOF;
 						bDoLineAreaUnion = false;
 						CRect rcLine(0,0,0,0);
 
- 						POSITION posWalkLine = posLineStart;
+ 						POSITION _posWalkLine = posLineStart;
 
-						for( ; posWalkLine != posLineEOF && posWalkLine != NULL ; )
+						for( ; _posWalkLine != posLineEOF && _posWalkLine != NULL ; )
 						{
-							CExtRichContentItem * pRCI = _listItems.GetNext( posWalkLine );
-							__EXT_DEBUG_RICH_CONTENT_ASSERT( pRCI != NULL );
- 							if(		pRCI->IsParagraphItem() 
+							CExtRichContentItem * _pRCI = _listItems.GetNext( _posWalkLine );
+							__EXT_DEBUG_RICH_CONTENT_ASSERT( _pRCI != NULL );
+ 							if(		_pRCI->IsParagraphItem() 
 								//||	pRCI->GetDisplay() == CExtRichStyleDescription::ed_table
 								)
  								break;
-							if( pRCI->m_rcLayout.IsRectEmpty() )
+							if( _pRCI->m_rcLayout.IsRectEmpty() )
 								continue;
 
 							if(	/*	(! pRCI->IsNoLayoutRectItem() )*/
-								/*&&	*/pRCI->m_rcLayout.left < pRCI->m_rcLayout.right && pRCI->m_rcLayout.top < pRCI->m_rcLayout.bottom
+								/*&&	*/_pRCI->m_rcLayout.left < _pRCI->m_rcLayout.right && _pRCI->m_rcLayout.top < _pRCI->m_rcLayout.bottom
 								)
 							{
 								if( bHaveInitialLineLayout )
 								{
-									rcLine.left = min( rcLine.left, pRCI->m_rcLayout.left );
-									rcLine.right = max( rcLine.right, pRCI->m_rcLayout.right );
-									rcLine.top = min( rcLine.top, pRCI->m_rcLayout.top );
-									rcLine.bottom = max( rcLine.bottom, pRCI->m_rcLayout.bottom );
+									rcLine.left = min( rcLine.left, _pRCI->m_rcLayout.left );
+									rcLine.right = max( rcLine.right, _pRCI->m_rcLayout.right );
+									rcLine.top = min( rcLine.top, _pRCI->m_rcLayout.top );
+									rcLine.bottom = max( rcLine.bottom, _pRCI->m_rcLayout.bottom );
 								}
 								else 
 								{
-									rcLine.SetRect( pRCI->m_rcLayout.TopLeft(), pRCI->m_rcLayout.BottomRight() );
+									rcLine.SetRect( _pRCI->m_rcLayout.TopLeft(), _pRCI->m_rcLayout.BottomRight() );
 									bHaveInitialLineLayout = true;
 								}
 							}
@@ -15016,18 +15016,18 @@ POSITION posTemp = posLineEOF;
 						if( rcLine.top < rcStartLine.top )
 						{
 							LONG _nLineShift = rcStartLine.top - rcLine.top;
-							posWalkLine = posLineStart;
-							for( ; posWalkLine != posLineEOF && posWalkLine != NULL ; )
+							_posWalkLine = posLineStart;
+							for( ; _posWalkLine != posLineEOF && _posWalkLine != NULL ; )
 							{
-								CExtRichContentItem * pRCI = _listItems.GetNext( posWalkLine );
-								__EXT_DEBUG_RICH_CONTENT_ASSERT( pRCI != NULL );
- 								if(		pRCI->IsParagraphItem() 
+								CExtRichContentItem * _pRCI = _listItems.GetNext( _posWalkLine );
+								__EXT_DEBUG_RICH_CONTENT_ASSERT( _pRCI != NULL );
+ 								if(		_pRCI->IsParagraphItem() 
 									//||	pRCI->GetDisplay() == CExtRichStyleDescription::ed_table
 									)
  									break;
-								if( pRCI->m_rcLayout.IsRectEmpty() )
+								if( _pRCI->m_rcLayout.IsRectEmpty() )
 									continue;
-								pRCI->OffsetSubTree(
+								_pRCI->OffsetSubTree(
 											CSize(
 													0
 												,	_nLineShift
@@ -15083,18 +15083,18 @@ POSITION posTemp = posLineEOF;
 							LONG nWidthOfLine = 0;
 							for( ; posWalkLine != posLineEOF && posWalkLine != NULL ; )
 							{
-								CExtRichContentItem * pRCI = _listItems.GetNext( posWalkLine );
-								__EXT_DEBUG_RICH_CONTENT_ASSERT( pRCI != NULL );
-								if(		pRCI->IsParagraphItem() 
-									||	pRCI->m_rcLayout.IsRectEmpty() 
+								CExtRichContentItem * _pRCI = _listItems.GetNext( posWalkLine );
+								__EXT_DEBUG_RICH_CONTENT_ASSERT( _pRCI != NULL );
+								if(		_pRCI->IsParagraphItem() 
+									||	_pRCI->m_rcLayout.IsRectEmpty() 
 									)
 									continue;
-								int nHelperTmAscent = pRCI->GetHelperTmAscent();
-								if(		pRCI->GetDisplay() == CExtRichStyleDescription::ed_inline_table
-									||	pRCI->GetDisplay() == CExtRichStyleDescription::ed_inline_block
+								int nHelperTmAscent = _pRCI->GetHelperTmAscent();
+								if(		_pRCI->GetDisplay() == CExtRichStyleDescription::ed_inline_table
+									||	_pRCI->GetDisplay() == CExtRichStyleDescription::ed_inline_block
 									)
-									nHelperTmAscent = pRCI->m_rcLayout.Height();
-								pRCI->OffsetSubTree(
+									nHelperTmAscent = _pRCI->m_rcLayout.Height();
+								_pRCI->OffsetSubTree(
 											CSize(
 													0
 												,	nHelperTmAscentMax 
@@ -15104,7 +15104,7 @@ POSITION posTemp = posLineEOF;
 											true, true
 											);
 
-								nWidthOfLine += pRCI->m_rcLayout.Width();
+								nWidthOfLine += _pRCI->m_rcLayout.Width();
 							}
 
 							CPoint ptStyleOffset( 0, 0 );
@@ -15140,9 +15140,9 @@ POSITION posTemp = posLineEOF;
 							posWalkLine = posSaved;
 							for( ; posWalkLine != posLineEOF && posWalkLine != NULL ; )
 							{
-								CExtRichContentItem * pRCI = _listItems.GetNext( posWalkLine );
-								__EXT_DEBUG_RICH_CONTENT_ASSERT( pRCI != NULL );
- 								if(		pRCI->IsParagraphItem() 
+								CExtRichContentItem * _pRCI = _listItems.GetNext( posWalkLine );
+								__EXT_DEBUG_RICH_CONTENT_ASSERT( _pRCI != NULL );
+ 								if(		_pRCI->IsParagraphItem() 
 									//||	pRCI->GetDisplay() == CExtRichStyleDescription::ed_table
 									)
  									break;
@@ -15152,25 +15152,25 @@ POSITION posTemp = posLineEOF;
 									)
 									continue;
 */
-								if( pRCI->m_rcLayout.IsRectEmpty() )
+								if( _pRCI->m_rcLayout.IsRectEmpty() )
 									continue;
 								if( ptStyleOffset.x != 0 || ptStyleOffset.y != 0 )
-									pRCI->OffsetSubTree( CSize( ptStyleOffset.x, ptStyleOffset.y ), true, true );
+									_pRCI->OffsetSubTree( CSize( ptStyleOffset.x, ptStyleOffset.y ), true, true );
 
-								if(		(! pRCI->IsNoLayoutRectItem() )
-									&&	pRCI->m_rcLayout.left < pRCI->m_rcLayout.right && pRCI->m_rcLayout.top < pRCI->m_rcLayout.bottom
+								if(		(! _pRCI->IsNoLayoutRectItem() )
+									&&	_pRCI->m_rcLayout.left < _pRCI->m_rcLayout.right && _pRCI->m_rcLayout.top < _pRCI->m_rcLayout.bottom
 									)
 								{
 									if( bHaveInitialUnionLayout )
 									{
-										m_rcLayout.left = min( m_rcLayout.left, pRCI->m_rcLayout.left );
-										m_rcLayout.right = max( m_rcLayout.right, pRCI->m_rcLayout.right );
-										m_rcLayout.top = min( m_rcLayout.top, pRCI->m_rcLayout.top );
-										m_rcLayout.bottom = max( m_rcLayout.bottom, pRCI->m_rcLayout.bottom );
+										m_rcLayout.left = min( m_rcLayout.left, _pRCI->m_rcLayout.left );
+										m_rcLayout.right = max( m_rcLayout.right, _pRCI->m_rcLayout.right );
+										m_rcLayout.top = min( m_rcLayout.top, _pRCI->m_rcLayout.top );
+										m_rcLayout.bottom = max( m_rcLayout.bottom, _pRCI->m_rcLayout.bottom );
 									}
 									else 
 									{
-										m_rcLayout.SetRect( pRCI->m_rcLayout.TopLeft(), pRCI->m_rcLayout.BottomRight() );
+										m_rcLayout.SetRect( _pRCI->m_rcLayout.TopLeft(), _pRCI->m_rcLayout.BottomRight() );
 										bHaveInitialUnionLayout = true;
 									}
 								}
@@ -15185,33 +15185,33 @@ POSITION posTemp = posLineEOF;
 							bDoLineAreaUnion = false;
 							CRect rcLine(0,0,0,0);
 
- 							POSITION posWalkLine = posLineStart;
+ 							POSITION _posWalkLine = posLineStart;
 
-							for( ; posWalkLine != posLineEOF && posWalkLine != NULL ; )
+							for( ; _posWalkLine != posLineEOF && _posWalkLine != NULL ; )
 							{
-								CExtRichContentItem * pRCI = _listItems.GetNext( posWalkLine );
-								__EXT_DEBUG_RICH_CONTENT_ASSERT( pRCI != NULL );
- 								if(		pRCI->IsParagraphItem() 
+								CExtRichContentItem * _pRCI = _listItems.GetNext( _posWalkLine );
+								__EXT_DEBUG_RICH_CONTENT_ASSERT( _pRCI != NULL );
+ 								if(		_pRCI->IsParagraphItem() 
 									//||	pRCI->GetDisplay() == CExtRichStyleDescription::ed_table
 									)
  									break;
-								if( pRCI->m_rcLayout.IsRectEmpty() )
+								if( _pRCI->m_rcLayout.IsRectEmpty() )
 									continue;
 
 								if(	/*	(! pRCI->IsNoLayoutRectItem() )*/
-									/*&&	*/pRCI->m_rcLayout.left < pRCI->m_rcLayout.right && pRCI->m_rcLayout.top < pRCI->m_rcLayout.bottom
+									/*&&	*/_pRCI->m_rcLayout.left < _pRCI->m_rcLayout.right && _pRCI->m_rcLayout.top < _pRCI->m_rcLayout.bottom
 									)
 								{
 									if( bHaveInitialLineLayout )
 									{
-										rcLine.left = min( rcLine.left, pRCI->m_rcLayout.left );
-										rcLine.right = max( rcLine.right, pRCI->m_rcLayout.right );
-										rcLine.top = min( rcLine.top, pRCI->m_rcLayout.top );
-										rcLine.bottom = max( rcLine.bottom, pRCI->m_rcLayout.bottom );
+										rcLine.left = min( rcLine.left, _pRCI->m_rcLayout.left );
+										rcLine.right = max( rcLine.right, _pRCI->m_rcLayout.right );
+										rcLine.top = min( rcLine.top, _pRCI->m_rcLayout.top );
+										rcLine.bottom = max( rcLine.bottom, _pRCI->m_rcLayout.bottom );
 									}
 									else 
 									{
-										rcLine.SetRect( pRCI->m_rcLayout.TopLeft(), pRCI->m_rcLayout.BottomRight() );
+										rcLine.SetRect( _pRCI->m_rcLayout.TopLeft(), _pRCI->m_rcLayout.BottomRight() );
 										bHaveInitialLineLayout = true;
 									}
 								}
@@ -15222,18 +15222,18 @@ POSITION posTemp = posLineEOF;
 							if( rcLine.top < rcStartLine.top )
 							{
 								_nLineShift = rcStartLine.top - rcLine.top;
-								posWalkLine = posLineStart;
-								for( ; posWalkLine != posLineEOF && posWalkLine != NULL ; )
+								_posWalkLine = posLineStart;
+								for( ; _posWalkLine != posLineEOF && _posWalkLine != NULL ; )
 								{
-									CExtRichContentItem * pRCI = _listItems.GetNext( posWalkLine );
-									__EXT_DEBUG_RICH_CONTENT_ASSERT( pRCI != NULL );
- 									if(		pRCI->IsParagraphItem() 
+									CExtRichContentItem * _pRCI = _listItems.GetNext( _posWalkLine );
+									__EXT_DEBUG_RICH_CONTENT_ASSERT( _pRCI != NULL );
+ 									if(		_pRCI->IsParagraphItem() 
 										//||	pRCI->GetDisplay() == CExtRichStyleDescription::ed_table
 										)
  										break;
-									if( pRCI->m_rcLayout.IsRectEmpty() )
+									if( _pRCI->m_rcLayout.IsRectEmpty() )
 										continue;
-									pRCI->OffsetSubTree(
+									_pRCI->OffsetSubTree(
 												CSize(
 														0
 													,	_nLineShift
@@ -15252,8 +15252,8 @@ POSITION posTemp = posLineEOF;
 
 					posLineStart = posLineEOF;
 
-					CExtRichContentItem * pRCI = _listItems.GetNext( posPostLineProcessing );
-					__EXT_DEBUG_RICH_CONTENT_ASSERT( pRCI != NULL );
+					CExtRichContentItem * _pRCI = _listItems.GetNext( posPostLineProcessing );
+					__EXT_DEBUG_RICH_CONTENT_ASSERT( _pRCI != NULL );
 					CRect rcPostLayout = rcLayout;
 					rcPostLayout.top = rcPrevious.bottom;
 					if( styleNext.m_sizeWH.cx >= 0 )
@@ -15261,11 +15261,11 @@ POSITION posTemp = posLineEOF;
 					if( styleNext.m_sizeWH.cy >= 0 )
 						rcPostLayout.bottom = rcPostLayout.top + styleNext.m_sizeWH.cy;
 					bForceLineStartMode = true;
-					pRCI->m_rcLayout.SetRect(0,0,0,0);
- 					pRCI->DoLayout( dc, rcPostLayout, pRCIFA, false );
+					_pRCI->m_rcLayout.SetRect(0,0,0,0);
+ 					_pRCI->DoLayout( dc, rcPostLayout, pRCIFA, false );
 					rcPrevious.left = rcLayout.left;
 					rcPrevious.right = rcLayout.left;
-					rcPrevious.top = rcPrevious.bottom = pRCI->m_rcLayout.bottom;
+					rcPrevious.top = rcPrevious.bottom = _pRCI->m_rcLayout.bottom;
 					pos = posPostLineProcessing;
 
 				}
@@ -15318,11 +15318,11 @@ POSITION posTemp = posLineEOF;
 							bDoLineAreaUnion = false;
 							CRect rcLine(0,0,0,0);
 
- 							POSITION posWalkLine = posLineStart;
+ 							POSITION _posWalkLine = posLineStart;
 
-							for( ; posWalkLine != NULL ; )
+							for( ; _posWalkLine != NULL ; )
 							{
-								CExtRichContentItem * pRCI = _listItems.GetNext( posWalkLine );
+								CExtRichContentItem * pRCI = _listItems.GetNext( _posWalkLine );
 								__EXT_DEBUG_RICH_CONTENT_ASSERT( pRCI != NULL );
  								if(		pRCI->IsParagraphItem() 
 									//||	pRCI->GetDisplay() == CExtRichStyleDescription::ed_table
@@ -15353,10 +15353,10 @@ POSITION posTemp = posLineEOF;
 							if( rcLine.top < rcStartLine.top )
 							{
 								LONG _nLineShift = rcStartLine.top - rcLine.top;
-								posWalkLine = posLineStart;
-								for( ; posWalkLine != NULL ; )
+								_posWalkLine = posLineStart;
+								for( ; _posWalkLine != NULL ; )
 								{
-									CExtRichContentItem * pRCI = _listItems.GetNext( posWalkLine );
+									CExtRichContentItem * pRCI = _listItems.GetNext( _posWalkLine );
 									__EXT_DEBUG_RICH_CONTENT_ASSERT( pRCI != NULL );
  									if(		pRCI->IsParagraphItem() 
 										//||	pRCI->GetDisplay() == CExtRichStyleDescription::ed_table
@@ -15615,9 +15615,9 @@ POSITION posTemp = posLineEOF;
 									continue;
 								LONG nColWidthBeforeCur = aTable.m_arrCWcur[ nColNo ];
 								LONG nColWidthBeforeMin = aTable.m_arrCWmin[ nColNo ];
-								LONG nAvail = nColWidthBeforeCur - nColWidthBeforeMin;
-								__EXT_DEBUG_RICH_CONTENT_ASSERT( nAvail >= 0 );
-								nAvailableForCollapsing += nAvail;
+								LONG _nAvail = nColWidthBeforeCur - nColWidthBeforeMin;
+								__EXT_DEBUG_RICH_CONTENT_ASSERT( _nAvail >= 0 );
+								nAvailableForCollapsing += _nAvail;
 							} // for( nColNo = 0; nColNo < sizeDim.cx; nColNo ++ )
 							LONG nNom = -nExpandRest, nDeNom = nAvailableForCollapsing;
 							for( nColNo = 0; nColNo < sizeDim.cx; nColNo ++ )
@@ -15627,23 +15627,23 @@ POSITION posTemp = posLineEOF;
 									continue;
 								LONG nColWidthBeforeCur = aTable.m_arrCWcur[ nColNo ];
 								LONG nColWidthBeforeMin = aTable.m_arrCWmin[ nColNo ];
-								LONG nAvail = nColWidthBeforeCur - nColWidthBeforeMin;
-								__EXT_DEBUG_RICH_CONTENT_ASSERT( nAvail >= 0 );
-								if( nAvail == 0 )
+								LONG _nAvail = nColWidthBeforeCur - nColWidthBeforeMin;
+								__EXT_DEBUG_RICH_CONTENT_ASSERT( _nAvail >= 0 );
+								if( _nAvail == 0 )
 									continue;
 								LONG nColWidthAfterCur = nColWidthBeforeCur;
 								if( nAvailableForCollapsing <= (-nExpandRest) )
 								{
-									nColWidthAfterCur -= nAvail;
-									nExpandRest += nAvail;
-									nAvailableForCollapsing -= nAvail;
+									nColWidthAfterCur -= _nAvail;
+									nExpandRest += _nAvail;
+									nAvailableForCollapsing -= _nAvail;
 								}
 								else
 								{
-									nAvail = ::MulDiv( nAvail, nNom, nDeNom );
-									nColWidthAfterCur -= nAvail;
-									nExpandRest += nAvail;
-									nAvailableForCollapsing -= nAvail;
+									_nAvail = ::MulDiv( _nAvail, nNom, nDeNom );
+									nColWidthAfterCur -= _nAvail;
+									nExpandRest += _nAvail;
+									nAvailableForCollapsing -= _nAvail;
 								}
 								if( nColWidthAfterCur != nColWidthBeforeCur )
 									aTable.m_arrCWcur.SetAt( nColNo, nColWidthAfterCur );
@@ -15670,13 +15670,13 @@ POSITION posTemp = posLineEOF;
 							} // if( bExpand )
 							else
 							{
-								LONG nAvail = nColWidthBeforeCur - nColWidthBeforeMin;
-								__EXT_DEBUG_RICH_CONTENT_ASSERT( nAvail >= 0 );
-								if( nAvail == 0 )
+								LONG _nAvail = nColWidthBeforeCur - nColWidthBeforeMin;
+								__EXT_DEBUG_RICH_CONTENT_ASSERT( _nAvail >= 0 );
+								if( _nAvail == 0 )
 									continue;
-								nAvail = min( nAvail, (-nExpandRest) );
-								nColWidthAfterCur -= nAvail;
-								nExpandRest += nAvail;
+								_nAvail = min( _nAvail, (-nExpandRest) );
+								nColWidthAfterCur -= _nAvail;
+								nExpandRest += _nAvail;
 							} // else from if( bExpand )
 							if( nColWidthAfterCur != nColWidthBeforeCur )
 								aTable.m_arrCWcur.SetAt( nColNo, nColWidthAfterCur );
@@ -15702,9 +15702,9 @@ POSITION posTemp = posLineEOF;
 								} // if( bExpand )
 								else
 								{
-									LONG nAvail = nColWidthBeforeCur - nColWidthBeforeMin;
-									__EXT_DEBUG_RICH_CONTENT_ASSERT( nAvail >= 0 );
-									if( nAvail == 0 )
+									LONG _nAvail = nColWidthBeforeCur - nColWidthBeforeMin;
+									__EXT_DEBUG_RICH_CONTENT_ASSERT( _nAvail >= 0 );
+									if( _nAvail == 0 )
 										continue;
 									nColWidthAfterCur --;
 									nExpandRest ++;
@@ -15724,9 +15724,9 @@ POSITION posTemp = posLineEOF;
 								continue;
 							LONG nColWidthBeforeCur = aTable.m_arrCWcur[ nColNo ];
 							LONG nColWidthBeforeMin = aTable.m_arrCWmin[ nColNo ];
-							LONG nAvail = nColWidthBeforeCur - nColWidthBeforeMin;
-							__EXT_DEBUG_RICH_CONTENT_ASSERT( nAvail >= 0 );
-							nAvailableForCollapsing += nAvail;
+							LONG _nAvail = nColWidthBeforeCur - nColWidthBeforeMin;
+							__EXT_DEBUG_RICH_CONTENT_ASSERT( _nAvail >= 0 );
+							nAvailableForCollapsing += _nAvail;
 						} // for( nColNo = 0; nColNo < sizeDim.cx; nColNo ++ )
 						LONG nNom = -nExpandRest, nDeNom = nAvailableForCollapsing;
 						// step 2d: compress/expand percent columns
@@ -15738,26 +15738,26 @@ POSITION posTemp = posLineEOF;
 							LONG nColWidthBeforeCur = aTable.m_arrCWcur[ nColNo ];
 							LONG nColWidthBeforeMin = aTable.m_arrCWmin[ nColNo ];
 							__EXT_DEBUG_RICH_CONTENT_ASSERT( nColWidthBeforeCur >= nColWidthBeforeMin );
-							LONG nAvail = nColWidthBeforeCur - nColWidthBeforeMin;///
-							__EXT_DEBUG_RICH_CONTENT_ASSERT( nAvail >= 0 );///
-							if( nAvail == 0 )
+							LONG _nAvail = nColWidthBeforeCur - nColWidthBeforeMin;///
+							__EXT_DEBUG_RICH_CONTENT_ASSERT( _nAvail >= 0 );///
+							if( _nAvail == 0 )
 								continue;
 							LONG nColWidthAfterCur = nColWidthBeforeCur;
 							//if( bExpand )
 							if( nAvailableForCollapsing <= (-nExpandRest) )///
 							{
-								nColWidthAfterCur -= nAvail;///
-								nExpandRest += nAvail;///
-								nAvailableForCollapsing -= nAvail;///
+								nColWidthAfterCur -= _nAvail;///
+								nExpandRest += _nAvail;///
+								nAvailableForCollapsing -= _nAvail;///
 							} // if( bExpand )
 							else
 							{
-								nAvail = ::MulDiv( nAvail, nNom, nDeNom );///
-								if( nAvail <= 0 )
+								_nAvail = ::MulDiv( _nAvail, nNom, nDeNom );///
+								if( _nAvail <= 0 )
 									continue;
-								nColWidthAfterCur -= nAvail;
-								nExpandRest += nAvail;
-								nAvailableForCollapsing -= nAvail;///
+								nColWidthAfterCur -= _nAvail;
+								nExpandRest += _nAvail;
+								nAvailableForCollapsing -= _nAvail;///
 							} // else from if( bExpand )
 							if( nColWidthAfterCur != nColWidthBeforeCur )
 								aTable.m_arrCWcur.SetAt( nColNo, nColWidthAfterCur );
@@ -15911,12 +15911,12 @@ POSITION posTemp = posLineEOF;
 								nRowNo + sizeSpan.cy - 1,
 								true
 								);
-							LONG nShiftX = nBorderSpacingHoriz * (nColNo + 1); // !!! shift on border spacing
-							LONG nShiftY = nBorderSpacingVert * (nRowNo + 1); // !!! shift on border spacing
-							rcTableCell.left += nShiftX; // !!! add border spacing
-							rcTableCell.top += nShiftY; // !!! add border spacing
-							rcTableCell.right += nShiftX + ( ( sizeSpan.cx - 1 ) * nBorderSpacingHoriz ); // !!! add border spacing
-							rcTableCell.bottom += nShiftY + ( ( sizeSpan.cy - 1 ) * nBorderSpacingVert ); // !!! add border spacing
+							LONG _nShiftX = nBorderSpacingHoriz * (nColNo + 1); // !!! shift on border spacing
+							LONG _nShiftY = nBorderSpacingVert * (nRowNo + 1); // !!! shift on border spacing
+							rcTableCell.left += _nShiftX; // !!! add border spacing
+							rcTableCell.top += _nShiftY; // !!! add border spacing
+							rcTableCell.right += _nShiftX + ( ( sizeSpan.cx - 1 ) * nBorderSpacingHoriz ); // !!! add border spacing
+							rcTableCell.bottom += _nShiftY + ( ( sizeSpan.cy - 1 ) * nBorderSpacingVert ); // !!! add border spacing
 							rcTableCell.OffsetRect( rcLayout.TopLeft() );
 							pTableCellHI->DoLayout( dc, rcTableCell, pRCIFA, false );
 							//pTableCellHI->m_rcLayout = rcTableCell;
@@ -20296,13 +20296,13 @@ const CExtRichContentItem * pClassRCI = CssClassGet( LPCTSTR(strGenericTagName) 
 		{
 			CExtSafeString & _strClass = pRCI->m_pListClassNames->GetNext( posClassName );
 			__EXT_DEBUG_RICH_CONTENT_ASSERT( ! _strClass.IsEmpty() );
-			const CExtRichContentItem * pClassRCI = CssClassGet( LPCTSTR(_strClass) );
-			if( pClassRCI != NULL )
+			const CExtRichContentItem * _pClassRCI = CssClassGet( LPCTSTR(_strClass) );
+			if( _pClassRCI != NULL )
 			{
-				POSITION posPCD = pClassRCI->m_listPCD.GetHeadPosition();
+				POSITION posPCD = _pClassRCI->m_listPCD.GetHeadPosition();
 				for( ; posPCD != NULL; )
 				{
-					const CExtRichContentItem * pPseudoClassRCI = pClassRCI->m_listPCD.GetNext( posPCD );
+					const CExtRichContentItem * pPseudoClassRCI = _pClassRCI->m_listPCD.GetNext( posPCD );
 					__EXT_DEBUG_RICH_CONTENT_ASSERT( pPseudoClassRCI != NULL );
 					if( pPseudoClassRCI->m_eType != CExtRichContentItem::__EHIT_CLASS_NODE )
 						continue;
@@ -22542,7 +22542,7 @@ LONG nLen = LONG( _strColorSpec.GetLength() );
 			h = 0;
 		else
 		{
-			LONG nPercentPos = strColorPart.Find( _T('%') );
+			nPercentPos = strColorPart.Find( _T('%') );
 			if( nPercentPos >= 0 )
 				return clrNotParsedRetVal; // not parsed
 			else
@@ -22560,7 +22560,7 @@ LONG nLen = LONG( _strColorSpec.GetLength() );
 			return clrNotParsedRetVal; // not parsed
 		else
 		{
-			LONG nPercentPos = strColorPart.Find( _T('%') );
+			nPercentPos = strColorPart.Find( _T('%') );
 			if( nPercentPos >= 0 )
 			{
 				strColorPart = strColorPart.Left( nPercentPos );
@@ -22579,7 +22579,7 @@ LONG nLen = LONG( _strColorSpec.GetLength() );
 			return clrNotParsedRetVal; // not parsed
 		else
 		{
-			LONG nPercentPos = strColorPart.Find( _T('%') );
+			nPercentPos = strColorPart.Find( _T('%') );
 			if( nPercentPos >= 0 )
 			{
 				strColorPart = strColorPart.Left( nPercentPos );
@@ -22748,9 +22748,9 @@ static struct { LPCTSTR m_strName; COLORREF m_clr; } g_arrWebColors[] =
 static CMapStringToPtr g_mapColorNames;
 	if( g_mapColorNames.GetCount() == 0 )
 	{
-		LONG nIndex, nCount = sizeof(g_arrWebColors) / sizeof(g_arrWebColors[0]);
-		for( nIndex = 0; nIndex < nCount; nIndex ++ )
-			g_mapColorNames.SetAt( g_arrWebColors[ nIndex ].m_strName, LPVOID( g_arrWebColors[ nIndex ].m_clr ) );
+		LONG _nIndex, nCount = sizeof(g_arrWebColors) / sizeof(g_arrWebColors[0]);
+		for( _nIndex = 0; _nIndex < nCount; _nIndex ++ )
+			g_mapColorNames.SetAt( g_arrWebColors[ _nIndex ].m_strName, LPVOID( g_arrWebColors[ _nIndex ].m_clr ) );
 		__EXT_DEBUG_RICH_CONTENT_ASSERT( g_mapColorNames.GetCount() == nCount );
 	}
 LPVOID pVal = NULL;
@@ -23678,14 +23678,14 @@ int m_nNewLineHeight = 0;
 	{
 		bool bHaveInitialUnionLayout = false;
 
-		CExtRichContentItem * pRCI_Paragraph = ( pRootRCI->m_listItems.GetCount() > 0 ) ? pRootRCI->m_listItems.GetHead() : NULL;
+		CExtRichContentItem * _pRCI_Paragraph = ( pRootRCI->m_listItems.GetCount() > 0 ) ? pRootRCI->m_listItems.GetHead() : NULL;
 
- 		POSITION pos = pRCI_Paragraph->m_listItems.GetHeadPosition();
-		const CExtRichStyleDescription & styleNext = pRCI_Paragraph->GetEffectiveStyle();
+ 		POSITION pos = _pRCI_Paragraph->m_listItems.GetHeadPosition();
+		const CExtRichStyleDescription & styleNext = _pRCI_Paragraph->GetEffectiveStyle();
 
 		for( ; pos != NULL; )
 		{
-			CExtRichContentItem * pRCI = pRCI_Paragraph->m_listItems.GetNext( pos );
+			CExtRichContentItem * pRCI = _pRCI_Paragraph->m_listItems.GetNext( pos );
 			__EXT_DEBUG_RICH_CONTENT_ASSERT( pRCI != NULL );
 			if( INT(pRCI->m_eType) >= INT(CExtRichContentItem::__EHIT_SPEC_START) )
 				continue;
@@ -24031,9 +24031,9 @@ int nBackSlashCount = 0;
 			}
 			if( listEllipsis.GetCount() > 0 )
 			{
-				POSITION pos = listEllipsis.GetTailPosition();
-				for( ; pos != NULL; )
-					strModified += listEllipsis.GetPrev( pos );
+				POSITION _pos = listEllipsis.GetTailPosition();
+				for( ; _pos != NULL; )
+					strModified += listEllipsis.GetPrev( _pos );
 			}
 			if( strModified.IsEmpty() )
 			{
@@ -25713,7 +25713,7 @@ int CExtRichBidiAlgorithm::ClassFromChN( __EXT_MFC_SAFE_TCHAR ch, int nLowerUppe
 TBYTE _ch = TBYTE(ch);
 	if( nLowerUpperMode != 0 && _istalpha( _ch ) )
 	{
-		TCHAR _modified[2] = { _ch, _T('\0') };
+		TCHAR _modified[2] = { (TCHAR)_ch, _T('\0') };
 		if( nLowerUpperMode < 0 )
 			__EXT_MFC_STRLWR( _modified, 2 );
 		else
@@ -25736,7 +25736,7 @@ int CExtRichBidiAlgorithm::ClassFromChWS( __EXT_MFC_SAFE_TCHAR ch, int nLowerUpp
 TBYTE _ch = TBYTE(ch);
 	if( nLowerUpperMode != 0 && _istalpha( _ch ) )
 	{
-		TCHAR _modified[2] = { _ch, _T('\0') };
+		TCHAR _modified[2] = { (TCHAR)_ch, _T('\0') };
 		if( nLowerUpperMode < 0 )
 			__EXT_MFC_STRLWR( _modified, 2 );
 		else

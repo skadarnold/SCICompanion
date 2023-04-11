@@ -2025,11 +2025,11 @@ CPoint pt = wr.CenterPoint();
 						}
 					}
 				}
-				CWnd * pWnd = GetParent();
-				ASSERT( pWnd != NULL );
-				ASSERT_VALID( pWnd );
+				CWnd * _pWnd = GetParent();
+				ASSERT( _pWnd != NULL );
+				ASSERT_VALID( _pWnd );
 				HWND hWndThis = GetSafeHwnd();
-				pWnd->SendMessage(
+				_pWnd->SendMessage(
 					WM_COMMAND,
 					MAKEWPARAM(nResultCmdID,BN_CLICKED),
 					(LPARAM)hWndThis

@@ -688,9 +688,9 @@ CRect & rcNcRect = reinterpret_cast < CRect & > ( lpncsp->rgrc[0] );
 		if( pWnd != NULL )
 		{
 			ASSERT_VALID( pWnd );
-			DWORD dwStyle = pWnd->GetStyle();
-			if(		(dwStyle&WS_VSCROLL) != 0
-				||	(dwStyle&WS_HSCROLL) != 0
+			DWORD _dwStyle = pWnd->GetStyle();
+			if(		(_dwStyle&WS_VSCROLL) != 0
+				||	(_dwStyle&WS_HSCROLL) != 0
 				)
 				bHasScrolBars = true;
 		}

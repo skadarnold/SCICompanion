@@ -452,16 +452,16 @@ BOOL CExtMdiWindowsListDlg::OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDH
 				{
 					for(int nItem = nCount-1; nItem >= 0; nItem-- )	
 					{
-						HWND hWnd=(HWND)m_wndListWindows.GetItemData(nItem);
+						HWND _hWnd=(HWND)m_wndListWindows.GetItemData(nItem);
 						if( m_wndListWindows.GetSel(nItem) > 0 )
 						{
 							//::ShowWindow( hWnd, SW_RESTORE );
-							::SendMessage( hWnd, WM_SYSCOMMAND, SC_RESTORE, 0L );
+							::SendMessage( _hWnd, WM_SYSCOMMAND, SC_RESTORE, 0L );
 						}
 						else
 						{
 							//::ShowWindow( hWnd, SW_MINIMIZE );
-							::SendMessage( hWnd, WM_SYSCOMMAND, SC_MINIMIZE, 0L );
+							::SendMessage( _hWnd, WM_SYSCOMMAND, SC_MINIMIZE, 0L );
 						}
 					} // for(int nItem = nCount-1; nItem >= 0; nItem-- )	
 					::SendMessage(m_hWndMDIClient, WM_MDITILE, MDITILE_VERTICAL, 0);	
@@ -474,16 +474,16 @@ BOOL CExtMdiWindowsListDlg::OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDH
 				{
 					for(int nItem = nCount-1; nItem >= 0; nItem-- )	
 					{
-						HWND hWnd=(HWND)m_wndListWindows.GetItemData(nItem);
+						HWND _hWnd=(HWND)m_wndListWindows.GetItemData(nItem);
 						if( m_wndListWindows.GetSel(nItem) > 0 )
 						{
 							//::ShowWindow( hWnd, SW_RESTORE );
-							::SendMessage( hWnd, WM_SYSCOMMAND, SC_RESTORE, 0L );
+							::SendMessage( _hWnd, WM_SYSCOMMAND, SC_RESTORE, 0L );
 						}
 						else
 						{
 							//::ShowWindow( hWnd, SW_MINIMIZE );
-							::SendMessage( hWnd, WM_SYSCOMMAND, SC_MINIMIZE, 0L );
+							::SendMessage( _hWnd, WM_SYSCOMMAND, SC_MINIMIZE, 0L );
 						}
 					} // for(int nItem = nCount-1; nItem >= 0; nItem-- )	
 					::SendMessage(m_hWndMDIClient, WM_MDITILE, MDITILE_HORIZONTAL, 0);	
@@ -498,10 +498,10 @@ BOOL CExtMdiWindowsListDlg::OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDH
 					{
 						if( m_wndListWindows.GetSel(nItem) > 0 ) 
 						{
-							HWND hWnd = (HWND)m_wndListWindows.GetItemData(nItem);
-							if( hWnd != NULL ) 
+							HWND _hWnd = (HWND)m_wndListWindows.GetItemData(nItem);
+							if( _hWnd != NULL ) 
 							{
-								CMDIChildWnd* pMDIChildWnd = (CMDIChildWnd*)CWnd::FromHandle(hWnd);
+								CMDIChildWnd* pMDIChildWnd = (CMDIChildWnd*)CWnd::FromHandle(_hWnd);
 								if (!pMDIChildWnd)
 									continue;
 								CDocument *pDocument = pMDIChildWnd->GetActiveDocument();
@@ -521,11 +521,11 @@ BOOL CExtMdiWindowsListDlg::OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDH
 				{
 					for(int nItem = nCount-1; nItem >= 0; nItem-- )	
 					{
-						HWND hWnd=(HWND)m_wndListWindows.GetItemData(nItem);
+						HWND _hWnd=(HWND)m_wndListWindows.GetItemData(nItem);
 						if( m_wndListWindows.GetSel(nItem) > 0 )
 						{
 							//::ShowWindow( hWnd, SW_MINIMIZE );
-							::SendMessage( hWnd, WM_SYSCOMMAND, SC_MINIMIZE, 0L );
+							::SendMessage( _hWnd, WM_SYSCOMMAND, SC_MINIMIZE, 0L );
 						}
 					} // for(int nItem = nCount-1; nItem >= 0; nItem-- )
 					::SendMessage(m_hWndMDIClient, WM_MDICASCADE, 0, 0);	
@@ -553,9 +553,9 @@ BOOL CExtMdiWindowsListDlg::OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDH
 					{
 						if( m_wndListWindows.GetSel(nItem) > 0 ) 
 						{
-							HWND hWnd = (HWND)m_wndListWindows.GetItemData(nItem);
-							if( hWnd != NULL )
-								::PostMessage(hWnd, WM_CLOSE, 0,0);
+							HWND _hWnd = (HWND)m_wndListWindows.GetItemData(nItem);
+							if( _hWnd != NULL )
+								::PostMessage(_hWnd, WM_CLOSE, 0,0);
 						} // if( m_wndListWindows.GetSel(nItem) > 0 ) 
 					} // for( int nItem = 0; nItem < nCount; nItem++ ) 
 				} // if( nCount != LB_ERR && nCount > 0 )
@@ -570,16 +570,16 @@ BOOL CExtMdiWindowsListDlg::OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDH
 				{
 					for(int nItem = nCount-1; nItem >= 0; nItem-- )	
 					{
-						HWND hWnd=(HWND)m_wndListWindows.GetItemData(nItem);
+						HWND _hWnd=(HWND)m_wndListWindows.GetItemData(nItem);
 						if( m_wndListWindows.GetSel(nItem) > 0 )
 						{
 							//::ShowWindow( hWnd, SW_RESTORE );
-							::SendMessage( hWnd, WM_SYSCOMMAND, SC_RESTORE, 0L );
+							::SendMessage( _hWnd, WM_SYSCOMMAND, SC_RESTORE, 0L );
 						}
 						else
 						{
 							//::ShowWindow( hWnd, SW_MINIMIZE );
-							::SendMessage( hWnd, WM_SYSCOMMAND, SC_MINIMIZE, 0L );
+							::SendMessage( _hWnd, WM_SYSCOMMAND, SC_MINIMIZE, 0L );
 						}
 					} // for(int nItem = nCount-1; nItem >= 0; nItem-- )	
 					::SendMessage(m_hWndMDIClient, WM_MDICASCADE, 0, 0);	

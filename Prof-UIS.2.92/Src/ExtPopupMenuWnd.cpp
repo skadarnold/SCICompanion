@@ -5804,9 +5804,9 @@ CBitmap * pBmpOld = NULL;
 				} // paint combined area AS IS
 
 				pBmpOld = dcmm.SelectObject( &m_bmpScreenDst );
-				int cx =
+				int mycx =
 					_rcClient.Width();
-				int cy =
+				int mycy =
 					_rcClient.Height();
 				if( m_AnimationType == __AT_ROLL
 					||
@@ -5815,7 +5815,7 @@ CBitmap * pBmpOld = NULL;
 				{ // non-stratchable variants
 					int _cx = 0;
 					if( m_AnimationType == __AT_ROLL )
-						_cx = (cx * (100-m_nAnimPercent)) / 100;
+						_cx = (mycx * (100-m_nAnimPercent)) / 100;
 					int _cy =
 						(cy * (100-m_nAnimPercent)) / 100;
 					if( m_eCombineAlign == __CMBA_RIGHT )
@@ -5824,7 +5824,7 @@ CBitmap * pBmpOld = NULL;
 						if( rgnClip.CreateRectRgnIndirect( &_rcClient ) )
 							pPaintDC->SelectClipRgn( &rgnClip );
 						pPaintDC->BitBlt(
-							_rcClient.left+_cx, _rcClient.top-_cy, cx, cy, 
+							_rcClient.left+_cx, _rcClient.top-_cy, mycx, mycy, 
 							&dcmm,
 							_rcClient.left, _rcClient.top,
 							SRCCOPY
@@ -5837,7 +5837,7 @@ CBitmap * pBmpOld = NULL;
 						if( rgnClip.CreateRectRgnIndirect( &_rcClient ) )
 							pPaintDC->SelectClipRgn( &rgnClip );
 						pPaintDC->BitBlt(
-							_rcClient.left-_cx, _rcClient.top+_cy, cx, cy,
+							_rcClient.left-_cx, _rcClient.top+_cy, mycx, mycy,
 							&dcmm,
 							_rcClient.left, _rcClient.top,
 							SRCCOPY
@@ -5847,7 +5847,7 @@ CBitmap * pBmpOld = NULL;
 					else
 					{ // if m_eCombineAlign is __CMBA_TOP or __CMBA_LEFT
 						pPaintDC->BitBlt(
-							_rcClient.left-_cx, _rcClient.top-_cy, cx, cy,
+							_rcClient.left-_cx, _rcClient.top-_cy, mycx, mycy,
 							&dcmm,
 							_rcClient.left, _rcClient.top,
 							SRCCOPY
@@ -5856,9 +5856,9 @@ CBitmap * pBmpOld = NULL;
 				} // non-stratchable variants
 				else
 				{ // stratchable variants
-					int _cx = cx;
+					int _cx = mycx;
 					if( m_AnimationType == __AT_ROLL_AND_STRETCH )
-						_cx = (cx * m_nAnimPercent) / 100;
+						_cx = (mycx * m_nAnimPercent) / 100;
 					int _cy =
 						(cy * m_nAnimPercent) / 100;
 					int nOldStretchBltMode =
@@ -5873,9 +5873,9 @@ CBitmap * pBmpOld = NULL;
 						if( rgnClip.CreateRectRgnIndirect( &_rcClient ) )
 							pPaintDC->SelectClipRgn( &rgnClip );
 						pPaintDC->StretchBlt(
-							_rcClient.left+cx-_cx, _rcClient.top, _cx, _cy,
+							_rcClient.left+mycx-_cx, _rcClient.top, _cx, _cy,
 							&dcmm,
-							_rcClient.left, _rcClient.top, cx, cy, 
+							_rcClient.left, _rcClient.top, mycx, mycy, 
 							SRCCOPY
 							);
 						pPaintDC->SelectClipRgn( NULL );
@@ -5886,9 +5886,9 @@ CBitmap * pBmpOld = NULL;
 						if( rgnClip.CreateRectRgnIndirect( &_rcClient ) )
 							pPaintDC->SelectClipRgn( &rgnClip );
 						pPaintDC->StretchBlt(
-							_rcClient.left-cx+_cx, _rcClient.top+cy-_cy, _cx, _cy,
+							_rcClient.left-mycx+_cx, _rcClient.top+mycy-_cy, _cx, _cy,
 							&dcmm,
-							_rcClient.left, _rcClient.top, cx, cy, 
+							_rcClient.left, _rcClient.top, mycx, mycy, 
 							SRCCOPY
 							);
 						pPaintDC->SelectClipRgn( NULL );
@@ -5898,7 +5898,7 @@ CBitmap * pBmpOld = NULL;
 						pPaintDC->StretchBlt(
 							_rcClient.left, _rcClient.top, _cx, _cy,
 							&dcmm,
-							_rcClient.left, _rcClient.top, cx, cy, 
+							_rcClient.left, _rcClient.top, mycx, mycy, 
 							SRCCOPY
 							);
 					} // if m_eCombineAlign is __CMBA_TOP or __CMBA_LEFT
@@ -5947,13 +5947,13 @@ CBitmap * pBmpOld = NULL;
 				} // paint combined area AS IS
 
 				pBmpOld = dcmm.SelectObject( &m_bmpScreenDst );
-				int cx =
+				int mycx =
 					_rcClient.Width();
-				int cy =
+				int mycy =
 					_rcClient.Height();
-				int _cx = cx;
+				int _cx = mycx;
 				int _cy =
-					(cy * m_nAnimPercent) / 100;
+					(mycy * m_nAnimPercent) / 100;
 
 				CExtPopupMenuWnd::visible_items_t v;
 					pThisPopup->_GetVisibleItems(
@@ -5969,7 +5969,7 @@ CBitmap * pBmpOld = NULL;
 					pPaintDC->StretchBlt(
 						_rcClient.left, _rcClient.top, _cx, _cy, 
 						&dcmm,
-						_rcClient.left, _rcClient.top, cx, cy,
+						_rcClient.left, _rcClient.top, mycx, mycy,
 						SRCCOPY
 						);
 					pPaintDC->SetStretchBltMode( nOldStretchBltMode );
@@ -7471,26 +7471,26 @@ bool bIR = true;
 				);
 			m_rcAlignment.SetRect( 0, 0, 0, 0 );
 		}
-		CExtPaintManager::monitor_parms_t _mp;
-		CExtPaintManager::stat_GetMonitorParms( _mp, m_rcExcludeArea );
-		CRect rcDesktop = g_bUseDesktopWorkArea
-			? _mp.m_rcWorkArea
-			: _mp.m_rcMonitor
+		CExtPaintManager::monitor_parms_t my_mp;
+		CExtPaintManager::stat_GetMonitorParms( my_mp, m_rcExcludeArea );
+		CRect _rcDesktop = g_bUseDesktopWorkArea
+			? my_mp.m_rcWorkArea
+			: my_mp.m_rcMonitor
 			;
-		if( rcWnd.right > rcDesktop.right )
+		if( rcWnd.right > _rcDesktop.right )
 			rcWnd.OffsetRect(
-				- ( rcWnd.right - rcDesktop.right ),
+				- ( rcWnd.right - _rcDesktop.right ),
 				0
 				);
-		if( rcWnd.left < rcDesktop.left )
-			rcWnd.OffsetRect( rcDesktop.left - rcWnd.left, 0 );
-		if( rcWnd.bottom > rcDesktop.bottom )
+		if( rcWnd.left < _rcDesktop.left )
+			rcWnd.OffsetRect( _rcDesktop.left - rcWnd.left, 0 );
+		if( rcWnd.bottom > _rcDesktop.bottom )
 			rcWnd.OffsetRect(
 				0,
-				- ( rcWnd.bottom - rcDesktop.bottom )
+				- ( rcWnd.bottom - _rcDesktop.bottom )
 				);
-		if( rcWnd.top < rcDesktop.top )
-			rcWnd.OffsetRect( 0, rcDesktop.top - rcWnd.top );
+		if( rcWnd.top < _rcDesktop.top )
+			rcWnd.OffsetRect( 0, _rcDesktop.top - rcWnd.top );
 		MoveWindow( &rcWnd );
 	}
 
@@ -9725,7 +9725,8 @@ CMenu menu;
 		ASSERT( FALSE );
 		return NULL;
 	}
-
+//KAWA: Removing this part, nobody uses NT4 nowadays lol
+/*
 OSVERSIONINFO ov;
     ov.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
 	VERIFY( ::GetVersionEx( &ov ) );
@@ -9735,6 +9736,7 @@ bool bStupidNT4XX =
 		&&
 		( ov.dwMajorVersion < 5 )
 		);
+*/
 
 int nCount = ItemGetCount();
 	for( int nItem = 0; nItem < nCount; nItem++ )
@@ -9773,7 +9775,7 @@ int nCount = ItemGetCount();
 				ASSERT( FALSE );
 				//continue;
 			}
-			if( bStupidNT4XX )
+			//if( bStupidNT4XX )
 			{
 				VERIFY( ::DestroyMenu( hPopupData ) );
 			}
@@ -10770,8 +10772,8 @@ CExtPopupMenuWnd * pParent = GetParentMenuWnd();
 									pWndTLP->GetWindowRect( &rcTLP );
 									if( ! rcTLP.IsRectEmpty() )
 									{
-										CRect rcIntersection;
-										if(	rcIntersection.IntersectRect(
+										CRect _rcIntersection;
+										if(	_rcIntersection.IntersectRect(
 												&rcTLP,
 												&rcWndOld
 												)
@@ -11946,19 +11948,19 @@ INT iter = 0;
 			i++, iter++
 			)
 	{
-		MENUITEMDATA & mi = ItemGetInfo( iter );
-		if( ! mi.IsDisplayed() )
+		MENUITEMDATA & _mi = ItemGetInfo( iter );
+		if( ! _mi.IsDisplayed() )
 			continue;
-		const RECT & rcBase = mi.GetBaseRect();
+		const RECT & rcBase = _mi.GetBaseRect();
 		y += (rcBase.bottom - rcBase.top);
 		INT nMarginTop = 0, nMarginBottom = 0;
-		mi.GetOuterMargins(
+		_mi.GetOuterMargins(
 			NULL,
 			&nMarginTop,
 			NULL,
 			&nMarginBottom
 			);
-		if( mi.GetIndex() == ItemGetCount() - 1 )
+		if( _mi.GetIndex() == ItemGetCount() - 1 )
 			nMarginBottom--;
 		y += (nMarginTop + nMarginBottom);
 	}
@@ -12065,12 +12067,12 @@ int xRow = x, dyRow = 0;
 int iter = 0, i = 0, nRowStart = 0;
 	for( ; i < nIndex && iter != nCountOfItems; i++, iter++ )
 	{
-		MENUITEMDATA & mi = ItemGetInfo( iter );
-		if( ! mi.IsDisplayed() )
+		MENUITEMDATA & _mi = ItemGetInfo( iter );
+		if( ! _mi.IsDisplayed() )
 			continue;
 		bool bWrap = _IsPaletteItemWrap( iter );
-		const RECT & rcBase = mi.GetBaseRect();
-		if( mi.IsSeparator() )
+		const RECT & rcBase = _mi.GetBaseRect();
+		if( _mi.IsSeparator() )
 			bWrap = true;
 		int nWidth = rcBase.right - rcBase.left;
 		int nHeight = rcBase.bottom - rcBase.top;
@@ -12080,7 +12082,7 @@ int iter = 0, i = 0, nRowStart = 0;
 			xRow = x;
 			y += dyRow;
 			dyRow = 0;
-			if( mi.IsSeparator() )
+			if( _mi.IsSeparator() )
 				y +=
 					PmBridge_GetPM()->GetSeparatorHeight()
 					+ __EXT_MENU_GAP
@@ -12091,7 +12093,7 @@ int iter = 0, i = 0, nRowStart = 0;
 		else
 		{
 			xRow += nWidth;
-			if( mi.IsInplaceEdit() )
+			if( _mi.IsInplaceEdit() )
 				xRow += (iter == 0) ? __EXT_MENU_GAP : (__EXT_MENU_GAP*2);
 //			else
 //				xRow += (nRowStart == i) ? 0 : __EXT_MENU_GAP;
@@ -12135,14 +12137,14 @@ const RECT & rcBase = mi.GetBaseRect();
 	dyRow = 0;
 	for( iter = nRowStart; iter != nCountOfItems; iter++ )
 	{
-		MENUITEMDATA & mi = ItemGetInfo( iter );
-		if( ! mi.IsDisplayed() )
+		MENUITEMDATA & _mi = ItemGetInfo( iter );
+		if( ! _mi.IsDisplayed() )
 			continue;
 		bool bWrap = _IsPaletteItemWrap( iter );
-		const RECT & rcBase = mi.GetBaseRect();
-		if( mi.IsSeparator() )
+		const RECT & _rcBase = _mi.GetBaseRect();
+		if( _mi.IsSeparator() )
 			bWrap = true;
-		int nHeight = rcBase.bottom - rcBase.top;
+		int nHeight = _rcBase.bottom - _rcBase.top;
 		dyRow = max( dyRow, nHeight );
 		if( bWrap )
 			break;
@@ -12917,15 +12919,15 @@ DRAWBACKGROUNDDATA _dbkgnd( dc, rcClient, this );
 
 	if( (TrackFlagsGet()&TPMX_RIBBON_RESIZING) != 0 )
 	{
-		CRect rcMB = PmBridge_GetPM()->GetMenuBorderMetrics( (CWnd*)this );
-		ASSERT( rcMB.left >= 0 );
-		ASSERT( rcMB.top >= 0 );
-		ASSERT( rcMB.right >= 0 );
-		ASSERT( rcMB.bottom >= 0 );
+		CRect _rcMB = PmBridge_GetPM()->GetMenuBorderMetrics( (CWnd*)this );
+		ASSERT( _rcMB.left >= 0 );
+		ASSERT( _rcMB.top >= 0 );
+		ASSERT( _rcMB.right >= 0 );
+		ASSERT( _rcMB.bottom >= 0 );
 		CRect rcResizingArea = rcClient;
-		rcResizingArea.left += rcMB.left;
-		rcResizingArea.right -= rcMB.right;
-		rcResizingArea.bottom -= rcMB.bottom;
+		rcResizingArea.left += _rcMB.left;
+		rcResizingArea.right -= _rcMB.right;
+		rcResizingArea.bottom -= _rcMB.bottom;
 		INT nMarginHeight = 0, nResizingCornerPartWidth = 0;
 		PmBridge_GetPM()->MenuBottomResizingMarginGetInfo( nMarginHeight, nResizingCornerPartWidth, this );
 		rcResizingArea.top = rcResizingArea.bottom - nMarginHeight;
@@ -13248,9 +13250,9 @@ DWORD dwTrackFlags = TrackFlagsGet();
 		CRect rcExcludeClient( m_rcExcludeArea );
 		ScreenToClient( &rcExcludeClient );
 		CRect rx( rcExcludeClient );
-		CExtMemoryDC dc( &dcPaint, &rx );
+		CExtMemoryDC mydc( &dcPaint, &rx );
 		PmBridge_GetPM()->PaintMenuCombinedArea(
-			dc,
+			mydc,
 			rcExcludeClient,
 			rcClient,
 			m_eCombineAlign,
@@ -13258,7 +13260,7 @@ DWORD dwTrackFlags = TrackFlagsGet();
 			);
 		if( m_pCbPaintCombinedContent != NULL )
 		{
-			CExtMemoryDC dcCA( &dc, &rcExcludeClient, CExtMemoryDC::MDCOPT_TO_MEMORY|CExtMemoryDC::MDCOPT_FILL_BITS|CExtMemoryDC::MDCOPT_RTL_COMPATIBILITY );
+			CExtMemoryDC dcCA( &mydc, &rcExcludeClient, CExtMemoryDC::MDCOPT_TO_MEMORY|CExtMemoryDC::MDCOPT_FILL_BITS|CExtMemoryDC::MDCOPT_RTL_COMPATIBILITY );
 			m_pCbPaintCombinedContent(
 				m_pCbPaintCombinedCookie,
 				dcCA,
@@ -13846,10 +13848,10 @@ int nHitTest =
 
 	if( _IsTearOff() && nHitTest == IDX_TEAROFF )
 	{
-		bool bLButtonUpCall =
+		bool _bLButtonUpCall =
 			( nFlags == WM_LBUTTONUP || nFlags == WM_NCLBUTTONUP )
 				? true : false;
-		if( ! bLButtonUpCall )
+		if( ! _bLButtonUpCall )
 			_DoTearOff();
 		return true;
 	}
@@ -14886,9 +14888,9 @@ bool bTopLevel = m_bTopLevel;
 	}
 	if( ! bCusomizeMode )
 	{
-		HWND hWndOwn = m_hWnd;
+		HWND myhWndOwn = m_hWnd;
 		_ItemFocusDelay();
-		if( ! ::IsWindow( hWndOwn ) )
+		if( ! ::IsWindow( myhWndOwn ) )
 			return;
 //		INT nSaved = m_nFadeOutAnimationStepCount;
 //		m_nFadeOutAnimationStepCount = -1;
@@ -16356,8 +16358,8 @@ HWND hWndFocus = ::GetFocus();
 			)
 		{
 			ASSERT_VALID( m_pWndParentMenu );
-			CPoint point = ptScreenClick;
-			m_pWndParentMenu->ScreenToClient( &point );
+			CPoint mypoint = ptScreenClick;
+			m_pWndParentMenu->ScreenToClient( &mypoint );
 			if( ptScreenClick == m_ptTrackWatched )
 			{
 				m_ptTrackWatched.x = m_ptTrackWatched.y = 0;
@@ -16366,7 +16368,7 @@ HWND hWndFocus = ::GetFocus();
 			HWND hWndOwn = m_hWnd;
 			if( m_pWndParentMenu->_OnMouseMove(
 					nFlags,
-					point,
+					mypoint,
 					bNoEat
 					)
 				)
@@ -16446,8 +16448,8 @@ HWND hWndFocus = ::GetFocus();
 					}
 					//::ReleaseCapture();
 					pPopup->_SetCapture();
-					CPoint point = ptScreenClick;
-					pPopup->ScreenToClient( &point );
+					CPoint mypoint = ptScreenClick;
+					pPopup->ScreenToClient( &mypoint );
 					return true; //pPopup->_OnMouseMove( nFlags, point, bNoEat );
 				}
 			}
@@ -16698,30 +16700,30 @@ HWND hWndOwn = m_hWnd;
 		int nOldCurIndex = m_nCurIndex; 
 		if( nOldCurIndex != nCurIndex )
 		{
-			HWND hWndOwn = m_hWnd;
+			HWND myhWndOwn = m_hWnd;
 			_ItemFocusDelay();
 			bool bFocusAreadySet = false;
 			if( mi.IsPopup() )
 				_ItemFocusDelay( nCurIndex, &bFocusAreadySet );
-			if( ! ::IsWindow( hWndOwn ) )
+			if( ! ::IsWindow( myhWndOwn ) )
 				return true;
 			if( ! bFocusAreadySet )
 			{
 				_SetCapture();
 				_ItemFocusSet( nCurIndex, FALSE, TRUE, FALSE, TRUE );
 			}
-			if( ! ::IsWindow( hWndOwn ) )
+			if( ! ::IsWindow( myhWndOwn ) )
 				return true;
 			m_nLastMousePick = nCurIndex;
-			MENUITEMDATA & mi = ItemGetInfo(nCurIndex);
-			if( (! bFocusAreadySet ) && mi.IsPopup() )
+			MENUITEMDATA & _mi = ItemGetInfo(nCurIndex);
+			if( (! bFocusAreadySet ) && _mi.IsPopup() )
 			{
 				CExtPopupMenuTipWnd & _tipWnd = GetTip();
 				_tipWnd.Hide();
-				if( mi.GetPopup()->GetSafeHwnd() == NULL )
+				if( _mi.GetPopup()->GetSafeHwnd() == NULL )
 				{
 					_ItemFocusDelay( nCurIndex );
-					if( ! ::IsWindow( hWndOwn ) )
+					if( ! ::IsWindow( myhWndOwn ) )
 						return true;
 				}
 				return true;
@@ -16736,14 +16738,14 @@ HWND hWndOwn = m_hWnd;
 				bool bInitCoolTip = true;
 				if( _IsRibbonMode() )
 				{
-					if(		mi.KeyTipGetWnd( true )->GetSafeHwnd() != NULL
-						||	mi.KeyTipGetWnd( false )->GetSafeHwnd() != NULL
+					if(		_mi.KeyTipGetWnd( true )->GetSafeHwnd() != NULL
+						||	_mi.KeyTipGetWnd( false )->GetSafeHwnd() != NULL
 						)
 						bInitCoolTip = false;
 					else
 					{
 						CExtPopupScreenTipWnd & _wndScreenTip = GetScreenTip();
-						if( mi.InitSceenTip( _wndScreenTip ) )
+						if( _mi.InitSceenTip( _wndScreenTip ) )
 							bInitCoolTip = false;
 					}
 				} // if( _IsRibbonMode() )
@@ -16751,7 +16753,7 @@ HWND hWndOwn = m_hWnd;
 #endif // (!defined __EXT_MFC_NO_CUSTOMIZE)
 				{
 					CExtSafeString sTipText;
-					mi.GetTip( sTipText );
+					_mi.GetTip( sTipText );
 					if( ! sTipText.IsEmpty() )
 					{
 						CRect rcItem;
@@ -18080,32 +18082,32 @@ bool bRTL = OnQueryLayoutRTL();
 		{
 			ASSERT( m_bExpandAvailable );
 			ASSERT( !m_bExpandWasPressed );
-			int nItemIndex = m_nCurIndex;
+			int _nItemIndex = m_nCurIndex;
 			HWND hWndOwn = m_hWnd;
 			_DoExpand();
 			if( ! ::IsWindow( hWndOwn ) )
 				return true;
-			if( nItemIndex >= 0 )
+			if( _nItemIndex >= 0 )
 			{
-				HWND hWndOwn = m_hWnd;
+				HWND myhWndOwn = m_hWnd;
 				_ItemFocusSet(
-					nItemIndex,
+					_nItemIndex,
 					FALSE,
 					//m_bAnimFinished
 					( GetSite().GetAnimated() == NULL )
 						? TRUE : FALSE
 					);
-				if( ! ::IsWindow( hWndOwn ) )
+				if( ! ::IsWindow( myhWndOwn ) )
 					return true;
 				int i = _GetNextItem(__NI_NEXT);
 				_ItemFocusSet(
-					(i>0) ? i : nItemIndex,
+					(i>0) ? i : _nItemIndex,
 					FALSE,
 					//m_bAnimFinished
 					( GetSite().GetAnimated() == NULL )
 						? TRUE : FALSE
 					);
-				if( ! ::IsWindow( hWndOwn ) )
+				if( ! ::IsWindow( myhWndOwn ) )
 					return true;
 			}
 			return true;
@@ -19218,15 +19220,15 @@ CSize m_sizeFullItems2 = m_sizeFullItems;
 				? __AT_CONTENT_EXPAND
 				: __AT_CONTENT_DISPLAY
 				;
-		HWND hWndOwn = m_hWnd;
+		HWND myhWndOwn = m_hWnd;
 		_StartAnimation();
-		if( ! ::IsWindow( hWndOwn ) )
+		if( ! ::IsWindow( myhWndOwn ) )
 			return;
 		if( m_AnimationType == __AT_NONE )
 		{
 			m_AnimationType = __AT_CONTENT_DISPLAY;
 			_StartAnimation();
-			if( ! ::IsWindow( hWndOwn ) )
+			if( ! ::IsWindow( myhWndOwn ) )
 				return;
 			ASSERT( m_AnimationType == __AT_CONTENT_DISPLAY );
 		}
@@ -19606,8 +19608,8 @@ int nApproxRowWidth = ::MulDiv( nSummaryWidth, 25, 100 );
 				//&&	nIndex != nIndexLast
 				)
 			{
-				MENUITEMDATA & mi = ItemGetInfo( nIndex - 1 );
-				mi.SetToolWrap( true );
+				MENUITEMDATA & _mi = ItemGetInfo( nIndex - 1 );
+				_mi.SetToolWrap( true );
 				dxRow = nWidth;
 				continue;
 			}
@@ -22155,10 +22157,10 @@ bool bLButtonUpCall =
 bool bEndSequence = false;
 HWND hWndOwn = GetSafeHwnd();
 	ASSERT( hWndOwn != NULL && ::IsWindow(hWndOwn) );
-int m_nColorIdxCurr = _ColorItemHitTest(point);
-	if(	(		m_nColorIdxCurr >= 0
-			||	m_nColorIdxCurr == IDX_DEFAULT_COLOR_BTN
-			||	m_nColorIdxCurr == IDX_CUSTOM_COLOR_BTN
+int my_nColorIdxCurr = _ColorItemHitTest(point);
+	if(	(		my_nColorIdxCurr >= 0
+			||	my_nColorIdxCurr == IDX_DEFAULT_COLOR_BTN
+			||	my_nColorIdxCurr == IDX_CUSTOM_COLOR_BTN
 			)
 		&&	( ! _FindCustomizeMode() )
 		)
@@ -22189,7 +22191,7 @@ HWND hWndFromPoint = ::WindowFromPoint( ptScreenClick );
 	if( bEndSequence || ( ! bLButtonUpCall ) )
 	{
 		COLORREF clr = (COLORREF)__ECST_NONE;
-		switch( m_nColorIdxCurr )
+		switch( my_nColorIdxCurr )
 		{
 		case IDX_DEFAULT_COLOR_BTN:
 			clr = (COLORREF)__ECST_BUTTON_DEFAULT;
@@ -22198,7 +22200,7 @@ HWND hWndFromPoint = ::WindowFromPoint( ptScreenClick );
 			clr = (COLORREF)__ECST_BUTTON_CUSTOM;
 		    break;
 		default:
-			clr = _GetColorValue( m_nColorIdxCurr );
+			clr = _GetColorValue( my_nColorIdxCurr );
 		    break;
 		}
 //		_EndSequence( clr );

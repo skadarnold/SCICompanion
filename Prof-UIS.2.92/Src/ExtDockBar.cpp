@@ -4290,16 +4290,16 @@ bool bHaveDraggingBar = ( CExtControlBar::_DraggingGetBar() != NULL ) ? true : f
 				else
 					pExtBar->m_sizeDockedV.cy = _size.cy / nRowSize;
 			}
-			LONG nMinHW = pExtBar->_CalcDesiredMinHW();
-			LONG nMinVH = pExtBar->_CalcDesiredMinVH();
+			LONG _nMinHW = pExtBar->_CalcDesiredMinHW();
+			LONG _nMinVH = pExtBar->_CalcDesiredMinVH();
 			INT nBarMinMetric = bHorz
-				? nMinVH
-				: nMinHW;
+				? _nMinVH
+				: _nMinHW;
 			nRowMinMetric =
 				min( nRowMinMetric, nBarMinMetric );
 			nRowMinExtent += bHorz
-				? nMinHW
-				: nMinVH;
+				? _nMinHW
+				: _nMinVH;
 			nRowExtent += bHorz
 				? pExtBar->m_sizeDockedH.cx
 				: pExtBar->m_sizeDockedV.cy;
@@ -4411,17 +4411,17 @@ bool bFinish = false;
 		ASSERT( pVLI != NULL );
 		if( pVLI->IsEmpty() )
 			continue;
-		INT nIncrement = ( pVLI->m_nRowExtent < nDesiredMetric ) ? 1 : -1;
-		INT nDiff = abs( pVLI->m_nRowExtent - nDesiredMetric );
+		INT _nIncrement = ( pVLI->m_nRowExtent < nDesiredMetric ) ? 1 : -1;
+		INT _nDiff = abs( pVLI->m_nRowExtent - nDesiredMetric );
 
 		bool bHaveDisplayingBars = false;
-		for( int nDisplaying = 0; nDisplaying < 2 && nDiff != 0; nDisplaying++ )
+		for( int nDisplaying = 0; nDisplaying < 2 && _nDiff != 0; nDisplaying++ )
 		{
 			bool bAllMinSized = false;
 			INT nPass = 0;
-			for( ; nDiff != 0; nPass ++ )
+			for( ; _nDiff != 0; nPass ++ )
 			{
-				ASSERT( nDiff >= 0 );
+				ASSERT( _nDiff >= 0 );
 				INT nRowSize = (INT)pVLI->m_vRow.GetSize();
 				if( nRowSize == 0 )
 					continue;
@@ -4441,16 +4441,16 @@ bool bFinish = false;
 						{
 							bHaveDisplayingBars = false;
 							bFinish = true;
-							INT nRowSize = (INT)pVLI->m_vRow.GetSize();
-							for( INT nBar = 0; nBar < nRowSize; nBar++ )
+							INT _nRowSize = (INT)pVLI->m_vRow.GetSize();
+							for( INT _nBar = 0; _nBar < _nRowSize; _nBar++ )
 							{
-								CExtControlBar * pExtBar = pVLI->m_vRow[ nBar ];
-								ASSERT( pExtBar != NULL );
-								if( pExtBar->_DisplayingGet() )
+								CExtControlBar * _pExtBar = pVLI->m_vRow[ _nBar ];
+								ASSERT( _pExtBar != NULL );
+								if( _pExtBar->_DisplayingGet() )
 								{
 									if( nPass <= nRowSize )
 										bFinish = false;
-									pExtBar->_DisplayingSet( false );
+									_pExtBar->_DisplayingSet( false );
 								}
 							} // for( INT nBar = 0; nBar < nRowSize; nBar++ )
 							if( bFinish )
@@ -4468,7 +4468,7 @@ bool bFinish = false;
 						? pExtBar->m_sizeDockedH.cx
 						: pExtBar->m_sizeDockedV.cy;
 
-					if( nIncrement < 0 )
+					if( _nIncrement < 0 )
 					{
 						LONG nBarMinMetric = bHorz
 							? pExtBar->_CalcDesiredMinHW()
@@ -4489,9 +4489,9 @@ bool bFinish = false;
 						}
 					} // if( nIncrement < 0 )
 
-					nBarMetricRef += nIncrement;
-					nDiff --;
-					if( nDiff == 0 )
+					nBarMetricRef += _nIncrement;
+					_nDiff --;
+					if( _nDiff == 0 )
 						break;
 				} // for( INT nBar = 0; nBar < nRowSize; nBar++ )
 				if( bFinish )
@@ -5603,8 +5603,8 @@ int nCount = (int)m_pWndDynDocker->m_arrBars.GetSize();
 		);
 	if( ! bDelay )
 	{
-	 	CFrameWnd * pFrame = GetParentFrame();
-		pFrame->RecalcLayout();
+	 	CFrameWnd * _pFrame = GetParentFrame();
+		_pFrame->RecalcLayout();
 	}
 }
 
@@ -6620,9 +6620,9 @@ int nCsRow = nExtentReal - nExtentMax /*- nPossibleBetween*/; //nPossibleCs;
 	if( nPossibleBetween > 0 )
 	{
 		int nLeftPrev = nExtentMax;
-		for( int nBar = nSubRowEndPos; nBar >= nSubRowStartPos; nBar-- )
+		for( int _nBar = nSubRowEndPos; _nBar >= nSubRowStartPos; _nBar-- )
 		{
-			CRect & rcPreCalc = arrRcPreCalc.ElementAt( nBar-nSubRowStartPos );
+			CRect & rcPreCalc = arrRcPreCalc.ElementAt( _nBar-nSubRowStartPos );
 			int nShift =
 				nLeftPrev
 				- (bHorz ? rcPreCalc.right : rcPreCalc.bottom)
@@ -6647,10 +6647,10 @@ bool bCompressionPassed = false;
 	if( (!bRetVal) && nCsRow >= 0 )
 	{
 		int nLeftPrev = nExtentMax;
-		for( int nBar = nSubRowEndPos; nBar >= nSubRowStartPos; nBar-- )
+		for( int _nBar = nSubRowEndPos; _nBar >= nSubRowStartPos; _nBar-- )
 		{
-			OuterLayoutItemData & olid = dbol.ElementAt( nBar );
-			CRect & rcPreCalc = arrRcPreCalc.ElementAt( nBar-nSubRowStartPos );
+			OuterLayoutItemData & olid = dbol.ElementAt( _nBar );
+			CRect & rcPreCalc = arrRcPreCalc.ElementAt( _nBar-nSubRowStartPos );
 			int nCsAvail = bHorz
 				? (rcPreCalc.Width() - olid.m_sizeBarMin.cx)
 				: (rcPreCalc.Height() - olid.m_sizeBarMin.cy)
@@ -6783,10 +6783,10 @@ bool bCompressionPassed = false;
 				if( bPerformReShift )
 				{
 					int nRightPrev = 0;
-					for( int nBar = nSubRowStartPos; nBar <= nSubRowEndPos; nBar++ )
+					for( int _nBar = nSubRowStartPos; _nBar <= nSubRowEndPos; _nBar++ )
 					{
 //						OuterLayoutItemData & olid = dbol.ElementAt( nBar );
-						CRect & rcPreCalc = arrRcPreCalc.ElementAt( nBar-nSubRowStartPos );
+						CRect & rcPreCalc = arrRcPreCalc.ElementAt( _nBar-nSubRowStartPos );
 						int nShift =
 							nRightPrev
 							- (bHorz ? rcPreCalc.left : rcPreCalc.top )
@@ -7857,16 +7857,16 @@ const int nRsOffset = 1; //2;
 	if( nCountOfBars > 1 && pAffixmentData != NULL )
 	{
 		int nSlideBarIdxInArray = -1;
-		for( int nBar = 0; nBar < nCountOfBars; nBar++ )
+		for( int _nBar = 0; _nBar < nCountOfBars; _nBar++ )
 		{
-			OuterLayoutItemData & olid = dbol.ElementAt( nBar );
+			OuterLayoutItemData & olid = dbol.ElementAt( _nBar );
 			ASSERT_VALID( olid.m_pBar );
 			ASSERT_KINDOF( CControlBar, olid.m_pBar );
 			ASSERT( olid.m_bVisible );
 			if( olid.m_pBar == pBarSlide )
 			{
 				ASSERT( nSlideBarIdxInArray < 0 );
-				nSlideBarIdxInArray = nBar;
+				nSlideBarIdxInArray = _nBar;
 				break;
 			}
 		} // for( nBar = 0; nBar < nCountOfBars; nBar++ )
@@ -7979,12 +7979,12 @@ const int nRsOffset = 1; //2;
 			}
 			for( int nBarXSP = nStartBar; nBarXSP <= nEndBar; nBarXSP++ )
 			{
-				OuterLayoutItemData & olid = dbol.ElementAt( nBarXSP );
-				ASSERT_VALID( olid.m_pBar );
-				ASSERT_KINDOF( CControlBar, olid.m_pBar );
-				ASSERT( olid.m_bVisible );
+				OuterLayoutItemData & _olid = dbol.ElementAt( nBarXSP );
+				ASSERT_VALID( _olid.m_pBar );
+				ASSERT_KINDOF( CControlBar, _olid.m_pBar );
+				ASSERT( _olid.m_bVisible );
 				int nFreeBefore = 0;
-				CRect rcBarLocal( olid.m_rcReal );
+				CRect rcBarLocal( _olid.m_rcReal );
 				if( nBarXSP == 0 )
 					nFreeBefore = bHorz ? rcBarLocal.left : rcBarLocal.top;
 				else

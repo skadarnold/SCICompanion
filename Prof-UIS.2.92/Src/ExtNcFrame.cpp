@@ -401,11 +401,11 @@ bool bContinueRecalc = true;
 				max( _mmi.ptMaxTrackSize.y, _mp.m_rcWorkArea.Height() )
 				);
 			CRect rcMax( /*_mmi.ptMaxPosition*/ ptMaxPosCurrent, maxSize );
-			WINDOWPLACEMENT _wp, _wp2;
-			::memset( &_wp, 0, sizeof(WINDOWPLACEMENT) );
-			_wp.length = sizeof(WINDOWPLACEMENT);
-			::GetWindowPlacement( hWndCheckZoomState, &_wp );
-			::memcpy( &_wp2, &_wp, sizeof(WINDOWPLACEMENT) );
+			WINDOWPLACEMENT my_wp, _wp2;
+			::memset( &my_wp, 0, sizeof(WINDOWPLACEMENT) );
+			my_wp.length = sizeof(WINDOWPLACEMENT);
+			::GetWindowPlacement( hWndCheckZoomState, &my_wp );
+			::memcpy( &_wp2, &my_wp, sizeof(WINDOWPLACEMENT) );
 			CRect rcMaxInflated( rcMax );
 			if( m_pNcFrameImpl->NcFrameImpl_IsSupported() )
 			{
@@ -419,9 +419,9 @@ bool bContinueRecalc = true;
 			::CopyRect( &_wp2.rcNormalPosition, &rcMaxInflated );
 			_wp2.showCmd = SW_SHOWMAXIMIZED;
 			::SetWindowPlacement( hWndCheckZoomState, &_wp2 );
-			_wp.showCmd = SW_SHOWMAXIMIZED;
+			my_wp.showCmd = SW_SHOWMAXIMIZED;
 			::SendMessage( hWndCheckZoomState, WM_SETREDRAW, 1L, 0L );
-			::SetWindowPlacement( hWndCheckZoomState, &_wp );
+			::SetWindowPlacement( hWndCheckZoomState, &my_wp );
 		}
 		m_pNcFrameImpl->m_bNcFrameImpl_InAdjustAdjustThemeSettings_NoRgnSetup = false;
 		m_pNcFrameImpl->NcFrameImpl_SetupRgn();
@@ -1318,9 +1318,9 @@ RECT rc = { 0, 0, 0, 0 };
 				rcWnd = (*pRectWnd);
 			else
 			{
- 				CWnd * pWndFrameImpl = (CWnd *)NcFrameImpl_GetFrameWindow();
- 				ASSERT_VALID( pWndFrameImpl );
-				pWndFrameImpl->GetWindowRect( &rcWnd );
+ 				CWnd * _pWndFrameImpl = (CWnd *)NcFrameImpl_GetFrameWindow();
+ 				ASSERT_VALID( _pWndFrameImpl );
+				_pWndFrameImpl->GetWindowRect( &rcWnd );
 			} // else from if( pRectWnd != NULL )
 			::OffsetRect( &rc, -rcWnd.left, -rcWnd.top );
 		} // if( bScreenMapping )
@@ -3151,23 +3151,23 @@ CWnd * pWndFrameImpl = NcFrameImpl_GetFrameWindow();
 									)
 									continue;
 								bStartDetected = true;
-								CRect rcWnd = rcWndStart;
-								rcWnd.OffsetRect( ptOffset );
+								CRect _rcWnd = rcWndStart;
+								_rcWnd.OffsetRect( ptOffset );
 								CRect rcWndCurrent;
 								::GetWindowRect( hWnd, &rcWndCurrent );
-								if( rcWndCurrent != rcWnd )
+								if( rcWndCurrent != _rcWnd )
 								{
 									if( ( ::__EXT_MFC_GetWindowLong(hWnd,GWL_STYLE) & WS_CHILD ) != 0 )
 									{
 										HWND hWndParent = ::GetParent( hWnd );
 										ASSERT( hWndParent != NULL );
-										::ScreenToClient( hWndParent, ((LPPOINT)&rcWnd) );
-										::ScreenToClient( hWndParent, ((LPPOINT)&rcWnd)+1 );
+										::ScreenToClient( hWndParent, ((LPPOINT)&_rcWnd) );
+										::ScreenToClient( hWndParent, ((LPPOINT)&_rcWnd)+1 );
 									}
-									CRect rcWndAdjusted = rcWnd;
+									CRect rcWndAdjusted = _rcWnd;
 									if( ::SendMessage( hWnd, WM_MOVING, 0L, LPARAM(&rcWndAdjusted) ) != 0L )
-										rcWnd = rcWndAdjusted;
-									::MoveWindow( hWnd, rcWnd.left, rcWnd.top, rcWnd.Width(), rcWnd.Height(), TRUE );
+										_rcWnd = rcWndAdjusted;
+									::MoveWindow( hWnd, _rcWnd.left, _rcWnd.top, _rcWnd.Width(), _rcWnd.Height(), TRUE );
 									SendMessage( hWnd, WM_NCPAINT, 0, 0 );
 									CExtPaintManager::stat_PassPaintMessages();
 									::Sleep(1);
@@ -3343,17 +3343,17 @@ CWnd * pWndFrameImpl = NcFrameImpl_GetFrameWindow();
 									bStop = true;
 									break;
 								}
-								CRect rcWnd = rcWndStart;
+								CRect _rcWnd = rcWndStart;
 								if(		wParam == HTLEFT
 									||	wParam == HTTOPLEFT
 									||	wParam == HTBOTTOMLEFT
 									)
 								{
-									rcWnd.left = rcWndStart.left + pt.x - ptStart.x;
-									if( rcWnd.Width() < _mmi.ptMinTrackSize.x )
-										rcWnd.left = rcWnd.right - _mmi.ptMinTrackSize.x;
-									if( rcWnd.Width() > _mmi.ptMaxTrackSize.x )
-										rcWnd.left = rcWnd.right - _mmi.ptMaxTrackSize.x;
+									_rcWnd.left = rcWndStart.left + pt.x - ptStart.x;
+									if( _rcWnd.Width() < _mmi.ptMinTrackSize.x )
+										_rcWnd.left = _rcWnd.right - _mmi.ptMinTrackSize.x;
+									if( _rcWnd.Width() > _mmi.ptMaxTrackSize.x )
+										_rcWnd.left = _rcWnd.right - _mmi.ptMaxTrackSize.x;
 									//if( rcWnd.left > rcWndStart.left )
 									//	rcWnd.left = rcWndStart.left;
 								}
@@ -3362,11 +3362,11 @@ CWnd * pWndFrameImpl = NcFrameImpl_GetFrameWindow();
 									||	wParam == HTBOTTOMRIGHT
 									)
 								{
-									rcWnd.right = rcWndStart.right + pt.x - ptStart.x;
-									if( rcWnd.Width() < _mmi.ptMinTrackSize.x )
-										rcWnd.right = rcWnd.left + _mmi.ptMinTrackSize.x;
-									if( rcWnd.Width() > _mmi.ptMaxTrackSize.x )
-										rcWnd.right = rcWnd.left + _mmi.ptMaxTrackSize.x;
+									_rcWnd.right = rcWndStart.right + pt.x - ptStart.x;
+									if( _rcWnd.Width() < _mmi.ptMinTrackSize.x )
+										_rcWnd.right = _rcWnd.left + _mmi.ptMinTrackSize.x;
+									if( _rcWnd.Width() > _mmi.ptMaxTrackSize.x )
+										_rcWnd.right = _rcWnd.left + _mmi.ptMaxTrackSize.x;
 									//if( rcWnd.right < rcWndStart.right )
 									//	rcWnd.right = rcWndStart.right;
 								}
@@ -3375,11 +3375,11 @@ CWnd * pWndFrameImpl = NcFrameImpl_GetFrameWindow();
 									||	wParam == HTTOPRIGHT
 									)
 								{
-									rcWnd.top = rcWndStart.top + pt.y - ptStart.y;
-									if( rcWnd.Height() < _mmi.ptMinTrackSize.y )
-										rcWnd.top = rcWnd.bottom - _mmi.ptMinTrackSize.y;
-									if( rcWnd.Height() > _mmi.ptMaxTrackSize.y )
-										rcWnd.top = rcWnd.bottom - _mmi.ptMaxTrackSize.y;
+									_rcWnd.top = rcWndStart.top + pt.y - ptStart.y;
+									if( _rcWnd.Height() < _mmi.ptMinTrackSize.y )
+										_rcWnd.top = _rcWnd.bottom - _mmi.ptMinTrackSize.y;
+									if( _rcWnd.Height() > _mmi.ptMaxTrackSize.y )
+										_rcWnd.top = _rcWnd.bottom - _mmi.ptMaxTrackSize.y;
 									//if( rcWnd.top > rcWndStart.top )
 									//	rcWnd.top = rcWndStart.top;
 								}
@@ -3388,17 +3388,17 @@ CWnd * pWndFrameImpl = NcFrameImpl_GetFrameWindow();
 									||	wParam == HTBOTTOMRIGHT
 									)
 								{
-									rcWnd.bottom = rcWndStart.bottom + pt.y - ptStart.y;
-									if( rcWnd.Height() < _mmi.ptMinTrackSize.y )
-										rcWnd.bottom = rcWnd.top + _mmi.ptMinTrackSize.y;
-									if( rcWnd.Height() > _mmi.ptMaxTrackSize.y )
-										rcWnd.bottom = rcWnd.top + _mmi.ptMaxTrackSize.y;
+									_rcWnd.bottom = rcWndStart.bottom + pt.y - ptStart.y;
+									if( _rcWnd.Height() < _mmi.ptMinTrackSize.y )
+										_rcWnd.bottom = _rcWnd.top + _mmi.ptMinTrackSize.y;
+									if( _rcWnd.Height() > _mmi.ptMaxTrackSize.y )
+										_rcWnd.bottom = _rcWnd.top + _mmi.ptMaxTrackSize.y;
 									//if( rcWnd.bottom < rcWndStart.bottom )
 									//	rcWnd.bottom = rcWndStart.bottom;
 								}
 								CRect rcWndCurrent;
 								::GetWindowRect( hWnd, &rcWndCurrent );
-								if( rcWndCurrent != rcWnd )
+								if( rcWndCurrent != _rcWnd )
 								{
 									UINT nIDFirst = 0, nIDLast = 0xFFFF, nIDLeftOver = AFX_IDW_PANE_FIRST;
 									AFX_SIZEPARENTPARAMS layout = { NULL, { 0, 0, 0, 0 }, { 0, 0 }, FALSE };
@@ -3406,8 +3406,8 @@ CWnd * pWndFrameImpl = NcFrameImpl_GetFrameWindow();
 									layout.bStretch = TRUE;
 									CRect rcClientCurrent;
 									::GetClientRect( hWnd, &rcClientCurrent );
-									layout.rect.right = rcClientCurrent.right + rcWnd.Width() - rcWndCurrent.Width();
-									layout.rect.bottom = rcClientCurrent.bottom + rcWnd.Height() - rcWndCurrent.Height();
+									layout.rect.right = rcClientCurrent.right + _rcWnd.Width() - rcWndCurrent.Width();
+									layout.rect.bottom = rcClientCurrent.bottom + _rcWnd.Height() - rcWndCurrent.Height();
 									layout.hDWP = ::BeginDeferWindowPos( 8 );
 									HWND hWndChild = ::GetTopWindow( hWnd );
 									for( ; hWndChild != NULL; hWndChild = ::GetNextWindow( hWndChild, GW_HWNDNEXT ) )
@@ -3437,13 +3437,13 @@ CWnd * pWndFrameImpl = NcFrameImpl_GetFrameWindow();
 									{
 										HWND hWndParent = ::GetParent( hWnd );
 										ASSERT( hWndParent != NULL );
-										::ScreenToClient( hWndParent, ((LPPOINT)&rcWnd) );
-										::ScreenToClient( hWndParent, ((LPPOINT)&rcWnd)+1 );
+										::ScreenToClient( hWndParent, ((LPPOINT)&_rcWnd) );
+										::ScreenToClient( hWndParent, ((LPPOINT)&_rcWnd)+1 );
 									}
-									CRect rcWndAdjusted = rcWnd;
+									CRect rcWndAdjusted = _rcWnd;
 									if( ::SendMessage( hWnd, WM_SIZING, wParamSizingCode, LPARAM(&rcWndAdjusted) ) != 0L )
-										rcWnd = rcWndAdjusted;
-									::MoveWindow( hWnd, rcWnd.left, rcWnd.top, rcWnd.Width(), rcWnd.Height(), TRUE );
+										_rcWnd = rcWndAdjusted;
+									::MoveWindow( hWnd, _rcWnd.left, _rcWnd.top, _rcWnd.Width(), _rcWnd.Height(), TRUE );
 									SendMessage( hWnd, WM_NCPAINT, 0, 0 );
 									CExtPaintManager::stat_PassPaintMessages();
 									::Sleep(1);
@@ -4578,9 +4578,9 @@ bool CExtNcFrameWatchMDIMF::OnHookWndMsg(
 					HWND hWndMdiClient = CExtControlBar::stat_FindMdiClientHWND( hWndHooked );
 					if( hWndMdiClient != NULL )
 					{
-						__EXT_MFC_LONG_PTR dwStyle = ::__EXT_MFC_GetWindowLong( hWndMdiClient, GWL_STYLE );
-						if( (dwStyle&WS_BORDER) != 0 )
-							::__EXT_MFC_SetWindowLong( hWndMdiClient, GWL_STYLE, dwStyle&(~(WS_BORDER)) );
+						__EXT_MFC_LONG_PTR _dwStyle = ::__EXT_MFC_GetWindowLong( hWndMdiClient, GWL_STYLE );
+						if( (_dwStyle&WS_BORDER) != 0 )
+							::__EXT_MFC_SetWindowLong( hWndMdiClient, GWL_STYLE, _dwStyle&(~(WS_BORDER)) );
 						__EXT_MFC_LONG_PTR dwStyleEx = ::__EXT_MFC_GetWindowLong( hWndMdiClient, GWL_EXSTYLE );
 						if( (dwStyleEx&(WS_EX_CLIENTEDGE|WS_EX_STATICEDGE|WS_EX_DLGMODALFRAME)) != 0 )
 							::__EXT_MFC_SetWindowLong( hWndMdiClient, GWL_EXSTYLE, (dwStyleEx&(~(WS_EX_CLIENTEDGE|WS_EX_STATICEDGE|WS_EX_DLGMODALFRAME)))|WS_EX_CLIENTEDGE );

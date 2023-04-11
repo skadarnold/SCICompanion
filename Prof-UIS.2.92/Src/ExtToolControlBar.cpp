@@ -4401,10 +4401,10 @@ CWnd * pCtrl = CtrlGet();
 		)
 	{
 		ASSERT_VALID( pCtrl );
-		CExtToolControlBar * pBar = GetSafeBar();
-		ASSERT_VALID( pBar );
-		if( CWnd::GetCapture() == pBar )
-			pBar->SendMessage( WM_CANCELMODE );
+		CExtToolControlBar * _pBar = GetSafeBar();
+		ASSERT_VALID( _pBar );
+		if( CWnd::GetCapture() == _pBar )
+			_pBar->SendMessage( WM_CANCELMODE );
 		//pCtrl->SetFocus();
 		return;
 	}
@@ -6457,7 +6457,7 @@ CExtControlBar::POPUP_MENU_EVENT_DATA _pmed(
 				if( ! g_ResourceManager->LoadString( sShowHidePanels, IDS_SHOW_HIDE_PANELS ) )
 					sShowHidePanels = _T("&Show/hide panels");
 
-				CExtControlBar::POPUP_MENU_EVENT_DATA _pmed(
+				CExtControlBar::POPUP_MENU_EVENT_DATA my_pmed(
 					CExtControlBar::POPUP_MENU_EVENT_DATA::__PMED_CTXEXPBTN_APPEND,
 					pPopup,
 					GetBar(),
@@ -6466,7 +6466,7 @@ CExtControlBar::POPUP_MENU_EVENT_DATA _pmed(
 					this
 					);
 			
-				if( ! _pmed.NotifyTarget( false ) )
+				if( ! my_pmed.NotifyTarget( false ) )
 				{
 					VERIFY(
 						pPopup->ItemInsert(
@@ -6500,7 +6500,7 @@ CExtControlBar::POPUP_MENU_EVENT_DATA _pmed(
 					}
 				} // if( !_pmed.NotifyTarget( false ) )
 
-				_pmed.NotifyTarget( true );
+				my_pmed.NotifyTarget( true );
 			
 			} // if( pFrame != NULL )
 
@@ -12805,17 +12805,17 @@ int nBtnIdx = 0;
 		ASSERT( ! m_bPaletteMode );
 		ASSERT( ! bMultiRowLayout );
 		INT nVisIdx0 = -1, nVisIdx1 = -1;
-		for( int nBtnIdx = 0; nBtnIdx < nReviewCount; nBtnIdx++ )
+		for( int _nBtnIdx = 0; _nBtnIdx < nReviewCount; _nBtnIdx++ )
 		{
-			if( ! arrBtnVisibility[nBtnIdx] )
+			if( ! arrBtnVisibility[_nBtnIdx] )
 				continue;
-			CExtBarButton * pTBB = _GetButtonPtr( nBtnIdx );
+			CExtBarButton * pTBB = _GetButtonPtr( _nBtnIdx );
 			ASSERT_VALID( pTBB );
 			if( pTBB->IsKindOf(RUNTIME_CLASS(CExtBarContentExpandButton)) )
 				break;
 			if( nVisIdx0 < 0 )
-				nVisIdx0 = nBtnIdx;
-			nVisIdx1 = nBtnIdx;
+				nVisIdx0 = _nBtnIdx;
+			nVisIdx1 = _nBtnIdx;
 		} // for( int nBtnIdx = 0; nBtnIdx < nReviewCount; nBtnIdx++ )
 		if( nVisIdx0 >= 0 )
 		{
@@ -12849,15 +12849,15 @@ int nBtnIdx = 0;
 			}
 			if( nShiftMetric != 0 )
 			{
-				for( int nBtnIdx = 0; nBtnIdx < nReviewCount; nBtnIdx++ )
+				for( int _nBtnIdx = 0; _nBtnIdx < nReviewCount; _nBtnIdx++ )
 				{
-					if( ! arrBtnVisibility[nBtnIdx] )
+					if( ! arrBtnVisibility[_nBtnIdx] )
 						continue;
-					CExtBarButton * pTBB = _GetButtonPtr( nBtnIdx );
+					CExtBarButton * pTBB = _GetButtonPtr( _nBtnIdx );
 					ASSERT_VALID( pTBB );
 					if( pTBB->IsKindOf(RUNTIME_CLASS(CExtBarContentExpandButton)) )
 						break;
-					arrBtnRects.ElementAt( nBtnIdx ).OffsetRect(
+					arrBtnRects.ElementAt( _nBtnIdx ).OffsetRect(
 						bHorz ? nShiftMetric : 0,
 						bHorz ? 0 : nShiftMetric
 						);
@@ -12883,11 +12883,11 @@ bool bShiftRTL = OnQueryShiftRTL();
 	{ // do content shift to right
 		CRect rcAlign = rcInner;
 		INT nAdditionalShift = 0;
-		for( int nBtnIdx = 0; nBtnIdx < nReviewCount; nBtnIdx++ )
+		for( int _nBtnIdx = 0; _nBtnIdx < nReviewCount; _nBtnIdx++ )
 		{
-			CExtBarButton * pTBB = _GetButtonPtr( nBtnIdx );
+			CExtBarButton * pTBB = _GetButtonPtr( _nBtnIdx );
 			ASSERT_VALID( pTBB );
-			BOOL bVis = arrBtnVisibility[nBtnIdx];
+			BOOL bVis = arrBtnVisibility[_nBtnIdx];
 			if( ! bVis )
 				continue;
 			CSize sizeTBB = *pTBB;
@@ -12896,7 +12896,7 @@ bool bShiftRTL = OnQueryShiftRTL();
 				)
 			{
 				nSizeRow = 0;
-				nRowStart = nBtnIdx + 1;
+				nRowStart = _nBtnIdx + 1;
 				//Align.left += sizeTBB.cx;
 				nAdditionalShift = - sizeTBB.cx;
 				if( nAdditionalShift == 0 )
@@ -12917,7 +12917,7 @@ bool bShiftRTL = OnQueryShiftRTL();
 				)
 				bWrap = true;
 			if(		bWrap
-				||	nBtnIdx == (nReviewCount-1)
+				||	_nBtnIdx == (nReviewCount-1)
 				)
 			{
 				INT nShift =
@@ -12926,15 +12926,15 @@ bool bShiftRTL = OnQueryShiftRTL();
 					+ nAdditionalShift
 					- 7
 					;
-				for( INT nBtnIdx2 = nRowStart; nBtnIdx2 <= nBtnIdx; nBtnIdx2++ )
+				for( INT nBtnIdx2 = nRowStart; nBtnIdx2 <= _nBtnIdx; nBtnIdx2++ )
 				{
-					CExtBarButton * pTBB = _GetButtonPtr( nBtnIdx2 );
-					ASSERT_VALID( pTBB );
+					CExtBarButton * _pTBB = _GetButtonPtr( nBtnIdx2 );
+					ASSERT_VALID( _pTBB );
 					BOOL bVis2 = arrBtnVisibility[nBtnIdx2];
 					if( ! bVis2 )
 						continue;
-					if(		pTBB->IsKindOf(RUNTIME_CLASS(CExtBarMdiDocButton))
-						&&	(! pTBB->IsKindOf(RUNTIME_CLASS(CExtBarMdiRightButton)) )
+					if(		_pTBB->IsKindOf(RUNTIME_CLASS(CExtBarMdiDocButton))
+						&&	(! _pTBB->IsKindOf(RUNTIME_CLASS(CExtBarMdiRightButton)) )
 						)
 						continue;
 					CRect rcBtn = arrBtnRects[nBtnIdx2];
@@ -12943,7 +12943,7 @@ bool bShiftRTL = OnQueryShiftRTL();
 //						rcBtn.OffsetRect( -3, 0 );
 					arrBtnRects.SetAt( nBtnIdx2, rcBtn );
 				}
-				nRowStart = nBtnIdx + 1;
+				nRowStart = _nBtnIdx + 1;
 				nSizeRow = 0;
 				nSubRowCount++;
 				rcAlign = rcInner;
@@ -12974,14 +12974,14 @@ bool bShiftRTL = OnQueryShiftRTL();
 		{
 			for( INT nBtnIdx2 = nRowStart; nBtnIdx2 <= nBtnIdx; nBtnIdx2++ )
 			{
-				CExtBarButton * pTBB = _GetButtonPtr( nBtnIdx2 );
-				ASSERT_VALID( pTBB );
+				CExtBarButton * _pTBB = _GetButtonPtr( nBtnIdx2 );
+				ASSERT_VALID( _pTBB );
 				BOOL bVis = arrBtnVisibility[nBtnIdx2];
-				pTBB->Show( bVis ? true : false );
+				_pTBB->Show( bVis ? true : false );
 				if( ! bVis )
 					continue;
 				CRect rcBtn = arrBtnRects[nBtnIdx2];
-				if( pTBB->IsSeparator() )
+				if( _pTBB->IsSeparator() )
 				{
 					if( bReAlignHorz )
 						rcBtn.bottom = rcBtn.top + nSizeRow;
@@ -13006,7 +13006,7 @@ bool bShiftRTL = OnQueryShiftRTL();
 					)
 					//rcBtn.OffsetRect( 0, 1 );
 					rcBtn.OffsetRect( 2, 1 );
-				pTBB->SetRect( rcBtn );
+				_pTBB->SetRect( rcBtn );
 			}
 			nRowStart = nBtnIdx + 1;
 			nSizeRow = 0;
@@ -13061,7 +13061,7 @@ bool bShiftRTL = OnQueryShiftRTL();
 	else if( ! m_bPaletteMode )
 	{ // just re-align separators in each row
 		INT nRowMinLoc = 0, nRowMaxLoc = 0;
-		INT nRowStart = 0;
+		INT _nRowStart = 0;
 		for( nBtnIdx = 0; nBtnIdx < nReviewCount; nBtnIdx++ )
 		{
 			CExtBarButton * pTBB = _GetButtonPtr( nBtnIdx );
@@ -13071,7 +13071,7 @@ bool bShiftRTL = OnQueryShiftRTL();
 				)
 			{
 				CRect rcTBB = *pTBB;
-				if( nBtnIdx == nRowStart )
+				if( nBtnIdx == _nRowStart )
 				{
 					if( bHorz )
 					{
@@ -13102,16 +13102,16 @@ bool bShiftRTL = OnQueryShiftRTL();
 				&&	nBtnIdx != (nReviewCount-1)
 				)
 				continue;
-			for( INT nBtnIdx2 = nRowStart; nBtnIdx2 < nBtnIdx; nBtnIdx2++ )
+			for( INT nBtnIdx2 = _nRowStart; nBtnIdx2 < nBtnIdx; nBtnIdx2++ )
 			{
-				CExtBarButton * pTBB = _GetButtonPtr( nBtnIdx2 );
-				ASSERT_VALID( pTBB );
-				if(		(! pTBB->IsVisible() )
-					||	(pTBB->GetStyle() & TBBS_HIDDEN) != 0
-					||	(! pTBB->IsSeparator() )
+				CExtBarButton * _pTBB = _GetButtonPtr( nBtnIdx2 );
+				ASSERT_VALID( _pTBB );
+				if(		(! _pTBB->IsVisible() )
+					||	(_pTBB->GetStyle() & TBBS_HIDDEN) != 0
+					||	(! _pTBB->IsSeparator() )
 					)
 					continue;
-				CRect rcTBB = *pTBB;
+				CRect rcTBB = *_pTBB;
 
 				if( bHorz )
 				{
@@ -13133,9 +13133,9 @@ bool bShiftRTL = OnQueryShiftRTL();
 //						0
 //						);
 				} // else from if( bHorz )
-				pTBB->SetRect( rcTBB );
+				_pTBB->SetRect( rcTBB );
 			} // for( INT nBtnIdx2 = nRowStart; nBtnIdx2 < nBtnIdx; nBtnIdx2++ )
-			nRowStart = nBtnIdx + 1;
+			_nRowStart = nBtnIdx + 1;
 		} // for( nBtnIdx = 0; nBtnIdx < nReviewCount; nBtnIdx++ )
 	} // just re-align separators in each row
 

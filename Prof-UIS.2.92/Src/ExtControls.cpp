@@ -210,19 +210,19 @@ void SubclassChildControls(
 		HWND hWndPrev = hWndLast;
 		while( arrGroupBoxes.GetSize() > 0 )
 		{
-			HWND hWnd = (HWND) arrGroupBoxes.GetAt( 0 );
-			if(		hWnd != NULL 
-				&&	::IsWindow( hWnd )
+			HWND _hWnd = (HWND) arrGroupBoxes.GetAt( 0 );
+			if(		_hWnd != NULL 
+				&&	::IsWindow( _hWnd )
 				)
 			{
 				::SetWindowPos(
-					hWnd,
+					_hWnd,
 					hWndPrev,
 					0,0,
 					0,0,
 					SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE
 					);
-				hWndPrev = hWnd;
+				hWndPrev = _hWnd;
 			}
 			arrGroupBoxes.RemoveAt( 0 );
 		}
@@ -533,6 +533,8 @@ bool CExtThemeSwitcherToolControlBar::ThemeSwitcherInit(
 	CExtThemeSwitcherToolControlBar::e_ThemeIconSize_t _eTIS_ToolBar // = __ETIS_24x24
 	)
 {
+	_eTIS_PopupMenu;
+	_eTIS_ToolBar;
 	return false;
 	/*
 	ASSERT_VALID( this );

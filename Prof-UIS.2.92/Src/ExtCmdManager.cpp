@@ -884,14 +884,14 @@ CExtCmdIcon * pIcon = m_icons.GetAt( nCmdIconIdx );
 POSITION pos = m_cmds.GetStartPosition();
 	for( ; pos != NULL; )
 	{
-		UINT nCmdID;
-		CExtCmdItem * pCmdItem = NULL;
-		m_cmds.GetNextAssoc( pos, nCmdID, pCmdItem );
-		ASSERT( pCmdItem != NULL );
-		ASSERT( pCmdItem->m_nIconIdx != nCmdIconIdx );
-		if( pCmdItem->m_nIconIdx < nCmdIconIdx )
+		UINT _nCmdID;
+		CExtCmdItem * _pCmdItem = NULL;
+		m_cmds.GetNextAssoc( pos, _nCmdID, _pCmdItem );
+		ASSERT( _pCmdItem != NULL );
+		ASSERT( _pCmdItem->m_nIconIdx != nCmdIconIdx );
+		if( _pCmdItem->m_nIconIdx < nCmdIconIdx )
 			continue;
-		pCmdItem->m_nIconIdx --;
+		_pCmdItem->m_nIconIdx --;
 	} // for( ; pos != NULL; )
 	return true;
 }
@@ -3295,8 +3295,8 @@ CExtIntegrityCheckSum _ExtIntegrityCheckSum;
 		CExtSafeString sRegKeyPath2( sRegKeyPath );
 		sRegKeyPath2 += _T('\\');
 		sRegKeyPath2 += sBlockSubKey;
-		CExtRegistry reg;
-		if( ! reg.Create(
+		CExtRegistry myreg;
+		if( ! myreg.Create(
 				hKeyRoot, // HKEY_CURRENT_USER
 				sRegKeyPath2,
 				KEY_ALL_ACCESS
@@ -3313,7 +3313,7 @@ CExtIntegrityCheckSum _ExtIntegrityCheckSum;
 			__REG_LINE_FMT,
 			nPortion++
 			);
-		if(	! reg.SaveBinary(
+		if(	! myreg.SaveBinary(
 				sVarName,
 				buffer,
 				nCount
@@ -3401,8 +3401,8 @@ CExtIntegrityCheckSum _ExtIntegrityCheckSum;
 		CExtSafeString sRegKeyPath2( sRegKeyPath );
 		sRegKeyPath2 += _T('\\');
 		sRegKeyPath2 += sBlockSubKey;
-		CExtRegistry reg;
-		if( ! reg.Open(
+		CExtRegistry myreg;
+		if( ! myreg.Open(
 				hKeyRoot, // HKEY_CURRENT_USER
 				sRegKeyPath2,
 				KEY_READ
@@ -3422,7 +3422,7 @@ CExtIntegrityCheckSum _ExtIntegrityCheckSum;
 		if( dwLen-dwLoaded < __REG_LINE_SIZE )
 			nCount = dwLen-dwLoaded;
 		ASSERT( nCount > 0 && nCount <= __REG_LINE_SIZE );
-		if(	! reg.LoadBinary(
+		if(	! myreg.LoadBinary(
 				sVarName,
 				buffer,
 				nCount

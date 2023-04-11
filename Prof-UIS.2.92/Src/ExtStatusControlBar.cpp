@@ -263,9 +263,9 @@ COLORREF nOldTextColor = 0;
 			} // if( (dwPaneStyle & SBPS_STRETCH ) == 0 )
 			else
 			{
-				CRect rcClient;
-				GetClientRect( &rcClient );
-				rcPane.right = rcClient.right;
+				CRect _rcClient;
+				GetClientRect( &_rcClient );
+				rcPane.right = _rcClient.right;
 				if( (GetStyle() & SBARS_SIZEGRIP) == SBARS_SIZEGRIP )
 				{
 					int cxSmIcon = ::GetSystemMetrics( SM_CXSMICON );
@@ -960,9 +960,9 @@ CRect rcClient;
 			} // if( (dwPaneStyle & SBPS_STRETCH ) == 0 )
 			else
 			{
-				CRect rcClient;
-				GetClientRect( &rcClient );
-				rcPane.right = rcClient.right;
+				CRect _rcClient;
+				GetClientRect( &_rcClient );
+				rcPane.right = _rcClient.right;
 				if( (GetStyle() & SBARS_SIZEGRIP) == SBARS_SIZEGRIP )
 				{
 					int cxSmIcon = ::GetSystemMetrics( SM_CXSMICON );

@@ -4009,86 +4009,86 @@ int nOldStretchBltMode = ::GetStretchBltMode( hDC );
 			Draw( hDC, rcDst, rcSrc, dwRop );
 		if( rcPadding.left > 0 )
 		{
-			CRect rcDst(
+			CRect myrcDst(
 				rcDstDraw.left,
 				rcDstDraw.top,
 				rcDstDraw.left + rcPadding.left,
 				rcDstDraw.top + rcPadding.top
 				);
-			CRect rcSrc(
+			CRect myrcSrc(
 				rcSrcDraw.left,
 				rcSrcDraw.top,
 				rcSrcDraw.left + rcPadding.left,
 				rcSrcDraw.top + rcPadding.top
 				);
-			if(		rcDst.left < rcDst.right
-				&&	rcDst.top < rcDst.bottom
-				&&	rcSrc.left < rcSrc.right
-				&&	rcSrc.top < rcSrc.bottom
+			if(		myrcDst.left < myrcDst.right
+				&&	myrcDst.top < myrcDst.bottom
+				&&	myrcSrc.left < myrcSrc.right
+				&&	myrcSrc.top < myrcSrc.bottom
 				)
-				Draw( hDC, rcDst, rcSrc, dwRop );
+				Draw( hDC, myrcDst, myrcSrc, dwRop );
 			if( nCaptionHeightDst > 0 )
 			{
-				CRect rcDst(
+				CRect _myrcDst(
 					rcDstDraw.left,
 					rcDstDraw.top + rcPadding.top,
 					rcDstDraw.left + rcPadding.left,
 					rcDstDraw.top + rcPadding.top + nCaptionHeightDst
 					);
-				CRect rcSrc(
+				CRect _myrcSrc(
 					rcSrcDraw.left,
 					rcSrcDraw.top + rcPadding.top,
 					rcSrcDraw.left + rcPadding.left,
 					rcSrcDraw.top + rcPadding.top + nCaptionHeightSrc
 					);
-				if(		rcDst.left < rcDst.right
-					&&	rcDst.top < rcDst.bottom
-					&&	rcSrc.left < rcSrc.right
-					&&	rcSrc.top < rcSrc.bottom
+				if(		_myrcDst.left < _myrcDst.right
+					&&	_myrcDst.top < _myrcDst.bottom
+					&&	_myrcSrc.left < _myrcSrc.right
+					&&	_myrcSrc.top < _myrcSrc.bottom
 					)
-					Draw( hDC, rcDst, rcSrc, dwRop );
+					Draw( hDC, _myrcDst, _myrcSrc, dwRop );
 			}
 		}
 		if( rcPadding.right > 0 )
 		{
-			CRect rcDst(
+			CRect myrcDst(
 				rcDstDraw.right - rcPadding.right,
 				rcDstDraw.top,
 				rcDstDraw.right,
 				rcDstDraw.top + rcPadding.top
 				);
-			CRect rcSrc(
+			CRect myrcSrc(
 				rcSrcDraw.right - rcPadding.right,
 				rcSrcDraw.top,
 				rcSrcDraw.right,
 				rcSrcDraw.top + rcPadding.top
 				);
-			if(		rcDst.left < rcDst.right
-				&&	rcDst.top < rcDst.bottom
-				&&	rcSrc.left < rcSrc.right
-				&&	rcSrc.top < rcSrc.bottom
+			if(		myrcDst.left < myrcDst.right
+				&&	myrcDst.top < myrcDst.bottom
+				&&	myrcSrc.left < myrcSrc.right
+				&&	myrcSrc.top < myrcSrc.bottom
 				)
-				Draw( hDC, rcDst, rcSrc, dwRop );
+				Draw( hDC, myrcDst, myrcSrc, dwRop );
 			if( nCaptionHeightDst > 0 )
 			{
-				CRect rcDst(
+				CRect _myrcDst(
 					rcDstDraw.right - rcPadding.right,
 					rcDstDraw.top + rcPadding.top,
 					rcDstDraw.right,
 					rcDstDraw.top + rcPadding.top + nCaptionHeightDst
 					);
-				CRect rcSrc(
+				CRect _myrcSrc(
 					rcSrcDraw.right - rcPadding.right,
 					rcSrcDraw.top + rcPadding.top,
 					rcSrcDraw.right,
 					rcSrcDraw.top + rcPadding.top + nCaptionHeightSrc
 					);
-				if(		rcDst.left < rcDst.right
-					&&	rcDst.top < rcDst.bottom
-					&&	rcSrc.left < rcSrc.right
-					&&	rcSrc.top < rcSrc.bottom
+				if(		_myrcDst.left < _myrcDst.right
+					&&	_myrcDst.top < _myrcDst.bottom
+					&&	_myrcSrc.left < _myrcSrc.right
+					&&	_myrcSrc.top < _myrcSrc.bottom
 					)
-					Draw( hDC, rcDst, rcSrc, dwRop );
+					Draw( hDC, _myrcDst, _myrcSrc, dwRop );
 			}
 		}
 	}
@@ -4135,24 +4135,24 @@ int nOldStretchBltMode = ::GetStretchBltMode( hDC );
 			Draw( hDC, rcDst, rcSrc, dwRop );
 		if( rcPadding.bottom > 0 )
 		{
-			CRect rcDst(
+			CRect myrcDst(
 				rcDstDraw.left,
 				rcDstDraw.bottom - rcPadding.bottom,
 				rcDstDraw.left + rcPadding.left,
 				rcDstDraw.bottom
 				);
-			CRect rcSrc(
+			CRect myrcSrc(
 				rcSrcDraw.left,
 				rcSrcDraw.bottom - rcPadding.bottom,
 				rcSrcDraw.left + rcPadding.left,
 				rcSrcDraw.bottom
 				);
-			if(		rcDst.left < rcDst.right
-				&&	rcDst.top < rcDst.bottom
-				&&	rcSrc.left < rcSrc.right
-				&&	rcSrc.top < rcSrc.bottom
+			if(		myrcDst.left < myrcDst.right
+				&&	myrcDst.top < myrcDst.bottom
+				&&	myrcSrc.left < myrcSrc.right
+				&&	myrcSrc.top < myrcSrc.bottom
 				)
-				Draw( hDC, rcDst, rcSrc, dwRop );
+				Draw( hDC, rcDst, myrcSrc, dwRop );
 		}
 	}
 	if( rcPadding.right > 0 )
@@ -4177,24 +4177,24 @@ int nOldStretchBltMode = ::GetStretchBltMode( hDC );
 			Draw( hDC, rcDst, rcSrc, dwRop );
 		if( rcPadding.bottom > 0 )
 		{
-			CRect rcDst(
+			CRect myrcDst(
 				rcDstDraw.right - rcPadding.right,
 				rcDstDraw.bottom - rcPadding.bottom,
 				rcDstDraw.right,
 				rcDstDraw.bottom
 				);
-			CRect rcSrc(
+			CRect myrcSrc(
 				rcSrcDraw.right - rcPadding.right,
 				rcSrcDraw.bottom - rcPadding.bottom,
 				rcSrcDraw.right,
 				rcSrcDraw.bottom
 				);
-			if(		rcDst.left < rcDst.right
-				&&	rcDst.top < rcDst.bottom
-				&&	rcSrc.left < rcSrc.right
-				&&	rcSrc.top < rcSrc.bottom
+			if(		myrcDst.left < myrcDst.right
+				&&	myrcDst.top < myrcDst.bottom
+				&&	myrcSrc.left < myrcSrc.right
+				&&	myrcSrc.top < myrcSrc.bottom
 				)
-				Draw( hDC, rcDst, rcSrc, dwRop );
+				Draw( hDC, myrcDst, myrcSrc, dwRop );
 		}
 	}
 	if( bDrawMiddlePart )
@@ -6640,13 +6640,13 @@ HRGN hRgnResult = NULL;
 					if( bRTL )
 					{
 						INT nPart, nLeft, nRight, nCount = INT( pRgnData->rdh.nCount );
-						LPRECT pRect = (LPRECT)&pRgnData->Buffer;
-						for( nPart = 0; nPart < nCount; nPart ++, pRect ++ )
+						LPRECT _pRect = (LPRECT)&pRgnData->Buffer;
+						for( nPart = 0; nPart < nCount; nPart ++, _pRect ++ )
 						{
-							nLeft = _sizeBitmap.cx - pRect->left;
-							nRight = _sizeBitmap.cx - pRect->right;
-							pRect->right = nLeft;
-							pRect->left = nRight;
+							nLeft = _sizeBitmap.cx - _pRect->left;
+							nRight = _sizeBitmap.cx - _pRect->right;
+							_pRect->right = nLeft;
+							_pRect->left = nRight;
 						} // for( nPart = 0; nPart < nCount; nPart ++, pRect ++ )
 					} // if( bRTL )
 					HRGN hRgnPart = ::ExtCreateRegion( NULL, sizeof(RGNDATAHEADER) + (sizeof(RECT) * nMaxParts), pRgnData );

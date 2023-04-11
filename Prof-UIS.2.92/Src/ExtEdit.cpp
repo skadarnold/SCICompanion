@@ -1047,11 +1047,11 @@ CWnd * pWndTest = pWnd->GetWindow( GW_HWNDNEXT );
 		::GetClassName( pWndTest->GetSafeHwnd(), szCompare, sizeof(szCompare)/sizeof(szCompare[0]) );
 		if( ! lstrcmpi( szCompare, szSpin ) )
 		{
-			DWORD dwStyle = pWndTest->GetStyle();
-			bSpinAlignRight = ( ( dwStyle & UDS_ALIGNRIGHT ) != 0 ) ? true : false;
-			bSpinAlignLeft  = ( ( dwStyle & UDS_ALIGNLEFT ) != 0 ) ? true : false;
+			DWORD _dwStyle = pWndTest->GetStyle();
+			bSpinAlignRight = ( ( _dwStyle & UDS_ALIGNRIGHT ) != 0 ) ? true : false;
+			bSpinAlignLeft  = ( ( _dwStyle & UDS_ALIGNLEFT ) != 0 ) ? true : false;
 			if( bSpinAlignRight || bSpinAlignLeft )
-				bBuddyWithSpin  = ( ( dwStyle & UDS_AUTOBUDDY ) != 0 || ((HWND)pWndTest->SendMessage(UDM_GETBUDDY)) == pWnd->m_hWnd ) ? true : false;
+				bBuddyWithSpin  = ( ( _dwStyle & UDS_AUTOBUDDY ) != 0 || ((HWND)pWndTest->SendMessage(UDM_GETBUDDY)) == pWnd->m_hWnd ) ? true : false;
 		}
 	}
 	if( bBuddyWithSpin )
@@ -1092,9 +1092,9 @@ COLORREF clrSysBk = pPmBridge->PmBridge_GetPM()->GetColor( ( bReadOnly || (!bEna
 		pWndTest->GetWindowRect( &rcSpinWnd );
 		pWndTest->GetClientRect( &rcSpinClient );
 		pWndTest->ClientToScreen( &rcSpinClient );
-		CPoint ptDevOffset = -rcSpinWnd.TopLeft();
-		rcSpinWnd.OffsetRect( ptDevOffset );
-		rcSpinClient.OffsetRect( ptDevOffset );
+		CPoint _ptDevOffset = -rcSpinWnd.TopLeft();
+		rcSpinWnd.OffsetRect( _ptDevOffset );
+		rcSpinClient.OffsetRect( _ptDevOffset );
 		__EXT_MFC_LONG_PTR dwExStyle = ::__EXT_MFC_GetWindowLong( pWndTest->GetSafeHwnd(), GWL_EXSTYLE );
 		bool bRTL = ( (dwExStyle & WS_EX_LAYOUTRTL) != 0 ) ? true : false;
 		if( bRTL )
@@ -3067,8 +3067,8 @@ CExtSafeString strAsmMask, strAsmVal;
 			strAsmMask += _tstr;
 			if( _tchrText != 0 )
 			{
-				TCHAR _tstr[2] = { TCHAR(_tchrText), TCHAR(0) };
-				strAsmVal += _tstr;
+				TCHAR my_tstr[2] = { TCHAR(_tchrText), TCHAR(0) };
+				strAsmVal += my_tstr;
 			}
 		}
 		else
@@ -3199,10 +3199,10 @@ INT strLen = INT(strEnd.GetLength());
 			nEnd = strLen;
 			for( ; strLen < nLenMask; strLen ++ )
 			{
-				__EXT_MFC_SAFE_TCHAR _tchrMask = m_strMask.GetAt( strLen );
-				if( m_arrRules.FindPos( _tchrMask ) >= 0 )
-					_tchrMask = _tchrNullChar;
-				TCHAR _tstr[2] = { TCHAR(_tchrMask), TCHAR(0) };
+				__EXT_MFC_SAFE_TCHAR my_tchrMask = m_strMask.GetAt( strLen );
+				if( m_arrRules.FindPos( my_tchrMask ) >= 0 )
+					my_tchrMask = _tchrNullChar;
+				TCHAR _tstr[2] = { TCHAR(my_tchrMask), TCHAR(0) };
 				strEnd += _tstr;
 			}
 		}
@@ -4172,13 +4172,13 @@ INT nLen = INT( strText.GetLength() );
 		INT _nStart = 0, _nEnd = 0;
 		_GetTextWithoutMarks( strText, _nStart, _nEnd );
 		INT nDecimalSignPos = (INT)strText.Find( m_strDecimalPoint );
-		INT nLen = INT( strText.GetLength() );
+		INT _nLen = INT( strText.GetLength() );
 		if( nDecimalSignPos < 0 )
 		{
-			if( nLen == 0 )
+			if( _nLen == 0 )
 			{
 				strText = _T('0');
-				nLen = (INT)strText.GetLength();
+				_nLen = (INT)strText.GetLength();
 			}
 			strText += m_strDecimalPoint;
 			nDecimalSignPos = (INT)strText.Find( m_strDecimalPoint );
@@ -4197,12 +4197,12 @@ INT nLen = INT( strText.GetLength() );
 		INT _nStart = 0, _nEnd = 0;
 		_GetTextWithoutMarks( strText, _nStart, _nEnd );
 		INT nDecimalSignPos = (INT)strText.Find( m_strDecimalPoint );
-		INT nLen = INT( strText.GetLength() );
+		INT _nLen = INT( strText.GetLength() );
 		INT nZeroCount = 0, nZeroPos = -1;
 		if( nDecimalSignPos < 0 )
 		{
-			nZeroCount = m_nMaxWholeDigits - nLen;
-			nZeroPos = nLen;
+			nZeroCount = m_nMaxWholeDigits - _nLen;
+			nZeroPos = _nLen;
 		}
 		else
 		{
@@ -5062,17 +5062,17 @@ INT nE_Pos = INT( strText.Find( strScientificSymbol ) );
 		nE_Pos = INT( strText.Find( strScientificSymbol ) );
 	if( nE_Pos < 0 || (! m_bUseScientificNumberMode) )
 	{
-		CString strText; // !!!
-		GetWindowText( strText ); // !!!
+		CString mystrText; // !!!
+		GetWindowText( mystrText ); // !!!
 		INT nStart, nEnd; // !!!
 		GetSel( nStart, nEnd ); // !!!
 		INT nStartOld, nEndOld; // !!!
 		nStartOld = nStart;
 		nEndOld = nEnd;
-		CString strOldText = strText;
-		Behavior_Base_Mode_OnChar( strText, nStart, nEnd, uChar ); // !!!
-		if( strOldText != strText )
-			m_pEditWithBehaviorWnd->TextSet( strText );
+		CString strOldText = mystrText;
+		Behavior_Base_Mode_OnChar( mystrText, nStart, nEnd, uChar ); // !!!
+		if( strOldText != mystrText )
+			m_pEditWithBehaviorWnd->TextSet( mystrText );
 		if( nStart != nStartOld || nEnd != nEndOld )
 			m_pEditWithBehaviorWnd->SetSel( nStart, nEnd );
 	}
@@ -5287,9 +5287,9 @@ CExtSafeString strScientificSymbolLower, strScientificSymbolUpper;
 		// test we're on the right of the decimal point.
 		if( nDecimalPos >= 0 && nDecimalPos < nStart )
 		{
-			bool bIsNegative = ( ! strNumericText.IsEmpty() && ( strNumericText.Find( m_strNegativeSign ) >= 0 ) && ( m_nNegativeFormatIndex == 3 || m_nNegativeFormatIndex == 4 ) );
-			if( ! bIsNegative )
-				bIsNegative = ( ! strNumericText.IsEmpty() && ( strNumericText.Find( _T('(') ) >= 0 ) && m_nNegativeFormatIndex == 0 );
+			bool _bIsNegative = ( ! strNumericText.IsEmpty() && ( strNumericText.Find( m_strNegativeSign ) >= 0 ) && ( m_nNegativeFormatIndex == 3 || m_nNegativeFormatIndex == 4 ) );
+			if( ! _bIsNegative )
+				_bIsNegative = ( ! strNumericText.IsEmpty() && ( strNumericText.Find( _T('(') ) >= 0 ) && m_nNegativeFormatIndex == 0 );
 
 			INT nNegLength = 0;
 			if( m_nNegativeFormatIndex != 0 )
@@ -5300,7 +5300,7 @@ CExtSafeString strScientificSymbolLower, strScientificSymbolUpper;
 				if( nStart == nEnd && nStart == nLen )
 					nStart = nEnd = nLen - 1;
 			}
-			if( bIsNegative )
+			if( _bIsNegative )
 			{
 				INT nNegSignPos = -1;
 				if( m_nNegativeFormatIndex == 3 )
@@ -5332,7 +5332,7 @@ CExtSafeString strScientificSymbolLower, strScientificSymbolUpper;
 				nStartSel = nStart; // !!!
 				nEndSel = nEnd; // !!!
 			}
-			if( strNumericText.Mid( /*nDecimalPos */ nNumericDecimalPos + nDecimalSeparatorLen ).GetLength() == ( m_nMaxFractionDigits + ( bIsNegative ? nNegLength : 0 ) ) )
+			if( strNumericText.Mid( /*nDecimalPos */ nNumericDecimalPos + nDecimalSeparatorLen ).GetLength() == ( m_nMaxFractionDigits + ( _bIsNegative ? nNegLength : 0 ) ) )
 			{
 				if( nStart <= ( nDecimalPos + m_nMaxFractionDigits + nDecimalSeparatorLen - 1 ) )
 				{
@@ -5353,7 +5353,7 @@ CExtSafeString strScientificSymbolLower, strScientificSymbolUpper;
 				}
 				return;
 			}
-			else if( strNumericText.Mid( /*nDecimalPos */ nNumericDecimalPos + nDecimalSeparatorLen ).GetLength() > ( m_nMaxFractionDigits + ( bIsNegative ? nNegLength : 0 ) ) )
+			else if( strNumericText.Mid( /*nDecimalPos */ nNumericDecimalPos + nDecimalSeparatorLen ).GetLength() > ( m_nMaxFractionDigits + ( _bIsNegative ? nNegLength : 0 ) ) )
 			{
 				ASSERT(false);
 				return;
@@ -5362,9 +5362,9 @@ CExtSafeString strScientificSymbolLower, strScientificSymbolUpper;
 		// we're on the left side of the decimal point
 		else
 		{
-			bool bIsNegative = ( ! strNumericText.IsEmpty() && ( strNumericText.Find( m_strNegativeSign ) >= 0 ) && ( m_nNegativeFormatIndex == 1 || m_nNegativeFormatIndex == 2 ) );
-			if( ! bIsNegative )
-				bIsNegative = ( ! strNumericText.IsEmpty() && ( strNumericText.Find( _T('(') ) >= 0 ) && m_nNegativeFormatIndex == 0 );
+			bool _bIsNegative = ( ! strNumericText.IsEmpty() && ( strNumericText.Find( m_strNegativeSign ) >= 0 ) && ( m_nNegativeFormatIndex == 1 || m_nNegativeFormatIndex == 2 ) );
+			if( ! _bIsNegative )
+				_bIsNegative = ( ! strNumericText.IsEmpty() && ( strNumericText.Find( _T('(') ) >= 0 ) && m_nNegativeFormatIndex == 0 );
 			bool bIsNegativeRight = ( ! strNumericText.IsEmpty() && ( strNumericText.Find( m_strNegativeSign ) >= 0 ) && ( m_nNegativeFormatIndex == 3 || m_nNegativeFormatIndex == 4 ) );
 			INT nNegLength = 0;
 				nNegLength 
@@ -5381,7 +5381,7 @@ CExtSafeString strScientificSymbolLower, strScientificSymbolUpper;
 				if( nStart == nEnd && nStart == nLen )
 					nStart = nEnd = nLen - 1;
 			}
-			if( bIsNegative )
+			if( _bIsNegative )
 			{
 				if( ( nStart >= 0 ) && ( nStart < nNegLength ) )
 				{
@@ -5393,7 +5393,7 @@ CExtSafeString strScientificSymbolLower, strScientificSymbolUpper;
 					nEndSel = nEnd; // !!!
 				}
 			}
-			if( bIsNegativeRight || ( bIsNegative && m_nNegativeFormatIndex == 0 ) )
+			if( bIsNegativeRight || ( _bIsNegative && m_nNegativeFormatIndex == 0 ) )
 			{
 				if( ( nEnd >= ( nLen - nNegLength ) ) && ( nEnd <= nLen ) )
 				{
@@ -5415,7 +5415,7 @@ CExtSafeString strScientificSymbolLower, strScientificSymbolUpper;
 			INT nGroupSeparatorLen = m_bEmptyGroupSeparatorMode ? 0 : INT( m_strGroupSeparator.GetLength() );
 			INT nDecimalSignLen = INT( m_strDecimalPoint.GetLength() );
 			// ensure we can still enter digits.
-			INT nDecPos = m_nMaxWholeDigits + ( bIsNegative ? nNegLength : 0 ) + ( nSepCount * nGroupSeparatorLen );
+			INT nDecPos = m_nMaxWholeDigits + ( _bIsNegative ? nNegLength : 0 ) + ( nSepCount * nGroupSeparatorLen );
 			if( m_bUseScientificNumberMode && bPower && (nStart == nDecPos) )
 				nDecPos++;
 			if( nStart == nDecPos )
@@ -5424,7 +5424,7 @@ CExtSafeString strScientificSymbolLower, strScientificSymbolUpper;
 				if(  ( nFlags & __ESE_ADD_DECIMAL_AFTER_MAX_WHOLE_DIGITS ) != 0 && m_nMaxFractionDigits > 0 )
 				{
 					nEnd = ( ( ( nEnd == nLen ) || ( ( nEnd > nStart ) && ( ( nEnd - nStart ) > 1 ) ) ) ? nEnd : ( nStart + nDecimalSignLen + 1 ) );
-					if( bIsNegativeRight || ( bIsNegative && m_nNegativeFormatIndex == 0 ) )
+					if( bIsNegativeRight || ( _bIsNegative && m_nNegativeFormatIndex == 0 ) )
 					{
 						//m_pEditWithBehaviorWnd->SetSel( nStart, strText.GetLength() ); // !!!
 						//m_pEditWithBehaviorWnd->ReplaceSel( _T(""), TRUE ); // !!!
@@ -5444,7 +5444,7 @@ CExtSafeString strScientificSymbolLower, strScientificSymbolUpper;
 					_strText.Insert( _nStart, (m_strDecimalPoint + c) ); // !!!
 					strTextBase = _strText; // !!!
 					nStartSel = nEndSel = _nStart + m_strDecimalPoint.GetLength() + 1; // !!!
-					if( bIsNegativeRight || ( bIsNegative && m_nNegativeFormatIndex == 0 ) )
+					if( bIsNegativeRight || ( _bIsNegative && m_nNegativeFormatIndex == 0 ) )
 					{
 						//CExtSafeString strChangedText = m_pEditWithBehaviorWnd->TextGet(); // !!!
 						CExtSafeString strChangedText = strTextBase; // !!!
@@ -5455,26 +5455,26 @@ CExtSafeString strScientificSymbolLower, strScientificSymbolUpper;
 						if( m_nNegativeFormatIndex != 0 )
 						{
 							//m_pEditWithBehaviorWnd->ReplaceSel( _strNegativeSign, TRUE ); // !!!
-							CExtSafeString _strText = strTextBase; // !!!
-							INT _nStart = min( nStart, nEnd );
-							INT _nEnd = max( nStart, nEnd );
-							_strText.Delete( _nStart, (_nEnd - _nStart) ); // !!!
-							_strText.Insert( _nStart, _strNegativeSign ); // !!!
-							strTextBase = _strText; // !!!
+							CExtSafeString my_strText = strTextBase; // !!!
+							INT my_nStart = min( nStart, nEnd );
+							INT my_nEnd = max( nStart, nEnd );
+							my_strText.Delete( my_nStart, (my_nEnd - my_nStart) ); // !!!
+							my_strText.Insert( my_nStart, _strNegativeSign ); // !!!
+							strTextBase = my_strText; // !!!
 							//nStartSel = nEndSel = nStart + m_strDecimalPoint.GetLength() + 1; // !!!
-							nEnd = nStart = _nStart + _strNegativeSign.GetLength(); // !!!
+							nEnd = nStart = my_nStart + _strNegativeSign.GetLength(); // !!!
 						}
 						else
 						{
 							//m_pEditWithBehaviorWnd->ReplaceSel( _T(")"), TRUE ); // !!!
-							CExtSafeString _strText = strTextBase; // !!!
-							INT _nStart = min( nStart, nEnd );
-							INT _nEnd = max( nStart, nEnd );
-							_strText.Delete( _nStart, (_nEnd - _nStart) ); // !!!
-							_strText.Insert( _nStart, _T(")") ); // !!!
-							strTextBase = _strText; // !!!
+							CExtSafeString my_strText = strTextBase; // !!!
+							INT my_nStart = min( nStart, nEnd );
+							INT my_nEnd = max( nStart, nEnd );
+							my_strText.Delete( my_nStart, (my_nEnd - my_nStart) ); // !!!
+							my_strText.Insert( my_nStart, _T(")") ); // !!!
+							strTextBase = my_strText; // !!!
 							//nStartSel = nEndSel = nStart + m_strDecimalPoint.GetLength() + 1; // !!!
-							nEnd = nStart = _nStart + 1; // !!!
+							nEnd = nStart = my_nStart + 1; // !!!
 						}
 						//m_pEditWithBehaviorWnd->SetSel( nEnd, nEnd ); // !!!
 						nStartSel = nEndSel = nEnd; // !!!
@@ -5495,7 +5495,7 @@ CExtSafeString strScientificSymbolLower, strScientificSymbolUpper;
 						: nNumericLen
 							)
 						).GetLength()
-						== ( nMaxWholeDigits + ( bIsNegative ? nNegLength : 0 ) ) //  + ( ( nNumericDecimalPos >= 0 ) ? ( m_strDecimalPoint.GetLength() ) : 0 )
+						== ( nMaxWholeDigits + ( _bIsNegative ? nNegLength : 0 ) ) //  + ( ( nNumericDecimalPos >= 0 ) ? ( m_strDecimalPoint.GetLength() ) : 0 )
 				)
 			{
 				{
@@ -5518,7 +5518,7 @@ CExtSafeString strScientificSymbolLower, strScientificSymbolUpper;
 					INT _nNegativeSignLen = INT( m_strNegativeSign.GetLength() ) + ( (m_nNegativeFormatIndex == 2 || m_nNegativeFormatIndex == 4) ? 1: 0 );
 					if( m_nNegativeFormatIndex == 0 )
 						_nNegativeSignLen = 1;
-					if( nStart < _nNegativeSignLen && bIsNegative )
+					if( nStart < _nNegativeSignLen && _bIsNegative )
 						nStart = _nNegativeSignLen;
 					nEnd = ( ( ( nEnd == nLen ) || ( nEnd > ( nStart + 1 ) ) ) ? nEnd : ( nStart + 1 ) );
 					if( bIsNegativeRight )
@@ -5586,8 +5586,8 @@ CExtSafeString strScientificSymbolLower, strScientificSymbolUpper;
 		// if the decimal point was added/removed or a separator needs adding/removing, adjust the text
 		if( bNeedAdjustment )
 		{
-			CExtSafeString _strText = Behavior_GetValidText_Base( strTextBase, nStartSel, nEndSel, bPower ); // !!!
-			strTextBase = _strText; // !!!
+			CExtSafeString my_strText = Behavior_GetValidText_Base( strTextBase, nStartSel, nEndSel, bPower ); // !!!
+			strTextBase = my_strText; // !!!
 		}
 	}
 	else
@@ -5614,10 +5614,10 @@ void CExtEditSystemNumber::Behavior_OnKeyDown( UINT uChar, UINT nRepCnt, UINT nF
 		{
 			INT nStart = 0, nEnd = 0;
 			m_pEditWithBehaviorWnd->GetSel( nStart, nEnd );
-			CExtSafeString strText = m_pEditWithBehaviorWnd->TextGet();
-			if( _DeleteSymbols( strText, nStart, nEnd ) )
+			CExtSafeString mystrText = m_pEditWithBehaviorWnd->TextGet();
+			if( _DeleteSymbols( mystrText, nStart, nEnd ) )
 			{
-				m_pEditWithBehaviorWnd->SetWindowText( strText );
+				m_pEditWithBehaviorWnd->SetWindowText( mystrText );
 				m_pEditWithBehaviorWnd->SetSel( nStart, nStart );
 			}
 			else
@@ -5710,13 +5710,13 @@ void CExtEditSystemNumber::Behavior_OnKeyDown( UINT uChar, UINT nRepCnt, UINT nF
 
 		if( nE_Pos < 0 || (! m_bUseScientificNumberMode) )
 		{
-			CExtSafeString strText = m_pEditWithBehaviorWnd->TextGet();
-			if( strText.IsEmpty() )
+			CExtSafeString mystrText = m_pEditWithBehaviorWnd->TextGet();
+			if( mystrText.IsEmpty() )
 				return;
 			INT nStart = 0, nEnd = 0;
 			m_pEditWithBehaviorWnd->GetSel( nStart, nEnd );
-			if( _DeleteSymbols( strText, nStart, nEnd, true ) )
-				m_pEditWithBehaviorWnd->SetWindowText( strText );
+			if( _DeleteSymbols( mystrText, nStart, nEnd, true ) )
+				m_pEditWithBehaviorWnd->SetWindowText( mystrText );
 			m_pEditWithBehaviorWnd->SetSel( nStart, nStart );
 		}
 		else
@@ -6036,17 +6036,17 @@ INT _nPos = 0, _nGroupSignBeforeStart = 0, _nGroupSignCount = (INT)_GetGroupSepa
 				INT nGroupSepPos = (INT)strText.Find( m_strGroupSeparator, ( nStart - nGroupSeparatorLen ) );
 				if( nGroupSepPos >= 0 )
 				{
-					INT _nPos = 0, _nGroupSignBeforeStartAfterDelete = 0;
+					INT my_nPos = 0, _nGroupSignBeforeStartAfterDelete = 0;
 					bool _bChangePos = false;
 					INT _nGroupSignCountAfterDelete = (INT)_GetGroupSeparatorCount( strText );
 					for( ; true; )
 					{
-						_nPos = (INT)strText.Find( m_strGroupSeparator, _nPos );
-						if( _nPos == -1 )
+						my_nPos = (INT)strText.Find( m_strGroupSeparator, my_nPos );
+						if( my_nPos == -1 )
 							break;
-						if( _nPos < nStart )
+						if( my_nPos < nStart )
 							_nGroupSignBeforeStartAfterDelete ++;
-						_nPos ++;
+						my_nPos ++;
 					}
 					_nGroupSignBeforeStartAfterDelete = _nGroupSignCountAfterDelete - _nGroupSignBeforeStartAfterDelete;
 					if( ( _nGroupSignBeforeStart - 1 ) == _nGroupSignBeforeStartAfterDelete )
@@ -6312,8 +6312,8 @@ void CExtEditSystemNumber::_OnPaste(
 	{
 		INT nStartPartLeft, nStartPartRight, nEndPartLeft, nEndPartRight;
 		nStartPartLeft = nStartPartRight = nEndPartLeft = nEndPartRight = 0;
-		INT _nStart = min( nStart, nEnd );
-		if( _nStart <= nE_Pos )
+		INT my_nStart = min( nStart, nEnd );
+		if( my_nStart <= nE_Pos )
 		{
 			nStartPartLeft = nStart;
 			nEndPartLeft = nEnd;
@@ -6322,7 +6322,7 @@ void CExtEditSystemNumber::_OnPaste(
 			else
 				nStartPartLeft = min( nStartPartLeft, nE_Pos );
 		}
-		if( _nStart > nE_Pos )
+		if( my_nStart > nE_Pos )
 		{
 // 			nStartPartRight = nStart - nE_Pos - 1;
 // 			nEndPartRight = nEnd - nE_Pos - 1;
@@ -6387,8 +6387,8 @@ void CExtEditSystemNumber::_OnPaste(
 		if( ! strSecondPart.IsEmpty() )
 		{
 			_GetTextWithoutMarksBase( strSecondPart, nStartPartRight, nEndPartRight, true );
-			bool bNegative = _IsNegative( strSecondPart );
-			_GetTextWithMarksBase( strSecondPart, nStartPartRight, nEndPartRight, bNegative, true );
+			bool _bNegative = _IsNegative( strSecondPart );
+			_GetTextWithMarksBase( strSecondPart, nStartPartRight, nEndPartRight, _bNegative, true );
 			nStartPartRight += strFirstPart.GetLength() + 1;
 			nEndPartRight += strFirstPart.GetLength() + 1;
 		}
@@ -7429,10 +7429,10 @@ bool bIsDecimalPoint = false;
 		// test whether we're on the right of the decimal point
 		if( nDecimalPos >= 0 && nDecimalPos < nStart )
 		{
-			bool bIsNegative = _IsNegative( strNumericText );
+			bool _bIsNegative = _IsNegative( strNumericText );
 			CExtSafeString _strBeforeCurrency = _T("");
 			CExtSafeString _strAfterCurrency = _T("");
-			_GetSignStrings( _strBeforeCurrency, _strAfterCurrency, bIsNegative && AllowNegativeGet() );
+			_GetSignStrings( _strBeforeCurrency, _strAfterCurrency, _bIsNegative && AllowNegativeGet() );
 			INT nNegLength = INT( _strAfterCurrency.GetLength() );
 			if( ! _strAfterCurrency.IsEmpty() )
 			{
@@ -7479,10 +7479,10 @@ bool bIsDecimalPoint = false;
 		// we're on the left side of the decimal point
 		else
 		{
-			bool bIsNegative = _IsNegative( strNumericText );
+			bool _bIsNegative = _IsNegative( strNumericText );
 			CExtSafeString _strBeforeCurrency = _T("");
 			CExtSafeString _strAfterCurrency = _T("");
-			_GetSignStrings( _strBeforeCurrency, _strAfterCurrency, bIsNegative && AllowNegativeGet() );
+			_GetSignStrings( _strBeforeCurrency, _strAfterCurrency, _bIsNegative && AllowNegativeGet() );
 			INT nNegLength = INT( _strBeforeCurrency.GetLength() );
 			INT nAfterSignsLength = INT( _strAfterCurrency.GetLength() );
 			if( nNegLength > 0 )
@@ -7516,8 +7516,8 @@ bool bIsDecimalPoint = false;
 			INT nDecPos = m_nMaxWholeDigits + nNegLength + ( nSepCount * nGroupSeparatorLen );
 			if( nStart == nDecPos )
 			{
-				UINT nFlags = CBehaviorBase::m_nBehaviorFlags;
-				if(  nFlags & __ESE_ADD_DECIMAL_AFTER_MAX_WHOLE_DIGITS && m_nMaxFractionDigits > 0 )
+				UINT _nFlags = CBehaviorBase::m_nBehaviorFlags;
+				if(  _nFlags & __ESE_ADD_DECIMAL_AFTER_MAX_WHOLE_DIGITS && m_nMaxFractionDigits > 0 )
 				{
 					nEnd = ( ( ( nEnd == nLen ) || ( ( nEnd > nStart ) && ( ( nEnd - nStart ) > 1 ) ) ) ? nEnd : ( nStart + nDecimalSignLen + 1 ) );
 					
@@ -7531,10 +7531,10 @@ bool bIsDecimalPoint = false;
 					if( _strAfterCurrency.GetLength() > 0 )
 					{
 						CExtSafeString strChangedText = m_pEditWithBehaviorWnd->TextGet();
-						INT nEnd = INT( strChangedText.GetLength() );
-						m_pEditWithBehaviorWnd->SetSel( nEnd, nEnd );
+						INT _nEnd = INT( strChangedText.GetLength() );
+						m_pEditWithBehaviorWnd->SetSel( _nEnd, _nEnd );
 						m_pEditWithBehaviorWnd->ReplaceSel( _strAfterCurrency, TRUE );
-						m_pEditWithBehaviorWnd->SetSel( nEnd, nEnd );
+						m_pEditWithBehaviorWnd->SetSel( _nEnd, _nEnd );
 					}
 					CExtSafeString strReplaceText = Behavior_GetValidText( true );
 				}
@@ -7875,18 +7875,18 @@ INT _nPos = 0, _nGroupSignBeforeStart = 0, _nGroupSignCount = (INT)_GetGroupSepa
 			INT nGroupSepPos = (INT)strText.Find( m_strGroupSeparator, ( nStart - nGroupSeparatorLen ) );
 			if( nGroupSepPos >= 0 )
 			{
-				INT _nPos = 0;
+				INT my_nPos = 0;
 				INT _nGroupSignBeforeStartAfterDelete = 0;
 				bool _bChangePos = false;
 				INT _nGroupSignCountAfterDelete = (INT)_GetGroupSeparatorCount( strText );
 				for( ; true; )
 				{
-					_nPos = (INT)strText.Find( m_strGroupSeparator, _nPos );
-					if( _nPos < 0 )
+					my_nPos = (INT)strText.Find( m_strGroupSeparator, my_nPos );
+					if( my_nPos < 0 )
 						break;
-					if( _nPos < nStart )
+					if( my_nPos < nStart )
 						_nGroupSignBeforeStartAfterDelete ++;
-					_nPos ++;
+					my_nPos ++;
 				}
 				_nGroupSignBeforeStartAfterDelete = _nGroupSignCountAfterDelete - _nGroupSignBeforeStartAfterDelete;
 				if( ( _nGroupSignBeforeStart - 1 ) == _nGroupSignBeforeStartAfterDelete )

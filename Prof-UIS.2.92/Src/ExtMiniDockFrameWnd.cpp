@@ -402,10 +402,10 @@ CRect rcWnd;
 			CMiniDockFrameWnd::OnNcLButtonDown( nHitTest, point);
 		else
 		{
-			CExtControlBar * pExtBar =
+			CExtControlBar * _pExtBar =
 				(CExtControlBar *)pBar;
-			if( !pExtBar->_IsShowContentWhenDragging()
-				&&	pExtBar->IsFixedMode()
+			if( !_pExtBar->_IsShowContentWhenDragging()
+				&&	_pExtBar->IsFixedMode()
 				)
 			{
 				pBar->m_pDockContext->StartResize( nHitTest, point );
@@ -783,14 +783,14 @@ CPoint ptOffsetWnd( 0, 0 );
 	} // if( bFixedMode )
 	if( bInvLeft || bInvTop || (! bFixedMode ) )
 	{
-		CRect rcWnd( rcWndOrg );
-		ScreenToClient( & rcWnd );
+		CRect _rcWnd( rcWndOrg );
+		ScreenToClient( & _rcWnd );
 		if( bInvLeft || (! bFixedMode ) )
 			ptOffsetWnd.x =
-				abs( rcWnd.left - rcClientOrg.left );
+				abs( _rcWnd.left - rcClientOrg.left );
 		if( bInvTop || (! bFixedMode ) )
 			ptOffsetWnd.y =
-				abs( rcWnd.top - rcClientOrg.top );
+				abs( _rcWnd.top - rcClientOrg.top );
 	} // if( bInvLeft || bInvTop )
 
 	switch( nHit )
@@ -1084,8 +1084,8 @@ void CExtMiniDockFrameWnd::OnNcRButtonDown(UINT nHitTest, CPoint point)
 			CFrameWnd * pFrame = pExtBar->_GetDockingFrameImpl();
 			ASSERT_VALID( pFrame );
 
-			CPoint point;
-			if( ! ::GetCursorPos(&point) )
+			CPoint _point;
+			if( ! ::GetCursorPos(&_point) )
 				return;
 			HWND hWndTrack = pFrame->GetSafeHwnd();
 			ASSERT( hWndTrack != NULL && ::IsWindow(hWndTrack) );
@@ -1117,8 +1117,8 @@ void CExtMiniDockFrameWnd::OnNcRButtonDown(UINT nHitTest, CPoint point)
 			//::SetFocus( hWndTrack );
 			if( ! pPopup->TrackPopupMenu(
 					TPMX_OWNERDRAW_FIXED,
-					point.x,
-					point.y,
+					_point.x,
+					_point.y,
 					NULL,
 					this,
 					NULL,
@@ -1329,10 +1329,10 @@ CRect rcText( m_rcFrameCaption );
 
 	if( ! bActive )
 	{
-		HWND hTmpWndFocus = ::GetFocus();
-		if(		hTmpWndFocus != NULL
-			&&	(	GetSafeHwnd() == hTmpWndFocus
-				||	::IsChild( GetSafeHwnd(), hTmpWndFocus )
+		HWND _hTmpWndFocus = ::GetFocus();
+		if(		_hTmpWndFocus != NULL
+			&&	(	GetSafeHwnd() == _hTmpWndFocus
+				||	::IsChild( GetSafeHwnd(), _hTmpWndFocus )
 				)
 			)
 			bActive = true;

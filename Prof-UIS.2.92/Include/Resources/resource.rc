@@ -72,25 +72,9 @@ IDR_EXT_DEFAULT_CSS     CSS     DISCARDABLE     "Resources\\CSS\\IDR_EXT_DEFAULT
 #define __EXT_MFC_NO_RIBBON_RES
 
 /////////////////////////////////////////////////////////////////////////////
-// Resources for geo controls
-
-//#include "ResGeoControls\\ResGeoControls.rc"
-
-/////////////////////////////////////////////////////////////////////////////
 // Resources for common and shell controls
 
 #include "ResCommonControls\\ResCommonControls.rc"
-
-/////////////////////////////////////////////////////////////////////////////
-// Resources for Office 2007 paint managers
-
-#include "Res2007\\Res2007.rc"
-
-/////////////////////////////////////////////////////////////////////////////
-// Resources for paint manager switching controls
-
-#include "ResPM\\ResPM.rc"
-
 
 #if ( !(defined _AFXDLL && !defined __STATPROFUIS_WITH_DLLMFC__) )
 	#include "AfxPrint.rc"

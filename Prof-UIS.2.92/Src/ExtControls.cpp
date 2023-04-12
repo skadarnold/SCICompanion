@@ -41,10 +41,6 @@
 	#include <ExtPopupMenuWnd.h>
 #endif
 
-#if (!defined __PROF_UIS_RES_PM_H)
-	#include <Resources/ResPM/ResPM.h>
-#endif
-
 #if( !defined __EXTMINIDOCKFRAMEWND_H)
 	#include "ExtMiniDockFrameWnd.h"
 #endif
@@ -496,7 +492,7 @@ CExtThemeSwitcherToolControlBar::CExtThemeSwitcherToolControlBar()
 	: m_eTIS_PopupMenu( CExtThemeSwitcherToolControlBar::__ETIS_16x16 )
 	, m_eTIS_ToolBar( CExtThemeSwitcherToolControlBar::__ETIS_24x24 )
 	, m_bCommandProfileInitialized( false )
-	, m_nMenuMarkerID( ID_EXT_PM_MENU_MARKER_THEME_CHANGER )
+//	, m_nMenuMarkerID( ID_EXT_PM_MENU_MARKER_THEME_CHANGER )
 	, m_bEnableOffice2007r3( false )
 {
 #if (!defined __EXT_MFC_NO_CUSTOMIZE)

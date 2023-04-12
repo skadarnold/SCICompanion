@@ -263,23 +263,6 @@ CExtPaintManager::~CExtPaintManager()
 	m_brushes.RemoveAll();
 }
 
-CExtBitmap & CExtPaintManager::_GetBmpCacheFilter( bool bApplied ) const
-{
-	if( m_bmpCacheFilterApplied.IsEmpty() )
-	{
-		VERIFY( m_bmpCacheFilterApplied.LoadBMP_Resource( MAKEINTRESOURCE( IDB_EXT_BITMAP_FILTER_APPLIED ) ) );
-		VERIFY( m_bmpCacheFilterApplied.Make32() );
-		m_bmpCacheFilterApplied.AlphaColor( RGB(255,0,255), RGB(0,0,0), BYTE(0) );
-	}
-	if( m_bmpCacheFilterUnApplied.IsEmpty() )
-	{
-		VERIFY( m_bmpCacheFilterUnApplied.LoadBMP_Resource( MAKEINTRESOURCE( IDB_EXT_BITMAP_FILTER_UNAPPLIED ) ) );
-		VERIFY( m_bmpCacheFilterUnApplied.Make32() );
-		m_bmpCacheFilterUnApplied.AlphaColor( RGB(255,0,255), RGB(0,0,0), BYTE(0) );
-	}
-	return bApplied ? m_bmpCacheFilterApplied : m_bmpCacheFilterUnApplied;
-}
-
 void CExtPaintManager::SerializeSynchronizationData( CArchive & ar )
 {
 	ASSERT_VALID( this );

@@ -359,9 +359,9 @@ IDB_BITMAPAFFECTALL     BITMAP                  "res\\AffectAll.bmp"
 
 IDB_BITMAPCUEACTIVE     BITMAP                  "res\\SoundCueActive.bmp"
 
-IDB_TABPIC              BITMAP                  "res\\TabPic.bmp"
+//IDB_TABPIC              BITMAP                  "res\\TabPic.bmp"
 
-IDB_TABPICNS            BITMAP                  "res\\TabPicNS.bmp"
+//IDB_TABPICNS            BITMAP                  "res\\TabPicNS.bmp"
 
 IDB_VPCHIGHLIGHT        BITMAP                  "res\\vpc_highlight.bmp"
 

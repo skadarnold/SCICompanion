@@ -64,8 +64,6 @@
 #define IDC_IMAGE_VIEWER                30060
 #define IDC_IMAGE_PALETTE               30061
 #define IDC_TOOLBAR_ICON_TOOLS          30064
-#define IDD_EXT_ICON_SELECTION_SIZE     30172
-#define IDD_EXT_ICON_MOUSE_POS          30173
 #define IDC_STATIC_SELECTION_SIZE       30174
 #define IDC_STATIC_MOUSE_POS            30175
 #define ID_EXT_CUSTOMIZE                30189

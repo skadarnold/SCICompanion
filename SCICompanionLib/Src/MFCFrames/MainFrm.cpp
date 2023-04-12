@@ -982,6 +982,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	}
 
 	// We don't actually show this, but we use its m_nMenuMarkerID member variable.
+	/*
 	if (!m_ThemeSwitcher.Create("theme switch toolbar", this, AFX_IDW_TOOLBAR))
 	{
 		return -1;
@@ -994,6 +995,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		//return -1;
 	}
 	m_ThemeSwitcher.ShowWindow(SW_HIDE);
+	*/
 
 	// These are just placeholders...
 	if (!m_wndStatusBar.Create(this))
@@ -1467,10 +1469,10 @@ BOOL CMainFrame::PreTranslateMessage(MSG* pMsg)
 	{
 		return TRUE;
 	}
-	if(m_ThemeSwitcher.PreTranslateMessage(pMsg))
-	{
-		return TRUE;
-	}
+	//if(m_ThemeSwitcher.PreTranslateMessage(pMsg))
+	//{
+	//	return TRUE;
+	//}
 	return CMDIFrameWnd::PreTranslateMessage(pMsg);
 }
 

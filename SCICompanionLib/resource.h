@@ -148,9 +148,7 @@
 #define IDB_BITMAP3                     263
 #define IDB_TABVIEW                     265
 #define IDB_BITMAP6                     266
-#define IDB_TABPIC                      266
 #define IDB_BITMAP7                     267
-#define IDB_TABPICNS                    267
 #define IDI_ICON4                       268
 #define IDI_COMPILEALL                  268
 #define IDI_BRUSH                       269

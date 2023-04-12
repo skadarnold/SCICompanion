@@ -134,7 +134,7 @@ private:  // control bar embedded members
 	CBarContainerDialog m_dlgEmpty;
 
 	// We don't actually show this, but we use its m_nMenuMarkerID member variable.
-	CExtThemeSwitcherToolControlBar m_ThemeSwitcher;
+	//CExtThemeSwitcherToolControlBar m_ThemeSwitcher;
 
 	// The empty dialog can contain these subdialogs:
 	RasterSidePane m_dlgForPanelDialogFont;

@@ -163,8 +163,6 @@ END
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
 IDD_EXT_COLOR_DIALOG    ICON    DISCARDABLE     "Resources\\Res\\IDD_EXT_COLOR_DIALOG.ico"
-IDD_EXT_ICON_SELECTION_SIZE ICON    DISCARDABLE     "Resources\\Res\\IDD_EXT_ICON_SELECTION_SIZE.ico"
-IDD_EXT_ICON_MOUSE_POS  ICON    DISCARDABLE     "Resources\\Res\\IDD_EXT_ICON_MOUSE_POS.ico"
 
 /////////////////////////////////////////////////////////////////////////////
 //

@@ -309,16 +309,6 @@ int CMDITabsDialogBar::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	if (__super::OnCreate(lpCreateStruct) == -1)
 		return -1;
 	_fNavigatingViaTravelLog = false;
-
-	ASSERT(ARRAYSIZE(c_rgHueAdjust) == ARRAYSIZE(_tabBitmap));
-	for (int i = 0; i < ARRAYSIZE(c_rgHueAdjust); ++i)
-	{
-		_tabBitmap[i].LoadBMP_Resource(MAKEINTRESOURCE(IDB_TABPIC));
-		_tabBitmap[i].AdjustHLS(COLORREF(-1L), RGB(0, 0, 0), c_rgHueAdjust[i], c_rgLumAdjust[i], c_rgSatAdjust[i], NULL);
-
-		_tabBitmapNS[i].LoadBMP_Resource(MAKEINTRESOURCE(IDB_TABPICNS));
-		_tabBitmapNS[i].AdjustHLS(COLORREF(-1L), RGB(0, 0, 0), c_rgHueAdjust[i], c_rgLumAdjust[i], c_rgSatAdjust[i], NULL);
-	}
    return 0;
 }
 
@@ -450,12 +440,8 @@ void CMDITabsDialogBar::DrawItem(LPDRAWITEMSTRUCT pdis)
 
 		bool drawCloseX = pActive->GetTabType() != MDITabType::TAB_GAME;
 		int iIndex = _GetBitmapIndex(pActive->GetTabType());
-		CExtBitmap &bitmapToUse = fSelected ? _tabBitmap[iIndex] : _tabBitmapNS[iIndex];
-		CRect rcSrc(CPoint(0, 0), bitmapToUse.GetSize());
 		CRect rcPadding(0, 0, 0, 0);
 
-
-		// bitmapToUse.AlphaBlendSkinParts(pdis->hDC, rc, rcSrc, rcPadding, /*__EXT_BMP_FLAG_PREMULTIPLIED_RGB_CHANNELS |*/ CExtBitmap::__EDM_STRETCH, true, true, 0xFF);
 		CRect rcUsable = rc;
 		rcUsable.left += 1;
 		rcUsable.top += 1;

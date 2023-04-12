@@ -38,22 +38,6 @@
 #define __PROF_UIS_VERSION_DWORD    DWORD( 0x02090200 )
 #define __PROF_UIS_VERSION                 0x02090200
 
-// the multiple monitor stub can be included into the library
-// builds (used in ExtPaintManager.cpp to define
-// COMPILE_MULTIMON_STUBS symbol before include multimon.h)
-#if ( (defined _AFXDLL) || ( _MFC_VER >= 0x0A00 ) )
-	#define __PROF_UIS_BUILTIN_MULTIMON_STUB
-#endif
-
-#if _MFC_VER <= 0x710
-	#pragma message("   Prof-UIS multiple monitor support:")
-	#if (defined __PROF_UIS_BUILTIN_MULTIMON_STUB)
-		#pragma message("      built-in")
-	#else
-		#pragma message("      external")
-	#endif // __PROF_UIS_BUILTIN_MULTIMON_STUB
-#endif
-
 // Prof-UIS basic library
 #if (defined _AFXDLL)
 	#if (defined __STATPROFUIS_WITH_DLLMFC__)

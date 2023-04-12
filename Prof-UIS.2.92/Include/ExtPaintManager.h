@@ -438,7 +438,6 @@ public:
 	
 	public:
 
-		CExtSafeString m_strOsVer;
 		OSVERSIONINFO m_osVerData;
 		// quick boolean helpers
 		bool

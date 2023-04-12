@@ -10019,9 +10019,5 @@ __PROF_UIS_MANAGE_STATE;
 
 #endif // (! defined __EXT_MFC_NO_MSG_BOX )
 
-
-
-
-
-
-
+//Workaround to remove LNK4221 warning
+char LNK4221_For_ExtControlsCommon;

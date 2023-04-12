@@ -15,3 +15,7 @@
 #include "Task.h"
 
 // Nothing to do here, since everything is templated.
+
+
+//...except to add a workaround to remove LNK4221 warning
+char LNK4221_For_Task;

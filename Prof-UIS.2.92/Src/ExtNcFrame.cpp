@@ -46,13 +46,6 @@
 	#include <../src/mfc/AfxImpl.h>
 #endif
 
-// disable warning 4706
-#pragma warning( push )
-#pragma warning ( disable : 4706 )
-	#include <multimon.h>
-// rollback warning 4706
-#pragma warning( pop )
-
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #undef THIS_FILE

@@ -26,13 +26,6 @@
 	#define COMPILE_MULTIMON_STUBS
 #endif // __PROF_UIS_BUILTIN_MULTIMON_STUB
 
-// disable warning 4706
-#pragma warning( push )
-#pragma warning ( disable : 4706 )
-	#include <multimon.h>
-// rollback warning 4706
-#pragma warning( pop )
-
 #if _MFC_VER < 0x700
 	#include <../src/AfxImpl.h>
 #else
@@ -683,23 +676,22 @@ CExtPaintManager::CExtPaintManagerAutoPtr::CExtPaintManagerAutoPtr()
 	, m_uCachedScrollLines( 0 )
 	, m_bUxValidColorsExtracted( false )
 	, m_eCurrentTheme( ThemeUnknown )
-	, m_strOsVer( _T("Unknown") )
 	, m_bIsWin32s( false )
 	, m_bIsWin9x( false )
 	, m_bIsWin95( false )
 	, m_bIsWin98( false )
 	, m_bIsWin98orLater( false )
-	, m_bIsWinNT( false )
+	, m_bIsWinNT( true ) 
 	, m_bIsWinNT4( false )
 	, m_bIsWin2000( false )
 	, m_bIsWinXP( false )
-	, m_bIsWinNT4orLater( false )
-	, m_bIsWin2000orLater( false )
-	, m_bIsWinXPorLater( false )
+	, m_bIsWinNT4orLater( true )
+	, m_bIsWin2000orLater( true )
+	, m_bIsWinXPorLater( true )
 	, m_bIsWinVista( false )
-	, m_bIsWinVistaOrLater( false )
-	, m_bIsWin7( false )
-	, m_bIsWin7OrLater( false )
+	, m_bIsWinVistaOrLater( true )
+	, m_bIsWin7( true )
+	, m_bIsWin7OrLater( true )
 	, m_hDllMsImg( NULL )
 	, m_hDllUser32( NULL )
 	, m_hDllSHLWAPI( NULL )
@@ -717,7 +709,7 @@ CExtPaintManager::CExtPaintManagerAutoPtr::CExtPaintManagerAutoPtr()
 	, m_bEnableUiScalingX( true )
 	, m_bEnableUiScalingY( true )
 	, m_bEnableUiScalingZ( true )
-	, m_bLayeredHighlighting2005( false )
+	, m_bLayeredHighlighting2005( true )
 	, m_bAllowWndUpdateSourceDetection( true )
 	, m_bAutoSkinScrollBars( true )
 	, m_nInstallPaintManagerCounter( 0 )
@@ -726,118 +718,7 @@ CExtPaintManager::CExtPaintManagerAutoPtr::CExtPaintManagerAutoPtr()
 #ifdef WM_THEMECHANGED
 	ASSERT( __ExtMfc_WM_THEMECHANGED == WM_THEMECHANGED );
 #endif // WM_THEMECHANGED
-	
-	memset((char *)&m_osVerData,0,sizeof(OSVERSIONINFO));
-	m_osVerData.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
 
-CExtSafeString sTmp( _T("") );
-	VERIFY( ::GetVersionEx(&m_osVerData) );
-	switch(m_osVerData.dwPlatformId)
-	{
-	case VER_PLATFORM_WIN32s:
-		m_bIsWin32s = true;
-		sTmp = _T("Win32s");
-	break;
-	case VER_PLATFORM_WIN32_WINDOWS:
-	{
-		m_bIsWin9x = true;
-		m_bIsWin95 =
-			(	( m_osVerData.dwMajorVersion == 4 )
-			&&	( m_osVerData.dwMinorVersion == 0 )
-			);
-		m_bIsWin98orLater = 
-			(	( m_osVerData.dwMajorVersion > 4 )
-			||	(	( m_osVerData.dwMajorVersion == 4 )
-				&&	( m_osVerData.dwMinorVersion > 0 )
-				)
-			);
-		sTmp = _T("Windows ");
-		if( m_bIsWin98orLater )
-		{
-			if(		( m_osVerData.dwMajorVersion == 4 )
-				&&	( m_osVerData.dwMinorVersion > 0 )
-				)
-			{
-				m_bIsWin98 = true;
-				sTmp += _T("98");
-			}
-			else
-				sTmp += _T("98 or later");
-		}
-		else
-		{
-			sTmp += _T("95");
-		}
-	}
-	break;
-	case VER_PLATFORM_WIN32_NT:
-		m_bIsWinNT = true;
-		if( m_osVerData.dwMajorVersion == 6 )
-		{
-			if( m_osVerData.dwMinorVersion == 0 )
-			{
-				m_bIsWinVista = true;
-				sTmp = _T("Windows Vista");
-			}
-			else
-			{
-				m_bIsWin7 = true;
-				sTmp = _T("Windows 7");
-			}
-		}
-		else if( m_osVerData.dwMajorVersion == 5 )
-		{
-			if( m_osVerData.dwMinorVersion == 0 )
-			{
-				m_bIsWin2000 = true;
-				sTmp = _T("Windows 2000");
-			}
-			else if( m_osVerData.dwMinorVersion == 1 )
-			{
-				m_bIsWinXP = true;
-				sTmp = _T("Windows XP");
-			}
-		}
-		else if( m_osVerData.dwMajorVersion == 4 )
-		{
-			m_bIsWinNT4 = true;
-			sTmp = _T("Windows NT");
-		}
-		else
-			sTmp = _T("Windows NT");
-		
-		if( m_osVerData.dwMajorVersion >= 4 )
-			m_bIsWinNT4orLater = true;
-		if( m_osVerData.dwMajorVersion >= 5 )
-		{
-			m_bIsWin2000orLater = true;
-			if(	!	(	m_osVerData.dwMajorVersion == 5
-					&&	m_osVerData.dwMinorVersion == 0
-					)
-				)
-				m_bIsWinXPorLater = true;
-			if( m_osVerData.dwMajorVersion >= 6 )
-			{
-				m_bIsWinVistaOrLater = true;
-				if( m_osVerData.dwMinorVersion >= 1 )
-					m_bIsWin7OrLater = true;
-			}
-		}
-	break;
-	} // switch(m_osVerData.dwPlatformId)
-
-	if( ! m_bIsWin2000orLater )
-		m_bAutoSkinScrollBars = false;
-
-	m_strOsVer.Format(
-		_T("%s v.%lu.%lu (build %lu) %s"),
-		sTmp,
-		m_osVerData.dwMajorVersion, 
-		m_osVerData.dwMinorVersion, 
-		m_osVerData.dwBuildNumber,
-		m_osVerData.szCSDVersion
-		);
-	
 	// init uxtheme.dll data
 	InitUserExApi();
 
@@ -886,12 +767,6 @@ CWindowDC dcDesktop( NULL );
 	m_nLPX = ::GetDeviceCaps( dcDesktop.m_hDC, LOGPIXELSX );
 	m_nLPY = ::GetDeviceCaps( dcDesktop.m_hDC, LOGPIXELSY );
 	m_nLPZ = ( m_nLPX + m_nLPY ) / 2;
-
-	if(		m_bIsWin2000orLater
-		&&	CExtPaintManager::stat_GetBPP() >= 15
-		&&	m_pfnUpdateLayeredWindow != NULL
-		)
-		m_bLayeredHighlighting2005 = true;
 }
 
 void CExtPaintManager::CExtPaintManagerAutoPtr::InitUserExApi()
@@ -901,36 +776,6 @@ void CExtPaintManager::CExtPaintManagerAutoPtr::InitUserExApi()
 
 	if( m_UxTheme.IsAppThemed() )
 	{
-		// theme name
-		WCHAR pszThemeName[MAX_PATH] = L"";
-		WCHAR pszColor[MAX_PATH] = L"";
-
-		if( m_UxTheme.GetCurrentThemeName(
-				pszThemeName, 
-				MAX_PATH, 
-				pszColor, 
-				MAX_PATH, 
-				NULL, 
-				0 
-				) == S_OK
-			)
-		{	
-			if( wcsstr( __EXT_MFC_WCSLWR( pszThemeName, wcslen( pszThemeName ) + 1 ), L"luna.msstyles") != 0 )
-			{
-				if( wcscmp( __EXT_MFC_WCSLWR( pszColor, wcslen( pszColor ) + 1 ), L"normalcolor") == 0 )
-					m_eCurrentTheme = ThemeLunaBlue;
-				else if( wcscmp( __EXT_MFC_WCSLWR( pszColor, wcslen( pszColor ) + 1 ), L"homestead") == 0 )
-					m_eCurrentTheme = ThemeLunaOlive;
-				else if( wcscmp( __EXT_MFC_WCSLWR( pszColor, wcslen( pszColor ) + 1 ), L"metallic") == 0 )
-					m_eCurrentTheme = ThemeLunaSilver;
-			}
-			else if( wcsstr( __EXT_MFC_WCSLWR( pszThemeName, wcslen( pszThemeName ) + 1 ), L"royale.msstyles") != 0 )
-			{
-				if( wcscmp( __EXT_MFC_WCSLWR( pszColor, wcslen( pszColor ) + 1 ), L"normalcolor") == 0 )
-					m_eCurrentTheme = ThemeLunaRoyale;
-			}
-		}
-		
 		HWND hWndDesktop = ::GetDesktopWindow();
 		ASSERT( hWndDesktop != NULL );
 		if(	m_UxTheme.OpenThemeData( hWndDesktop, L"TASKBAND" ) != NULL )

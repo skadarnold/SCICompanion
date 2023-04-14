@@ -426,11 +426,14 @@ Script *Decompile(const GameFolderHelper &helper, const CompiledScript &compiled
 	// Before adding these though, remove any exports from the internalProcOffsets.
 	for (const auto &exporty : compiledScript._exportsTO)
 	{
-		set<uint16_t>::iterator internalsIndex = find(internalProcOffsetsTO.begin(), internalProcOffsetsTO.end(), exporty);
-		if (internalsIndex != internalProcOffsetsTO.end())
+		if (compiledScript.IsExportAProcedure(exporty)) // Exported objects can have the same address as a proc, we need to make sure we don't omit a proc because of that.
 		{
-			// Remove this guy.
-			internalProcOffsetsTO.erase(internalsIndex);
+			set<uint16_t>::iterator internalsIndex = find(internalProcOffsetsTO.begin(), internalProcOffsetsTO.end(), exporty);
+			if (internalsIndex != internalProcOffsetsTO.end())
+			{
+				// Remove this guy.
+				internalProcOffsetsTO.erase(internalsIndex);
+			}
 		}
 	}
 	// Now add the internal guys to the full list

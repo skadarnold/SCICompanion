@@ -71,7 +71,7 @@
 (instance rmScript of Script
 	(properties)
 	
-	(method (changeState newState)
+	(method (changeState newState &tmp theChoice)
 		(switch (= state newState)
 			(0 (= seconds 4))
 			; Wait 4 seconds before going to the next state.
@@ -79,18 +79,21 @@
 				(= seconds 0)
 				(= gNormalCursor 999)
 				(gGame setCursor: 999 1)
-				(Print
-					dialog: myDialog
-					font: gFont
-					width: 150
-					mode: alCENTER
-					addText: N_TITLEMENU 0 0 4 0 0 0
-					addText: N_TITLEMENU 0 0 5 0 10 0
-					addColorButton: 0 N_TITLEMENU 0 0 1 0 20 0 0 11 23 5 5 5
-					addColorButton: 1 N_TITLEMENU 0 0 2 0 30 0 0 11 23 5 5 5
-					addColorButton: 2 N_TITLEMENU 0 0 3 0 40 0 0 11 23 5 5 5
+				(= theChoice
+					(Print
+						dialog: myDialog
+						font: gFont
+						width: 150
+						mode: alCENTER
+						addText: N_TITLEMENU V_LOOK 0 4 0 0 0
+						addText: N_TITLEMENU V_LOOK 0 5 0 10 0
+						addColorButton: 0 N_TITLEMENU V_LOOK 0 1 0 20 0 0 11 23 5 5 5
+						addColorButton: 1 N_TITLEMENU V_LOOK 0 2 0 30 0 0 11 23 5 5 5
+						addColorButton: 2 N_TITLEMENU V_LOOK 0 3 0 40 0 0 11 23 5 5 5
+						init:
+					)
 				)
-				(switch (Print init:)
+				(switch theChoice
 					(0 (gRoom newRoom: 110))
 					(1
 						(gGame restore:)

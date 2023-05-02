@@ -235,6 +235,14 @@ std::string CSCOFile::GetVariableName(WORD wIndex) const
 		if (theName == "")
 		{
 			// TODO: probably an array... search backward for the name?
+			// KAWA: let's try that just for fun.
+			while (wIndex > 0)
+			{
+				wIndex--;
+				theName = _vars[wIndex].GetName();
+				if (theName != "")
+					return theName;
+			}
 		}
 		return theName;
 	}

@@ -56,7 +56,7 @@ void ReadImageDataWorker(sci::istream &byteStreamRLE, Cel &cel, bool isVGA, sci:
 	uint8_t scratchBuffer[128];
 	uint8_t *scratchPointer = nullptr;
 
-	// For some reason, the bitmap with needs to be rounded up to fit on a DWORD boundary.
+	// For some reason, the bitmap width needs to be rounded up to fit on a DWORD boundary.
 	int cxActual = CX_ACTUAL(cel.size.cx);
 	int cxRemainingOnThisLine = cel.size.cx;
 	int cxLine = cel.size.cx;
@@ -670,6 +670,10 @@ struct LoopHeader_VGA11
 	uint8_t celCount;
 	uint8_t dummy1;			 // 0xff (typical)
 	uint32_t dummy2, dummy3;	// 0x3fffffff, 0x00000000   (typical)
+	//KAWA: the above are actually
+	//uint8_t startCel, endingCel, repeatCount, stepSize;
+	//uint32_t paletteOffset;
+	//none of that is used.
 	uint32_t celOffsetAbsolute;
 };
 
@@ -719,6 +723,9 @@ void ReadCelFromVGA11(sci::istream &byteStream, Cel &cel, bool isPic)
 
 	// LB_Dagger, view 86 has zero here. It's corrupted. All others have 0xa
 	// assert(celHeader.always_0xa == 0xa);
+	//KAWA: Not True! When setting a Magnifier effect, this HAS to be zero.
+	//View 2823 in Eco2, which is a magnifier just like LB_Dagger view 86, has this.
+	//offsetRLE will be non-zero in this case, while offsetLiteral will be zero.
 
 	bool hasSplitRLEAndLiteral = (celHeader.always_0xa == 0xa) || (celHeader.always_0xa == 0x8a);
 	if (hasSplitRLEAndLiteral)
@@ -737,13 +744,24 @@ void ReadCelFromVGA11(sci::istream &byteStream, Cel &cel, bool isPic)
 	// RLE are the encoding "instructions", while Literal is the raw data it reads from
 	assert(celHeader.offsetRLE != 0);
 	byteStream.seekg(celHeader.offsetRLE);
+	
 	if (celHeader.offsetLiteral == 0)
 	{
+/*
 		// Just copy the bits directly. AFAIK this is only for LB_Dagger views 86, 456 and 527
 		size_t dataSize = celHeader.size.cx * celHeader.size.cy; // Not sure if padding happens?
 		cel.Data.allocate(max(1, dataSize));
 		byteStream.read_data(&cel.Data[0], dataSize);
 		FlipImageData(&cel.Data[0], celHeader.size.cx, celHeader.size.cy, celHeader.size.cx);
+*/
+		sci::istream stream(byteStream, celHeader.offsetLiteral);
+		cel.Data.allocate(max(1, CX_ACTUAL(celHeader.size.cx) * celHeader.size.cy));
+		for (int y = cel.size.cy - 1; y >= 0; y--)
+		{
+			int pos = y * CX_ACTUAL(cel.size.cx);
+			byteStream.read_data(&cel.Data[pos], cel.size.cx);
+			cel.Data.fill(pos + cel.size.cx, CX_ACTUAL(cel.size.cx) - cel.size.cx, cel.TransparentColor);
+		}
 	}
 	else
 	{
@@ -913,6 +931,8 @@ void ViewWriteToVGA11_2_Helper(const ResourceEntity &resource, sci::ostream &byt
 				const Cel &cel = loop.Cels[i];
 				CelHeader_VGA11 celHeader = prelimCelHeaders[realLoopIndex][i];
 				celHeader.size = cel.size;
+				//TODO: THIS WILL FUCK UP MAGNIFIER CELS
+				//They NEED to be 0x00 here and saved RAW.
 				celHeader.always_0xa = isVGA2 ? 0x8a : 0xa;
 				celHeader.placement = cel.placement;
 				celHeader.transparentColor = cel.TransparentColor;

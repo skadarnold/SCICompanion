@@ -3146,55 +3146,55 @@ END
 // Cursor
 //
 
-IDC_CURSORPEN           CURSOR                  "res\\cursor1.cur"
+IDC_CURSORPEN           CURSOR                  "res\\pen.cur"
 
-IDC_CURSORHISTORY       CURSOR                  "res\\cur00001.cur"
+IDC_CURSORHISTORY       CURSOR                  "res\\history.cur"
 
-IDC_CURSORLINE          CURSOR                  "res\\cur00002.cur"
+IDC_CURSORLINE          CURSOR                  "res\\line.cur"
 
-IDC_CURSORZOOM          CURSOR                  "res\\cur00003.cur"
+IDC_CURSORZOOM          CURSOR                  "res\\zoom.cur"
 
-IDC_CURSORFILL          CURSOR                  "res\\cursor2.cur"
+IDC_CURSORFILL          CURSOR                  "res\\fill.cur"
 
-IDC_CURSORPASTE         CURSOR                  "res\\cur00004.cur"
+IDC_CURSORPASTE         CURSOR                  "res\\paste.cur"
 
-IDC_CURSORPLACEMENT     CURSOR                  "res\\cursorli.cur"
+IDC_CURSORPLACEMENT     CURSOR                  "res\\placement.cur"
 
-IDC_CURSORPOLYGON       CURSOR                  "res\\cur00005.cur"
+IDC_CURSORPOLYGON       CURSOR                  "res\\polygon.cur"
 
-IDC_CURSORRESIZENS_BR   CURSOR                  "res\\cur00006.cur"
+IDC_CURSORRESIZENS_BR   CURSOR                  "res\\resizens_br.cur"
 
-IDC_CURSORRESIZENS_TL   CURSOR                  "res\\cursorre.cur"
+IDC_CURSORRESIZENS_TL   CURSOR                  "res\\resizens_tl.cur"
 
-IDC_CURSORRESIZENS_STRETCH CURSOR                  "res\\cur00007.cur"
+IDC_CURSORRESIZENS_STRETCH CURSOR                  "res\\resizens.cur"
 
-IDC_CURSORRESIZEWE_BR   CURSOR                  "res\\cur00008.cur"
+IDC_CURSORRESIZEWE_BR   CURSOR                  "res\\resizewe_br.cur"
 
-IDC_CURSORRESIZEWE_TL   CURSOR                  "res\\cur00009.cur"
+IDC_CURSORRESIZEWE_TL   CURSOR                  "res\\resizewe_tl.cur"
 
-IDC_CURSORRESIZEWE_STRETCH CURSOR                  "res\\cur00010.cur"
+IDC_CURSORRESIZEWE_STRETCH CURSOR                  "res\\resizewe.cur"
 
-IDC_CURSORRESIZENSWE_BR CURSOR                  "res\\cur00011.cur"
+IDC_CURSORRESIZENSWE_BR CURSOR                  "res\\resizenswe_br.cur"
 
-IDC_CURSORRESIZENSWE_STRETCH CURSOR                  "res\\cur00012.cur"
+IDC_CURSORRESIZENSWE_STRETCH CURSOR                  "res\\resizenswe.cur"
 
-IDC_CURSORRESIZENSWE_TL CURSOR                  "res\\cur00013.cur"
+IDC_CURSORRESIZENSWE_TL CURSOR                  "res\\resizenswe_tl.cur"
 
-IDC_CURSORROTATE        CURSOR                  "res\\cur00014.cur"
+IDC_CURSORROTATE        CURSOR                  "res\\rotate.cur"
 
-IDC_CURSORUP            CURSOR                  "res\\cur00015.cur"
+IDC_CURSORUP            CURSOR                  "res\\up.cur"
 
-IDC_CURSORDOWN          CURSOR                  "res\\cursorup.cur"
+IDC_CURSORDOWN          CURSOR                  "res\\down.cur"
 
-IDC_CURSORRIGHT         CURSOR                  "res\\cursordo.cur"
+IDC_CURSORRIGHT         CURSOR                  "res\\right.cur"
 
-IDC_CURSORLEFT          CURSOR                  "res\\cur00016.cur"
+IDC_CURSORLEFT          CURSOR                  "res\\left.cur"
 
-IDC_CURSORCIRCLE        CURSOR                  "res\\cur00017.cur"
+IDC_CURSORCIRCLE        CURSOR                  "res\\circle.cur"
 
 IDC_CURSOREYEDROPPER    CURSOR                  "res\\eyedropper.cur"
 
-IDC_CURSORSHAPE         CURSOR                  "res\\cursorsh.cur"
+IDC_CURSORSHAPE         CURSOR                  "res\\rect.cur"
 
 
 /////////////////////////////////////////////////////////////////////////////

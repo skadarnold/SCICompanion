@@ -194,15 +194,19 @@ struct CelHeader_VGA11
 	size16 size;
 	point16 placement;
 	uint8_t transparentColor;
-	// "Unknown":
 	uint8_t always_0xa;
 	uint8_t temp2, temp3;
+	//KAWA: the above are actually
+	//uint8_t compressType;
+	//uint16_t compRemapCount
+	//compressType matters for Magnifier cels-- the engine will Panic if it's nonzero.
 	uint32_t totalCelDataSize;
 	uint32_t rleCelDataSize;
 	uint32_t paletteOffset;	 // Used for pic cels only, apparently.
 	uint32_t offsetRLE;
 	uint32_t offsetLiteral;
 	uint32_t perRowOffsets;	 // SCI2 needs this.
+	//KAWA: perRowOffset may be compressRemapOffste in SCI11.
 };
 #include <poppack.h>
 

@@ -106,6 +106,15 @@
     <Filter Include="Header Files\FrameComponents">
       <UniqueIdentifier>{ef99ccd9-3e6c-4062-8bf0-6d3dc7d5eb4a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\Toolbar icons">
+      <UniqueIdentifier>{5cf0519d-8843-4be4-bb9b-13d48348bd56}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Cursors">
+      <UniqueIdentifier>{c04634e3-738d-4fed-a508-d220d82fd638}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Toolbar templates">
+      <UniqueIdentifier>{2ff917bd-77d8-425d-b0c5-405af24383ed}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SCICompanionLib.cpp">
@@ -1844,84 +1853,6 @@
     <None Include="Src\Util\ScriptConvert.h">
       <Filter>Header Files\Util</Filter>
     </None>
-    <None Include="res\cur00001.cur">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="res\cur00002.cur">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="res\cur00003.cur">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="res\cur00004.cur">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="res\cur00005.cur">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="res\cur00006.cur">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="res\cur00007.cur">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="res\cur00008.cur">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="res\cur00009.cur">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="res\cur00010.cur">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="res\cur00011.cur">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="res\cur00012.cur">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="res\cur00013.cur">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="res\cur00014.cur">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="res\cur00015.cur">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="res\cur00016.cur">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="res\cur00017.cur">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="res\cursor1.cur">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="res\cursor2.cur">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="res\cursordo.cur">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="res\cursorli.cur">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="res\cursorre.cur">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="res\cursorsh.cur">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="res\cursorup.cur">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="res\mg_cur.cur">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="res\eyedropper.cur">
-      <Filter>Resource Files</Filter>
-    </None>
     <None Include="Src\r8brain\README.md">
       <Filter>Header Files\r8brain</Filter>
     </None>
@@ -1936,6 +1867,84 @@
     </None>
     <None Include="Src\CppFormat\README.rst">
       <Filter>Header Files\CppFormat</Filter>
+    </None>
+    <None Include="res\eyedropper.cur">
+      <Filter>Resource Files\Cursors</Filter>
+    </None>
+    <None Include="res\mg_cur.cur">
+      <Filter>Resource Files\Cursors</Filter>
+    </None>
+    <None Include="res\history.cur">
+      <Filter>Resource Files\Cursors</Filter>
+    </None>
+    <None Include="res\line.cur">
+      <Filter>Resource Files\Cursors</Filter>
+    </None>
+    <None Include="res\zoom.cur">
+      <Filter>Resource Files\Cursors</Filter>
+    </None>
+    <None Include="res\paste.cur">
+      <Filter>Resource Files\Cursors</Filter>
+    </None>
+    <None Include="res\fill.cur">
+      <Filter>Resource Files\Cursors</Filter>
+    </None>
+    <None Include="res\polygon.cur">
+      <Filter>Resource Files\Cursors</Filter>
+    </None>
+    <None Include="res\resizens_br.cur">
+      <Filter>Resource Files\Cursors</Filter>
+    </None>
+    <None Include="res\resizens_tl.cur">
+      <Filter>Resource Files\Cursors</Filter>
+    </None>
+    <None Include="res\placement.cur">
+      <Filter>Resource Files\Cursors</Filter>
+    </None>
+    <None Include="res\pen.cur">
+      <Filter>Resource Files\Cursors</Filter>
+    </None>
+    <None Include="res\resizens.cur">
+      <Filter>Resource Files\Cursors</Filter>
+    </None>
+    <None Include="res\resizewe_br.cur">
+      <Filter>Resource Files\Cursors</Filter>
+    </None>
+    <None Include="res\resizewe_tl.cur">
+      <Filter>Resource Files\Cursors</Filter>
+    </None>
+    <None Include="res\resizewe.cur">
+      <Filter>Resource Files\Cursors</Filter>
+    </None>
+    <None Include="res\resizenswe_br.cur">
+      <Filter>Resource Files\Cursors</Filter>
+    </None>
+    <None Include="res\resizenswe.cur">
+      <Filter>Resource Files\Cursors</Filter>
+    </None>
+    <None Include="res\resizenswe_tl.cur">
+      <Filter>Resource Files\Cursors</Filter>
+    </None>
+    <None Include="res\rotate.cur">
+      <Filter>Resource Files\Cursors</Filter>
+    </None>
+    <None Include="res\up.cur">
+      <Filter>Resource Files\Cursors</Filter>
+    </None>
+    <None Include="res\down.cur">
+      <Filter>Resource Files\Cursors</Filter>
+    </None>
+    <None Include="res\right.cur">
+      <Filter>Resource Files\Cursors</Filter>
+    </None>
+    <None Include="res\left.cur">
+      <Filter>Resource Files\Cursors</Filter>
+    </None>
+    <None Include="res\circle.cur">
+      <Filter>Resource Files\Cursors</Filter>
+    </None>
+    <None Include="res\rect.cur">
+      <Filter>Resource Files\Cursors</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -1974,70 +1983,7 @@
     <Image Include="res\null.bmp">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="res\ellipse.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\ellipse_solid.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\fliphorz.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\floodfill.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\draw_brush.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\delete.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\lightup.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\showtrace.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\newmessage.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\message.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\newroom.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\newscript.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\newmessagesequence.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\newmessageentry.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\stop.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\PolyPath.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\newword.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\clonemessageentry.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\image.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\image_sequence.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
     <Image Include="res\ListTools.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\SoundTools.bmp">
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="res\VocabTools.bmp">
@@ -2049,28 +1995,7 @@
     <Image Include="res\FontTools.bmp">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="res\TextTools.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\ScriptTools.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\MessageTools.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\ViewTools.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\MainTools.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\PicTools.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
     <Image Include="res\CorruptResource.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\Screens.bmp">
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="res\SoundCue.bmp">
@@ -2080,12 +2005,6 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="res\SoundLoop.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\TabPic.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\TabPicNS.bmp">
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="res\UnusedRes40.bmp">
@@ -2100,245 +2019,329 @@
     <Image Include="res\vpc_highlightx.bmp">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="res\pause.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\stopdebug.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\play.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\debug.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\main_run.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\cursor.ico">
-      <Filter>Resource Files</Filter>
+    <Image Include="res\animate.ico">
+      <Filter>Resource Files\Toolbar icons</Filter>
     </Image>
     <Image Include="res\audio.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\invert.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\placement.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\flipvert.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\script.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\palette.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\palette0.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\palette1.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\palette2.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\palette3.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\unditherpic.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\loadtrace.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\patch.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\pic_history.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\prioritylines.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\Vocab.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\greyscale.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\editpalette.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\animate.ico">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\Toolbar icons</Filter>
     </Image>
     <Image Include="res\audiomap.ico">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\Toolbar icons</Filter>
     </Image>
-    <Image Include="res\draw_zoom.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\preferences.ico">
-      <Filter>Resource Files</Filter>
+    <Image Include="res\debug.ico">
+      <Filter>Resource Files\Toolbar icons</Filter>
     </Image>
     <Image Include="res\debug_room.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\select.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\script_insert_object.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\script_convert.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\repackage.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\refresh.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\RightArrow.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\movedown.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\moveup.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\find.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\screenvisual.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\screenpri.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\screencontrol.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\Upload.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\waveform.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\Stamp.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\headphones.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\record.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\findinfiles.ico">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\Toolbar icons</Filter>
     </Image>
     <Image Include="res\decompile.ico">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\Toolbar icons</Filter>
     </Image>
-    <Image Include="res\edit_cut.ico">
-      <Filter>Resource Files</Filter>
+    <Image Include="res\delete.ico">
+      <Filter>Resource Files\Toolbar icons</Filter>
     </Image>
-    <Image Include="res\main_properties.ico">
-      <Filter>Resource Files</Filter>
+    <Image Include="res\clonemessageentry.ico">
+      <Filter>Resource Files\Toolbar icons</Filter>
+    </Image>
+    <Image Include="res\cursor.ico">
+      <Filter>Resource Files\Toolbar icons</Filter>
+    </Image>
+    <Image Include="res\draw_brush.ico">
+      <Filter>Resource Files\Toolbar icons</Filter>
     </Image>
     <Image Include="res\draw_replace.ico">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\Toolbar icons</Filter>
     </Image>
-    <Image Include="res\text.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\pic.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\main_rebuild.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\edit_paste.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\script_compileall.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\script_compile.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\newtext.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\newpic.ico">
-      <Filter>Resource Files</Filter>
+    <Image Include="res\draw_zoom.ico">
+      <Filter>Resource Files\Toolbar icons</Filter>
     </Image>
     <Image Include="res\edit_copy.ico">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\Toolbar icons</Filter>
     </Image>
-    <Image Include="res\sound.ico">
-      <Filter>Resource Files</Filter>
+    <Image Include="res\edit_cut.ico">
+      <Filter>Resource Files\Toolbar icons</Filter>
     </Image>
-    <Image Include="res\newsound.ico">
-      <Filter>Resource Files</Filter>
+    <Image Include="res\edit_paste.ico">
+      <Filter>Resource Files\Toolbar icons</Filter>
     </Image>
-    <Image Include="res\newfont.ico">
-      <Filter>Resource Files</Filter>
+    <Image Include="res\editpalette.ico">
+      <Filter>Resource Files\Toolbar icons</Filter>
     </Image>
     <Image Include="res\font.ico">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\Toolbar icons</Filter>
     </Image>
-    <Image Include="res\newpalette.ico">
-      <Filter>Resource Files</Filter>
+    <Image Include="res\ellipse.ico">
+      <Filter>Resource Files\Toolbar icons</Filter>
     </Image>
-    <Image Include="res\newview.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\view.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\newcursor.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\main_back.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\main_forward.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\file_open.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\GameFolder.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\file_save.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\line.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\Transparent.ico">
-      <Filter>Resource Files</Filter>
+    <Image Include="res\ellipse_solid.ico">
+      <Filter>Resource Files\Toolbar icons</Filter>
     </Image>
     <Image Include="res\Eyedropper.ico">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\Toolbar icons</Filter>
     </Image>
-    <Image Include="res\roundedrect.ico">
-      <Filter>Resource Files</Filter>
+    <Image Include="res\file_open.ico">
+      <Filter>Resource Files\Toolbar icons</Filter>
+    </Image>
+    <Image Include="res\file_save.ico">
+      <Filter>Resource Files\Toolbar icons</Filter>
+    </Image>
+    <Image Include="res\find.ico">
+      <Filter>Resource Files\Toolbar icons</Filter>
+    </Image>
+    <Image Include="res\findinfiles.ico">
+      <Filter>Resource Files\Toolbar icons</Filter>
+    </Image>
+    <Image Include="res\fliphorz.ico">
+      <Filter>Resource Files\Toolbar icons</Filter>
+    </Image>
+    <Image Include="res\flipvert.ico">
+      <Filter>Resource Files\Toolbar icons</Filter>
+    </Image>
+    <Image Include="res\floodfill.ico">
+      <Filter>Resource Files\Toolbar icons</Filter>
+    </Image>
+    <Image Include="res\image_sequence.ico">
+      <Filter>Resource Files\Toolbar icons</Filter>
+    </Image>
+    <Image Include="res\GameFolder.ico">
+      <Filter>Resource Files\Toolbar icons</Filter>
+    </Image>
+    <Image Include="res\greyscale.ico">
+      <Filter>Resource Files\Toolbar icons</Filter>
+    </Image>
+    <Image Include="res\headphones.ico">
+      <Filter>Resource Files\Toolbar icons</Filter>
+    </Image>
+    <Image Include="res\image.ico">
+      <Filter>Resource Files\Toolbar icons</Filter>
+    </Image>
+    <Image Include="res\invert.ico">
+      <Filter>Resource Files\Toolbar icons</Filter>
+    </Image>
+    <Image Include="res\lightup.ico">
+      <Filter>Resource Files\Toolbar icons</Filter>
+    </Image>
+    <Image Include="res\line.ico">
+      <Filter>Resource Files\Toolbar icons</Filter>
+    </Image>
+    <Image Include="res\main_run.ico">
+      <Filter>Resource Files\Toolbar icons</Filter>
+    </Image>
+    <Image Include="res\main_back.ico">
+      <Filter>Resource Files\Toolbar icons</Filter>
+    </Image>
+    <Image Include="res\main_forward.ico">
+      <Filter>Resource Files\Toolbar icons</Filter>
+    </Image>
+    <Image Include="res\main_properties.ico">
+      <Filter>Resource Files\Toolbar icons</Filter>
+    </Image>
+    <Image Include="res\main_rebuild.ico">
+      <Filter>Resource Files\Toolbar icons</Filter>
+    </Image>
+    <Image Include="res\loadtrace.ico">
+      <Filter>Resource Files\Toolbar icons</Filter>
+    </Image>
+    <Image Include="res\message.ico">
+      <Filter>Resource Files\Toolbar icons</Filter>
+    </Image>
+    <Image Include="res\movedown.ico">
+      <Filter>Resource Files\Toolbar icons</Filter>
+    </Image>
+    <Image Include="res\moveup.ico">
+      <Filter>Resource Files\Toolbar icons</Filter>
+    </Image>
+    <Image Include="res\newcursor.ico">
+      <Filter>Resource Files\Toolbar icons</Filter>
+    </Image>
+    <Image Include="res\newfont.ico">
+      <Filter>Resource Files\Toolbar icons</Filter>
+    </Image>
+    <Image Include="res\newmessage.ico">
+      <Filter>Resource Files\Toolbar icons</Filter>
+    </Image>
+    <Image Include="res\newmessageentry.ico">
+      <Filter>Resource Files\Toolbar icons</Filter>
+    </Image>
+    <Image Include="res\newmessagesequence.ico">
+      <Filter>Resource Files\Toolbar icons</Filter>
+    </Image>
+    <Image Include="res\newpalette.ico">
+      <Filter>Resource Files\Toolbar icons</Filter>
+    </Image>
+    <Image Include="res\newpic.ico">
+      <Filter>Resource Files\Toolbar icons</Filter>
+    </Image>
+    <Image Include="res\newroom.ico">
+      <Filter>Resource Files\Toolbar icons</Filter>
+    </Image>
+    <Image Include="res\newscript.ico">
+      <Filter>Resource Files\Toolbar icons</Filter>
+    </Image>
+    <Image Include="res\newsound.ico">
+      <Filter>Resource Files\Toolbar icons</Filter>
+    </Image>
+    <Image Include="res\newtext.ico">
+      <Filter>Resource Files\Toolbar icons</Filter>
+    </Image>
+    <Image Include="res\newview.ico">
+      <Filter>Resource Files\Toolbar icons</Filter>
+    </Image>
+    <Image Include="res\newword.ico">
+      <Filter>Resource Files\Toolbar icons</Filter>
+    </Image>
+    <Image Include="res\palette3.ico">
+      <Filter>Resource Files\Toolbar icons</Filter>
+    </Image>
+    <Image Include="res\palette.ico">
+      <Filter>Resource Files\Toolbar icons</Filter>
+    </Image>
+    <Image Include="res\palette0.ico">
+      <Filter>Resource Files\Toolbar icons</Filter>
+    </Image>
+    <Image Include="res\palette1.ico">
+      <Filter>Resource Files\Toolbar icons</Filter>
+    </Image>
+    <Image Include="res\palette2.ico">
+      <Filter>Resource Files\Toolbar icons</Filter>
+    </Image>
+    <Image Include="res\pic.ico">
+      <Filter>Resource Files\Toolbar icons</Filter>
+    </Image>
+    <Image Include="res\patch.ico">
+      <Filter>Resource Files\Toolbar icons</Filter>
+    </Image>
+    <Image Include="res\pause.ico">
+      <Filter>Resource Files\Toolbar icons</Filter>
+    </Image>
+    <Image Include="res\PolyPath.ico">
+      <Filter>Resource Files\Toolbar icons</Filter>
+    </Image>
+    <Image Include="res\placement.ico">
+      <Filter>Resource Files\Toolbar icons</Filter>
+    </Image>
+    <Image Include="res\play.ico">
+      <Filter>Resource Files\Toolbar icons</Filter>
+    </Image>
+    <Image Include="res\pic_history.ico">
+      <Filter>Resource Files\Toolbar icons</Filter>
+    </Image>
+    <Image Include="res\preferences.ico">
+      <Filter>Resource Files\Toolbar icons</Filter>
+    </Image>
+    <Image Include="res\prioritylines.ico">
+      <Filter>Resource Files\Toolbar icons</Filter>
+    </Image>
+    <Image Include="res\record.ico">
+      <Filter>Resource Files\Toolbar icons</Filter>
     </Image>
     <Image Include="res\rect.ico">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\Toolbar icons</Filter>
     </Image>
     <Image Include="res\rect_solid.ico">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\Toolbar icons</Filter>
+    </Image>
+    <Image Include="res\refresh.ico">
+      <Filter>Resource Files\Toolbar icons</Filter>
+    </Image>
+    <Image Include="res\repackage.ico">
+      <Filter>Resource Files\Toolbar icons</Filter>
+    </Image>
+    <Image Include="res\RightArrow.ico">
+      <Filter>Resource Files\Toolbar icons</Filter>
+    </Image>
+    <Image Include="res\roundedrect.ico">
+      <Filter>Resource Files\Toolbar icons</Filter>
     </Image>
     <Image Include="res\roundedrect_solid.ico">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\Toolbar icons</Filter>
+    </Image>
+    <Image Include="res\screencontrol.ico">
+      <Filter>Resource Files\Toolbar icons</Filter>
+    </Image>
+    <Image Include="res\screenpri.ico">
+      <Filter>Resource Files\Toolbar icons</Filter>
+    </Image>
+    <Image Include="res\script.ico">
+      <Filter>Resource Files\Toolbar icons</Filter>
+    </Image>
+    <Image Include="res\screenvisual.ico">
+      <Filter>Resource Files\Toolbar icons</Filter>
+    </Image>
+    <Image Include="res\script_compile.ico">
+      <Filter>Resource Files\Toolbar icons</Filter>
+    </Image>
+    <Image Include="res\script_compileall.ico">
+      <Filter>Resource Files\Toolbar icons</Filter>
+    </Image>
+    <Image Include="res\script_convert.ico">
+      <Filter>Resource Files\Toolbar icons</Filter>
+    </Image>
+    <Image Include="res\script_insert_object.ico">
+      <Filter>Resource Files\Toolbar icons</Filter>
+    </Image>
+    <Image Include="res\select.ico">
+      <Filter>Resource Files\Toolbar icons</Filter>
+    </Image>
+    <Image Include="res\showtrace.ico">
+      <Filter>Resource Files\Toolbar icons</Filter>
+    </Image>
+    <Image Include="res\sound.ico">
+      <Filter>Resource Files\Toolbar icons</Filter>
+    </Image>
+    <Image Include="res\Stamp.ico">
+      <Filter>Resource Files\Toolbar icons</Filter>
+    </Image>
+    <Image Include="res\stop.ico">
+      <Filter>Resource Files\Toolbar icons</Filter>
+    </Image>
+    <Image Include="res\stopdebug.ico">
+      <Filter>Resource Files\Toolbar icons</Filter>
+    </Image>
+    <Image Include="res\text.ico">
+      <Filter>Resource Files\Toolbar icons</Filter>
+    </Image>
+    <Image Include="res\Transparent.ico">
+      <Filter>Resource Files\Toolbar icons</Filter>
+    </Image>
+    <Image Include="res\unditherpic.ico">
+      <Filter>Resource Files\Toolbar icons</Filter>
+    </Image>
+    <Image Include="res\Upload.ico">
+      <Filter>Resource Files\Toolbar icons</Filter>
+    </Image>
+    <Image Include="res\view.ico">
+      <Filter>Resource Files\Toolbar icons</Filter>
+    </Image>
+    <Image Include="res\Vocab.ico">
+      <Filter>Resource Files\Toolbar icons</Filter>
+    </Image>
+    <Image Include="res\waveform.ico">
+      <Filter>Resource Files\Toolbar icons</Filter>
+    </Image>
+    <Image Include="res\MainTools.bmp">
+      <Filter>Resource Files\Toolbar templates</Filter>
+    </Image>
+    <Image Include="res\MessageTools.bmp">
+      <Filter>Resource Files\Toolbar templates</Filter>
+    </Image>
+    <Image Include="res\PicTools.bmp">
+      <Filter>Resource Files\Toolbar templates</Filter>
+    </Image>
+    <Image Include="res\Screens.bmp">
+      <Filter>Resource Files\Toolbar templates</Filter>
+    </Image>
+    <Image Include="res\ScriptTools.bmp">
+      <Filter>Resource Files\Toolbar templates</Filter>
+    </Image>
+    <Image Include="res\SoundTools.bmp">
+      <Filter>Resource Files\Toolbar templates</Filter>
+    </Image>
+    <Image Include="res\TextTools.bmp">
+      <Filter>Resource Files\Toolbar templates</Filter>
+    </Image>
+    <Image Include="res\ViewTools.bmp">
+      <Filter>Resource Files\Toolbar templates</Filter>
     </Image>
   </ItemGroup>
 </Project>

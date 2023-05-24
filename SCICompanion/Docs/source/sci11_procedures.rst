@@ -14,7 +14,6 @@ The SCI 1.1 template game consists of about 35 public procedures.
 .. toctree::
 	:maxdepth: 1
 
-	Procedures/AddPolygonsToRoom
 	Procedures/AddToScore
 	Procedures/AimToward
 	Procedures/AngleDiff
@@ -23,7 +22,6 @@ The SCI 1.1 template game consists of about 35 public procedures.
 	Procedures/Btest
 	Procedures/CantBeSeen
 	Procedures/ColorInit
-	Procedures/CreateNewPolygon
 	Procedures/DebugPrint
 	Procedures/DebugRoomInit
 	Procedures/Die

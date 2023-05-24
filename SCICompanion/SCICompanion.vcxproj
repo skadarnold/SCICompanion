@@ -832,7 +832,6 @@ xcopy /S /Y /I /D "$(ProjectDir)Tools" "$(OutDir)Tools"</Command>
     <None Include="Docs\source\pics.rst" />
     <None Include="Docs\source\polygons.rst" />
     <None Include="Docs\source\preferences.rst" />
-    <None Include="Docs\source\Procedures\AddPolygonsToRoom.rst" />
     <None Include="Docs\source\Procedures\AddToScore.rst" />
     <None Include="Docs\source\Procedures\AimToward.rst" />
     <None Include="Docs\source\Procedures\AngleDiff.rst" />
@@ -841,7 +840,6 @@ xcopy /S /Y /I /D "$(ProjectDir)Tools" "$(OutDir)Tools"</Command>
     <None Include="Docs\source\Procedures\Btest.rst" />
     <None Include="Docs\source\Procedures\CantBeSeen.rst" />
     <None Include="Docs\source\Procedures\ColorInit.rst" />
-    <None Include="Docs\source\Procedures\CreateNewPolygon.rst" />
     <None Include="Docs\source\Procedures\DebugPrint.rst" />
     <None Include="Docs\source\Procedures\DebugRoomInit.rst" />
     <None Include="Docs\source\Procedures\Die.rst" />

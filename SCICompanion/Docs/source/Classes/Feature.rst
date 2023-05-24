@@ -220,7 +220,7 @@ Methods
 
 		(theTable setOnMeCheck: omcCOLORS ctlWHITE ctlGREY)
 
-		(theRock setOnMeCheck: omcPOLYGON (CreateNewPolygon @P_TheRock))
+		(theRock setOnMeCheck: omcPOLYGON (&getpoly "TheRock"))
 
 
 

@@ -71,7 +71,7 @@ When you create a new room in |scicomp|, the .shp file will be included from the
 
 ::
 
-    (AddPolygonsToRoom @P_Default110)
+    (gRoom addObstacle: (&getpoly ""))
 
 And if you look in 110.shp, you might see something like this:
 
@@ -113,7 +113,7 @@ In script, you can assign the polygon to a feature's "onMeCheck" like this:
 ::
 
         (lake
-            setOnMeCheck: omcPOLYGON (CreateNewPolygon @P_Lake)
+            setOnMeCheck: omcPOLYGON (&getpoly "Lake")
             init:
         )
 
@@ -125,5 +125,3 @@ If you need to remove the name of a polygon to set it back to being a "default p
 .. |polygon| image:: /images/PolygonTool.png
 .. |upload| image:: /images/Upload.png
 
-
-See :func:`AddPolygonsToRoom` and :func:`CreateNewPolygon`.

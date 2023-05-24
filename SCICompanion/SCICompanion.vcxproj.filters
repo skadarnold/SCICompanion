@@ -860,9 +860,6 @@
     <None Include="Docs\source\Kernels\AddMenu.rst">
       <Filter>Resource Files\Help sources</Filter>
     </None>
-    <None Include="Docs\source\Procedures\AddPolygonsToRoom.rst">
-      <Filter>Resource Files\Help sources</Filter>
-    </None>
     <None Include="Docs\source\Kernels\AddToEnd.rst">
       <Filter>Resource Files\Help sources</Filter>
     </None>
@@ -1194,9 +1191,6 @@
       <Filter>Resource Files\Help sources</Filter>
     </None>
     <None Include="Files\Licenses\cppformat_README.rst">
-      <Filter>Resource Files\Help sources</Filter>
-    </None>
-    <None Include="Docs\source\Procedures\CreateNewPolygon.rst">
       <Filter>Resource Files\Help sources</Filter>
     </None>
     <None Include="Docs\source\Classes\Cue.rst">

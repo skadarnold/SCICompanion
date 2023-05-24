@@ -49,10 +49,6 @@ Public Procedures
 
 :func:`DebugPrint`
 
-:func:`AddPolygonsToRoom`
-
-:func:`CreateNewPolygon`
-
 Global variables 
 =================
 

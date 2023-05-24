@@ -61,7 +61,7 @@ say N_PAINTING. You can remove the onMeCheck property for now. So you should hav
 Of course, we need to initialize it. Here is where we'll also associate the polygon with it. In the room's init() method, at the end, add::
 
     (painting:
-        setOnMeCheck(omcPOLYGON CreateNewPolygon(@P_Painting))
+        setOnMeCheck(omcPOLYGON (&getpoly "Painting"))
         init()
     )
 

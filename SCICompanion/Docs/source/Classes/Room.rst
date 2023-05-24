@@ -151,7 +151,7 @@ Methods
 	
 	Example usage::
 	
-		(gRoom addObstacle: (CreateNewPolygon @P_Flower))
+		(gRoom addObstacle: (&getpoly "Flower"))
 	
 
 

@@ -31,11 +31,11 @@ The init: method
 
 Let's go through each of the pieces of code in init()::
 
-    (AddPolygonsToRoom @P_Default110)
+    (gRoom addObstacle: (&getpoly ""))
 
 The above line adds the polygons defined with the pic resource to the room. Polygons define the boundaries of where the ego can go. (If you click
 on the *pic 110* link in the Toolbox, pic 110 will open. Then click on *Show polygons* in the pic Toolbox, and you'll see a green rectangle outlined
-on the pic. This is the single default polygon for this room). In subsequent tutorials we'll modify this to control where the ego can go.
+on the pic. "" is the single default polygon for this room). In subsequent tutorials we'll modify this to control where the ego can go.
 
 Next, we have::
 
@@ -95,7 +95,7 @@ Go to your room's init method, and assign the script to the room:
     :emphasize-lines: 4
     
     (method (init)
-        (AddPolygonsToRoom @P_Default110)
+        (gRoom addObstacle: (&getpoly ""))
         (super init:)
         (self setScript: RoomScript)
 

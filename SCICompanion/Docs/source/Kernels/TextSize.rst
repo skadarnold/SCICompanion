@@ -29,5 +29,5 @@ TextSize (Kernel)
 			(TextSize @sizeRect "Hello World" 4 100)
 			; gets the bounds of "Hello World" with FONT.004 with a maximum line width of 100
 		)
-
+		
 

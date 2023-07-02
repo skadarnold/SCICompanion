@@ -14,10 +14,58 @@
 #include "stdafx.h"
 #include "Text.h"
 #include "ResourceEntity.h"
+#include "AppState.h"
 
 using namespace std;
 
 std::string AutoGenTextSentinel = "_AUTOGEN_";
+
+//From DOS-437 to Win-1252
+const unsigned char dos2winTable[] = {
+	/* 80 */ 0xC7, 0xFC, 0xE9, 0xE2, 0xE4, 0xE0, 0xE5, 0xE7, 0xEA, 0xEB, 0xE8, 0xEF, 0xEE, 0xEC, 0xC4, 0xC5,
+	/* 90 */ 0xC9, 0xE6, 0xC6, 0xF4, 0xF6, 0xF2, 0xFB, 0xF9, 0xFF, 0xD6, 0xDC, 0xA2, 0xA3, 0xA5, 0x3F, 0x3F,
+	/* A0 */ 0xE1, 0xED, 0xF3, 0xFA, 0xF1, 0xD1, 0xAA, 0xBA, 0xBF, 0x3F, 0xAC, 0xBD, 0xBC, 0xA1, 0xAB, 0xBB,
+};
+//From Win-1252 to DOS-437
+const unsigned char win2dosTable[] = {
+	/* C0 */ 0x3F, 0x3F, 0x3F, 0x3F, 0x8E, 0x8F, 0x3F, 0x80, 0x3F, 0x90, 0x3F, 0x3F, 0x3F, 0x3F, 0x3F, 0x3F,
+	/* D0 */ 0x3F, 0xA5, 0x3F, 0x3F, 0x3F, 0x3F, 0x99, 0x3F, 0x3F, 0x3F, 0x3F, 0x3F, 0x9A, 0x3F, 0x3F, 0x3F,
+	/* E0 */ 0x85, 0xA0, 0x83, 0x3F, 0x84, 0x86, 0x91, 0x87, 0x8A, 0x82, 0x88, 0x89, 0x8D, 0xA1, 0x8C, 0x8B,
+	/* F0 */ 0x3F, 0xA4, 0x95, 0xA2, 0x93, 0x3F, 0x94, 0x3F, 0x3F, 0x97, 0xA3, 0x96, 0x81, 0x3F, 0x3F, 0x98,
+};
+//Wait, where's 0xE1/U+00DF, the Sharp S? It's so separate from the rest that I can't be arsed, and just hardcode it.
+
+std::string Dos2Win(std::string &str)
+{
+	if (appState->GetResourceMap().Helper().GetCodepage() == 1252)
+		return str;
+	std::string ret;
+	for (size_t i = 0; i < str.length(); i++)
+	{
+		if ((unsigned char)str[i] == 0xE1) ret.push_back(0xDFu); //sharp s
+		else if ((unsigned char)str[i] >= 0x80 && (unsigned char)str[i] <= 0xAF)
+			ret.push_back(dos2winTable[(unsigned char)str[i] - 0x80]);
+		else
+			ret.push_back(str[i]);
+	}
+	return ret;
+}
+
+std::string Win2Dos(const std::string &str)
+{
+	if (appState->GetResourceMap().Helper().GetCodepage() == 1252)
+		return str;
+	std::string ret;
+	for (size_t i = 0; i < str.length(); i++)
+	{
+		if ((unsigned char)str[i] == 0xDF) ret.push_back(0xE1u); //sharp s
+		else if ((unsigned char)str[i] >= 0xC0 && (unsigned char)str[i] <= 0xFF)
+			ret.push_back(win2dosTable[(unsigned char)str[i] - 0xC0]);
+		else
+			ret.push_back(str[i]);
+	}
+	return ret;
+}
 
 bool TextEntry::operator == (const TextEntry &other) const
 {
@@ -133,7 +181,7 @@ void TextWriteTo(const ResourceEntity &resource, sci::ostream &byteStream, std::
 	// Note: this function is not unicode aware
 	for (size_t i = 0; i < text.Texts.size(); i++)
 	{
-		const string &str = text.Texts[i].Text;
+		const string &str = Win2Dos(text.Texts[i].Text);
 		byteStream.WriteBytes((uint8_t*)str.c_str(), (int)str.length() + 1);
 	}
 }
@@ -152,8 +200,8 @@ void TextReadFrom(ResourceEntity &resource, sci::istream &byteStream, const std:
 			byteStream >> str;
 			if (byteStream.good())
 			{
-				TextEntry entry = { 0 };
-				entry.Text = str;
+				TextEntry entry = { 0 };				
+				entry.Text = Dos2Win(str);
 				text.Texts.push_back(entry);
 			}
 		}

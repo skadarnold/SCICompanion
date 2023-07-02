@@ -685,8 +685,9 @@ void _Section5_Strings(CompileContext &context, vector<BYTE> &outputScr, vector<
 		{
 			// Get the index to which we'll write the string.
 			uint16_t wAbsolute = (uint16_t)outputHeap.size();
+			auto newString = Win2Dos(theString);
 			context.WroteSource(context.GetTempToken(ValueType::String, theString), wAbsolute);
-			outputHeap.insert(outputHeap.end(), theString.begin(), theString.end());
+			outputHeap.insert(outputHeap.end(), newString.begin(), newString.end());
 			outputHeap.push_back(0);
 		}
 

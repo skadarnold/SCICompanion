@@ -125,10 +125,10 @@ void NewGameDialog::DoDataExchange(CDataExchange* pDX)
 
 	DDX_Control(pDX, IDC_STATIC4, m_wndStatic4);
 	DDX_Control(pDX, IDC_COMBOLANGUAGE, m_wndComboLanguage);
-	m_wndComboLanguage.SetCurSel(0);
-#ifdef DISABLE_STUDIO
-	m_wndComboLanguage.EnableWindow(FALSE);
-#endif
+	m_wndComboLanguage.SetCurSel(1); //assume Win-1252 for new games
+//#ifdef DISABLE_STUDIO
+//	m_wndComboLanguage.EnableWindow(FALSE);
+//#endif
 
 	DDX_Control(pDX, IDC_COMBOTEMPLATE, m_wndComboTemplate);
 	_PopulateTemplates();
@@ -227,6 +227,8 @@ void NewGameDialog::OnBnClickedOk()
 			GameFolderHelper helper;
 			helper.GameFolder = szPath;
 			helper.SetIniString(GameSection, LanguageKey, (lang == LangSyntaxSCI) ? LanguageValueSCI : LanguageValueStudio);
+
+			helper.SetIniString(GameSection, CodepageKey, (m_wndComboLanguage.GetCurSel() == 1) ? "1252" : "437");
 		}
 		if (!fContinue)
 		{

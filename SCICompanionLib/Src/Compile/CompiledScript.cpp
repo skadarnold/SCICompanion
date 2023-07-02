@@ -209,6 +209,8 @@ BadExport badExports[] =
 	{ 11, 1, 0x2a3 }	// KQ6 CD
 };
 
+extern std::string Dos2Win(std::string &str);
+
 bool _IsBadExport(uint16_t script, size_t index, uint16_t exportOffset)
 {
 	for (const BadExport &badExport : badExports)
@@ -350,7 +352,7 @@ bool CompiledScript::_LoadSCI1_1(const GameFolderHelper &helper, int iScriptNumb
 					if (!aString.empty() || (heapStream->tellg() < stringPointerOffsetsOffset))
 					{
 						_stringsOffset.push_back(offset);
-						_strings.push_back(aString);
+						_strings.push_back(Dos2Win(aString));
 					}
 				} while (heapStream->tellg() < stringPointerOffsetsOffset);
 
@@ -1067,7 +1069,7 @@ bool CompiledScript::_ReadStrings(sci::istream &stream, uint16_t wDataSize)
 		{
 			ASSERT(dwOffset <= 0xffff);
 			_stringsOffset.push_back(static_cast<uint16_t>(dwOffset));
-			_strings.push_back(str);
+			_strings.push_back(Dos2Win(str));
 		}
 	}
 	return stream.good();

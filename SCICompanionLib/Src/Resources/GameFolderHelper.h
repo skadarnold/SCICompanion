@@ -29,6 +29,7 @@ extern const std::string GameSection;
 extern const std::string LanguageKey;
 extern const std::string LanguageValueStudio;
 extern const std::string LanguageValueSCI;
+extern const std::string CodepageKey;
 
 enum class ResourceSaveLocation : uint16_t
 {
@@ -76,6 +77,8 @@ public:
 	void SetUndither(bool undither) const;
 	bool GetNoDbugStr() const;
 	void SetNoDbugStr(bool dbugStr) const;
+	int GetCodepage() const;
+	void SetCodepage(int codepage) const;
 
 	bool GetGenerateDebugInfo() const;
 

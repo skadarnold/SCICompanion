@@ -36,6 +36,9 @@ const std::string NoDbugStrKey = "NoDbugStr";
 const std::string TrueValue = "true";
 const std::string FalseValue = "false";
 const std::string GenerateDebugInfoKey = "GenerateDebugInfo";
+const std::string CodepageKey = "Codepage";
+const std::string CodePage437 = "437";
+const std::string CodePage1252 = "1252";
 
 // Returns "n004" for input of 4
 std::string default_reskey(int iNumber, uint32_t base36Number)
@@ -272,6 +275,17 @@ bool GameFolderHelper::GetNoDbugStr() const
 void GameFolderHelper::SetNoDbugStr(bool noDbug) const
 {
 	SetIniString(GameSection, NoDbugStrKey, noDbug ? TrueValue : FalseValue);
+}
+int GameFolderHelper::GetCodepage() const
+{
+	//assume DOS-437 because old games
+	std::string value = GetIniString(GameSection, CodepageKey, CodePage437.c_str());
+	std::transform(value.begin(), value.end(), value.begin(), ::tolower);
+	return value == CodePage1252 ? 1252 : 437;
+}
+void GameFolderHelper::SetCodepage(int codepage) const
+{
+	SetIniString(GameSection, CodepageKey, codepage == 1252 ? CodePage1252 : CodePage437);
 }
 
 bool GameFolderHelper::GetGenerateDebugInfo() const

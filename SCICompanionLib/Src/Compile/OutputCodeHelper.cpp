@@ -93,7 +93,7 @@ std::string EscapeString(const std::string &src)
 			result.push_back(escaped);
 		}
 		//KAWA: escape unprintables because many aren't in practice
-		else if (ch < ' ')
+		else if ((unsigned)ch < ' ')
 		{
 			result.push_back('\\');
 			result.push_back("0123456789ABCDEF"[(ch >> 4) & 0x0F]); //ugleh

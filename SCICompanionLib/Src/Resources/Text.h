@@ -93,3 +93,6 @@ struct TextComponent : public ResourceComponent, public ILookupNames
 
 ResourceEntity *CreateTextResource(SCIVersion version);
 ResourceEntity *CreateDefaultTextResource(SCIVersion version);
+
+std::string Dos2Win(std::string &str);
+std::string Win2Dos(const std::string &str);

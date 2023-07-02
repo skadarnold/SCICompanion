@@ -83,6 +83,8 @@ void MessageReadFrom_2102(TextComponent &messageComponent, sci::istream &byteStr
 		textStream.seekg(textOffset);
 		textStream >> message.Text;
 
+		message.Text = Dos2Win(message.Text);
+
 		messageComponent.Texts.push_back(message);
 	}
 }
@@ -107,6 +109,8 @@ void MessageReadFrom_3411(TextComponent &messageComponent, sci::istream &byteStr
 		sci::istream textStream = byteStream;
 		textStream.seekg(textOffset);
 		textStream >> message.Text;
+
+		message.Text = Dos2Win(message.Text);
 
 		messageComponent.Texts.push_back(message);
 	}
@@ -138,6 +142,9 @@ void MessageReadFrom_4000(TextComponent &messageComponent, sci::istream &byteStr
 		sci::istream textStream = byteStream;
 		textStream.seekg(textOffset);
 		textStream >> message.Text;
+
+		message.Text = Dos2Win(message.Text);
+
 		messageComponent.Texts.push_back(message);
 	}
 
@@ -160,7 +167,7 @@ void MessageWriteTo_2102(const TextComponent &messageComponent, sci::ostream &by
 
 	for (const TextEntry &entry : messageComponent.Texts)
 	{
-		byteStream << entry.Text;
+		byteStream << Win2Dos(entry.Text);
 	}
 
 	uint16_t totalSize = (uint16_t)byteStream.tellp();
@@ -191,7 +198,7 @@ void MessageWriteTo_3411(const TextComponent &messageComponent, sci::ostream &by
 
 	for (const TextEntry &entry : messageComponent.Texts)
 	{
-		byteStream << entry.Text;
+		byteStream << Win2Dos(entry.Text);
 	}
 
 	uint16_t totalSize = (uint16_t)byteStream.tellp();
@@ -226,7 +233,7 @@ void MessageWriteTo_4000(const TextComponent &messageComponent, sci::ostream &by
 
 	for (const TextEntry &entry : messageComponent.Texts)
 	{
-		byteStream << entry.Text;
+		byteStream << Win2Dos(entry.Text);
 	}
 
 	uint16_t totalSize = (uint16_t)byteStream.tellp();

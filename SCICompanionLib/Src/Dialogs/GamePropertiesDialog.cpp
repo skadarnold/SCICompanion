@@ -56,11 +56,12 @@ void CGamePropertiesDialog::DoDataExchange(CDataExchange* pDX)
 
 	DDX_Control(pDX, IDC_STATIC4, m_wndStatic4);
 	DDX_Control(pDX, IDC_COMBOLANGUAGE, m_wndComboLanguage);
-	LangSyntax lang = appState->GetResourceMap().Helper().GetDefaultGameLanguage();
-	m_wndComboLanguage.SetCurSel((int)lang);
-#ifdef DISABLE_STUDIO
-	m_wndComboLanguage.EnableWindow(FALSE);
-#endif
+//	LangSyntax lang = appState->GetResourceMap().Helper().GetDefaultGameLanguage();
+//	m_wndComboLanguage.SetCurSel((int)lang);
+//#ifdef DISABLE_STUDIO
+//	m_wndComboLanguage.EnableWindow(FALSE);
+//#endif
+	m_wndComboLanguage.SetCurSel(appState->GetResourceMap().Helper().GetCodepage() == 1252 ? 1 : 0);
 
 	DDX_Control(pDX, IDC_STATICPROFILE, m_wndStaticProfile);
 	DDX_Control(pDX, IDC_COMBOPROFILE, m_wndComboProfile);
@@ -178,6 +179,7 @@ void CGamePropertiesDialog::OnOK()
 		appState->NotifyChangeAspectRatio();
 	}
 
+	/*
 	LangSyntax lang = appState->GetResourceMap().Helper().GetDefaultGameLanguage();
 #ifndef DISABLE_STUDIO
 	int curSel = 0;
@@ -202,6 +204,8 @@ void CGamePropertiesDialog::OnOK()
 			}
 		}
 	}
+	*/
+	appState->GetResourceMap().Helper().SetCodepage(m_wndComboLanguage.GetCurSel() == 1 ? 1252 : 437);
 
 	bool unditherEGA = m_wndCheckUnditherEGA.GetCheck() == BST_CHECKED;
 	if (unditherEGA != _fUnditherStart)

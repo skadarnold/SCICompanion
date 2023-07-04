@@ -66,227 +66,116 @@ END
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
 IDR_MAINFRAME           ICON                    "res\\1_216.ico"
-
 //IDR_SCIPicEditorTYPE    ICON                    "res\\SCICompanionDoc.ico"
-
 //IDI_ICONCONVERT         ICON                    "res\\icon1.ico"
-
 //IDI_APPICON             ICON                    "res\\icon2.ico"
-
 //IDI_BANG                ICON                    "res\\bang.ico"
-
 //IDI_ICONTEST            ICON                    "res\\icon3.ico"
-
 //IDI_ICONMAINTEXT        ICON                    "res\\SCIText.ico"
-
 IDI_COMPILEALL          ICON                    "res\\script_compileall.ico"
-
 IDI_BRUSH               ICON                    "res\\draw_brush.ico"
-
 IDI_REPLACECOLOUR       ICON                    "res\\draw_replace.ico"
-
 IDI_ZOOM                ICON                    "res\\draw_zoom.ico"
-
 IDI_EDIT_COPY           ICON                    "res\\edit_copy.ico"
-
 IDI_EDIT_CUT            ICON                    "res\\edit_cut.ico"
-
 IDI_EDIT_PASTE          ICON                    "res\\edit_paste.ico"
-
 IDI_FILE_OPEN           ICON                    "res\\file_open.ico"
-
 IDI_FILE_SAVE           ICON                    "res\\file_save.ico"
-
 IDI_REBUILDRESOURCES    ICON                    "res\\main_rebuild.ico"
-
 //IDI_CD                  ICON                    "res\\CD.ico"
-
 IDI_RUNGAME             ICON                    "res\\main_run.ico"
-
 IDI_HISTORY             ICON                    "res\\pic_history.ico"
-
 IDI_COMPILE             ICON                    "res\\script_compile.ico"
-
 IDI_SOUND               ICON                    "res\\sound.ico"
-
 IDI_BACK                ICON                    "res\\main_back.ico"
-
 IDI_FORWARD             ICON                    "res\\main_forward.ico"
-
 IDI_GAMEPROPERTIES      ICON                    "res\\main_properties.ico"
-
 IDI_NEWSOUND            ICON                    "res\\newsound.ico"
-
 IDI_PATCH               ICON                    "res\\patch.ico"
-
 IDI_FONT                ICON                    "res\\font.ico"
-
 IDI_NEWFONT             ICON                    "res\\newfont.ico"
-
 IDI_NEWPIC              ICON                    "res\\newpic.ico"
-
 IDI_NEWSCRIPT           ICON                    "res\\newscript.ico"
-
 IDI_NEWVIEW             ICON                    "res\\newview.ico"
-
 IDI_SCRIPT              ICON                    "res\\script.ico"
-
 IDI_VIEW                ICON                    "res\\view.ico"
-
 IDI_VOCAB               ICON                    "res\\Vocab.ico"
-
 IDI_NEWTEXT             ICON                    "res\\newtext.ico"
-
 IDI_NEWMESSAGE          ICON                    "res\\newmessage.ico"
-
 IDI_NEWMESSAGEENTRY     ICON                    "res\\newmessageentry.ico"
-
 IDI_NEWMESSAGESEQ       ICON                    "res\\newmessagesequence.ico"
-
 IDI_CLONEMESSAGEENTRY   ICON                    "res\\clonemessageentry.ico"
-
 IDI_NEWPALETTE          ICON                    "res\\newpalette.ico"
-
 IDI_TEXT                ICON                    "res\\text.ico"
-
 IDI_MESSAGE             ICON                    "res\\message.ico"
-
 IDI_PREFERENCES         ICON                    "res\\preferences.ico"
-
 IDI_NEWCURSOR           ICON                    "res\\newcursor.ico"
-
 IDI_CURSOR              ICON                    "res\\cursor.ico"
-
 IDI_PIC                 ICON                    "res\\pic.ico"
-
 IDI_SHOWTRACEIMAGE      ICON                    "res\\showtrace.ico"
-
 IDI_UNDITHERPIC         ICON                    "res\\unditherpic.ico"
-
 IDI_LOADTRACEIMAGE      ICON                    "res\\loadtrace.ico"
-
 IDI_DELETE              ICON                    "res\\delete.ico"
-
 IDI_RECORD              ICON                    "res\\record.ico"
-
 IDI_MONITOR             ICON                    "res\\headphones.ico"
-
 IDI_EDIT_FIND           ICON                    "res\\find.ico"
-
 IDI_EDITPALETTE         ICON                    "res\\editpalette.ico"
-
 IDI_ANIMATE             ICON                    "res\\animate.ico"
-
 IDI_PALETTE             ICON                    "res\\palette.ico"
-
 IDI_IMAGESEQUENCE       ICON                    "res\\image_sequence.ico"
-
 IDI_IMAGE               ICON                    "res\\image.ico"
-
 //IDI_VIEWDETAILS         ICON                    "res\\view_details.ico"
-
 //IDI_VIEWICONS           ICON                    "res\\view_icons.ico"
-
 IDI_SCRIPT_CONVERT      ICON                    "res\\script_convert.ico"
-
 IDI_SCRIPT_INSERT_OBJECT ICON                    "res\\script_insert_object.ico"
-
 IDI_NEWROOM             ICON                    "res\\newroom.ico"
-
 IDI_NEWWORD             ICON                    "res\\newword.ico"
-
 IDI_MOVEUP              ICON                    "res\\moveup.ico"
-
 IDI_MOVEDOWN            ICON                    "res\\movedown.ico"
-
 IDI_STOP                ICON                    "res\\stop.ico"
-
 IDI_PLAY                ICON                    "res\\play.ico"
-
 IDI_PAUSE               ICON                    "res\\pause.ico"
-
 IDI_RECT                ICON                    "res\\rect.ico"
-
 IDI_ROUNDEDRECT_SOLID   ICON                    "res\\roundedrect_solid.ico"
-
 IDI_ROUNDEDRECT         ICON                    "res\\roundedrect.ico"
-
 IDI_ELLIPSE_SOLID       ICON                    "res\\ellipse_solid.ico"
-
 IDI_ELLIPSE             ICON                    "res\\ellipse.ico"
-
 IDI_RECT_SOLID          ICON                    "res\\rect_solid.ico"
-
 IDI_LINE                ICON                    "res\\line.ico"
-
 IDI_FLIPHORZ            ICON                    "res\\fliphorz.ico"
-
 IDI_FLIPVERT            ICON                    "res\\flipvert.ico"
-
 IDI_INVERT              ICON                    "res\\invert.ico"
-
 IDI_GREYSCALE           ICON                    "res\\greyscale.ico"
-
 IDI_LIGHTUP             ICON                    "res\\lightup.ico"
-
 IDI_PLACEMENT           ICON                    "res\\placement.ico"
-
 IDI_DITHER              ICON                    "res\\findinfiles.ico"
-
 IDI_FAKEEGO             ICON                    "res\\decompile.ico"
-
 IDI_PRIORITYLINES       ICON                    "res\\prioritylines.ico"
-
 IDI_PALETTE0            ICON                    "res\\palette0.ico"
-
 IDI_PALETTE3            ICON                    "res\\palette3.ico"
-
 IDI_PALETTE1            ICON                    "res\\palette1.ico"
-
 IDI_PALETTE2            ICON                    "res\\palette2.ico"
-
 IDI_SCREENCONTROL       ICON                    "res\\screencontrol.ico"
-
 IDI_SCREENVISUAL        ICON                    "res\\screenvisual.ico"
-
 IDI_SCREENPRIORITY      ICON                    "res\\screenpri.ico"
-
 IDI_FLOODFILL           ICON                    "res\\floodfill.ico"
-
 IDI_PALETTEVGA          ICON                    "res\\palette.ico"
-
 IDI_ICON3               ICON                    "res\\repackage.ico"
-
 IDI_ICON5               ICON                    "res\\select.ico"
-
 IDI_EYEDROPPER          ICON                    "res\\Eyedropper.ico"
-
 IDI_TRANSPARENCY        ICON                    "res\\Transparent.ico"
-
 IDI_AUDIO               ICON                    "res\\audio.ico"
-
 IDI_AUDIOMAP            ICON                    "res\\audiomap.ico"
-
 IDI_POLYPATH            ICON                    "res\\PolyPath.ico"
-
 IDI_OPENGAMEFOLDER      ICON                    "res\\GameFolder.ico"
-
 IDI_DEBUG               ICON                    "res\\debug.ico"
-
 IDI_DEBUGROOM           ICON                    "res\\debug_room.ico"
-
 IDI_STOPDEBUG           ICON                    "res\\stopdebug.ico"
-
 IDI_UPLOAD              ICON                    "res\\Upload.ico"
-
 IDI_REFRESH             ICON                    "res\\refresh.ico"
-
 IDI_RIGHT_ARROW         ICON                    "res\\RightArrow.ico"
-
 IDI_WAVEFORM            ICON                    "res\\waveform.ico"
-
 //IDI_CONVERT             ICON                    "res\\convert.ico"
-
 IDI_STAMP               ICON                    "res\\Stamp.ico"
 
 
@@ -296,87 +185,46 @@ IDI_STAMP               ICON                    "res\\Stamp.ico"
 //
 
 IDR_MAINFRAME           BITMAP                  "res\\MainTools.bmp"
-
 IDR_TOOLBARPIC          BITMAP                  "res\\PicTools.bmp"
-
 IDR_TOOLBARVIEWS        BITMAP                  "res\\ListTools.bmp"
-
 IDR_TOOLBARCOMMANDVIEW  BITMAP                  "res\\ViewCommandTools.bmp"
-
 IDR_TOOLBARSCRIPT       BITMAP                  "res\\ScriptTools.bmp"
-
 IDR_TOOLBARDRAWVIEW     BITMAP                  "res\\ViewTools.bmp"
-
 IDR_TOOLBARVOCAB        BITMAP                  "res\\VocabTools.bmp"
-
 //IDB_BITMAPUP            BITMAP                  "res\\Up.bmp"
-
 //IDB_BITMAPDOWN          BITMAP                  "res\\Down.bmp"
-
 //IDB_BITMAPLEFT          BITMAP                  "res\\Left.bmp"
-
 //IDB_BITMAPRIGHT         BITMAP                  "res\\Right.bmp"
-
 //IDB_BITMAPTEST          BITMAP                  "res\\bitmap1.bmp"
-
 IDB_OVERLAYOLD          BITMAP                  "res\\UnusedResource.bmp"
-
 IDB_OVERLAYOLD40        BITMAP                  "res\\UnusedRes40.bmp"
-
 IDB_CORRUPTRESOURCE     BITMAP                  "res\\CorruptResource.bmp"
-
 IDR_TOOLBARFONT         BITMAP                  "res\\FontTools.bmp"
-
 IDR_TOOLBARTEXT         BITMAP                  "res\\TextTools.bmp"
-
 //IDB_BITMAPCONVERT       BITMAP                  "res\\bmp00012.bmp"
-
 IDB_CLASSBROWSER        BITMAP                  "res\\ClassBrowser.bmp"
-
 IDB_ALPHABLEND          BITMAP                  "res\\AlphaBlend.bmp"
-
 //IDB_ALPHABLENDWHITE     BITMAP                  "res\\AlphaWhite.bmp"
-
 //IDB_BITMAPOBJECTTREE    BITMAP                  "res\\ObjectTree.bmp"
-
 //IDR_TOOLBAR_PICSLIDER   BITMAP                  "res\\bmp00016.bmp"
-
 //IDR_TOOLBARPALETTES     BITMAP                  "res\\bmp00017.bmp"
-
 //IDB_RESOURCETYPES       BITMAP                  "res\\bmp00018.bmp"
-
 //IDB_BITMAPNOPIC         BITMAP                  "res\\bmp00005.bmp"
-
 IDB_BITMAPNULL          BITMAP                  "res\\null.bmp"
-
 IDR_TOOLBARSOUND        BITMAP                  "res\\SoundTools.bmp"
-
 IDB_BITMAPLOOP          BITMAP                  "res\\SoundLoop.bmp"
-
 IDB_BITMAPCUE           BITMAP                  "res\\SoundCue.bmp"
-
 IDB_BITMAPAFFECTALL     BITMAP                  "res\\AffectAll.bmp"
-
 IDB_BITMAPCUEACTIVE     BITMAP                  "res\\SoundCueActive.bmp"
-
 //IDB_TABPIC              BITMAP                  "res\\TabPic.bmp"
-
 //IDB_TABPICNS            BITMAP                  "res\\TabPicNS.bmp"
-
 IDB_VPCHIGHLIGHT        BITMAP                  "res\\vpc_highlight.bmp"
-
 IDB_VPCHIGHLIGHTX       BITMAP                  "res\\vpc_highlightx.bmp"
-
 IDR_TOOLBARSCREENS      BITMAP                  "res\\Screens.bmp"
-
 //IDB_PICTHUMB_HIGHLIGHT  BITMAP                  "res\\picthumb_highlight.bmp"
-
 IDB_CLOSE_ACTIVE        BITMAP                  "res\\CloseActive.bmp"
-
 IDB_CLOSE_INACTIVE      BITMAP                  "res\\CloseInactive.bmp"
-
 IDR_TOOLBARMESSAGE      BITMAP                  "res\\MessageTools.bmp"
-
 IDB_MESSAGEAUDIOICONS   BITMAP                  "res\\MessageIcons.bmp"
 
 
@@ -1067,7 +915,7 @@ CAPTION "About SCICompanion"
 FONT 9, "Segoe UI", 0, 0, 0x1
 BEGIN
     ICON            IDR_MAINFRAME,IDC_STATIC4,11,17,20,20
-    LTEXT           "SCICompanion version 3.2.4",IDC_STATIC1,50,7,121,8,SS_NOPREFIX
+    LTEXT           "SCICompanion version 3.2.5",IDC_STATIC1,50,7,121,8,SS_NOPREFIX
     LTEXT           "© 2021 IceFall Games",IDC_STATIC2,50,25,119,8
     DEFPUSHBUTTON   "OK",IDOK,238,7,50,16,BS_FLAT | WS_GROUP
     EDITTEXT        IDC_EDIT1,50,41,238,127,ES_MULTILINE | ES_READONLY | ES_AUTOVSCROLL | WS_VSCROLL
@@ -2401,8 +2249,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 3,2,4,0
- PRODUCTVERSION 3,2,4,0
+ FILEVERSION 3,2,5,0
+ PRODUCTVERSION 3,2,5,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -2419,12 +2267,12 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "IceFall Games"
             VALUE "FileDescription", "SCICompanion"
-            VALUE "FileVersion", "3.2.4"
+            VALUE "FileVersion", "3.2.5"
             VALUE "InternalName", "SCICompanion.exe"
             VALUE "LegalCopyright", "© IceFall Games.  All rights reserved."
             VALUE "OriginalFilename", "SCICompanion.exe"
             VALUE "ProductName", "SCI Companion 3"
-            VALUE "ProductVersion", "3.2.4"
+            VALUE "ProductVersion", "3.2.5"
         END
     END
     BLOCK "VarFileInfo"
@@ -3147,53 +2995,29 @@ END
 //
 
 IDC_CURSORPEN           CURSOR                  "res\\pen.cur"
-
 IDC_CURSORHISTORY       CURSOR                  "res\\history.cur"
-
 IDC_CURSORLINE          CURSOR                  "res\\line.cur"
-
 IDC_CURSORZOOM          CURSOR                  "res\\zoom.cur"
-
 IDC_CURSORFILL          CURSOR                  "res\\fill.cur"
-
 IDC_CURSORPASTE         CURSOR                  "res\\paste.cur"
-
 IDC_CURSORPLACEMENT     CURSOR                  "res\\placement.cur"
-
 IDC_CURSORPOLYGON       CURSOR                  "res\\polygon.cur"
-
 IDC_CURSORRESIZENS_BR   CURSOR                  "res\\resizens_br.cur"
-
 IDC_CURSORRESIZENS_TL   CURSOR                  "res\\resizens_tl.cur"
-
 IDC_CURSORRESIZENS_STRETCH CURSOR                  "res\\resizens.cur"
-
 IDC_CURSORRESIZEWE_BR   CURSOR                  "res\\resizewe_br.cur"
-
 IDC_CURSORRESIZEWE_TL   CURSOR                  "res\\resizewe_tl.cur"
-
 IDC_CURSORRESIZEWE_STRETCH CURSOR                  "res\\resizewe.cur"
-
 IDC_CURSORRESIZENSWE_BR CURSOR                  "res\\resizenswe_br.cur"
-
 IDC_CURSORRESIZENSWE_STRETCH CURSOR                  "res\\resizenswe.cur"
-
 IDC_CURSORRESIZENSWE_TL CURSOR                  "res\\resizenswe_tl.cur"
-
 IDC_CURSORROTATE        CURSOR                  "res\\rotate.cur"
-
 IDC_CURSORUP            CURSOR                  "res\\up.cur"
-
 IDC_CURSORDOWN          CURSOR                  "res\\down.cur"
-
 IDC_CURSORRIGHT         CURSOR                  "res\\right.cur"
-
 IDC_CURSORLEFT          CURSOR                  "res\\left.cur"
-
 IDC_CURSORCIRCLE        CURSOR                  "res\\circle.cur"
-
 IDC_CURSOREYEDROPPER    CURSOR                  "res\\eyedropper.cur"
-
 IDC_CURSORSHAPE         CURSOR                  "res\\rect.cur"
 
 
@@ -3204,179 +3028,114 @@ IDC_CURSORSHAPE         CURSOR                  "res\\rect.cur"
 
 IDD_DIALOGVERSION DLGINIT
 BEGIN
-    IDC_COMBO1, 0x403, 4, 0, "EGA\000"
-//0x4745, 0x0041,
-    IDC_COMBO1, 0x403, 6, 0, "VGA\000"
-//0x4756, 0x2041, 0x0031,
-    IDC_COMBO1, 0x403, 8, 0, "VGA 1.1\000"
-//0x4756, 0x2041, 0x2e31, 0x0031,
-    IDC_COMBO1, 0x403, 6, 0, "VGA 2\000"
-//0x4756, 0x2041, 0x0032,
-    IDC_COMBO2, 0x403, 4, 0, "EGA\000"
-//0x4745, 0x0041,
-    IDC_COMBO2, 0x403, 6, 0, "VGA\000"
-//0x4756, 0x2041, 0x0031,
-    IDC_COMBO2, 0x403, 8, 0, "VGA 1.1\000"
-//0x4756, 0x2041, 0x2e31, 0x0031,
-    IDC_COMBO2, 0x403, 6, 0, "VGA 2\000"
-//0x4756, 0x2041, 0x0032,
-    IDC_COMBO3, 0x403, 5, 0, "None\000"
-//0x6f4e, 0x656e, "\000"
-    IDC_COMBO3, 0x403, 5, 0, ".aud\000"
-//0x612e, 0x6475, "\000"
-    IDC_COMBO3, 0x403, 5, 0, ".sfx\000"
-//0x732e, 0x7866, "\000"
-    IDC_COMBO3, 0x403, 8, 0, "aud/sfx\000"
-//0x7561, 0x2f64, 0x6673, 0x0078,
-    IDC_COMBO4, 0x403, 5, 0, "None\000"
-//0x6f4e, 0x656e, "\000"
-    IDC_COMBO4, 0x403, 8, 0, "5 bytes\000"
-//0x2035, 0x7962, 0x6574, 0x0073,
-    IDC_COMBO4, 0x403, 8, 0, "6 bytes\000"
-//0x2036, 0x7962, 0x6574, 0x0073,
-    IDC_COMBO4, 0x403, 8, 0, "8 bytes\000"
-//0x2038, 0x7962, 0x6574, 0x0073,
-    IDC_COMBO4, 0x403, 15, 0, "Sync map early\000"
-//0x7953, 0x636e, 0x6d20, 0x7061, 0x6520, 0x7261, 0x796c, "\000"
-    IDC_COMBO4, 0x403, 14, 0, "Sync map late\000"
-//0x7953, 0x636e, 0x6d20, 0x7061, 0x6c20, 0x7461, 0x0065,
-    IDC_COMBO5, 0x403, 5, 0, "None\000"
-//0x6f4e, 0x656e, "\000"
-    IDC_COMBO5, 0x403, 8, 0, "5 bytes\000"
-//0x2035, 0x7962, 0x6574, 0x0073,
-    IDC_COMBO5, 0x403, 8, 0, "6 bytes\000"
-//0x2036, 0x7962, 0x6574, 0x0073,
-    IDC_COMBO5, 0x403, 8, 0, "8 bytes\000"
-//0x2038, 0x7962, 0x6574, 0x0073,
-    IDC_COMBO5, 0x403, 15, 0, "Sync map early\000"
-//0x7953, 0x636e, 0x6d20, 0x7061, 0x6520, 0x7261, 0x796c, "\000"
-    IDC_COMBO5, 0x403, 14, 0, "Sync map late\000"
-//0x7953, 0x636e, 0x6d20, 0x7061, 0x6c20, 0x7461, 0x0065,
-    IDC_COMBO6, 0x403, 2, 0, "0\000"
-//0x0030,
-    IDC_COMBO6, 0x403, 6, 0, "65535\000"
-//0x3536, 0x3335, 0x0035,
-    IDC_COMBO7, 0x403, 13, 0, "resource.map\000"
-//0x6572, 0x6f73, 0x7275, 0x6563, 0x6d2e, 0x7061, "\000"
-    IDC_COMBO7, 0x403, 12, 0, "message.map\000"
-//0x656d, 0x7373, 0x6761, 0x2e65, 0x616d, 0x0070,
-    IDC_COMBO7, 0x403, 11, 0, "altres.map\000"
-//0x6c61, 0x7274, 0x7365, 0x6d2e, 0x7061, "\000"
-    IDC_COMBO8, 0x403, 8, 0, "320x200\000"
-//0x3233, 0x7830, 0x3032, 0x0030,
-    IDC_COMBO8, 0x403, 8, 0, "640×400\000"
-//0x3436, 0x7830, 0x3034, 0x0030,
-    IDC_COMBO8, 0x403, 8, 0, "640×480\000"
-//0x3436, 0x7830, 0x3834, 0x0030,
-    IDC_COMBO9, 0x403, 9, 0, "Provided\000"
-//0x7250, 0x766f, 0x6469, 0x6465, "\000"
-    IDC_COMBO9, 0x403, 10, 0, "SCI0/SCI1\000"
-//0x4353, 0x3049, 0x532f, 0x4943, 0x0031,
-    IDC_COMBO9, 0x403, 5, 0, "SCI2\000"
-//0x4353, 0x3249, "\000"
-    IDC_COMBO9, 0x403, 7, 0, "SCI2.1\000"
-//0x4353, 0x3249, 0x312e, "\000"
+    IDC_COMBO1, 0x403, 4, 0, "EGA\0"
+    IDC_COMBO1, 0x403, 6, 0, "VGA 1\0"
+    IDC_COMBO1, 0x403, 8, 0, "VGA 1.1\0"
+    IDC_COMBO1, 0x403, 6, 0, "VGA 2\0"
+    IDC_COMBO2, 0x403, 4, 0, "EGA\0"
+    IDC_COMBO2, 0x403, 6, 0, "VGA 1\0"
+    IDC_COMBO2, 0x403, 8, 0, "VGA 1.1\0"
+    IDC_COMBO2, 0x403, 6, 0, "VGA 2\0"
+    IDC_COMBO3, 0x403, 5, 0, "None\0"
+    IDC_COMBO3, 0x403, 5, 0, ".aud\0"
+    IDC_COMBO3, 0x403, 5, 0, ".sfx\0"
+    IDC_COMBO3, 0x403, 8, 0, "aud/sfx\0"
+    IDC_COMBO4, 0x403, 5, 0, "None\0"
+    IDC_COMBO4, 0x403, 8, 0, "5 bytes\0"
+    IDC_COMBO4, 0x403, 8, 0, "6 bytes\0"
+    IDC_COMBO4, 0x403, 8, 0, "8 bytes\0"
+    IDC_COMBO4, 0x403, 15, 0, "Sync map early\0"
+    IDC_COMBO4, 0x403, 14, 0, "Sync map late\0"
+    IDC_COMBO5, 0x403, 5, 0, "None\0"
+    IDC_COMBO5, 0x403, 8, 0, "5 bytes\0"
+    IDC_COMBO5, 0x403, 8, 0, "6 bytes\0"
+    IDC_COMBO5, 0x403, 8, 0, "8 bytes\0"
+    IDC_COMBO5, 0x403, 15, 0, "Sync map early\0"
+    IDC_COMBO5, 0x403, 14, 0, "Sync map late\0"
+    IDC_COMBO6, 0x403, 2, 0, "0\0"
+    IDC_COMBO6, 0x403, 6, 0, "65535\0"
+    IDC_COMBO7, 0x403, 13, 0, "resource.map\0"
+    IDC_COMBO7, 0x403, 12, 0, "message.map\0"
+    IDC_COMBO7, 0x403, 11, 0, "altres.map\0"
+    IDC_COMBO8, 0x403, 8, 0, "320x200\0"
+    IDC_COMBO8, 0x403, 8, 0, "640×400\0"
+    IDC_COMBO8, 0x403, 8, 0, "640×480\0"
+    IDC_COMBO9, 0x403, 9, 0, "Provided\0"
+    IDC_COMBO9, 0x403, 10, 0, "SCI0/SCI1\0"
+    IDC_COMBO9, 0x403, 5, 0, "SCI2\0"
+    IDC_COMBO9, 0x403, 7, 0, "SCI2.1\0"
     0
 END
 
 IDD_PICCOMMANDS_VGA1 DLGINIT
 BEGIN
-    IDC_COMBOPOLYTYPE, 0x403, 6, 0, "Total\000"
-//0x6f54, 0x6174, 0x006c,
-    IDC_COMBOPOLYTYPE, 0x403, 8, 0, "Nearest\000"
-//0x654e, 0x7261, 0x7365, 0x0074,
-    IDC_COMBOPOLYTYPE, 0x403, 7, 0, "Barred\000"
-//0x6142, 0x7272, 0x6465, "\000"
-    IDC_COMBOPOLYTYPE, 0x403, 10, 0, "Contained\000"
-//0x6f43, 0x746e, 0x6961, 0x656e, 0x0064,
+    IDC_COMBOPOLYTYPE, 0x403, 6, 0, "Total\0"
+    IDC_COMBOPOLYTYPE, 0x403, 8, 0, "Nearest\0"
+    IDC_COMBOPOLYTYPE, 0x403, 7, 0, "Barred\0"
+    IDC_COMBOPOLYTYPE, 0x403, 10, 0, "Contained\0"
     0
 END
 
 IDD_BITMAPTOVGA DLGINIT
 BEGIN
     IDC_COMBOMATCH, 0x403, 4, 0, "RGB\000"
-//0x4752, 0x0042,
     IDC_COMBOMATCH, 0x403, 5, 0, "CCIR\000"
-//0x4343, 0x5249, "\000"
-    IDC_COMBODITHERALPHA, 0x403, 10, 0, "No dither\000"
-//0x6f4e, 0x6420, 0x7469, 0x6568, 0x0072,
-    IDC_COMBODITHERALPHA, 0x403, 16, 0, "Floyd Steinberg\000"
-//0x6c46, 0x796f, 0x2064, 0x7453, 0x6965, 0x626e, 0x7265, 0x0067,
-    IDC_COMBODITHERALPHA, 0x403, 20, 0, "Jarvis/Judice/Ninke\000"
-//0x614a, 0x7672, 0x7369, 0x4a2f, 0x6475, 0x6369, 0x2f65, 0x694e, 0x6b6e,
-//0x0065,
-    IDC_COMBODITHERALPHA, 0x403, 15, 0, "Ordered dither\000"
-//0x724f, 0x6564, 0x6572, 0x2064, 0x6964, 0x6874, 0x7265, "\000"
+    IDC_COMBODITHERALPHA, 0x403, 10, 0, "No dither\0"
+    IDC_COMBODITHERALPHA, 0x403, 16, 0, "Floyd Steinberg\0"
+    IDC_COMBODITHERALPHA, 0x403, 20, 0, "Jarvis/Judice/Ninke\0"
+    IDC_COMBODITHERALPHA, 0x403, 15, 0, "Ordered dither\0"
     0
 END
 
 IDD_MESSAGEEDIT DLGINIT
 BEGIN
-    IDC_COMBO_WAVEFORMAT, 0x403, 15, 0, "11025Hz, 8 bit\000"
-//0x3131, 0x3230, 0x4835, 0x2c7a, 0x3820, 0x6220, 0x7469, "\000"
-    IDC_COMBO_WAVEFORMAT, 0x403, 16, 0, "11025Hz, 16 bit\000"
-//0x3131, 0x3230, 0x4835, 0x2c7a, 0x3120, 0x2036, 0x6962, 0x0074,
-    IDC_COMBO_WAVEFORMAT, 0x403, 15, 0, "22050Hz, 8 bit\000"
-//0x3232, 0x3530, 0x4830, 0x2c7a, 0x3820, 0x6220, 0x7469, "\000"
-    IDC_COMBO_WAVEFORMAT, 0x403, 16, 0, "22050Hz, 16 bit\000"
-//0x3232, 0x3530, 0x4830, 0x2c7a, 0x3120, 0x2036, 0x6962, 0x0074,
+    IDC_COMBO_WAVEFORMAT, 0x403, 15, 0, "11025Hz, 8 bit\0"
+    IDC_COMBO_WAVEFORMAT, 0x403, 16, 0, "11025Hz, 16 bit\0"
+    IDC_COMBO_WAVEFORMAT, 0x403, 15, 0, "22050Hz, 8 bit\0"
+    IDC_COMBO_WAVEFORMAT, 0x403, 16, 0, "22050Hz, 16 bit\0"
     0
 END
 
 IDD_PREVIEWAUDIO DLGINIT
 BEGIN
-    IDC_COMBO_WAVEFORMAT, 0x403, 15, 0, "11025Hz, 8 bit\000"
-//0x3131, 0x3230, 0x4835, 0x2c7a, 0x3820, 0x6220, 0x7469, "\000"
-    IDC_COMBO_WAVEFORMAT, 0x403, 16, 0, "11025Hz, 16 bit\000"
-//0x3131, 0x3230, 0x4835, 0x2c7a, 0x3120, 0x2036, 0x6962, 0x0074,
-    IDC_COMBO_WAVEFORMAT, 0x403, 15, 0, "22050Hz, 8 bit\000"
-//0x3232, 0x3530, 0x4830, 0x2c7a, 0x3820, 0x6220, 0x7469, "\000"
-    IDC_COMBO_WAVEFORMAT, 0x403, 16, 0, "22050Hz, 16 bit\000"
-//0x3232, 0x3530, 0x4830, 0x2c7a, 0x3120, 0x2036, 0x6962, 0x0074,
+    IDC_COMBO_WAVEFORMAT, 0x403, 15, 0, "11025Hz, 8 bit\0"
+    IDC_COMBO_WAVEFORMAT, 0x403, 16, 0, "11025Hz, 16 bit\0"
+    IDC_COMBO_WAVEFORMAT, 0x403, 15, 0, "22050Hz, 8 bit\0"
+    IDC_COMBO_WAVEFORMAT, 0x403, 16, 0, "22050Hz, 16 bit\0"
     0
 END
 
 IDD_AUDIOEDIT DLGINIT
 BEGIN
-    IDC_COMBO_BIT, 0x403, 6, 0, "8 bit\000"
-//0x2038, 0x6962, 0x0074,
-    IDC_COMBO_BIT, 0x403, 7, 0, "16 bit\000"
-//0x3631, 0x6220, 0x7469, "\000"
+    IDC_COMBO_BIT, 0x403, 6, 0, "8 bit\0"
+    IDC_COMBO_BIT, 0x403, 7, 0, "16 bit\0"
     0
 END
 
 IDD_NEWGAMEDIALOG DLGINIT
 BEGIN
-    IDC_COMBOLANGUAGE, 0x403, 8, 0, "DOS 437\000",
-    IDC_COMBOLANGUAGE, 0x403, 13, 0, "Windows 1252\000",
-//    IDC_COMBOLANGUAGE, 0x403, 14, 0
-//0x6953, 0x7265, 0x6172, 0x5320, 0x7263, 0x7069, 0x0074,
-//    IDC_COMBOLANGUAGE, 0x403, 11, 0
-//0x4353, 0x2049, 0x7453, 0x6475, 0x6f69, "\000"
+    IDC_COMBOLANGUAGE, 0x403, 8, 0, "DOS 437\0",
+    IDC_COMBOLANGUAGE, 0x403, 13, 0, "Windows 1252\0",
+//    IDC_COMBOLANGUAGE, 0x403, 14, 0, "Sierra Script\0",
+//    IDC_COMBOLANGUAGE, 0x403, 11, 0, "SCI Studio\0"
     0
 END
 
 IDD_GAMEPROPERTIESDIALOG DLGINIT
 BEGIN
-    IDC_COMBOLANGUAGE, 0x403, 8, 0, "DOS 437\000",
-    IDC_COMBOLANGUAGE, 0x403, 13, 0, "Windows 1252\000",
-//    IDC_COMBOLANGUAGE, 0x403, 14, 0
-//0x6953, 0x7265, 0x6172, 0x5320, 0x7263, 0x7069, 0x0074,
-//    IDC_COMBOLANGUAGE, 0x403, 11, 0
-//0x4353, 0x2049, 0x7453, 0x6475, 0x6f69, "\000"
+    IDC_COMBOLANGUAGE, 0x403, 8, 0, "DOS 437\0",
+    IDC_COMBOLANGUAGE, 0x403, 13, 0, "Windows 1252\0",
+//    IDC_COMBOLANGUAGE, 0x403, 14, 0, "Sierra Script\0",
+//    IDC_COMBOLANGUAGE, 0x403, 11, 0, "SCI Studio\0"
     0
 END
 
 IDD_PICCOMMANDS_EGAPOLY DLGINIT
 BEGIN
-    IDC_COMBOPOLYTYPE, 0x403, 6, 0, "Total\000"
-//0x6f54, 0x6174, 0x006c,
-    IDC_COMBOPOLYTYPE, 0x403, 8, 0, "Nearest\000"
-//0x654e, 0x7261, 0x7365, 0x0074,
-    IDC_COMBOPOLYTYPE, 0x403, 7, 0, "Barred\000"
-//0x6142, 0x7272, 0x6465, "\000"
-    IDC_COMBOPOLYTYPE, 0x403, 10, 0, "Contained\000"
-//0x6f43, 0x746e, 0x6961, 0x656e, 0x0064,
+    IDC_COMBOPOLYTYPE, 0x403, 6, 0, "Total\0"
+    IDC_COMBOPOLYTYPE, 0x403, 8, 0, "Nearest\0"
+    IDC_COMBOPOLYTYPE, 0x403, 7, 0, "Barred\0"
+    IDC_COMBOPOLYTYPE, 0x403, 10, 0, "Contained\0"
     0
 END
 

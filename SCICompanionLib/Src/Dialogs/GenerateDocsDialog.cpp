@@ -17,6 +17,8 @@ GNU General Public License for more details.
 // ClassBrowserDialog.cpp : implementation file
 //
 
+#ifdef DOCSUPPORT
+
 #include "stdafx.h"
 #include "AppState.h"
 #include "format.h"
@@ -289,3 +291,5 @@ void GenerateDocsDialog::OnBnClickedGeneratekernels()
 	}
 		);
 }
+
+#endif

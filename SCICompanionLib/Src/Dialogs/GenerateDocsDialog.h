@@ -1,5 +1,7 @@
 #pragma once
 
+#ifdef DOCSUPPORT
+
 #include "resource.h"
 #include "GameFolderHelper.h"
 // GenerateDocsDialog dialog
@@ -48,3 +50,5 @@ public:
 	afx_msg void OnEnChangeEditcommand();
 	afx_msg void OnBnClickedGeneratekernels();
 };
+
+#endif

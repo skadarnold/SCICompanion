@@ -2,9 +2,6 @@
 //
 #include "resource.h"
 
-//TODO: figure out how to make this work with project properties -- K
-#define DISABLE_DEBUGSTUFF
-
 #define APSTUDIO_READONLY_SYMBOLS
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -559,9 +556,9 @@ BEGIN
         END
         POPUP "Rotate"
         BEGIN
-            MENUITEM "90° degrees CW\tCtrl-]",      ID_ROTATE_CW
-            MENUITEM "90° degrees CCW\tCtrl-[",     ID_ROTATE_CCW
-            MENUITEM "180° degrees\tCtrl-\\",       ID_ROTATE_180
+            MENUITEM "90ï¿½ degrees CW\tCtrl-]",      ID_ROTATE_CW
+            MENUITEM "90ï¿½ degrees CCW\tCtrl-[",     ID_ROTATE_CCW
+            MENUITEM "180ï¿½ degrees\tCtrl-\\",       ID_ROTATE_180
             MENUITEM "Arbitrary\tCtrl-R",           ID_ROTATE_ARBITRARY
         END
 		MENUITEM "Shrink&wrap cel",				ID_VIEW_SHRINKWRAPCEL
@@ -916,7 +913,7 @@ FONT 9, "Segoe UI", 0, 0, 0x1
 BEGIN
     ICON            IDR_MAINFRAME,IDC_STATIC4,11,17,20,20
     LTEXT           "SCICompanion version 3.2.5",IDC_STATIC1,50,7,121,8,SS_NOPREFIX
-    LTEXT           "© 2021 IceFall Games",IDC_STATIC2,50,25,119,8
+    LTEXT           "ï¿½ 2021 IceFall Games",IDC_STATIC2,50,25,119,8
     DEFPUSHBUTTON   "OK",IDOK,238,7,50,16,BS_FLAT | WS_GROUP
     EDITTEXT        IDC_EDIT1,50,41,238,127,ES_MULTILINE | ES_READONLY | ES_AUTOVSCROLL | WS_VSCROLL
 END
@@ -1328,8 +1325,8 @@ BEGIN
     CONTROL         "",IDC_STATIC_CHOSENCOLORS,"Static",SS_OWNERDRAW | WS_GROUP,15,7,24,19
     CONTROL         "",IDC_STATIC_PALETTE,"Static",SS_OWNERDRAW | SS_NOTIFY | WS_GROUP,49,7,36,16
     LTEXT           "Pen style:",IDC_STATIC1,34,33,33,10
-    PUSHBUTTON      "ï",IDC_BUTTONLEFT,33,44,15,11
-    PUSHBUTTON      "ð",IDC_BUTTONRIGHT,48,44,15,11
+    PUSHBUTTON      "ï¿½",IDC_BUTTONLEFT,33,44,15,11
+    PUSHBUTTON      "ï¿½",IDC_BUTTONRIGHT,48,44,15,11
     LTEXT           "Size:",IDC_STATIC2,13,68,23,8,0,WS_EX_RIGHT
     EDITTEXT        IDC_EDIT_CELWIDTH,37,65,21,14,ES_AUTOHSCROLL | ES_NUMBER
     LTEXT           "x",IDC_STATIC5,59,72,8,8,0,WS_EX_RIGHT
@@ -1368,10 +1365,10 @@ BEGIN
     CONTROL         "",IDC_STATIC_CHOSENCOLORS,"Static",SS_OWNERDRAW | WS_GROUP,3,104,24,19
     CONTROL         "",IDC_STATIC_PALETTE,"Static",SS_OWNERDRAW | SS_NOTIFY | WS_GROUP,3,7,96,94
     RTEXT           "Pen style:",IDC_STATIC1,40,107,34,10
-    PUSHBUTTON      "ñ",IDC_BUTTONUP,68,139,15,12
-    PUSHBUTTON      "ï",IDC_BUTTONLEFT,52,145,15,11
-    PUSHBUTTON      "ð",IDC_BUTTONRIGHT,84,145,15,11
-    PUSHBUTTON      "ò",IDC_BUTTONDOWN,68,151,15,11
+    PUSHBUTTON      "ï¿½",IDC_BUTTONUP,68,139,15,12
+    PUSHBUTTON      "ï¿½",IDC_BUTTONLEFT,52,145,15,11
+    PUSHBUTTON      "ï¿½",IDC_BUTTONRIGHT,84,145,15,11
+    PUSHBUTTON      "ï¿½",IDC_BUTTONDOWN,68,151,15,11
     PUSHBUTTON      "Add Before",IDC_BUTTON_ADDCELBEFORE,7,170,44,14
     PUSHBUTTON      "Add After",IDC_BUTTON_ADDCELAFTER,7,184,44,14
     PUSHBUTTON      "Delete",IDC_BUTTON_DELETECEL,54,170,41,14
@@ -1987,10 +1984,10 @@ BEGIN
     CONTROL         "Entire view",IDC_RADIOVIEW,"Button",BS_AUTORADIOBUTTON,232,44,49,10
     GROUPBOX        "Extent",IDC_STATICGROUP,226,3,64,57
     EDITTEXT        IDC_EDITRANGE,226,65,64,45,ES_MULTILINE | ES_AUTOHSCROLL | ES_READONLY
-    PUSHBUTTON      "ñ",IDC_BUTTONUP,248,116,15,12
-    PUSHBUTTON      "ï",IDC_BUTTONLEFT,232,122,15,11
-    PUSHBUTTON      "ð",IDC_BUTTONRIGHT,264,122,15,11
-    PUSHBUTTON      "ò",IDC_BUTTONDOWN,248,128,15,11
+    PUSHBUTTON      "ï¿½",IDC_BUTTONUP,248,116,15,12
+    PUSHBUTTON      "ï¿½",IDC_BUTTONLEFT,232,122,15,11
+    PUSHBUTTON      "ï¿½",IDC_BUTTONRIGHT,264,122,15,11
+    PUSHBUTTON      "ï¿½",IDC_BUTTONDOWN,248,128,15,11
 END
 
 IDD_LIPSYNCDIALOG DIALOGEX 0, 0, 357, 263
@@ -2269,7 +2266,7 @@ BEGIN
             VALUE "FileDescription", "SCICompanion"
             VALUE "FileVersion", "3.2.5"
             VALUE "InternalName", "SCICompanion.exe"
-            VALUE "LegalCopyright", "© IceFall Games.  All rights reserved."
+            VALUE "LegalCopyright", "ï¿½ IceFall Games.  All rights reserved."
             VALUE "OriginalFilename", "SCICompanion.exe"
             VALUE "ProductName", "SCI Companion 3"
             VALUE "ProductVersion", "3.2.5"
@@ -3058,8 +3055,8 @@ BEGIN
     IDC_COMBO7, 0x403, 12, 0, "message.map\0"
     IDC_COMBO7, 0x403, 11, 0, "altres.map\0"
     IDC_COMBO8, 0x403, 8, 0, "320x200\0"
-    IDC_COMBO8, 0x403, 8, 0, "640×400\0"
-    IDC_COMBO8, 0x403, 8, 0, "640×480\0"
+    IDC_COMBO8, 0x403, 8, 0, "640ï¿½400\0"
+    IDC_COMBO8, 0x403, 8, 0, "640ï¿½480\0"
     IDC_COMBO9, 0x403, 9, 0, "Provided\0"
     IDC_COMBO9, 0x403, 10, 0, "SCI0/SCI1\0"
     IDC_COMBO9, 0x403, 5, 0, "SCI2\0"

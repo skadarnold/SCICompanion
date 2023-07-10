@@ -365,7 +365,12 @@ std::string GetAudioVolumePath(const std::string &gameFolder, bool bak, AudioVol
 	{
 		*sourceFlags = sourceFlagsTemp;
 	}
-	return fullPath;
+	WIN32_FIND_DATA fd = { 0 };
+	auto ffh = FindFirstFile(fullPath.c_str(), &fd);
+	if (ffh == INVALID_HANDLE_VALUE)
+		return fullPath;
+	FindClose(ffh);
+	return gameFolder + "\\" + fd.cFileName;
 }
 
 AudioVolumeName GetVolumeToUse(SCIVersion version, uint32_t base36Number)

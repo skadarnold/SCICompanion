@@ -41,20 +41,46 @@ const char *folderFileFormat = "{0}\\{1}";
 const char *folderFileFormatBak = "{0}\\{1}.bak";
 std::string FileDescriptorBase::_GetMapFilename() const
 {
-	return fmt::format(folderFileFormat, _gameFolder, _traits.MapFormat);
+	std::string couldBe = fmt::format(folderFileFormat, _gameFolder, _traits.MapFormat);
+	WIN32_FIND_DATA fd = { 0 };
+	auto ffh = FindFirstFile(couldBe.c_str(), &fd);
+	if (ffh == INVALID_HANDLE_VALUE)
+		return couldBe;
+	FindClose(ffh);
+	return fmt::format(folderFileFormat, _gameFolder, fd.cFileName);
 }
 
 std::string FileDescriptorBase::_GetVolumeFilename(int volume) const
 {
-	return fmt::format(folderFileFormat, _gameFolder, fmt::format(_traits.VolumeFormat, volume));
+	std::string couldBe = fmt::format(folderFileFormat, _gameFolder, fmt::format(_traits.VolumeFormat, volume));
+	WIN32_FIND_DATA fd = { 0 };
+	auto ffh = FindFirstFile(couldBe.c_str(), &fd);
+	if (ffh == INVALID_HANDLE_VALUE)
+		return couldBe;
+	FindClose(ffh);
+	return fmt::format(folderFileFormat, _gameFolder, fd.cFileName);
 }
 std::string FileDescriptorBase::_GetMapFilenameBak() const
 {
-	return fmt::format(folderFileFormatBak, _gameFolder, _traits.MapFormat);
+	std::string couldBe = fmt::format(folderFileFormatBak, _gameFolder, _traits.MapFormat);
+	WIN32_FIND_DATA fd = { 0 };
+	auto ffh = FindFirstFile(couldBe.c_str(), &fd);
+	if (ffh == INVALID_HANDLE_VALUE)
+		return couldBe;
+	FindClose(ffh);
+	//Do NOT use folderFileFormatBak here lest it return X.BAK.BAK.
+	return fmt::format(folderFileFormat, _gameFolder, fd.cFileName);
 }
 std::string FileDescriptorBase::_GetVolumeFilenameBak(int volume) const
 {
-	return fmt::format(folderFileFormatBak, _gameFolder, fmt::format(_traits.VolumeFormat, volume));
+	std::string couldBe = fmt::format(folderFileFormatBak, _gameFolder, fmt::format(_traits.VolumeFormat, volume));
+	WIN32_FIND_DATA fd = { 0 };
+	auto ffh = FindFirstFile(couldBe.c_str(), &fd);
+	if (ffh == INVALID_HANDLE_VALUE)
+		return couldBe;
+	FindClose(ffh);
+	//Do NOT use folderFileFormatBak here lest it return X.BAK.BAK.
+	return fmt::format(folderFileFormat, _gameFolder, fd.cFileName);
 }
 
 bool IsResourceCompatible(const SCIVersion &usVersion, const SCIVersion &resourceVersion, ResourceType type)

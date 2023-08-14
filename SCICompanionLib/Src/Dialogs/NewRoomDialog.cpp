@@ -359,8 +359,9 @@ void CNewRoomDialog::_PrepareBuffer()
 			if (includePolys)
 			{
 #ifdef ENABLE_GETPOLY
-				_AddStatement(*pInit, GetSetUpPolyProcedureCall());
-				//_AddComment(*pInit, "(gRoom addObstacle: (getpoly {Room}))", sci::CommentType::Indented);
+				//_AddStatement(*pInit, GetSetUpPolyProcedureCall());
+				_AddComment(*pInit, "Uncomment this line once one or more polygons have been defined in the picture editor.", sci::CommentType::LeftJustified);
+				_AddComment(*pInit, "(gRoom addObstacle: (&getpoly \"\"))", sci::CommentType::Indented);
 #else
 				_AddStatement(*pInit, GetSetUpPolyProcedureCall(_nPicScript));
 #endif

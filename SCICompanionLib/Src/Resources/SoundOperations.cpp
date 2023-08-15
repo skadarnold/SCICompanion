@@ -108,7 +108,7 @@ SoundChangeHint InitializeFromMidi(SCIVersion version, std::vector<DeviceType> d
 					}
 					else
 					{
-						AfxMessageBox("Only type 0 and type 1 midi files are supported.", MB_ERRORFLAGS);
+						AfxMessageBox("Only type 0 and type 1 MIDI files are supported.", MB_ERRORFLAGS);
 					}
 				}
 				else
@@ -118,7 +118,7 @@ SoundChangeHint InitializeFromMidi(SCIVersion version, std::vector<DeviceType> d
 			}
 			else
 			{
-				AfxMessageBox("Not a midi file", MB_ERRORFLAGS);
+				AfxMessageBox("Not a MIDI file", MB_ERRORFLAGS);
 			}
 		}
 		sound._fCanSetTempo = true;

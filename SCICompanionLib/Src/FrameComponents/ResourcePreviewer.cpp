@@ -828,7 +828,11 @@ void SoundPreviewer::OnSynthChoiceChange()
 			}
 			m_wndChannels.SetWindowText(channelText.c_str());
 		}
-		g_midiPlayer.SetDevice(_device);
+		//g_midiPlayer.SetDevice(_device);
+		//KAWA: I'm not sure if this helper is needed, but it seems to work :shrug:
+		g_midiPlayer.SetDevice(GetDeviceFromComboHelper(appState->GetVersion(), m_wndSynths));
+		//KAWA: Reload the sound since MIDIPlayer keeps and plays a copy with the (initially MT32) tracks only.
+		g_midiPlayer.SetSound(*soundComp, StandardTempo);
 	}
 }
 

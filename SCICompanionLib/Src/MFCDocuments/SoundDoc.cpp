@@ -267,14 +267,14 @@ void CSoundDoc::Serialize(CArchive& ar)
 	}
 }
 
-const char c_szMidiFilter[] = "Midi Files|*.mid;*.midi|All Files|*.*|";
+const char c_szMidiFilter[] = "MIDI Files|*.mid;*.midi|All Files|*.*|";
 
 bool ImportMidi(std::vector<DeviceType> devices, ResourceEntity *resourceEntity)
 {
 	bool success = false;
 	// Create a file dialog.
 	CFileDialog fileDialog(TRUE, NULL, NULL, OFN_ENABLESIZING | OFN_EXPLORER | OFN_HIDEREADONLY | OFN_NOCHANGEDIR, c_szMidiFilter);
-	fileDialog.m_ofn.lpstrTitle = TEXT("Import midi file");
+	fileDialog.m_ofn.lpstrTitle = TEXT("Import MIDI file");
 	if (IDOK == fileDialog.DoModal())
 	{
 		CString fileName = fileDialog.GetPathName();

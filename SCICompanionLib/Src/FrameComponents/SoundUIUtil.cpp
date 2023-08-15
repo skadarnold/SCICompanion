@@ -23,14 +23,14 @@ const DeviceAndName c_rgDeviceNamesSCI0[] =
 const DeviceAndName c_rgDeviceNamesSCI1[] =
 {
 	{ DeviceType::SCI1_Adlib, "Adlib, Sound Blaster ($00)" },
-	{ DeviceType::SCI1_GM, "General Midi ($07)" },
+	{ DeviceType::SCI1_GM, "General/Ext. MIDI ($07)" },
 	{ DeviceType::SCI1_GameBlaster, "Game Blaster ($09)" },
 	{ DeviceType::SCI1_RolandGM, "Roland MT-32, GM ($0c)" },
 	{ DeviceType::SCI1_PCSpeaker, "PC Speaker ($12)" },
 	{ DeviceType::SCI1_Tandy, "Tandy 3v / IBM PS1 ($13)" },
 	{ DeviceType::SCI1_AmigaMac, "Amiga/Mac ($06)" },
 	{ DeviceType::SCI1_Unknown08, "Unknown ($08)" },
-	{ DeviceType::SCI1_Unkonwn0b, "Unknown ($0b)" },
+	{ DeviceType::SCI1_Unkonwn0b, "Base MIDI ($0b)" },
 	{ DeviceType::Digital, "Digital" },
 };
 

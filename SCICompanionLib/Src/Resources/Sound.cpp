@@ -477,7 +477,7 @@ uint16_t SoundComponent::_ReadMidiFileTrack(size_t nTrack, std::istream &midiFil
 					{
 						if (nTrack != 0)
 						{
-							appState->LogInfo("Found tempo event in track %d in midi file - ignoring\n", nTrack);
+							appState->LogInfo("Found tempo event in track %d in MIDI file - ignoring\n", nTrack);
 						}
 						else
 						{

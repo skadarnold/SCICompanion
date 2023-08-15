@@ -117,7 +117,7 @@ bool MidiPlayer::_Init()
 		UINT deviceId = appState->GetMidiDeviceId();
 		if (midiStreamOpen(&_handle, &deviceId, 1, reinterpret_cast<DWORD_PTR>(s_MidiOutProc), reinterpret_cast<DWORD_PTR>(this), CALLBACK_FUNCTION))
 		{
-			OutputDebugString("Failed to open midi stream\n");
+			OutputDebugString("Failed to open MIDI stream\n");
 			assert(_handle == nullptr);
 		}
 	}

@@ -246,7 +246,10 @@ ResourceTraits fontResTraits =
 
 FontTraits fontTraitsSCI0 =
 {
-	false
+	//false
+	true
+	//Fun fact: from testing with a KQ4 '88, there is no actual 128-character limit.
+	//I feel like removing FontTraits entirely, but nyeeeh -- Kawa
 };
 FontTraits fontTraitsSCI1 =
 {

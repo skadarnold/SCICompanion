@@ -41,7 +41,7 @@ enum class ResourceSaveLocation : uint16_t
 class GameFolderHelper
 {
 public:
-	GameFolderHelper() {}
+	GameFolderHelper() = default;
 	GameFolderHelper(const GameFolderHelper &orig) = default;
 	GameFolderHelper &operator=(const GameFolderHelper &other) = default;
 

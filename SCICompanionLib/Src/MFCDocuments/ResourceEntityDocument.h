@@ -113,10 +113,7 @@ public:
 				// Go ahead and notify things...
 				UpdateAllViewsAndNonViews(nullptr, 0, &updateHint);
 
-				if (modified)
-				{
-					SetModifiedFlag(TRUE);
-				}
+				SetModifiedFlag(TRUE);
 			}
 			else
 			{

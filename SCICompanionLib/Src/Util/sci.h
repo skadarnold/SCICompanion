@@ -269,7 +269,7 @@ EGACOLOR GetClosestEGAColorFromSet(int iAlgorithm, bool gammaCorrected, COLORREF
 //
 struct SCIBitmapInfo : public BITMAPINFO
 {
-	SCIBitmapInfo() {}
+	SCIBitmapInfo() = default;
 	SCIBitmapInfo(int cx, int cy, const RGBQUAD *pPalette = nullptr, int count = 0);
 	RGBQUAD _colors[256];
 };

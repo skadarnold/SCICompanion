@@ -20,7 +20,7 @@ struct sRECT;
 
 struct PicClip
 {
-	PicClip() {}
+	PicClip() = default;
 	PicClip(const std::string &name, const sRECT &bounds, std::unique_ptr<std::vector<PicCommand>> &&Commands);
 
 

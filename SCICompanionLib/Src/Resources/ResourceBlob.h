@@ -142,7 +142,7 @@ struct RESOURCEHEADER_SCI0
 
 	ResourceType GetType() { return (ResourceType)iType; }
 
-	ResourceHeaderAgnostic ToAgnostic(SCIVersion version, ResourceSourceFlags sourceFlags, uint16_t packageHint)
+	ResourceHeaderAgnostic ToAgnostic(const SCIVersion &version, ResourceSourceFlags sourceFlags, uint16_t packageHint)
 	{
 		ResourceHeaderAgnostic agnostic;
 		agnostic.Type = GetType();

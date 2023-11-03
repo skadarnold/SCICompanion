@@ -47,7 +47,7 @@ enum ProcedureType
 class ISourceCodePosition
 {
 public:
-	ISourceCodePosition() {}
+	ISourceCodePosition() = default;
 	ISourceCodePosition(const ISourceCodePosition &src) = default;
 	int GetLineNumber() const { return _start.Line(); }
 	int GetColumnNumber() const { return _start.Column(); }
@@ -113,9 +113,8 @@ public:
 		_resourceType = ResourceType::None;
 	}
 
-	CompileResult(const std::string &message, CompileResultType type = CRT_Message)
+	CompileResult(const std::string &message, CompileResultType type = CRT_Message) : _message(message)
 	{
-		_message = message;
 		_nLine = 0;
 		_nCol = 0;
 		_type = type;
@@ -123,28 +122,23 @@ public:
 	}
 
 	// For other resources.
-	CompileResult(const std::string &message, ResourceType type, int number, int index)
+	CompileResult(const std::string &message, ResourceType type, int number, int index) : _message(message)
 	{
-		_message = message;
 		_nLine = number;
 		_nCol = index;
 		_type = CRT_Message;
 		_resourceType = type;
 	}
 
-	CompileResult(const std::string &message, ScriptId script, int nLineNumber)
+	CompileResult(const std::string &message, ScriptId script, int nLineNumber) : _message(message), _script(script)
 	{
-		_message = message;
-		_script = script;
 		_nLine = nLineNumber;
 		_nCol = 0;
 		_type = CRT_Message;
 		_resourceType = ResourceType::None;
 	}
-	CompileResult(const std::string &message, ScriptId script, int nLineNumber, int nCol, CompileResultType type)
+	CompileResult(const std::string &message, ScriptId script, int nLineNumber, int nCol, CompileResultType type) : _message(message), _script(script)
 	{
-		_message = message;
-		_script = script;
 		_nLine = nLineNumber;
 		_nCol = nCol;
 		_type = type;

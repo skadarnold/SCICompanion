@@ -52,8 +52,9 @@ public:
 			_thread.detach();
 			fRet = true;
 		}
-		catch (std::system_error)
+		catch (std::system_error&)
 		{
+			assert(false);
 		}
 		return fRet;
 	}

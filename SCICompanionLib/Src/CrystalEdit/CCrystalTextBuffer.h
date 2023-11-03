@@ -42,7 +42,7 @@ enum LINEFLAGS
 	LF_INVALID_BREAKPOINT       = 0x00100000L
 };
 
-#define LF_BOOKMARK(id)		(LF_BOOKMARK_FIRST << id)
+#define LF_BOOKMARK(id)		(LF_BOOKMARK_FIRST << (id))
 
 enum CRLFSTYLE
 {

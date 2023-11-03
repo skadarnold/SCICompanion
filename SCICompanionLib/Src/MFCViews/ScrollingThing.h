@@ -173,7 +173,7 @@ void CScrollingThing<T>::_OnScroll(int iType, UINT nSBCode, UINT nPos)
 		case SB_LINEDOWN:	   _ScrollDelta(iType, hwnd, +1); break;
 		case SB_PAGEUP:		 _ScrollDelta(iType, hwnd, -iPageDelta); break;
 		case SB_PAGEDOWN:	   _ScrollDelta(iType, hwnd, +iPageDelta); break;
-		case SB_THUMBPOSITION:  _ScrollTo(iType, hwnd, nPos); break;
+		case SB_THUMBPOSITION: //...same as...
 		case SB_THUMBTRACK:	 _ScrollTo(iType, hwnd, nPos); break;
 		case SB_TOP:			_ScrollTo(iType, hwnd, 0); break;
 		case SB_BOTTOM:		 _ScrollTo(iType, hwnd, MAXLONG); break;

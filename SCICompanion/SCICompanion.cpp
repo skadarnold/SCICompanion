@@ -302,116 +302,74 @@ BOOL SCICompanionApp::InitInstance()
 		RUNTIME_CLASS(CResourceListDoc),
 		RUNTIME_CLASS(CGameExplorerFrame), // custom MDI child frame
 		RUNTIME_CLASS(CGameExplorerView));
-	if (!pDocTemplate)
-		return FALSE;
+	//KAWA: removed "if !pDocTemplate return false" because "new" would raise an exception instead.
 	AddDocTemplate(pDocTemplate);
 
 	appState->_pPicTemplate = new CMultiDocTemplateWithNonViews(IDR_TEXTFRAME,
 		RUNTIME_CLASS(CPicDoc),
 		RUNTIME_CLASS(CPicChildFrame),		// standard MDI child frame
 		RUNTIME_CLASS(CPicView));
-	if (!appState->_pPicTemplate)
-		return FALSE;
+	//KAWA: same for the rest of 'em.
 	AddDocTemplate(appState->_pPicTemplate);
 
 	appState->_pVocabTemplate = new CMultiDocTemplate(IDR_VOCABFRAME,
 		RUNTIME_CLASS(CVocabDoc),
 		RUNTIME_CLASS(CVocabChildFrame),
 		RUNTIME_CLASS(CVocabView));
-	if (!appState->_pVocabTemplate)
-	{
-		return FALSE;
-	}
 	AddDocTemplate(appState->_pVocabTemplate);
 
 	appState->_pTextTemplate = new CMultiDocTemplate(IDR_TEXTFRAME,
 		RUNTIME_CLASS(CTextDoc),
 		RUNTIME_CLASS(CTextChildFrame),
 		RUNTIME_CLASS(CTextView));
-	if (!appState->_pTextTemplate)
-	{
-		return FALSE;
-	}
 	AddDocTemplate(appState->_pTextTemplate);
 
 	appState->_pSoundTemplate = new CMultiDocTemplate(IDR_TEXTFRAME,
 		RUNTIME_CLASS(CSoundDoc),
 		RUNTIME_CLASS(CSoundChildFrame),
 		RUNTIME_CLASS(CSoundView));
-	if (!appState->_pSoundTemplate)
-	{
-		return FALSE;
-	}
 	AddDocTemplate(appState->_pSoundTemplate);
 
 	appState->_pViewTemplate = new CMultiDocTemplateWithNonViews(IDR_TEXTFRAME,
 		RUNTIME_CLASS(CNewRasterResourceDocument),
 		RUNTIME_CLASS(CEditViewChildFrame),
 		RUNTIME_CLASS(CRasterView));
-	if (!appState->_pViewTemplate)
-	{
-		return FALSE;
-	}
 	AddDocTemplate(appState->_pViewTemplate);
 
 	appState->_pFontTemplate = new CMultiDocTemplateWithNonViews(IDR_TEXTFRAME,
 		RUNTIME_CLASS(CNewRasterResourceDocument),
 		RUNTIME_CLASS(CEditFontChildFrame),
 		RUNTIME_CLASS(CRasterView));
-	if (!appState->_pFontTemplate)
-	{
-		return FALSE;
-	}
 	AddDocTemplate(appState->_pFontTemplate);
 
 	appState->_pCursorTemplate = new CMultiDocTemplateWithNonViews(IDR_TEXTFRAME,
 		RUNTIME_CLASS(CNewRasterResourceDocument),
 		RUNTIME_CLASS(CCursorChildFrame),
 		RUNTIME_CLASS(CRasterView));
-	if (!appState->_pCursorTemplate)
-	{
-		return FALSE;
-	}
 	AddDocTemplate(appState->_pCursorTemplate);
 
 	appState->_pScriptTemplate = new CMultiDocTemplate(IDR_SCRIPTFRAME,
 		RUNTIME_CLASS(CScriptDocument),
 		RUNTIME_CLASS(CScriptFrame),
 		RUNTIME_CLASS(CScriptView));
-	if (!appState->_pScriptTemplate)
-	{
-		return FALSE;
-	}
 	AddDocTemplate(appState->_pScriptTemplate);
 
 	appState->_pMessageTemplate = new CMultiDocTemplateWithNonViews(IDR_TEXTFRAME,
 		RUNTIME_CLASS(CMessageDoc),
 		RUNTIME_CLASS(CMessageChildFrame),
 		RUNTIME_CLASS(CMessageView));
-	if (!appState->_pMessageTemplate)
-	{
-		return FALSE;
-	}
 	AddDocTemplate(appState->_pMessageTemplate);
 
 	appState->_pPaletteTemplate = new CMultiDocTemplate(IDR_TEXTFRAME,
 		RUNTIME_CLASS(CPaletteDoc),
 		RUNTIME_CLASS(CPaletteChildFrame),
 		RUNTIME_CLASS(CPaletteView));
-	if (!appState->_pMessageTemplate)
-	{
-		return FALSE;
-	}
 	AddDocTemplate(appState->_pPaletteTemplate);
 
 	appState->_pRoomExplorerTemplate = new CMultiDocTemplate(IDR_TEXTFRAME,
 		RUNTIME_CLASS(CRoomExplorerDoc),
 		RUNTIME_CLASS(CRoomExplorerFrame),
 		RUNTIME_CLASS(CRoomExplorerView));
-	if (!appState->_pRoomExplorerTemplate)
-	{
-		return FALSE;
-	}
 	AddDocTemplate(appState->_pRoomExplorerTemplate);
 
 	// Prof-UIS stuff
@@ -431,8 +389,11 @@ BOOL SCICompanionApp::InitInstance()
 
 	// create main MDI Frame window
 	CMainFrame* pMainFrame = new CMainFrame;
-	if (!pMainFrame || !pMainFrame->LoadFrame(IDR_MAINFRAME))
+	if (!pMainFrame->LoadFrame(IDR_MAINFRAME))
+	{
+		delete pMainFrame;
 		return FALSE;
+	}
 	m_pMainWnd = pMainFrame;
 
 	// Register a clipboard format for pic commands
@@ -534,11 +495,12 @@ void SCICompanionApp::_LoadSettings(BOOL fReset)
 	appState->_audioProcessing->AutoGain = GetProfileInt(pszRegName, TEXT("AutoGain"), appState->_audioProcessing->AutoGain);
 	appState->_audioProcessing->AudioDither = GetProfileInt(pszRegName, TEXT("AudioDither"), appState->_audioProcessing->AudioDither);
 	appState->_audioProcessing->Compression = GetProfileInt(pszRegName, TEXT("Compression"), appState->_audioProcessing->Compression);
-	appState->_audioProcessing->Noise.AttackTimeMS = GetProfileInt(pszRegName, TEXT("NoiseAttackTimeMS"), appState->_audioProcessing->Noise.AttackTimeMS);
-	appState->_audioProcessing->Noise.ReleaseTimeMS = GetProfileInt(pszRegName, TEXT("NoiseReleaseTimeMS"), appState->_audioProcessing->Noise.ReleaseTimeMS);
-	appState->_audioProcessing->Noise.HoldTimeMS = GetProfileInt(pszRegName, TEXT("NoiseHoldTimeMS"), appState->_audioProcessing->Noise.HoldTimeMS);
-	appState->_audioProcessing->Noise.OpenThresholdDB = GetProfileInt(pszRegName, TEXT("NoiseOpenThresholdDB"), appState->_audioProcessing->Noise.OpenThresholdDB);
-	appState->_audioProcessing->Noise.CloseThresholdDB = GetProfileInt(pszRegName, TEXT("NoiseCloseThresholdDB"), appState->_audioProcessing->Noise.CloseThresholdDB);
+	NoiseSettings noise = appState->_audioProcessing->Noise;
+	noise.AttackTimeMS = GetProfileInt(pszRegName, TEXT("NoiseAttackTimeMS"), appState->_audioProcessing->Noise.AttackTimeMS);
+	noise.ReleaseTimeMS = GetProfileInt(pszRegName, TEXT("NoiseReleaseTimeMS"), appState->_audioProcessing->Noise.ReleaseTimeMS);
+	noise.HoldTimeMS = GetProfileInt(pszRegName, TEXT("NoiseHoldTimeMS"), appState->_audioProcessing->Noise.HoldTimeMS);
+	noise.OpenThresholdDB = GetProfileInt(pszRegName, TEXT("NoiseOpenThresholdDB"), appState->_audioProcessing->Noise.OpenThresholdDB);
+	noise.CloseThresholdDB = GetProfileInt(pszRegName, TEXT("NoiseCloseThresholdDB"), appState->_audioProcessing->Noise.CloseThresholdDB);
 
 	appState->_fUseBoxEgo = GetProfileInt(pszRegName, TEXT("UseBoxEgo"), FALSE);
 	appState->_fScaleTracingImages = GetProfileInt(pszRegName, TEXT("ScaleTracingImages"), TRUE);
@@ -579,11 +541,12 @@ void SCICompanionApp::_SaveSettings()
 	WriteProfileInt(m_pszAppName, TEXT("AutoGain"), appState->_audioProcessing->AutoGain);
 	WriteProfileInt(m_pszAppName, TEXT("DetectStartEnd"), appState->_audioProcessing->DetectStartEnd);
 	WriteProfileInt(m_pszAppName, TEXT("Compression"), appState->_audioProcessing->Compression);
-	WriteProfileInt(m_pszAppName, TEXT("NoiseAttackTimeMS"), appState->_audioProcessing->Noise.AttackTimeMS);
-	WriteProfileInt(m_pszAppName, TEXT("NoiseReleaseTimeMS"), appState->_audioProcessing->Noise.ReleaseTimeMS);
-	WriteProfileInt(m_pszAppName, TEXT("NoiseHoldTimeMS"), appState->_audioProcessing->Noise.HoldTimeMS);
-	WriteProfileInt(m_pszAppName, TEXT("NoiseOpenThresholdDB"), appState->_audioProcessing->Noise.OpenThresholdDB);
-	WriteProfileInt(m_pszAppName, TEXT("NoiseCloseThresholdDB"), appState->_audioProcessing->Noise.CloseThresholdDB);
+	NoiseSettings noise = appState->_audioProcessing->Noise;
+	WriteProfileInt(m_pszAppName, TEXT("NoiseAttackTimeMS"), noise.AttackTimeMS);
+	WriteProfileInt(m_pszAppName, TEXT("NoiseReleaseTimeMS"), noise.ReleaseTimeMS);
+	WriteProfileInt(m_pszAppName, TEXT("NoiseHoldTimeMS"), noise.HoldTimeMS);
+	WriteProfileInt(m_pszAppName, TEXT("NoiseOpenThresholdDB"), noise.OpenThresholdDB);
+	WriteProfileInt(m_pszAppName, TEXT("NoiseCloseThresholdDB"), noise.CloseThresholdDB);
 
 	WriteProfileInt(m_pszAppName, TEXT("UseBoxEgo"), appState->_fUseBoxEgo);
 	WriteProfileInt(m_pszAppName, TEXT("ScaleTracingImages"), appState->_fScaleTracingImages);

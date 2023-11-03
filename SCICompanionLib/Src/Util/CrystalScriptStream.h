@@ -59,9 +59,7 @@ public:
 	CScriptStreamLimiter(CCrystalTextBuffer *pBuffer);
 	CScriptStreamLimiter(CCrystalTextBuffer *pBuffer, CPoint ptLimit, int extraSpace);
 
-	~CScriptStreamLimiter()
-	{
-	}
+	~CScriptStreamLimiter() = default;
 
 	void Extend(const std::string &extraChars) { _pBuffer->Extend(extraChars); }
 

@@ -29,7 +29,7 @@ namespace sci
 // fwd decl
 class ResourceEntity;
 
-#define BUFFEROFFSET_NONSTD(cx, cy, x, y) (((cy) - 1) -(y))*cx+(x)
+#define BUFFEROFFSET_NONSTD(cx, cy, x, y) (((cy) - 1) -(y))*(cx)+(x)
 
 // Pic opcodes
 const uint8_t PIC_OP_SET_COLOR = 0xf0;

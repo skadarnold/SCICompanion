@@ -34,7 +34,7 @@ DEFINE_ENUM_FLAGS(RasterChangeHint, uint32_t)
 
 struct RasterChange
 {
-	RasterChange() {}
+	RasterChange() = default;
 	RasterChange(RasterChangeHint hint, CelIndex index) : hint(hint), index(index) {}
 	RasterChange(RasterChangeHint hint) : hint(hint) {}
 	RasterChange(const RasterChange &src) = default;

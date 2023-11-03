@@ -56,6 +56,8 @@ TPoint GameResolutionToScreenResolution(TPoint point, NativeResolution resolutio
 {
 	switch (resolution)
 	{
+		case NativeResolution::Res320x200:
+			break;
 		case NativeResolution::Res640x400:
 			point.x *= 2;
 			point.y *= 2;
@@ -73,6 +75,8 @@ TPoint ScreenResolutionToGameResolution(TPoint point, NativeResolution resolutio
 {
 	switch (resolution)
 	{
+		case NativeResolution::Res320x200:
+			break;
 		case NativeResolution::Res640x400:
 			point.x /= 2;
 			point.y /= 2;

@@ -49,8 +49,8 @@ class AutoCompleteResult
 {
 public:
 	AutoCompleteResult() { Reset(); }
-	~AutoCompleteResult() {}
-	void Add(PCTSTR psz, AutoCompleteIconIndex iIcon) { choices.push_back(AutoCompleteChoice(psz, iIcon)); }
+	~AutoCompleteResult() = default;
+	void Add(PCTSTR psz, AutoCompleteIconIndex iIcon) { choices.emplace_back(AutoCompleteChoice(psz, iIcon)); }
 	void AddOnFirstLetter(PCTSTR pszLetters, PCTSTR pszText, AutoCompleteIconIndex iIcon)
 	{
 		fACType = pszLetters[0] ? AC_ShowOnFirst_Shown : AC_ShowOnFirst_Empty;

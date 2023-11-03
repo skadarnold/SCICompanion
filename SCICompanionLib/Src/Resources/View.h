@@ -28,10 +28,8 @@ extern uint8_t g_vgaPaletteMapping[256];
 
 struct Cel
 {
-	Cel(size16 size, point16 placement, uint8_t transparentColor)
+	Cel(size16 size, point16 placement, uint8_t transparentColor) : size(size), placement(placement)
 	{
-		this->size = size;
-		this->placement = placement;
 		this->TransparentColor = transparentColor;
 		this->Stride32 = true;
 	}

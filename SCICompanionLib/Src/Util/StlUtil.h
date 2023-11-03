@@ -200,6 +200,8 @@ namespace sci
 
 		array &operator=(const array &src)
 		{
+			if (this == std::addressof(src))
+				return *this;
 			delete[] _data;
 			_allocateInternal(src._size);
 			if (_size > 0)

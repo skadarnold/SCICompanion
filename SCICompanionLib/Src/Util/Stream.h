@@ -46,7 +46,7 @@ namespace sci
 			return *this;
 		}
 
-		ostream &operator<< (const std::string aString)
+		ostream &operator<< (const std::string &aString)
 		{
 			WriteBytes(reinterpret_cast<const uint8_t*>(aString.c_str()), (int)aString.length() + 1);
 			return *this;

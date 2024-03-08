@@ -70,24 +70,92 @@ void LoadPALFile(const std::string &filename, PaletteComponent &palette, int sta
 	sci::streamOwner owner(file.hFile);
 	sci::istream byteStream = owner.getReader();
 	uint32_t riff, pal, dataSize, chunk, chunkSize;
-	byteStream >> riff;
-	byteStream >> dataSize;
-	byteStream >> pal;
-	byteStream >> chunk;
-	byteStream >> chunkSize;
-	uint16_t palVersion, palEntries;
-	byteStream >> palVersion;
-	byteStream >> palEntries;
 
-	for (uint16_t i = 0; i < palEntries; i++)
-	{
-		if ((i + startIndex) < ARRAYSIZE(palette.Colors))
-		{
-			byteStream >> palette.Colors[i + startIndex].rgbRed;
-			byteStream >> palette.Colors[i + startIndex].rgbGreen;
-			byteStream >> palette.Colors[i + startIndex].rgbBlue;
-			byteStream >> palette.Colors[i + startIndex].rgbReserved;
+	const uint32_t JASC = 0x4353414A;
+
+	byteStream >> riff;
+
+	if (std::memcmp(&riff, &JASC, sizeof(uint32_t)) == 0) {
+		// JASC-PAL import
+		// Skip the "JASC-PAL\n0100\n" parts
+		for (int i = 0; i < 2; ++i) {
+			while (byteStream.good() && byteStream.peek() != '\n') {
+				uint8_t byte;
+				byteStream >> byte; // Read and ignore each byte until a newline
+			}
+			uint8_t newline;
+			byteStream >> newline; // Read the newline itself
+		}
+
+		// Read the color count dynamically
+		std::string colorCountStr;
+		uint8_t ch;
+		while (byteStream.good() && byteStream.peek() != '\n') {
+			byteStream >> ch;
+			colorCountStr += static_cast<char>(ch);
+		}
+		byteStream >> ch; // Consume the newline
+		int colorCount = std::atoi(colorCountStr.c_str());
+
+		std::string componentStr;
+
+		for (int i = 0; i < colorCount; ++i) {
+			uint8_t red, green, blue, temp;
+
+			// Function to read and convert a color component
+			auto readColorComponent = [&](uint8_t &colorComponent) {
+				componentStr.clear();
+				while (byteStream.good()) {
+					uint8_t ch = byteStream.peek();
+					// Check if the next character is a space or newline, which are delimiters.
+					if (ch == ' ' || ch == '\n' || !byteStream.good()) {
+						break; // Exit the loop if a delimiter is found or stream is not good.
+					}
+					byteStream >> ch; // Read the next character from the stream.
+					componentStr += static_cast<char>(ch); // Append the character to the string.
+				}
+
+				if (!componentStr.empty()) {
+					colorComponent = static_cast<uint8_t>(std::atoi(componentStr.c_str())); // Convert string to number.
+				}
+
+				// Consume the delimiter (space or newline) if the stream is still good.
+				if (byteStream.good()) {
+					byteStream >> temp; // Assuming 'temp' is declared outside this lambda.
+				}
+			};
+
+			// Read and convert each color component
+			readColorComponent(red);
+			readColorComponent(green);
+			readColorComponent(blue);
+
+			palette.Colors[i + startIndex].rgbRed = red;
+			palette.Colors[i + startIndex].rgbGreen = green;
+			palette.Colors[i + startIndex].rgbBlue = blue;
 			palette.Colors[i + startIndex].rgbReserved = 0x1; // Actually, set this to used.
+		}
+	}
+	else {
+		// RIFF-PAL import
+		byteStream >> dataSize;
+		byteStream >> pal;
+		byteStream >> chunk;
+		byteStream >> chunkSize;
+		uint16_t palVersion, palEntries;
+		byteStream >> palVersion;
+		byteStream >> palEntries;
+
+		for (uint16_t i = 0; i < palEntries; i++)
+		{
+			if ((i + startIndex) < ARRAYSIZE(palette.Colors))
+			{
+				byteStream >> palette.Colors[i + startIndex].rgbRed;
+				byteStream >> palette.Colors[i + startIndex].rgbGreen;
+				byteStream >> palette.Colors[i + startIndex].rgbBlue;
+				byteStream >> palette.Colors[i + startIndex].rgbReserved;
+				palette.Colors[i + startIndex].rgbReserved = 0x1; // Actually, set this to used.
+			}
 		}
 	}
 }

@@ -255,7 +255,7 @@ void CPaletteDefinitionDialog::OnColorClick(BYTE bIndex, int nID, BOOL fLeftClic
 
 bool _GetPaletteFilename(bool open, const std::string &dialogTitle, std::string &filename)
 {
-	CFileDialog fileDialog(open, ".pal", nullptr, OFN_NOCHANGEDIR, "PAL files (*.pal)|*.pal|All Files|*.*|");
+	CFileDialog fileDialog(open, ".pal", nullptr, OFN_NOCHANGEDIR, "PAL files (*.pal)|*.pal|PspPalette files (*.PspPalette)|*.PspPalette|All Files|*.*|");
 	fileDialog.m_ofn.lpstrTitle = dialogTitle.c_str();;
 	if (IDOK == fileDialog.DoModal())
 	{

@@ -2092,11 +2092,8 @@ CodeResult Assignment::OutputByteCode(CompileContext &context) const
 				// Then or it with what we pop off the stack.. essentially transfering from stack to acc
 				WriteSimple(context, Opcode::OR, GetLineNumber());		// Transfer from stack to acc
 				WriteSimple(context, Opcode::PPREV, GetLineNumber());	 // And now... the value will be on the stack!
-				VariableOperand(context, wIndex, TokenTypeToVOType(tokenType) | VO_STACK | VO_STORE | VO_ACC_AS_INDEX_MOD, GetLineNumber());
-
-				// REVIEW: the value was on the stack, but now it's gone!  Technically, we'll need a system where
-				// we can know if the caller *really* needs the result of this assignment.  But that's probably rare,
-				// and we can live without it.
+				VariableOperand(context, wIndex, TokenTypeToVOType(tokenType) | VO_ACC | VO_STORE | VO_ACC_AS_INDEX_MOD, GetLineNumber());
+				ocWhereWePutValue = OC_Accumulator; // It's sitting in the accumulator
 			}
 			else
 			{

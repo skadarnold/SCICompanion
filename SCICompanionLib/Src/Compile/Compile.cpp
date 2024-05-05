@@ -2347,6 +2347,7 @@ CodeResult NaryOp::OutputByteCode(CompileContext &context) const
 	// 2:	pprev (puts 2 on stack)
 	// 3:	load in acc
 
+	declare_conditional isCondition(context, false);
 	branch_block blockSuccess(context, BranchBlockIndex::Failure);
 	for (size_t i = 1; i < _segments.size(); i++)
 	{

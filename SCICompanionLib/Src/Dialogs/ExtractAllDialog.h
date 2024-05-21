@@ -60,6 +60,7 @@ protected:
 	CExtCheckBox m_wndDisassembleScripts;
 	CExtCheckBox m_wndExportMessages;
 	CExtCheckBox m_wndGenerateWav;
+	CExtCheckBox m_wndExtractAsPng;
 
 	std::unique_ptr<std::future<void>> _future;
 	CString _location;
@@ -70,6 +71,8 @@ protected:
 	bool _disassembleScripts;
 	bool _exportMessages;
 	bool _generateWavs;
+
+	bool _extractAsPng;
 
 	void OnTimer(UINT_PTR nIDEvent);
 

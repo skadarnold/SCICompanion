@@ -75,6 +75,8 @@ void ExtractAllDialog::DoDataExchange(CDataExchange* pDX)
 	m_wndExportMessages.SetCheck(BST_CHECKED);
 	DDX_Control(pDX, IDC_CHECK6, m_wndGenerateWav);
 	m_wndGenerateWav.SetCheck(BST_CHECKED);
+	DDX_Control(pDX, IDC_CHECK7, m_wndExtractAsPng);
+	m_wndExtractAsPng.SetCheck(BST_UNCHECKED);
 }
 
 BOOL ExtractAllDialog::OnInitDialog()
@@ -222,6 +224,7 @@ void ExtractAllDialog::OnBnClickedExtract()
 		_disassembleScripts = m_wndDisassembleScripts.GetCheck() != 0;
 		_exportMessages = m_wndExportMessages.GetCheck() != 0;
 		_generateWavs = m_wndGenerateWav.GetCheck() != 0;
+		_extractAsPng = m_wndExtractAsPng.GetCheck() != 0;
 
 		try
 		{
@@ -236,7 +239,7 @@ void ExtractAllDialog::OnBnClickedExtract()
 
 void ExtractAllDialog::s_ThreadWorker(ExtractAllDialog *pThis)
 {
-	ExtractAllResources(pThis->_version, (PCSTR)pThis->_location, pThis->_extractResources, pThis->_extractPicImages, pThis->_extractViewImages, pThis->_disassembleScripts, pThis->_exportMessages, pThis->_generateWavs, pThis);
+	ExtractAllResources(pThis->_version, (PCSTR)pThis->_location, pThis->_extractResources, pThis->_extractPicImages, pThis->_extractViewImages, pThis->_disassembleScripts, pThis->_exportMessages, pThis->_generateWavs, pThis->_extractAsPng, pThis);
 }
 
 void ExtractAllDialog::OnTimer(UINT_PTR nIDEvent)

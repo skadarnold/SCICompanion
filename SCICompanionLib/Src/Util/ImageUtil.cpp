@@ -24,7 +24,7 @@
 using namespace Gdiplus;
 
 // Default to bmp files by default, since those are the only ones that have consistent behavior end-to-end.
-extern char g_szGdiplus8BitSaveFilter[] = "Bitmap files(*.bmp)|*.bmp|GIF files(*.gif)|*.gif|PNG files(*.png)|*.png|TIFF files(*.tif;*.tiff)|*.tif;*.tiff|All Files|*.*||";
+extern char g_szGdiplus8BitSaveFilter[] = "PNG files(*.png)|*.png|Bitmap files(*.bmp)|*.bmp|GIF files(*.gif)|*.gif|TIFF files(*.tif;*.tiff)|*.tif;*.tiff|All Files|*.*|";
 
 int GetEncoderClsid(const WCHAR* format, CLSID* pClsid)
 {
@@ -88,7 +88,8 @@ std::unique_ptr<Bitmap> CelAndPaletteToBitmap(const Cel &cel, const PaletteCompo
 	if (squishPalette)
 	{
 		// Now "squish" the palette (and modify the data) so all the used colors are at the beginning.
-		usedColors = SquishPalette(&buffer[0], buffer.size(), palette, newPaletteColors);
+        //usedColors = SquishPalette(&buffer[0], buffer.size(), palette, newPaletteColors);
+        memcpy(newPaletteColors, palette.Colors, sizeof(newPaletteColors));
 	}
 	else
 	{
@@ -109,10 +110,13 @@ std::unique_ptr<Bitmap> CelAndPaletteToBitmap(const Cel &cel, const PaletteCompo
 		pcp->Flags = 0;
 		for (int i = 0; i < usedColors; i++)
 		{
+            if (i != cel.TransparentColor) {
 			RGBQUAD rgb = newPaletteColors[i];
 			ARGB argb = (rgb.rgbRed << RED_SHIFT) | (rgb.rgbGreen << GREEN_SHIFT) | (rgb.rgbBlue << BLUE_SHIFT) | (0xff << ALPHA_SHIFT);
 			pcp->Entries[i] = argb;
 		}
+        }
+        pcp->Entries[cel.TransparentColor] = (newPaletteColors[cel.TransparentColor].rgbRed << RED_SHIFT) | (newPaletteColors[cel.TransparentColor].rgbGreen << GREEN_SHIFT) | (newPaletteColors[cel.TransparentColor].rgbBlue << BLUE_SHIFT) | (0x00 << ALPHA_SHIFT);
 		bitmap->SetPalette(pcp);
 		free(pcp);
 
@@ -123,10 +127,33 @@ std::unique_ptr<Bitmap> CelAndPaletteToBitmap(const Cel &cel, const PaletteCompo
 	return bitmap;
 }
 
+std::vector<unsigned char> ToPixels(HBITMAP BitmapHandle, int& width, int& height)
+{
+    BITMAP Bmp = { 0 };
+    BITMAPINFO Info = { 0 };
+    std::vector<unsigned char> Pixels = std::vector<unsigned char>();
+    HDC DC = CreateCompatibleDC(NULL);
+    std::memset(&Info, 0, sizeof(BITMAPINFO)); //not necessary really..
+    HBITMAP OldBitmap = (HBITMAP)SelectObject(DC, BitmapHandle);
+    GetObject(BitmapHandle, sizeof(Bmp), &Bmp);
+    Info.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
+    Info.bmiHeader.biWidth = width = Bmp.bmWidth;
+    Info.bmiHeader.biHeight = height = Bmp.bmHeight;
+    Info.bmiHeader.biPlanes = 1;
+    Info.bmiHeader.biBitCount = Bmp.bmBitsPixel;
+    Info.bmiHeader.biCompression = BI_RGB;
+    Info.bmiHeader.biSizeImage = ((width * Bmp.bmBitsPixel + 31) / 32) * 4 * height;
+    Pixels.resize(Info.bmiHeader.biSizeImage);
+    GetDIBits(DC, BitmapHandle, 0, height, &Pixels[0], &Info, DIB_RGB_COLORS);
+    SelectObject(DC, OldBitmap);
+    height = std::abs(height);
+    DeleteDC(DC);
+    return Pixels;
+}
 // TODO: mark unused colors and squash the bits
 bool Save8BitBmpGdiP(const char *filename, const Cel &cel, const PaletteComponent &palette, bool squishPalette)
 {
-	std::unique_ptr<Bitmap> bitmap = CelAndPaletteToBitmap(cel, palette, squishPalette);
+    std::unique_ptr<Bitmap> bitmap = CelAndPaletteToBitmap(cel, palette, squishPalette);
 
 	// Find the encoder we want
 	const char *extension = PathFindExtension(filename);
@@ -813,7 +840,7 @@ HBITMAP Create32bbpBitmap(const Cel &cel, const RGBQUAD *palette, int paletteSiz
 HBITMAP Create32bbpBitmap(const uint8_t *pData, int cxStride, int cx, int cy, uint8_t transparentColor, const RGBQUAD *palette, int paletteSize)
 {
 	std::unique_ptr<RGBQUAD[]> pixels = std::make_unique<RGBQUAD[]>(cx * cy);
-	RGBQUAD transparent = {};
+    RGBQUAD transparent = { 0xff, 0x00, 0xff, 0x00 };
 	for (int y = 0; y < cy; y++)
 	{
 		int rowSource = cy - y - 1;

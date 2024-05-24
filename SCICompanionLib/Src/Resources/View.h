@@ -206,6 +206,109 @@ struct CelHeader_VGA11
 	uint32_t perRowOffsets;	 // SCI2 needs this.
 	//KAWA: perRowOffset may be compressRemapOffste in SCI11.
 };
+
+// Dhel - sci32
+struct CelBase
+{
+	uint16_t xDim;
+	uint16_t yDim;
+	uint16_t xHot; //  0
+	uint16_t yHot; //  0
+	unsigned char skip;
+	unsigned char compressType; //  Uncompressed
+	uint16_t dataFlags;
+	uint32_t dataByteCount;	//  0
+	uint32_t controlByteCount; //  0
+	uint32_t paletteOffset;	//  Use later (0)
+	uint32_t controlOffset;	//  0
+	uint32_t colorOffset;		//  sizeof(CelHeader)
+	uint32_t rowTableOffset;	//  0
+};
+
+const int CELBASESIZE = sizeof(CelBase);
+
+struct CelHeader32 : public CelBase
+{
+	uint16_t   xRes;
+	uint16_t	yRes;
+	uint32_t    linkTableOffset;
+	uint16_t   linkNumber;
+};
+
+struct CelHeaderPic32 : public CelBase
+{
+	uint16_t priority;
+	uint16_t xpos;
+	uint16_t ypos;
+};
+
+struct CelHeaderView32 : public CelBase
+{
+	uint32_t linkTableOffset;
+	uint16_t linkTableCount;
+	unsigned char padding[10];
+};
+
+const int CELHEADERVIEW32SIZE = sizeof(CelHeaderView32);
+
+struct PicHeader32
+{
+	uint16_t	picHeaderSize;
+	unsigned char		celCount;
+	unsigned char		splitFlag;
+	uint16_t	celHeaderSize;
+	uint32_t	paletteOffset;
+	uint16_t	resX;	//if Height==0 : 0-320x200, 1-640x480, 2-640x400
+	uint16_t	resY;
+};
+const int PICHEADER32SIZE = sizeof(PicHeader32);
+
+struct ViewHeader32
+{
+	uint16_t	viewHeaderSize;
+	unsigned char 	loopCount;
+	unsigned char 	stripView;
+	unsigned char 	splitView;
+	uint8_t 	resolution;	//0-320x200, 1-640x480, 2-640x400 
+	uint16_t 	celCount;
+	uint32_t	paletteOffset;
+	unsigned char 	loopHeaderSize;
+	unsigned char 	celHeaderSize;
+	uint16_t	resX;	//if ResX==0 && ResY==0 - look at ViewSize  
+	uint16_t	resY;
+};
+const int VIEW32_HEADER_SIZE = sizeof(ViewHeader32);
+
+struct ViewHeaderLinks : public ViewHeader32
+{
+	unsigned char	version;
+	unsigned char	futureExpansion;
+};
+const int VIEW32_HEADER_LINK_SIZE = sizeof(ViewHeaderLinks);
+
+struct LoopHeader32
+{
+	char 		altLoop;
+	unsigned char 	flags;
+	unsigned char 	numCels;
+	char		contLoop;
+	char		startCel;
+	char		endCel;
+	unsigned char 	repeatCount;
+	unsigned char 	stepSize;
+	uint32_t		paletteOffset;
+	uint32_t		celOffset;
+};
+const int LOOPHEADERSIZE = sizeof(LoopHeader32);
+
+struct LinkPoint
+{
+	uint16_t x;
+	uint16_t y;
+	unsigned char positionType;
+	char priority;
+};
+
 #include <poppack.h>
 
 ResourceEntity *CreateViewResource(SCIVersion version);

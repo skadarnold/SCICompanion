@@ -697,6 +697,8 @@ struct ViewHeader_VGA11
 	uint8_t celHeaderSize;
 	size16 nativeResolution;	// In SQ6, at least, these are the screen dimensions (640x480). Interesting.
 };
+
+const int VIEW11_HEADER_SIZE = sizeof(ViewHeader_VGA11);
 #include <poppack.h>
 
 void ReadCelFromVGA11(sci::istream &byteStream, Cel &cel, bool isPic)
@@ -811,6 +813,195 @@ void ReadLoopFromVGA(ResourceEntity &resource, sci::istream &byteStream, Loop &l
 }
 
 void ViewWriteToVGA11_2_Helper(const ResourceEntity &resource, sci::ostream &byteStream, std::map<BlobKey, uint32_t> &propertyBag, bool isVGA2)
+{
+	const RasterComponent &raster = resource.GetComponent<RasterComponent>();
+
+	// The general format we'll be using is like this:
+	// [ViewHeader]
+	// [LoopHeader0 ... LoopHeadern]
+	// [CelHeader0_0 ... CelHeadern_n]
+	// [palette]
+	// [CelRLE0 ... CelRLEn]
+	// [CelLiteral0 ... CelLiteraln]
+
+	// Saving is easier if we first just write to different streams, then combine them.
+	// Palette is easy
+	sci::ostream paletteStream;
+	const PaletteComponent *palette = resource.TryGetComponent<PaletteComponent>();
+	if (palette)
+	{
+		//WritePalette(paletteStream, *palette);
+		WritePaletteShortForm(paletteStream, *palette);
+	}
+	uint32_t paletteSize = paletteStream.GetDataSize();
+
+	// Now let's calculate how much space is used up by the headers
+	uint32_t headersSize = CELHEADERVIEW32SIZE;
+	headersSize += raster.LoopCount() * LOOPHEADERSIZE;
+	for (const Loop &loop : raster.Loops)
+	{
+		if (!loop.IsMirror)
+		{
+			headersSize += loop.Cels.size() * VIEW32_HEADER_LINK_SIZE;
+		}
+	}
+
+	// We still can't write the headers because we don't know the image data size, and the
+	// cel headers contain absolute offsets to the litewral image data, which comes after the
+	// variable size rle data. We'll need to keep track of the offsets.
+	vector<vector<CelHeaderView32>> prelimCelHeaders;
+	// Now we write the actual data. In VGA1.1, this is split into two separate sections
+	sci::ostream celRLEData;
+	sci::ostream celRawData;
+
+	std::unique_ptr<sci::ostream> celRowOffsets = isVGA2 ? std::make_unique<sci::ostream>() : nullptr;
+
+	uint16_t celDataCount = 0;
+	for (int nLoop = 0; nLoop < raster.LoopCount(); nLoop++)
+	{
+		const Loop &loop = raster.Loops[nLoop];
+		if (!loop.IsMirror)
+		{
+			vector<CelHeaderView32> celHeaders;
+			for (int nCel = 0; nCel < (int)loop.Cels.size(); nCel++)
+			{
+				CelHeaderView32 celHeader = {};
+				celHeader.controlOffset = celRLEData.tellp();
+				celHeader.colorOffset = celRawData.tellp();
+				WriteImageData(celRLEData, loop.Cels[nCel], true, celRawData, false);
+				celHeader.controlByteCount = celRLEData.tellp() - celHeader.controlOffset;
+				celHeader.dataByteCount = (celRawData.tellp() - celHeader.colorOffset) + celHeader.controlByteCount;
+				celHeaders.push_back(celHeader);
+
+				celDataCount++;
+			}
+			prelimCelHeaders.push_back(celHeaders);
+		}
+	}
+
+	// Now we can write the headers.
+	ViewHeaderLinks header;
+	header.viewHeaderSize = VIEW32_HEADER_LINK_SIZE;   // - 2 because headerSize word is not included.
+	header.loopCount = (uint8_t)raster.LoopCount();
+	header.stripView = raster.ScaleFlags;
+	header.splitView = 1;
+	header.resolution = 0;
+	header.celCount = celDataCount;
+	header.paletteOffset = palette ? headersSize : 0;			 // We will write this right after the headers.
+	header.loopHeaderSize = (uint8_t)sizeof(LoopHeader_VGA11);
+	header.celHeaderSize = CELHEADERVIEW32SIZE;
+	size16 size = NativeResolutionToStoredSize(raster.Resolution);
+	header.resX = size.cx;
+	header.resY = size.cy;
+	byteStream << header;
+
+	// Now the loop headers
+	uint32_t celHeaderStart = sizeof(ViewHeaderLinks) + raster.LoopCount() * sizeof(LoopHeader_VGA11);
+	uint32_t curCelHeaderOffset = celHeaderStart;
+	for (const Loop &loop : raster.Loops)
+	{
+		LoopHeader_VGA11 loopHeader = { 0 };
+		loopHeader.celCount = (uint8_t)loop.Cels.size();
+		loopHeader.mirrorInfo = loop.MirrorOf;
+		loopHeader.isMirror = loop.IsMirror ? 0x1 : 0x0;
+		loopHeader.celOffsetAbsolute = curCelHeaderOffset;
+		loopHeader.dummy1 = 0xff;	   // Don't know what this is, but this is a typical value.
+		loopHeader.dummy2 = 0x03ffffff; // Again, a typical value
+		byteStream << loopHeader;
+		if (!loop.IsMirror)
+		{
+			curCelHeaderOffset += sizeof(CelHeaderView32) * loop.Cels.size();
+		}
+	}
+	assert(byteStream.tellp() == celHeaderStart);   // Assuming our calculations were correct
+	
+	std::unique_ptr<sci::ostream> rowOffsetStream;
+	if (isVGA2)
+	{
+		rowOffsetStream = std::make_unique<sci::ostream>();
+	}
+
+	// Now the cel headers
+	uint32_t rleImageDataBaseOffset = headersSize + paletteSize;
+	uint32_t literalImageDataBaseOffset = rleImageDataBaseOffset + celRLEData.tellp();
+	uint32_t rowOffsetOffsetBase = literalImageDataBaseOffset + celRawData.tellp();
+	int realLoopIndex = 0;
+	for (const Loop &loop : raster.Loops)
+	{
+		if (!loop.IsMirror)
+		{
+			for (int i = 0; i < (int)loop.Cels.size(); i++)
+			{
+				const Cel &cel = loop.Cels[i];
+				CelHeaderView32 celHeader = prelimCelHeaders[realLoopIndex][i];
+				//celHeader.size = cel.size;
+				//TODO: THIS WILL FUCK UP MAGNIFIER CELS
+				//They NEED to be 0x00 here and saved RAW.
+				//elHeader.always_0xa = isVGA2 ? 0x8a : 0xa;
+				//celHeader.placement = cel.placement;
+				//celHeader.transparentColor = cel.TransparentColor;
+
+				// SCI2 views contain a section at the end of the view that lists,
+				// for each row of each cel in the view, the (32-bit) relative offsets in
+				// the rle data and the literal data where this data begins.
+				//
+				// For example, if there were two cels, the data would look like:
+				// offsetA:[C0_R0_offsetRLE][C0_R1_offsetRLE] ... [C0_Rn_offsetRLE]
+				//		 [C0_R0_offsetLiteral][C0_R1_offsetLiteral] ... [C0_Rn_offsetLiteral]
+				// offsetB:[C1_R0_offsetRLE][C1_R1_offsetRLE] ... [C1_Rn_offsetRLE]
+				//		 [C1_R0_offsetLiteral][C1_R1_offsetLiteral] ... [C1_Rn_offsetLiteral]
+				//
+				// Cel #0's header's perRowOffset field would point to OffsetA, and Cel#1's would 
+				// point to offsetB
+				//
+				// For each cel, therefore, there will this extra (celHeight * 4 * 2) bytes of data.
+
+				if (isVGA2)
+				{
+					// Read our cel data back so as to calculate offsets to the rows.
+					sci::istream rleData = sci::istream_from_ostream(celRLEData);
+					rleData.seekg(celHeader.controlOffset);
+					sci::istream literalData = sci::istream_from_ostream(celRawData);
+					literalData.seekg(celHeader.colorOffset);
+					uint32_t rowOffsetOffset = rowOffsetStream->tellp();
+					// Terrible hack, copying cel!
+					Cel celTemp = {};
+					celTemp.size = cel.size;
+					celTemp.placement = cel.placement;
+					celTemp.TransparentColor = cel.TransparentColor;
+					CalculateSCI2RowOffsets(celTemp, rleData, literalData, *rowOffsetStream);
+					celHeader.rowTableOffset = rowOffsetOffset + rowOffsetOffsetBase;
+				}
+
+				celHeader.controlOffset += rleImageDataBaseOffset;
+				celHeader.colorOffset += literalImageDataBaseOffset;
+				byteStream << celHeader;
+			}
+			realLoopIndex++;
+		}
+	}
+	
+	// Now the palette
+	assert(byteStream.tellp() == headersSize);		  // Since that's where we said we'll write the palette.
+	sci::transfer(sci::istream_from_ostream(paletteStream), byteStream, paletteSize);
+
+	// Now the image data
+	assert(rleImageDataBaseOffset == byteStream.tellp());  // Since that's where we said we'll write the image data.
+	sci::transfer(sci::istream_from_ostream(celRLEData), byteStream, celRLEData.GetDataSize());
+	assert(literalImageDataBaseOffset == byteStream.tellp());
+	sci::transfer(sci::istream_from_ostream(celRawData), byteStream, celRawData.GetDataSize());
+	
+	if (isVGA2)
+	{
+		sci::transfer(sci::istream_from_ostream(*rowOffsetStream), byteStream, celRawData.GetDataSize());
+	}
+	
+
+	// Done!
+}
+
+
+void ViewWriteToVGA11_2_HelperOG(const ResourceEntity &resource, sci::ostream &byteStream, std::map<BlobKey, uint32_t> &propertyBag, bool isVGA2)
 {
 	const RasterComponent &raster = resource.GetComponent<RasterComponent>();
 
@@ -1010,6 +1201,72 @@ void ViewReadFromVGA11Helper(ResourceEntity &resource, sci::istream &byteStream,
 	RasterComponent &raster = resource.GetComponent<RasterComponent>();
 
 	// VGA1.1 is quite different from the other versions.
+	ViewHeaderLinks header;
+	byteStream >> header;
+	header.viewHeaderSize += 2; // Dhel - what is this??? Doesn't seem relavent to sci32 but images will not load without it
+	assert(header.headerSize >= 16);
+	// Nope, it appears to be used to identify views with no image data encoding (just raw). e.g. LB_Dagger, view 86
+	//assert(header.always1 == 0x1);
+	raster.Resolution = StoredSizeToNativeResolution(size16(header.resX, header.resY));
+	raster.ScaleFlags = header.stripView;
+	bool isScaleable = (raster.ScaleFlags != 0x01);
+
+	// TODO: Turn these into an exception
+	assert(header.loopHeaderSize == LOOPHEADERSIZE);   // 16
+	assert(header.celHeaderSize >= CELBASESIZE);	 // 36
+
+	//KAWA: Detect SCI1.0 views and drop down a version instead. MAYBE FIND A BETTER DIFFERENCE?
+	if (header.loopHeaderSize > 32)
+	{
+		byteStream.seekg(0);
+		ViewReadFromVersioned(resource, byteStream, true);
+		return;
+	}
+
+	// 36 is common in SCI1.1, 52 is common in SCI2. But sometimes we'll see 36 in SCI2.
+	assert((header.celHeaderSize == CELBASESIZE) || (header.celHeaderSize == CELHEADERVIEW32SIZE));
+
+	if (header.paletteOffset)
+	{
+		sci::istream streamPalette(byteStream);
+		streamPalette.seekg(header.paletteOffset);
+		ReadPalette(resource, streamPalette);
+	}
+
+	raster.Loops.assign(header.loopCount, Loop()); // Just empty ones for now
+	for (int i = 0; i < header.loopCount; i++)
+	{
+		sci::istream streamLoop(byteStream);
+		streamLoop.seekg(header.viewHeaderSize + (header.loopHeaderSize * i));  // Start of this loop's data
+		ReadLoopFromVGA(resource, streamLoop, raster.Loops[i], i, header.celHeaderSize, isSCI2);
+	}
+
+	// Now fill in mirrors. They seem setup a little differently than in earlier versions of views,
+	// so we aren't re-using code.
+	for (Loop &loop : raster.Loops)
+	{
+		if (loop.IsMirror && (loop.MirrorOf < header.loopCount))
+		{
+			assert(loop.Cels.empty());
+			Loop &origLoop = raster.Loops[loop.MirrorOf];
+			for (size_t i = 0; i < origLoop.Cels.size(); i++)
+			{
+				// Make new empty cels, and for each one, do a "sync mirror state" if the original.
+				loop.Cels.push_back(Cel());
+				SyncCelMirrorState(loop.Cels[i], origLoop.Cels[i]);
+			}
+		}
+	}
+
+	PostReadProcessing(resource, raster);
+}
+
+/*
+void ViewReadFromVGA11Helper(ResourceEntity &resource, sci::istream &byteStream, const std::map<BlobKey, uint32_t> &propertyBag, bool isSCI2)
+{
+	RasterComponent &raster = resource.GetComponent<RasterComponent>();
+
+	// VGA1.1 is quite different from the other versions.
 	ViewHeader_VGA11 header;
 	byteStream >> header;
 	header.headerSize += 2;
@@ -1069,6 +1326,9 @@ void ViewReadFromVGA11Helper(ResourceEntity &resource, sci::istream &byteStream,
 
 	PostReadProcessing(resource, raster);
 }
+*/
+
+
 
 void ViewReadFromVGA11(ResourceEntity &resource, sci::istream &byteStream, const std::map<BlobKey, uint32_t> &propertyBag)
 {

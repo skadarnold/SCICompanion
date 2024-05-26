@@ -836,15 +836,17 @@ void ViewWriteToVGA11_2_Helper(const ResourceEntity &resource, sci::ostream &byt
 	uint32_t paletteSize = paletteStream.GetDataSize();
 
 	// Now let's calculate how much space is used up by the headers
-	uint32_t headersSize = CELHEADERVIEW32SIZE;
-	headersSize += raster.LoopCount() * LOOPHEADERSIZE;
+	int totalCelCount = 0;
+
 	for (const Loop &loop : raster.Loops)
 	{
 		if (!loop.IsMirror)
 		{
-			headersSize += loop.Cels.size() * VIEW32_HEADER_LINK_SIZE;
+			totalCelCount += loop.Cels.size();
+			
 		}
 	}
+	uint32_t headersSize = VIEW32_HEADER_LINK_SIZE + LOOPHEADERSIZE * raster.LoopCount() + CELHEADERVIEW32SIZE * totalCelCount + 6;
 
 	// We still can't write the headers because we don't know the image data size, and the
 	// cel headers contain absolute offsets to the litewral image data, which comes after the
@@ -881,121 +883,137 @@ void ViewWriteToVGA11_2_Helper(const ResourceEntity &resource, sci::ostream &byt
 
 	// Now we can write the headers.
 	ViewHeaderLinks header;
-	header.viewHeaderSize = VIEW32_HEADER_LINK_SIZE;   // - 2 because headerSize word is not included.
+	header.viewHeaderSize = VIEW32_HEADER_SIZE;   // - 2 because headerSize word is not included.
 	header.loopCount = (uint8_t)raster.LoopCount();
 	header.stripView = raster.ScaleFlags;
 	header.splitView = 1;
-	header.resolution = 0;
+	header.resolution = 0xFF;
 	header.celCount = celDataCount;
 	header.paletteOffset = palette ? headersSize : 0;			 // We will write this right after the headers.
-	header.loopHeaderSize = (uint8_t)sizeof(LoopHeader_VGA11);
+	header.loopHeaderSize = LOOPHEADERSIZE;
 	header.celHeaderSize = CELHEADERVIEW32SIZE;
 	size16 size = NativeResolutionToStoredSize(raster.Resolution);
 	header.resX = size.cx;
 	header.resY = size.cy;
 	byteStream << header;
 
-	// Now the loop headers
-	uint32_t celHeaderStart = sizeof(ViewHeaderLinks) + raster.LoopCount() * sizeof(LoopHeader_VGA11);
-	uint32_t curCelHeaderOffset = celHeaderStart;
-	for (const Loop &loop : raster.Loops)
-	{
-		LoopHeader_VGA11 loopHeader = { 0 };
-		loopHeader.celCount = (uint8_t)loop.Cels.size();
-		loopHeader.mirrorInfo = loop.MirrorOf;
-		loopHeader.isMirror = loop.IsMirror ? 0x1 : 0x0;
-		loopHeader.celOffsetAbsolute = curCelHeaderOffset;
-		loopHeader.dummy1 = 0xff;	   // Don't know what this is, but this is a typical value.
-		loopHeader.dummy2 = 0x03ffffff; // Again, a typical value
-		byteStream << loopHeader;
-		if (!loop.IsMirror)
-		{
-			curCelHeaderOffset += sizeof(CelHeaderView32) * loop.Cels.size();
-		}
-	}
-	assert(byteStream.tellp() == celHeaderStart);   // Assuming our calculations were correct
-	
-	std::unique_ptr<sci::ostream> rowOffsetStream;
-	if (isVGA2)
-	{
-		rowOffsetStream = std::make_unique<sci::ostream>();
-	}
+	char debugOut[1024];
+	snprintf(debugOut, sizeof(debugOut), "paletteOffset %d", header.paletteOffset);
 
-	// Now the cel headers
-	uint32_t rleImageDataBaseOffset = headersSize + paletteSize;
-	uint32_t literalImageDataBaseOffset = rleImageDataBaseOffset + celRLEData.tellp();
-	uint32_t rowOffsetOffsetBase = literalImageDataBaseOffset + celRawData.tellp();
-	int realLoopIndex = 0;
-	for (const Loop &loop : raster.Loops)
-	{
-		if (!loop.IsMirror)
+	OutputDebugStringA(debugOut);
+	
+		// Now the loop headers
+		uint32_t celHeaderStart = VIEW32_HEADER_LINK_SIZE + raster.LoopCount() * LOOPHEADERSIZE;
+		uint32_t curCelHeaderOffset = celHeaderStart;
+		for (const Loop &loop : raster.Loops)
 		{
-			for (int i = 0; i < (int)loop.Cels.size(); i++)
+			LoopHeader32 loopHeader = { 0 };
+			loopHeader.numCels = (uint8_t)loop.Cels.size();
+			loopHeader.altLoop = loop.MirrorOf;
+			loopHeader.flags = loop.IsMirror ? 0x1 : 0x0;
+			
+			loopHeader.contLoop = 0xff;	   // Don't know what this is, but this is a typical value.
+			loopHeader.startCel = 0xff; // Again, a typical value
+			loopHeader.endCel = 0xff; // Again, a typical value
+			loopHeader.repeatCount = 0xff;
+			loopHeader.stepSize;
+			loopHeader.paletteOffset;
+
+			loopHeader.celOffset = curCelHeaderOffset;
+			
+			byteStream << loopHeader;
+			if (!loop.IsMirror)
 			{
-				const Cel &cel = loop.Cels[i];
-				CelHeaderView32 celHeader = prelimCelHeaders[realLoopIndex][i];
-				//celHeader.size = cel.size;
-				//TODO: THIS WILL FUCK UP MAGNIFIER CELS
-				//They NEED to be 0x00 here and saved RAW.
-				//elHeader.always_0xa = isVGA2 ? 0x8a : 0xa;
-				//celHeader.placement = cel.placement;
-				//celHeader.transparentColor = cel.TransparentColor;
-
-				// SCI2 views contain a section at the end of the view that lists,
-				// for each row of each cel in the view, the (32-bit) relative offsets in
-				// the rle data and the literal data where this data begins.
-				//
-				// For example, if there were two cels, the data would look like:
-				// offsetA:[C0_R0_offsetRLE][C0_R1_offsetRLE] ... [C0_Rn_offsetRLE]
-				//		 [C0_R0_offsetLiteral][C0_R1_offsetLiteral] ... [C0_Rn_offsetLiteral]
-				// offsetB:[C1_R0_offsetRLE][C1_R1_offsetRLE] ... [C1_Rn_offsetRLE]
-				//		 [C1_R0_offsetLiteral][C1_R1_offsetLiteral] ... [C1_Rn_offsetLiteral]
-				//
-				// Cel #0's header's perRowOffset field would point to OffsetA, and Cel#1's would 
-				// point to offsetB
-				//
-				// For each cel, therefore, there will this extra (celHeight * 4 * 2) bytes of data.
-
-				if (isVGA2)
-				{
-					// Read our cel data back so as to calculate offsets to the rows.
-					sci::istream rleData = sci::istream_from_ostream(celRLEData);
-					rleData.seekg(celHeader.controlOffset);
-					sci::istream literalData = sci::istream_from_ostream(celRawData);
-					literalData.seekg(celHeader.colorOffset);
-					uint32_t rowOffsetOffset = rowOffsetStream->tellp();
-					// Terrible hack, copying cel!
-					Cel celTemp = {};
-					celTemp.size = cel.size;
-					celTemp.placement = cel.placement;
-					celTemp.TransparentColor = cel.TransparentColor;
-					CalculateSCI2RowOffsets(celTemp, rleData, literalData, *rowOffsetStream);
-					celHeader.rowTableOffset = rowOffsetOffset + rowOffsetOffsetBase;
-				}
-
-				celHeader.controlOffset += rleImageDataBaseOffset;
-				celHeader.colorOffset += literalImageDataBaseOffset;
-				byteStream << celHeader;
+				curCelHeaderOffset += CELHEADERVIEW32SIZE * loop.Cels.size();
 			}
-			realLoopIndex++;
 		}
-	}
-	
-	// Now the palette
-	assert(byteStream.tellp() == headersSize);		  // Since that's where we said we'll write the palette.
-	sci::transfer(sci::istream_from_ostream(paletteStream), byteStream, paletteSize);
+		assert(byteStream.tellp() == celHeaderStart);   // Assuming our calculations were correct
+		
 
-	// Now the image data
-	assert(rleImageDataBaseOffset == byteStream.tellp());  // Since that's where we said we'll write the image data.
-	sci::transfer(sci::istream_from_ostream(celRLEData), byteStream, celRLEData.GetDataSize());
-	assert(literalImageDataBaseOffset == byteStream.tellp());
-	sci::transfer(sci::istream_from_ostream(celRawData), byteStream, celRawData.GetDataSize());
-	
-	if (isVGA2)
-	{
-		sci::transfer(sci::istream_from_ostream(*rowOffsetStream), byteStream, celRawData.GetDataSize());
-	}
-	
+		std::unique_ptr<sci::ostream> rowOffsetStream;
+		if (isVGA2)
+		{
+			rowOffsetStream = std::make_unique<sci::ostream>();
+		}
+
+		// Now the cel headers
+		uint32_t rleImageDataBaseOffset = headersSize + paletteSize;
+		uint32_t literalImageDataBaseOffset = rleImageDataBaseOffset + celRLEData.tellp();
+		uint32_t rowOffsetOffsetBase = literalImageDataBaseOffset + celRawData.tellp();
+		int realLoopIndex = 0;
+		for (const Loop &loop : raster.Loops)
+		{
+			if (!loop.IsMirror)
+			{
+				for (int i = 0; i < (int)loop.Cels.size(); i++)
+				{
+					const Cel &cel = loop.Cels[i];
+					CelHeaderView32 celHeader = prelimCelHeaders[realLoopIndex][i];
+					//celHeader.size = cel.size;
+					//TODO: THIS WILL FUCK UP MAGNIFIER CELS
+					//They NEED to be 0x00 here and saved RAW.
+					//elHeader.always_0xa = isVGA2 ? 0x8a : 0xa;
+					//celHeader.placement = cel.placement;
+					//celHeader.transparentColor = cel.TransparentColor;
+
+					// SCI2 views contain a section at the end of the view that lists,
+					// for each row of each cel in the view, the (32-bit) relative offsets in
+					// the rle data and the literal data where this data begins.
+					//
+					// For example, if there were two cels, the data would look like:
+					// offsetA:[C0_R0_offsetRLE][C0_R1_offsetRLE] ... [C0_Rn_offsetRLE]
+					//		 [C0_R0_offsetLiteral][C0_R1_offsetLiteral] ... [C0_Rn_offsetLiteral]
+					// offsetB:[C1_R0_offsetRLE][C1_R1_offsetRLE] ... [C1_Rn_offsetRLE]
+					//		 [C1_R0_offsetLiteral][C1_R1_offsetLiteral] ... [C1_Rn_offsetLiteral]
+					//
+					// Cel #0's header's perRowOffset field would point to OffsetA, and Cel#1's would
+					// point to offsetB
+					//
+					// For each cel, therefore, there will this extra (celHeight * 4 * 2) bytes of data.
+
+					if (isVGA2)
+					{
+						// Read our cel data back so as to calculate offsets to the rows.
+						sci::istream rleData = sci::istream_from_ostream(celRLEData);
+						rleData.seekg(celHeader.controlOffset);
+						sci::istream literalData = sci::istream_from_ostream(celRawData);
+						literalData.seekg(celHeader.colorOffset);
+						uint32_t rowOffsetOffset = rowOffsetStream->tellp();
+						// Terrible hack, copying cel!
+						Cel celTemp = {};
+						celTemp.size = cel.size;
+						celTemp.placement = cel.placement;
+						celTemp.TransparentColor = cel.TransparentColor;
+						CalculateSCI2RowOffsets(celTemp, rleData, literalData, *rowOffsetStream);
+						celHeader.rowTableOffset = rowOffsetOffset + rowOffsetOffsetBase;
+					}
+
+					celHeader.controlOffset += rleImageDataBaseOffset;
+					celHeader.colorOffset += literalImageDataBaseOffset;
+					byteStream << celHeader;
+				}
+				realLoopIndex++;
+			}
+		}
+
+		
+
+		// Now the palette
+		assert(byteStream.tellp() == headersSize);		  // Since that's where we said we'll write the palette.
+		sci::transfer(sci::istream_from_ostream(paletteStream), byteStream, paletteSize);
+
+		// Now the image data
+		assert(rleImageDataBaseOffset == byteStream.tellp());  // Since that's where we said we'll write the image data.
+		sci::transfer(sci::istream_from_ostream(celRLEData), byteStream, celRLEData.GetDataSize());
+		assert(literalImageDataBaseOffset == byteStream.tellp());
+		sci::transfer(sci::istream_from_ostream(celRawData), byteStream, celRawData.GetDataSize());
+
+		if (isVGA2)
+		{
+			sci::transfer(sci::istream_from_ostream(*rowOffsetStream), byteStream, celRawData.GetDataSize());
+		}
+		/*
+		*/
 
 	// Done!
 }

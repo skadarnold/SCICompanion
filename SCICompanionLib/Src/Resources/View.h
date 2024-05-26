@@ -235,6 +235,8 @@ struct CelHeader32 : public CelBase
 	uint16_t   linkNumber;
 };
 
+const int CELHEADER32SIZE = sizeof(CelHeader32);
+
 struct CelHeaderPic32 : public CelBase
 {
 	uint16_t priority;

@@ -26,17 +26,17 @@ void ReadCelFromVGA11(sci::istream &byteStream, Cel &cel, bool isPic);
 
 extern uint8_t g_vgaPaletteMapping[256];
 
-struct Cel
+struct Cel32
 {
-	Cel(size16 size, point16 placement, uint8_t transparentColor) : size(size), placement(placement)
+	Cel32(size16 size, point16 placement, uint8_t transparentColor) : size(size), placement(placement)
 	{
 		this->TransparentColor = transparentColor;
 		this->Stride32 = true;
 	}
 
-	Cel() : Stride32(true) {}
-	Cel(const Cel &cel) = default;
-	Cel &operator=(const Cel &cel) = default;
+	Cel32() : Stride32(true) {}
+	Cel32(const Cel32 &cel) = default;
+	Cel32 &operator=(const Cel32 &cel) = default;
 
 	uint16_t GetStride() const { return Stride32 ? CX_ACTUAL(size.cx) : size.cx; }
 	size_t GetDataSize() const
@@ -59,6 +59,23 @@ struct Loop
 	Loop() : UnknownData(0), IsMirror(false), MirrorOf(0xff) {}
 	Loop(const Loop &loop) = default;
 	Loop &operator=(const Loop &loop) = default;
+	int GetMirrorOf() const
+	{
+		return IsMirror ? (int)MirrorOf : -1;
+
+	}
+
+	std::vector<Cel> Cels;
+	uint16_t UnknownData;
+	bool IsMirror;
+	uint8_t MirrorOf;
+};
+
+struct Loop32
+{
+	Loop32() : UnknownData(0), IsMirror(false), MirrorOf(0xff) {}
+	Loop32(const Loop32 &loop) = default;
+	Loop32 &operator=(const Loop32 &loop) = default;
 	int GetMirrorOf() const
 	{
 		return IsMirror ? (int)MirrorOf : -1;
@@ -181,6 +198,7 @@ struct RasterComponent : ResourceComponent
 	const RasterTraits &Traits;
 	RasterSettings &Settings;
 	std::vector<Loop> Loops;
+	std::vector<Loop32> Loops32; // Dhel
 	uint32_t UnknownData;
 	uint8_t ScaleFlags;			 // Scaling flags for VGA 1.1 views (0x0 is scalable, 0x1 is not)
 	NativeResolution Resolution;	// Used for views
@@ -252,6 +270,37 @@ struct CelHeaderView32 : public CelBase
 };
 
 const int CELHEADERVIEW32SIZE = sizeof(CelHeaderView32);
+
+struct Cel
+{
+	Cel(size16 size, point16 placement, uint8_t transparentColor) : size(size), placement(placement)
+	{
+		this->TransparentColor = transparentColor;
+		this->Stride32 = true;
+	}
+
+	Cel() : Stride32(true) {}
+	Cel(const Cel &cel) = default;
+	Cel &operator=(const Cel &cel) = default;
+
+	uint16_t GetStride() const { return Stride32 ? CX_ACTUAL(size.cx) : size.cx; }
+	size_t GetDataSize() const
+	{
+		return (GetStride() * size.cy);
+	}
+
+	// REVIEW: std::vector is 16 bytes. We could change this to 4 bytes if we wish
+	// (thus reducing size of a cel from 24 to 12?) 
+	// But we'd need to write a manual copy/assignment constructor.
+	sci::array<uint8_t> Data;
+	size16 size;
+	point16 placement;
+	uint8_t TransparentColor;
+	bool Stride32;  // 32 bit stride
+
+	CelHeaderView32 celHeader;
+
+};
 
 struct PicHeader32
 {

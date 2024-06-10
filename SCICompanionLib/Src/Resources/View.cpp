@@ -701,6 +701,80 @@ struct ViewHeader_VGA11
 const int VIEW11_HEADER_SIZE = sizeof(ViewHeader_VGA11);
 #include <poppack.h>
 
+void ReadCelFromVGA32(sci::istream &byteStream, Cel &cel, bool isPic)
+{
+	CelHeaderView32 celHeader;
+	byteStream >> celHeader;
+	cel.celHeader = celHeader;
+
+	// Investigation
+	/*
+	OutputDebugString(fmt::format("something:{:x}\n", celHeader.perRowOffsets).c_str());
+	{
+		sci::istream moo(byteStream);
+		moo.seekg(celHeader.perRowOffsets);
+		int count = 20;
+		while (count && moo.getBytesRemaining() > 0)
+		{
+			uint32_t byte;
+			moo >> byte;
+			OutputDebugString(fmt::format(" 0x{0:x}", byte).c_str());
+			count--;
+		}
+		OutputDebugString("\n");
+	}*/
+
+	// LB_Dagger, view 86 has zero here. It's corrupted. All others have 0xa
+	// assert(celHeader.always_0xa == 0xa);
+	//KAWA: Not True! When setting a Magnifier effect, this HAS to be zero.
+	//View 2823 in Eco2, which is a magnifier just like LB_Dagger view 86, has this.
+	//offsetRLE will be non-zero in this case, while offsetLiteral will be zero.
+
+	bool hasSplitRLEAndLiteral = (celHeader.xHot == 0xa) || (celHeader.xHot == 0x8a);
+	if (hasSplitRLEAndLiteral)
+	{
+		assert(celHeader.offsetLiteral && celHeader.offsetRLE);
+	}
+	else
+	{
+		assert(celHeader.offsetRLE && !celHeader.offsetLiteral);
+	}
+
+	cel.size.cx = celHeader.xDim;
+    cel.size.cy = celHeader.yDim;
+	cel.placement.x = celHeader.xHot;
+	cel.placement.y = celHeader.yHot;
+	cel.TransparentColor = celHeader.skip;
+
+	// RLE are the encoding "instructions", while Literal is the raw data it reads from
+	assert(celHeader.controlOffset != 0);
+	byteStream.seekg(celHeader.controlOffset);
+	
+	if (celHeader.colorOffset == 0)
+	{
+/*
+		// Just copy the bits directly. AFAIK this is only for LB_Dagger views 86, 456 and 527
+		size_t dataSize = celHeader.size.cx * celHeader.size.cy; // Not sure if padding happens?
+		cel.Data.allocate(max(1, dataSize));
+		byteStream.read_data(&cel.Data[0], dataSize);
+		FlipImageData(&cel.Data[0], celHeader.size.cx, celHeader.size.cy, celHeader.size.cx);
+*/
+		sci::istream stream(byteStream, celHeader.colorOffset);
+		cel.Data.allocate(max(1, CX_ACTUAL(cel.size.cx) * cel.size.cy));
+		for (int y = cel.size.cy - 1; y >= 0; y--)
+		{
+			int pos = y * CX_ACTUAL(cel.size.cx);
+			byteStream.read_data(&cel.Data[pos], cel.size.cx);
+			cel.Data.fill(pos + cel.size.cx, CX_ACTUAL(cel.size.cx) - cel.size.cx, cel.TransparentColor);
+		}
+	}
+	else
+	{
+		ReadImageData(byteStream, cel, true, sci::istream(byteStream, celHeader.colorOffset));
+	}
+}
+
+
 void ReadCelFromVGA11(sci::istream &byteStream, Cel &cel, bool isPic)
 {
 	CelHeader_VGA11 celHeader;
@@ -771,6 +845,47 @@ void ReadCelFromVGA11(sci::istream &byteStream, Cel &cel, bool isPic)
 	}
 }
 
+void ReadLoopFromVGA32(ResourceEntity &resource, sci::istream &byteStream, Loop32 &loop, int nLoop, uint8_t celHeaderSize, bool isSCI2)
+{
+	g_debugCelRLE = resource.ResourceNumber;
+
+
+	LoopHeader32 loopHeader;
+	byteStream >> loopHeader;
+
+	if (loopHeader.altLoop == 0xff)
+	{
+		// Some games violate this assumption, but it's probably just a bug
+		// Fails for SQ6, 2292, loop 1. Not much we can do, we'll just mark it as not a mirror. View is corrupt.
+		// assert(loopHeader.isMirror == 0);
+	}
+	else
+	{
+		// Some games violate this assumption, but it's probably just a bug
+		// KQ6, 138, loop 4, it's a mirror of 1
+		// KQ6, 302, loop 1, it's a mirror of 0
+		//assert(loopHeader.isMirror == 1);
+	}
+
+	loop.IsMirror = (loopHeader.altLoop != 0xff);
+
+	if (loop.IsMirror)
+	{
+		loop.MirrorOf = loopHeader.altLoop;
+	}
+
+	if (!loop.IsMirror)
+	{
+		loop.Cels.assign(loopHeader.numCels, Cel());
+		for (uint16_t i = 0; i < loopHeader.numCels; i++)
+		{
+			sci::istream streamCel(byteStream);
+			streamCel.seekg(loopHeader.celOffset + celHeaderSize * i);
+			ReadCelFromVGA32(streamCel, loop.Cels[i], false);
+		}
+	}
+}
+
 void ReadLoopFromVGA(ResourceEntity &resource, sci::istream &byteStream, Loop &loop, int nLoop, uint8_t celHeaderSize, bool isSCI2)
 {
 	g_debugCelRLE = resource.ResourceNumber;
@@ -807,7 +922,8 @@ void ReadLoopFromVGA(ResourceEntity &resource, sci::istream &byteStream, Loop &l
 		{
 			sci::istream streamCel(byteStream);
 			streamCel.seekg(loopHeader.celOffsetAbsolute + celHeaderSize * i);
-			ReadCelFromVGA11(streamCel, loop.Cels[i], false);
+			//ReadCelFromVGA11(streamCel, loop.Cels[i], false);
+			ReadCelFromVGA32(streamCel, loop.Cels[i], false);
 		}
 	}
 }
@@ -831,7 +947,8 @@ void ViewWriteToVGA11_2_Helper(const ResourceEntity &resource, sci::ostream &byt
 	if (palette)
 	{
 		//WritePalette(paletteStream, *palette);
-		WritePaletteShortForm(paletteStream, *palette);
+		//WritePaletteShortForm(paletteStream, *palette);
+		WritePaletteSCI2(paletteStream, *palette);
 	}
 	uint32_t paletteSize = paletteStream.GetDataSize();
 
@@ -990,7 +1107,8 @@ void ViewWriteToVGA11_2_Helper(const ResourceEntity &resource, sci::ostream &byt
 
 					celHeader.controlOffset += rleImageDataBaseOffset;
 					celHeader.colorOffset += literalImageDataBaseOffset;
-					byteStream << celHeader;
+					//byteStream << celHeader;
+					byteStream << cel.celHeader;
 				}
 				realLoopIndex++;
 			}
@@ -1001,6 +1119,7 @@ void ViewWriteToVGA11_2_Helper(const ResourceEntity &resource, sci::ostream &byt
 		// Now the palette
 		assert(byteStream.tellp() == headersSize);		  // Since that's where we said we'll write the palette.
 		sci::transfer(sci::istream_from_ostream(paletteStream), byteStream, paletteSize);
+		/*
 
 		// Now the image data
 		assert(rleImageDataBaseOffset == byteStream.tellp());  // Since that's where we said we'll write the image data.
@@ -1012,7 +1131,7 @@ void ViewWriteToVGA11_2_Helper(const ResourceEntity &resource, sci::ostream &byt
 		{
 			sci::transfer(sci::istream_from_ostream(*rowOffsetStream), byteStream, celRawData.GetDataSize());
 		}
-		/*
+		
 		*/
 
 	// Done!
@@ -1252,11 +1371,13 @@ void ViewReadFromVGA11Helper(ResourceEntity &resource, sci::istream &byteStream,
 	}
 
 	raster.Loops.assign(header.loopCount, Loop()); // Just empty ones for now
+	raster.Loops32.assign(header.loopCount, Loop32()); // Just empty ones for now
 	for (int i = 0; i < header.loopCount; i++)
 	{
 		sci::istream streamLoop(byteStream);
 		streamLoop.seekg(header.viewHeaderSize + (header.loopHeaderSize * i));  // Start of this loop's data
 		ReadLoopFromVGA(resource, streamLoop, raster.Loops[i], i, header.celHeaderSize, isSCI2);
+		//ReadLoopFromVGA32(resource, streamLoop, raster.Loops32[i], i, header.celHeaderSize, isSCI2);
 	}
 
 	// Now fill in mirrors. They seem setup a little differently than in earlier versions of views,
